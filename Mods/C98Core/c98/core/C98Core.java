@@ -14,7 +14,7 @@ import c98.core.impl.launch.C98Tweaker;
 
 public class C98Core implements HudRenderHook {
 	public static final String KEYBIND_CAT = "C98Mods";
-	public static final String URL = "https://cubic.muncher.se/modded"; //TODO maybe change to /r/C98Mods
+	public static final String URL = "https://cubic.muncher.se/modded"; //TODO change to /r/C98Mods when that opens
 	public static boolean client;
 	public static boolean forge = C98Tweaker.forge;
 	public static Minecraft mc;

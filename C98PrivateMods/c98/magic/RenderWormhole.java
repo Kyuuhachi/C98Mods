@@ -1,7 +1,6 @@
 package c98.magic;
 
 import static org.lwjgl.opengl.GL11.*;
-import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -10,7 +9,8 @@ import c98.core.util.*;
 import c98.magic.util.WorldRender;
 
 public class RenderWormhole extends TileEntitySpecialRenderer {
-	private int MASK = 1;
+	private static final float WIDTH = 0.435F;
+	private static final int MASK = 1;
 	private boolean recursion;
 	
 	@Override public void renderTileEntityAt(TileEntity t, double x, double y, double z, float ptt) {
@@ -31,22 +31,20 @@ public class RenderWormhole extends TileEntitySpecialRenderer {
 		{
 			glPushMatrix();
 			{
-				int d = te.dist();
+				float d = te.dist();
 				if(te.getDirection() == 0) glTranslated(0, 0, d);
 				if(te.getDirection() == 1) glTranslated(-d, 0, 0);
 				if(te.getDirection() == 2) glTranslated(0, 0, -d);
 				if(te.getDirection() == 3) glTranslated(d, 0, 0);
 				
-				double[] plane = null;
-				if(te.getDirection() == 0) plane = plane(new Vector(x, y, z + d), new Vector(x, y + 1, z + d), new Vector(x + 1, y, z + d));
-				if(te.getDirection() == 1) plane = plane(new Vector(x + d, y, z), new Vector(x + d, y + 1, z), new Vector(x + d, y, z + 1));
-				if(te.getDirection() == 2) plane = plane(new Vector(x, y, z - d), new Vector(x, y + 1, z - d), new Vector(x - 1, y, z - d));
-				if(te.getDirection() == 3) plane = plane(new Vector(x - d, y, z), new Vector(x - d, y + 1, z), new Vector(x - d, y, z - 1));
-				
 				glMatrixMode(GL_PROJECTION);
 				glPushMatrix();
 				{
-					clipPlane(plane);
+					d += WIDTH;
+					if(te.getDirection() == 0) plane(new Vector(x, y, z - d), new Vector(x, y + 1, z - d), new Vector(x + 1, y, z - d));
+					if(te.getDirection() == 1) plane(new Vector(x + d, y, z), new Vector(x + d, y + 1, z), new Vector(x + d, y, z + 1));
+					if(te.getDirection() == 2) plane(new Vector(x, y, z + d), new Vector(x, y + 1, z + d), new Vector(x - 1, y, z + d));
+					if(te.getDirection() == 3) plane(new Vector(x - d, y, z), new Vector(x - d, y + 1, z), new Vector(x - d, y, z - 1));
 					
 					double ofx = 0;
 					double ofz = 0;
@@ -98,7 +96,6 @@ public class RenderWormhole extends TileEntitySpecialRenderer {
 	}
 	
 	private void drawField(BlockWormhole.TE te, double x, double y, double z) {
-		float f = 0.4F;
 		glPushMatrix();
 		{
 			glTranslated(x, y, z);
@@ -106,28 +103,28 @@ public class RenderWormhole extends TileEntitySpecialRenderer {
 			glBegin(GL_QUADS);
 			{
 				if(te.getDirection() == 0) {
-					glVertex3f(-1.5F, -1.5F, -f);
-					glVertex3f(+1.5F, -1.5F, -f);
-					glVertex3f(+1.5F, +1.5F, -f);
-					glVertex3f(-1.5F, +1.5F, -f);
+					glVertex3f(-1.5F, -1.5F, -WIDTH);
+					glVertex3f(+1.5F, -1.5F, -WIDTH);
+					glVertex3f(+1.5F, +1.5F, -WIDTH);
+					glVertex3f(-1.5F, +1.5F, -WIDTH);
 				}
 				if(te.getDirection() == 1) {
-					glVertex3f(f, -1.5F, -1.5F);
-					glVertex3f(f, -1.5F, +1.5F);
-					glVertex3f(f, +1.5F, +1.5F);
-					glVertex3f(f, +1.5F, -1.5F);
+					glVertex3f(WIDTH, -1.5F, -1.5F);
+					glVertex3f(WIDTH, -1.5F, +1.5F);
+					glVertex3f(WIDTH, +1.5F, +1.5F);
+					glVertex3f(WIDTH, +1.5F, -1.5F);
 				}
 				if(te.getDirection() == 2) {
-					glVertex3f(+1.5F, -1.5F, f);
-					glVertex3f(-1.5F, -1.5F, f);
-					glVertex3f(-1.5F, +1.5F, f);
-					glVertex3f(+1.5F, +1.5F, f);
+					glVertex3f(+1.5F, -1.5F, WIDTH);
+					glVertex3f(-1.5F, -1.5F, WIDTH);
+					glVertex3f(-1.5F, +1.5F, WIDTH);
+					glVertex3f(+1.5F, +1.5F, WIDTH);
 				}
 				if(te.getDirection() == 3) {
-					glVertex3f(-f, -1.5F, +1.5F);
-					glVertex3f(-f, -1.5F, -1.5F);
-					glVertex3f(-f, +1.5F, -1.5F);
-					glVertex3f(-f, +1.5F, +1.5F);
+					glVertex3f(-WIDTH, -1.5F, +1.5F);
+					glVertex3f(-WIDTH, -1.5F, -1.5F);
+					glVertex3f(-WIDTH, +1.5F, -1.5F);
+					glVertex3f(-WIDTH, +1.5F, +1.5F);
 				}
 			}
 			glEnd();
@@ -135,10 +132,15 @@ public class RenderWormhole extends TileEntitySpecialRenderer {
 		glPopMatrix();
 	}
 	
-	private double[] plane(Vector v1, Vector v2, Vector v3) { //I have no idea how this function works, I just googled it
-		DoubleBuffer mv = BufferUtils.createDoubleBuffer(16);
-		glGetDouble(GL_MODELVIEW_MATRIX, mv);
+	private void plane(Vector v1, Vector v2, Vector v3) {
+		FloatBuffer mv = BufferUtils.createFloatBuffer(16);
+		glGetFloat(GL_MODELVIEW_MATRIX, mv);
 		Matrix mvMat = new Matrix().load(mv);
+		
+		FloatBuffer pr = BufferUtils.createFloatBuffer(16);
+		glGetFloat(GL_PROJECTION_MATRIX, pr);
+		Matrix prMat = new Matrix().load(pr);
+		
 		mvMat.transform(v1);
 		mvMat.transform(v2);
 		mvMat.transform(v3);
@@ -147,26 +149,27 @@ public class RenderWormhole extends TileEntitySpecialRenderer {
 		double y = v1.z * (v2.x - v3.x) + v2.z * (v3.x - v1.x) + v3.z * (v1.x - v2.x);
 		double z = v1.x * (v2.y - v3.y) + v2.x * (v3.y - v1.y) + v3.x * (v1.y - v2.y);
 		double dist = -(v1.x * (v2.y * v3.z - v3.y * v2.z) + v2.x * (v3.y * v1.z - v1.y * v3.z) + v3.x * (v1.y * v2.z - v2.y * v1.z));
-		return new double[] {x, y, z, dist};
-	}
-	
-	private void clipPlane(double[] plane) { //Same here
-		FloatBuffer pr = BufferUtils.createFloatBuffer(16);
-		glGetFloat(GL_PROJECTION_MATRIX, pr);
 		
-		double x = (Math.signum(plane[0]) + pr.get(8)) / pr.get(0);
-		double y = (Math.signum(plane[1]) + pr.get(9)) / pr.get(5);
-		double z = -1;
-		double w = (1 + pr.get(10)) / pr.get(14);
+		double x2 = (Math.signum(x) + prMat.m[2][0]) / prMat.m[0][0];
+		double y2 = (Math.signum(y) + prMat.m[2][1]) / prMat.m[1][1];
 		
-		double scale = 2 / dot(plane, new double[] {x, y, z, w});
+		double scale = 2 / dot(new double[] {x, y, z, dist}, new double[] {x2, y2, -1, 0});
 		
-		pr.put(2, (float)(plane[0] * scale));
-		pr.put(6, (float)(plane[1] * scale));
-		pr.put(10, (float)(plane[2] * scale) + 1);
-		pr.put(14, (float)(plane[3] * scale));
+		prMat.m[0][2] = (float)(x * scale);
+		prMat.m[1][2] = (float)(y * scale);
+		prMat.m[2][2] = (float)(z * scale) + 1;
+		prMat.m[3][2] = (float)(dist * scale);
 		
+		pr.flip();
+		prMat.store(pr);
+		pr.flip();
 		glLoadMatrix(pr);
+		
+//		glBegin(GL_TRIANGLES);
+//		glVertex3d(v1.x, v1.y, v1.z);
+//		glVertex3d(v2.x, v2.y, v2.z);
+//		glVertex3d(v3.x, v3.y, v3.z);
+//		glEnd();
 	}
 	
 	private double dot(double[] v1, double[] v2) {

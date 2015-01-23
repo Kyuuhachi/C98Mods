@@ -1,6 +1,7 @@
 package c98.core.util;
 
 import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
 
 public class Matrix {
 	
@@ -10,9 +11,11 @@ public class Matrix {
 		setIdentity();
 	}
 	
-	public Matrix(final Matrix mat) {
+	public Matrix(Matrix mat) {
 		setZero();
-		load(mat);
+		for(int i = 0; i < 4; i++)
+			for(int j = 0; j < 4; j++)
+				m[i][j] = mat.m[i][j];
 	}
 	
 	@Override public String toString() {
@@ -34,149 +37,49 @@ public class Matrix {
 		return this;
 	}
 	
-	public Matrix load(Matrix src) {
-		m[0][0] = src.m[0][0];
-		m[0][1] = src.m[0][1];
-		m[0][2] = src.m[0][2];
-		m[0][3] = src.m[0][3];
-		m[1][0] = src.m[1][0];
-		m[1][1] = src.m[1][1];
-		m[1][2] = src.m[1][2];
-		m[1][3] = src.m[1][3];
-		m[2][0] = src.m[2][0];
-		m[2][1] = src.m[2][1];
-		m[2][2] = src.m[2][2];
-		m[2][3] = src.m[2][3];
-		m[3][0] = src.m[3][0];
-		m[3][1] = src.m[3][1];
-		m[3][2] = src.m[3][2];
-		m[3][3] = src.m[3][3];
-		return this;
-	}
-	
 	public Matrix load(DoubleBuffer buf) {
-		m[0][0] = buf.get();
-		m[0][1] = buf.get();
-		m[0][2] = buf.get();
-		m[0][3] = buf.get();
-		m[1][0] = buf.get();
-		m[1][1] = buf.get();
-		m[1][2] = buf.get();
-		m[1][3] = buf.get();
-		m[2][0] = buf.get();
-		m[2][1] = buf.get();
-		m[2][2] = buf.get();
-		m[2][3] = buf.get();
-		m[3][0] = buf.get();
-		m[3][1] = buf.get();
-		m[3][2] = buf.get();
-		m[3][3] = buf.get();
-		return this;
-	}
-	
-	public Matrix loadTranspose(DoubleBuffer buf) {
-		m[0][0] = buf.get();
-		m[1][0] = buf.get();
-		m[2][0] = buf.get();
-		m[3][0] = buf.get();
-		m[0][1] = buf.get();
-		m[1][1] = buf.get();
-		m[2][1] = buf.get();
-		m[3][1] = buf.get();
-		m[0][2] = buf.get();
-		m[1][2] = buf.get();
-		m[2][2] = buf.get();
-		m[3][2] = buf.get();
-		m[0][3] = buf.get();
-		m[1][3] = buf.get();
-		m[2][3] = buf.get();
-		m[3][3] = buf.get();
+		for(int i = 0; i < 4; i++)
+			for(int j = 0; j < 4; j++)
+				m[i][j] = buf.get();
 		return this;
 	}
 	
 	public Matrix store(DoubleBuffer buf) {
-		buf.put(m[0][0]);
-		buf.put(m[0][1]);
-		buf.put(m[0][2]);
-		buf.put(m[0][3]);
-		buf.put(m[1][0]);
-		buf.put(m[1][1]);
-		buf.put(m[1][2]);
-		buf.put(m[1][3]);
-		buf.put(m[2][0]);
-		buf.put(m[2][1]);
-		buf.put(m[2][2]);
-		buf.put(m[2][3]);
-		buf.put(m[3][0]);
-		buf.put(m[3][1]);
-		buf.put(m[3][2]);
-		buf.put(m[3][3]);
+		for(int i = 0; i < 4; i++)
+			for(int j = 0; j < 4; j++)
+				buf.put(m[i][j]);
 		return this;
 	}
 	
-	public Matrix storeTranspose(DoubleBuffer buf) {
-		buf.put(m[0][0]);
-		buf.put(m[1][0]);
-		buf.put(m[2][0]);
-		buf.put(m[3][0]);
-		buf.put(m[0][1]);
-		buf.put(m[1][1]);
-		buf.put(m[2][1]);
-		buf.put(m[3][1]);
-		buf.put(m[0][2]);
-		buf.put(m[1][2]);
-		buf.put(m[2][2]);
-		buf.put(m[3][2]);
-		buf.put(m[0][3]);
-		buf.put(m[1][3]);
-		buf.put(m[2][3]);
-		buf.put(m[3][3]);
+	public Matrix load(FloatBuffer buf) {
+		for(int i = 0; i < 4; i++)
+			for(int j = 0; j < 4; j++)
+				m[i][j] = buf.get();
+		return this;
+	}
+	
+	public Matrix store(FloatBuffer buf) {
+		for(int i = 0; i < 4; i++)
+			for(int j = 0; j < 4; j++)
+				buf.put((float)m[i][j]);
 		return this;
 	}
 	
 	public Matrix add(Matrix right) {
-		m[0][0] = m[0][0] + right.m[0][0];
-		m[0][1] = m[0][1] + right.m[0][1];
-		m[0][2] = m[0][2] + right.m[0][2];
-		m[0][3] = m[0][3] + right.m[0][3];
-		m[1][0] = m[1][0] + right.m[1][0];
-		m[1][1] = m[1][1] + right.m[1][1];
-		m[1][2] = m[1][2] + right.m[1][2];
-		m[1][3] = m[1][3] + right.m[1][3];
-		m[2][0] = m[2][0] + right.m[2][0];
-		m[2][1] = m[2][1] + right.m[2][1];
-		m[2][2] = m[2][2] + right.m[2][2];
-		m[2][3] = m[2][3] + right.m[2][3];
-		m[3][0] = m[3][0] + right.m[3][0];
-		m[3][1] = m[3][1] + right.m[3][1];
-		m[3][2] = m[3][2] + right.m[3][2];
-		m[3][3] = m[3][3] + right.m[3][3];
+		for(int i = 0; i < 4; i++)
+			for(int j = 0; j < 4; j++)
+				m[i][j] = m[i][j] + right.m[i][j];
 		return this;
 	}
 	
 	public Matrix sub(Matrix right) {
-		m[0][0] = m[0][0] - right.m[0][0];
-		m[0][1] = m[0][1] - right.m[0][1];
-		m[0][2] = m[0][2] - right.m[0][2];
-		m[0][3] = m[0][3] - right.m[0][3];
-		m[1][0] = m[1][0] - right.m[1][0];
-		m[1][1] = m[1][1] - right.m[1][1];
-		m[1][2] = m[1][2] - right.m[1][2];
-		m[1][3] = m[1][3] - right.m[1][3];
-		m[2][0] = m[2][0] - right.m[2][0];
-		m[2][1] = m[2][1] - right.m[2][1];
-		m[2][2] = m[2][2] - right.m[2][2];
-		m[2][3] = m[2][3] - right.m[2][3];
-		m[3][0] = m[3][0] - right.m[3][0];
-		m[3][1] = m[3][1] - right.m[3][1];
-		m[3][2] = m[3][2] - right.m[3][2];
-		m[3][3] = m[3][3] - right.m[3][3];
-		
+		for(int i = 0; i < 4; i++)
+			for(int j = 0; j < 4; j++)
+				m[i][j] = m[i][j] - right.m[i][j];
 		return this;
 	}
 	
 	public Matrix mul(Matrix right) {
-		
 		double m00 = m[0][0] * right.m[0][0] + m[1][0] * right.m[0][1] + m[2][0] * right.m[0][2] + m[3][0] * right.m[0][3];
 		double m01 = m[0][1] * right.m[0][0] + m[1][1] * right.m[0][1] + m[2][1] * right.m[0][2] + m[3][1] * right.m[0][3];
 		double m02 = m[0][2] * right.m[0][0] + m[1][2] * right.m[0][1] + m[2][2] * right.m[0][2] + m[3][2] * right.m[0][3];

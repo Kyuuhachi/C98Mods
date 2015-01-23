@@ -4,11 +4,12 @@ import static org.lwjgl.opengl.GL11.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
 public class SkinsWings implements SkinExtras {
+	private static final ResourceLocation dragon = new ResourceLocation("textures/entity/enderdragon/dragon.png");
 	
 	private ModelRenderer wing;
 	private ModelRenderer wingTip;
@@ -37,77 +38,43 @@ public class SkinsWings implements SkinExtras {
 		model.textureHeight = prevHeight;
 	}
 	
-	private static final int MAX_STILL = 15;
-	
-	private static final int ANGLE = 0;
-	private static final int TIME_STILL = 1;
-	private static final int PX0 = 2, PY0 = 3, PZ0 = 4;
-	private static final int PX1 = 5, PY1 = 6, PZ1 = 7;
-	private static final ResourceLocation dragon = new ResourceLocation("textures/entity/enderdragon/dragon.png");
-	
-	@Override public void draw(net.minecraft.entity.EntityLivingBase ent, float time, float ptt) {
+	@Override public void draw(EntityLivingBase ent, float time, float scale) {
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
-		if(ent.getCommandSenderName().equalsIgnoreCase("Caagr_98")) doRender(ent, ptt, ent.wingVars);
-		glDisable(GL_CULL_FACE);
-	}
-	
-	private void doRender(Entity ent, float scale, float[] vars) {//TODO don't tick wings here
 		Minecraft.getMinecraft().getTextureManager().bindTexture(dragon);
 		glPushMatrix();
-		glScalef(0.25F, 0.25F, 0.25F);
 		
-		double dx = (ent.posX - ent.prevPosX) * scale;
-		double dy = (ent.posY - ent.prevPosY) * scale;
-		double dz = (ent.posZ - ent.prevPosZ) * scale;
-		double d = Math.abs(dx) + Math.abs(dy) + Math.abs(dz);
-		
-		if(d > 0.01 || !ent.onGround && ent.ridingEntity == null && !ent.isSneaking()) vars[TIME_STILL] = 0;
-		if(vars[TIME_STILL] < MAX_STILL) vars[ANGLE] += d * 5;
-		if(!ent.onGround) vars[ANGLE] += 0.1;
-		else if(d < 0.05) vars[TIME_STILL]++;
-		vars[ANGLE] %= 2;
-		
-		float rad = vars[ANGLE] * (float)Math.PI;
-		float x0 = 0.125F - MathHelper.cos(rad) * 0.2F;
-		float y0 = 0.25F;
-		float z0 = (MathHelper.sin(rad) + 0.125F) * 0.8F;
-		float x1 = 0;
-		float y1 = 0;
-		float z1 = -(MathHelper.sin(rad) + 0.5F) * 0.75F;
-		
-		if(vars[TIME_STILL] >= MAX_STILL) {
-			int t = (int)vars[TIME_STILL];
-			if(t > MAX_STILL + 5) t = MAX_STILL + 5;
-			float rad0 = (float)((t + Math.PI - MAX_STILL) / Math.PI / 2);
-			x0 = 0.125F - MathHelper.cos(rad0) * 0.2F;
-			z0 = MathHelper.sin(rad0) + 0.125F;
-			z1 = -(MathHelper.sin(rad0) + 0.5F) * 1.875F;
-			vars[ANGLE] = 0;
-		}
-		
-		float f = 0.6F;
-		wing.rotateAngleX = /*   */x0 + (vars[PX0] - x0) * f;
-		wing.rotateAngleY = /*   */y0 + (vars[PY0] - y0) * f;
-		wing.rotateAngleZ = /*   */z0 + (vars[PZ0] - z0) * f;
-		wingTip.rotateAngleX = /**/x1 + (vars[PX1] - x1) * f;
-		wingTip.rotateAngleY = /**/y1 + (vars[PY1] - y1) * f;
-		wingTip.rotateAngleZ = /**/z1 + (vars[PZ1] - z1) * f;
+		setAngles(ent, time);
 		
 		for(int i = 0; i < 2; ++i) {
-			wing.render(scale);
+			wing.render(scale / 4);
 			glScalef(-1, 1, 1);
 			if(i == 0) glCullFace(GL_FRONT);
 		}
 		
 		glCullFace(GL_BACK);
 		glPopMatrix();
+	}
+	
+	private void setAngles(EntityLivingBase ent, float time) {
+		float ang = ent.wingAngle * (float)Math.PI * 2;
 		
-		vars[PX0] = x0 + (vars[PX0] - x0) * f;
-		vars[PY0] = y0 + (vars[PY0] - y0) * f;
-		vars[PZ0] = z0 + (vars[PZ0] - z0) * f;
-		vars[PX1] = x1 + (vars[PX1] - x1) * f;
-		vars[PY1] = y1 + (vars[PY1] - y1) * f;
-		vars[PZ1] = z1 + (vars[PZ1] - z1) * f;
+		float wingx0 = 0.125F - MathHelper.cos(ang) * 0.2F;
+		float wingz0 = (MathHelper.sin(ang) + 0.125F) * 0.8F;
+		float wingz1 = -(MathHelper.sin(ang) + 0.5F) * 0.75F;
+		if(ent.wingResting) wingz1 = -2.5F;
+		
+		float angp = ent.wingAnglep * (float)Math.PI * 2;
+		float wingx0p = 0.125F - MathHelper.cos(angp) * 0.2F;
+		float wingz0p = (MathHelper.sin(angp) + 0.125F) * 0.8F;
+		float wingz1p = -(MathHelper.sin(angp) + 0.5F) * 0.75F;
+		if(ent.wingRestingp) wingz1p = -2.5F;
+		
+		wing.rotateAngleX = wingx0p + (wingx0 - wingx0p) * (time % 1);
+		wing.rotateAngleY = 0.25F;
+		wing.rotateAngleZ = wingz0p + (wingz0 - wingz0p) * (time % 1);
+		wingTip.rotateAngleX = 0;
+		wingTip.rotateAngleY = 0;
+		wingTip.rotateAngleZ = wingz1p + (wingz1 - wingz1p) * (time % 1);
 	}
 }

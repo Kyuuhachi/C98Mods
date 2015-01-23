@@ -4,6 +4,6 @@ import net.minecraft.entity.EntityLivingBase;
 
 public interface SkinExtras {
 	
-	void draw(EntityLivingBase ent, float time, float ptt);
-
+	void draw(EntityLivingBase ent, float time, float scale);
+	
 }

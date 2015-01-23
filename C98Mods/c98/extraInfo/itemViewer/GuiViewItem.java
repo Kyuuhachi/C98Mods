@@ -1,4 +1,4 @@
-package c98.itemViewer;
+package c98.extraInfo.itemViewer;
 
 import static org.lwjgl.opengl.GL11.*;
 import java.awt.Toolkit;
@@ -18,8 +18,8 @@ import org.lwjgl.input.Mouse;
 import com.google.gson.*;
 import com.google.gson.internal.bind.TypeAdapters;
 
-public class GuiViewItem extends GuiScreen {
-	
+public class GuiViewItem extends GuiScreen { //TODO add tooltip for enchantment tags and similar
+
 	private static final int WIDTH = 256, HEIGHT = 202;
 	private static final int FIELD_X = 16, FIELD_Y = 17;
 	private static final int FIELD_W = 214, FIELD_H = 153;
@@ -109,7 +109,7 @@ public class GuiViewItem extends GuiScreen {
 		glPushMatrix();
 		glTranslatef(guiLeft, guiTop, 0);
 		
-		mc.getTextureManager().bindTexture(new ResourceLocation("c98:Carbage/viewItem.png"));
+		mc.getTextureManager().bindTexture(new ResourceLocation("c98", "ExtraInfo/item_view.png"));
 		drawTexturedModalRect(0, 0, 0, 0, WIDTH, HEIGHT);
 		int scrollY = (int)((float)scroll / maxScroll * (SCROLL_H - SCROLL_KNOB_H));
 		drawTexturedModalRect(SCROLL_X, SCROLL_Y + scrollY, maxScroll != 0 ? 0 : SCROLL_W, HEIGHT, SCROLL_W, SCROLL_KNOB_H);

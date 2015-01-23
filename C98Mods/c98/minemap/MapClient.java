@@ -18,7 +18,7 @@ import c98.core.IO;
 import c98.core.util.Vector;
 
 public class MapClient implements IResourceManagerReloadListener {
-	private static final ResourceLocation mapIcons = new ResourceLocation("c98:Carbage/mapIcons.png");
+	private static final ResourceLocation mapIcons = new ResourceLocation("c98", "Minemap/map_icons.png");
 	private static final ResourceLocation mapBG = new ResourceLocation("textures/map/map_background.png");
 	private final int[][] sizes = new int[16][2];
 	private final float[][] texCoords = new float[16][2];

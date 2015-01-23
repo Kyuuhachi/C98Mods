@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import c98.GraphicalUpgrade;
 
 public class RenderSheepColored extends RenderSheep {
-	private static final ResourceLocation tex = new ResourceLocation("c98", "Carbage/sheepWool.png");
+	private static final ResourceLocation tex = new ResourceLocation("c98", "GraphicalUpgrade/entity/sheep_wool.png");
 	private boolean b;
 	
 	public RenderSheepColored(ModelBase par1ModelBase, ModelBase par2ModelBase, float par3) {

@@ -54,7 +54,7 @@ public class EntitySelector {
 	
 	public static Map<String, Map<String, DataWatchObj>> attributes;
 	public static Map<Class, String> classToId;
-	private static final ResourceLocation datawatcher = new ResourceLocation("c98", "Carbage/misc/datawatcher.txt");
+	private static final ResourceLocation datawatcher = new ResourceLocation("c98", "Minemap/datawatcher.txt");
 	
 	public static DataWatchObj getParam(Entity e, String key) {
 		for(Class c = e.getClass(); c != null; c = c.getSuperclass()) {

@@ -1,4 +1,4 @@
-package c98.itemViewer;
+package c98.extraInfo.itemViewer;
 
 import java.util.List;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -16,7 +16,7 @@ public class GuiSelectItem extends GuiContainer {
 	}
 	
 	@Override protected void func_146976_a(float par1, int mouseX, int mouseY) {
-		mc.getTextureManager().bindTexture(new ResourceLocation("c98:Carbage/selectItem.png"));
+		mc.getTextureManager().bindTexture(new ResourceLocation("c98", "ExtraInfo/item_select.png"));
 		drawTexturedModalRect(field_147003_i, field_147009_r, 0, 0, field_146999_f, field_147000_g);
 		
 		drawEntity(51, 75, 30, 70, mouseX, mouseY, mc.thePlayer);

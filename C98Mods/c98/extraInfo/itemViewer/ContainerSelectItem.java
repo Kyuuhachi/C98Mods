@@ -1,4 +1,4 @@
-package c98.itemViewer;
+package c98.extraInfo.itemViewer;
 
 import java.util.List;
 import net.minecraft.client.Minecraft;

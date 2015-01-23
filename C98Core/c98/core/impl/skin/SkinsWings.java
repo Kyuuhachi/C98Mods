@@ -52,7 +52,7 @@ public class SkinsWings implements SkinExtras {
 		glDisable(GL_CULL_FACE);
 	}
 	
-	private void doRender(Entity ent, float scale, float[] vars) {
+	private void doRender(Entity ent, float scale, float[] vars) {//TODO don't tick wings here
 		Minecraft.getMinecraft().getTextureManager().bindTexture(dragon);
 		glPushMatrix();
 		glScalef(0.25F, 0.25F, 0.25F);
@@ -62,7 +62,7 @@ public class SkinsWings implements SkinExtras {
 		double dz = (ent.posZ - ent.prevPosZ) * scale;
 		double d = Math.abs(dx) + Math.abs(dy) + Math.abs(dz);
 		
-		if(d > 0.01 || !ent.onGround/*TODO onGround seems buggy, I think?*/&& ent.ridingEntity == null && !ent.isSneaking()) vars[TIME_STILL] = 0;
+		if(d > 0.01 || !ent.onGround && ent.ridingEntity == null && !ent.isSneaking()) vars[TIME_STILL] = 0;
 		if(vars[TIME_STILL] < MAX_STILL) vars[ANGLE] += d * 5;
 		if(!ent.onGround) vars[ANGLE] += 0.1;
 		else if(d < 0.05) vars[TIME_STILL]++;

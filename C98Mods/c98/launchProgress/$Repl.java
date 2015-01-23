@@ -12,7 +12,6 @@ import c98.core.launch.Replacer;
 
 public class $Repl implements Replacer {
 	@Override public void register(List<String> ls) {
-//		TODO repair LaunchProgress
 		createWindow();
 		String[] s = {"MainHook", "MinecraftHook"};
 		for(String st:s)

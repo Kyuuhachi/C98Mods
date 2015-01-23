@@ -11,6 +11,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
+import c98.core.hooks.RenderBlockHook;
+import c98.core.impl.HookImpl;
 import c98.core.item.ItemOverlay;
 import c98.core.item.ItemRenderHook;
 
@@ -123,7 +125,7 @@ public class Rendering {
 	
 	public static boolean renderWorldBlock(RenderBlocks rb, IBlockAccess w, Block b, int i, int j, int k, int renderType) {
 		if(models.containsKey(renderType)) {
-			for(C98Mod mod:C98Core.modList)
+			for(RenderBlockHook mod:HookImpl.renderBlockHooks)
 				mod.renderWorldBlock(rb, w, i, j, k, b, renderType);
 			return true;
 		}
@@ -132,7 +134,7 @@ public class Rendering {
 	
 	public static boolean renderInvBlock(RenderBlocks rb, Block b, int meta, int renderType) {
 		if(models.containsKey(renderType) && models.get(renderType)) {
-			for(C98Mod mod:C98Core.modList)
+			for(RenderBlockHook mod:HookImpl.renderBlockHooks)
 				mod.renderInvBlock(rb, b, meta, renderType);
 			return true;
 		}

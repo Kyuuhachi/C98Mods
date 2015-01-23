@@ -6,9 +6,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import c98.core.*;
+import c98.core.hooks.RenderBlockHook;
 import c98.magic.*;
 
-public class Magic extends C98Mod {
+public class Magic extends C98Mod implements RenderBlockHook {
 	public static Block extractor = new BlockXpExtractor().setCreativeTab(CreativeTabs.tabRedstone);
 	public static Block pipe = new BlockXpPipe().setCreativeTab(CreativeTabs.tabRedstone);
 	public static Block tap = new BlockXpTap().setCreativeTab(CreativeTabs.tabRedstone);
@@ -34,4 +35,6 @@ public class Magic extends C98Mod {
 	@Override public void renderWorldBlock(RenderBlocks rb, IBlockAccess w, int i, int j, int k, Block block, int rdr) {
 		if(rdr == renderPipe) ((BlockXpPipe)block).render(rb, w, i, j, k);
 	}
+	
+	@Override public void renderInvBlock(RenderBlocks rb, Block block, int meta, int rdr) {}
 }

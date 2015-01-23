@@ -26,18 +26,18 @@ public class Render3DDoor extends ItemRenderBlock {
 		bindTerrain();
 		rb.setRenderBounds(f, 0, 0, f + 3 / 16F, 1, 1);
 		glTranslatef(-f / 2, -0.55F, 0);
-		yNeg(block, 0, 0, 0, tex0);
-		yPos(block, 0, 0, 0, tex0);
-		zNeg(block, 0, 0, 0, tex0);
-		zPos(block, 0, 0, 0, tex0);
-		xNeg(block, 0, 0, 0, tex0);
-		xPos(block, 0, 0, 0, tex0);
-		glTranslatef(0, 1, 0);
 		yNeg(block, 0, 0, 0, tex1);
 		yPos(block, 0, 0, 0, tex1);
 		zNeg(block, 0, 0, 0, tex1);
 		zPos(block, 0, 0, 0, tex1);
 		xNeg(block, 0, 0, 0, tex1);
 		xPos(block, 0, 0, 0, tex1);
+		glTranslatef(0, 1, 0);
+		yNeg(block, 0, 0, 0, tex0);
+		yPos(block, 0, 0, 0, tex0);
+		zNeg(block, 0, 0, 0, tex0);
+		zPos(block, 0, 0, 0, tex0);
+		xNeg(block, 0, 0, 0, tex0);
+		xPos(block, 0, 0, 0, tex0);
 	}
 }

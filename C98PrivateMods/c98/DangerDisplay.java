@@ -15,13 +15,11 @@ import net.minecraft.util.*;
 import net.minecraft.world.EnumSkyBlock;
 import org.lwjgl.input.Keyboard;
 import c98.core.*;
+import c98.core.hooks.KeyHook;
 import c98.core.hooks.WorldRenderHook;
 import com.google.common.collect.Sets;
 
-public class DangerDisplay extends C98Mod implements WorldRenderHook {
-	
-//	static Field fldRange = ReflectHelper.getFields(MobSpawnerBaseLogic.class, int.class).get(6);
-//	static Field fldMaxEntities = ReflectHelper.getFields(MobSpawnerBaseLogic.class, int.class).get(4);
+public class DangerDisplay extends C98Mod implements WorldRenderHook, KeyHook {
 	
 	private boolean display = false;
 	

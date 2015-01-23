@@ -17,11 +17,12 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.world.IBlockAccess;
 import c98.core.*;
+import c98.core.hooks.RenderBlockHook;
 import c98.core.item.ItemRenderBlock;
 import c98.graphicalUpgrade.*;
 import c98.graphicalUpgrade.threeD.*;
 
-public class GraphicalUpgrade extends C98Mod {
+public class GraphicalUpgrade extends C98Mod implements RenderBlockHook {
 	
 	public static class GUConf {
 		public static class BMConf {
@@ -157,4 +158,6 @@ public class GraphicalUpgrade extends C98Mod {
 		if(r == Rendering.RenderTypes.STAINED_GLASS) Render3DBlocks.pane(rb, w, (BlockPane)b, x, y, z);
 		if(r == Rendering.RenderTypes.TALL_GRASS) Render3DBlocks.crossedSquares(rb, w, b, x, y, z);
 	}
+	
+	@Override public void renderInvBlock(RenderBlocks rb, Block block, int meta, int rdr) {}
 }

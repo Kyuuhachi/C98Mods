@@ -5,7 +5,8 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
-import net.minecraft.client.resources.*;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
+import net.minecraft.client.resources.SimpleReloadableResourceManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.launchwrapper.Launch;
@@ -33,13 +34,16 @@ public class HookImpl {
 	}
 	
 	public static Timer timer;
-	private static List<TickHook> tickHooks = new ArrayList();
-	private static List<GuiHook> guiHooks = new ArrayList();
-	private static List<HudRenderHook> hudRenderHooks = new ArrayList();
-	private static List<HudTopRenderHook> hudTopRenderHooks = new ArrayList();
-	private static List<WorldRenderHook> worldRenderHooks = new ArrayList();
-	private static List<GuiRenderHook> guiRenderHooks = new ArrayList();
-	private static List<GuiSetHook> guiSetHooks = new ArrayList();
+	public static List<TickHook> tickHooks = new ArrayList();
+	public static List<GuiHook> guiHooks = new ArrayList();
+	public static List<HudRenderHook> hudRenderHooks = new ArrayList();
+	public static List<HudTopRenderHook> hudTopRenderHooks = new ArrayList();
+	public static List<WorldRenderHook> worldRenderHooks = new ArrayList();
+	public static List<GuiRenderHook> guiRenderHooks = new ArrayList();
+	public static List<GuiSetHook> guiSetHooks = new ArrayList();
+	public static List<KeyHook> keyHooks = new ArrayList();
+	public static List<ConnectHook> connectHooks = new ArrayList();
+	public static List<RenderBlockHook> renderBlockHooks = new ArrayList();
 	public static HashMap<KeyBinding, boolean[]> keyBindings = new LinkedHashMap(); //the boolean[] contains [continuous, wasPressed]
 	
 	public static void addHook(Object hook) {
@@ -51,7 +55,10 @@ public class HookImpl {
 		if(hook instanceof WorldRenderHook) worldRenderHooks.add((WorldRenderHook)hook);
 		if(hook instanceof GuiRenderHook) guiRenderHooks.add((GuiRenderHook)hook);
 		if(hook instanceof GuiSetHook) guiSetHooks.add((GuiSetHook)hook);
-		if(hook instanceof IResourceManagerReloadListener) ((IReloadableResourceManager)C98Core.mc.getResourceManager()).registerReloadListener((IResourceManagerReloadListener)hook);
+		if(hook instanceof KeyHook) keyHooks.add((KeyHook)hook);
+		if(hook instanceof ConnectHook) connectHooks.add((ConnectHook)hook);
+		if(hook instanceof RenderBlockHook) renderBlockHooks.add((RenderBlockHook)hook);
+		if(hook instanceof IResourceManagerReloadListener) ((SimpleReloadableResourceManager)C98Core.mc.getResourceManager()).reloadListeners.add(hook);
 	}
 	
 	public static void removeHook(Object hook) {
@@ -63,6 +70,9 @@ public class HookImpl {
 		if(hook instanceof WorldRenderHook) worldRenderHooks.remove(hook);
 		if(hook instanceof GuiRenderHook) guiRenderHooks.remove(hook);
 		if(hook instanceof GuiSetHook) guiSetHooks.remove(hook);
+		if(hook instanceof KeyHook) keyHooks.remove(hook);
+		if(hook instanceof ConnectHook) connectHooks.remove(hook);
+		if(hook instanceof RenderBlockHook) renderBlockHooks.remove(hook);
 		if(hook instanceof IResourceManagerReloadListener) ((SimpleReloadableResourceManager)C98Core.mc.getResourceManager()).reloadListeners.remove(hook);
 	}
 	
@@ -92,6 +102,9 @@ public class HookImpl {
 				Console.log.finer("Hud: " + hudRenderHooks);
 				Console.log.finer("HudTop: " + hudTopRenderHooks);
 				Console.log.finer("World: " + worldRenderHooks);
+				Console.log.finer("Key: " + keyHooks);
+				Console.log.finer("Connect: " + connectHooks);
+				Console.log.finer("RenderBlock: " + renderBlockHooks);
 			}
 		} catch(Exception e) {
 			throw new RuntimeException(e);
@@ -244,26 +257,15 @@ public class HookImpl {
 	
 	public static void renderHudTop() {
 		if(C98Core.mc.playerController.enableEverythingIsScrewedUpMode()) return;
-		C98Core.mc.mcProfiler.startSection("c98renderHudTop");
 		
-		for(HudTopRenderHook mod:hudTopRenderHooks) {
-			C98Core.mc.mcProfiler.startSection(mod.toString());
+		for(HudTopRenderHook mod:hudTopRenderHooks)
 			mod.renderHudTop();
-			C98Core.mc.mcProfiler.endSection();
-		}
-		C98Core.mc.getTextureManager().bindTexture(Gui.icons);
 		glColor3f(1, 1, 1);
-		C98Core.mc.mcProfiler.endSection();
 	}
 	
 	public static void setGui(GuiScreen par1GuiScreen) {
-		C98Core.mc.mcProfiler.startSection("c98setGui");
-		for(GuiSetHook mod:guiSetHooks) {
-			C98Core.mc.mcProfiler.startSection(mod.toString());
+		for(GuiSetHook mod:guiSetHooks)
 			mod.setGui(par1GuiScreen);
-			C98Core.mc.mcProfiler.endSection();
-		}
-		C98Core.mc.mcProfiler.endSection();
 	}
 	
 	private static void doKeys() {
@@ -278,7 +280,7 @@ public class HookImpl {
 			boolean prevDown = flags[1];
 			flags[1] = down;
 			
-			if(down && (!prevDown || flags[0])) for(C98Mod mod:C98Core.modList)
+			if(down && (!prevDown || flags[0])) for(KeyHook mod:keyHooks)
 				mod.keyboardEvent(entry.getKey());
 		}
 	}
@@ -290,12 +292,12 @@ public class HookImpl {
 	}
 	
 	public static void onConnect() {
-		for(C98Mod mod:C98Core.modList)
+		for(ConnectHook mod:connectHooks)
 			mod.onConnect(C98Core.mc.getNetHandler());
 	}
 	
 	public static void onDisconnect() {
-		for(C98Mod mod:C98Core.modList)
+		for(ConnectHook mod:connectHooks)
 			mod.onDisconnect(C98Core.mc.getNetHandler());
 	}
 	

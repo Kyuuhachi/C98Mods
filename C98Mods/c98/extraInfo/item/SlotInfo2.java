@@ -16,7 +16,7 @@ import c98.core.launch.*;
 
 public class SlotInfo2 extends GuiContainerCreative implements CustomASMer {
 	public static class Impl {
-		public static void drawIt(CreativeTabs tab, int x, int y, int u, int v, int w, int h) { //TODO this draws outside the tab
+		public static void drawIt(CreativeTabs tab, int x, int y, int u, int v, int w, int h) { //TODO this draws outside the tab, use stencil buffer
 			Color c = ExtraInfo.config.slotInfo.colors.get(tab.getTabLabel());
 			GuiScreen s = Minecraft.getMinecraft().currentScreen;
 			GuiContainerCreative g = s instanceof GuiContainerCreative ? (GuiContainerCreative)s : null;
@@ -24,6 +24,7 @@ public class SlotInfo2 extends GuiContainerCreative implements CustomASMer {
 				glColor3f(1, 1, 1);
 				return;
 			}
+			
 			glEnable(GL_BLEND);
 			glDisable(GL_ALPHA_TEST);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

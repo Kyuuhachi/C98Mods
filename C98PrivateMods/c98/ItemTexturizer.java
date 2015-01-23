@@ -19,10 +19,11 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL12;
 import c98.core.C98Core;
 import c98.core.C98Mod;
+import c98.core.hooks.KeyHook;
 
-public class ItemTexturizer extends C98Mod {
+public class ItemTexturizer extends C98Mod implements KeyHook {
 	int n = 16;
-	KeyBinding k = new KeyBinding("asdf", Keyboard.KEY_I, C98Core.KEYBIND_CAT);
+	KeyBinding k = new KeyBinding("Create item sheet", Keyboard.KEY_I, C98Core.KEYBIND_CAT);
 	
 	@Override public void load() {
 //		C98Core.registerKey(k, false);
@@ -44,11 +45,11 @@ public class ItemTexturizer extends C98Mod {
 				return -String.CASE_INSENSITIVE_ORDER.compare(arg0.split(":")[0], arg1.split(":")[0]);
 			}
 		});
-
+		
 		Framebuffer fb = new Framebuffer(names.size() * n, 16 * n, true);
 		RenderItem ri = new RenderItem();
 		initGl(names, fb, ri);
-
+		
 		File dir = new File("C:/Users/admusr/Desktop/mcmods");
 		PrintStream out = null;
 		try {
@@ -58,11 +59,11 @@ public class ItemTexturizer extends C98Mod {
 		int x = 0;
 		boolean c98 = false;
 		List<String> allnames = new LinkedList();
-
+		
 		String[] wood = {"oak", "spruce", "birch", "jungle", "acacia", "dark_oak"};
 		String[] color = {"white", "orange", "magenta", "lightBlue", "yellow", "lime", "pink", "gray", "silver", "cyan", "purple", "blue", "brown", "green", "red", "black"};
 		String[] slab = {"stone", "sandstone", "wood_old", "cobblestone", "brick", "stone_brick", "nether_brick", "quartz"};
-		for(String s : names) {
+		for(String s:names) {
 			if(s.startsWith("c98") && !c98) {
 				c98 = true;
 				while(x % 16 != 0)
@@ -73,20 +74,20 @@ public class ItemTexturizer extends C98Mod {
 			try {
 				for(int j = 0; j < 16; j++) {
 					ItemStack is = new ItemStack(i, 1, j);
-
+					
 					String un = s;
 					if(un.startsWith("minecraft:")) un = un.substring(10);
 					if(un.startsWith("c98:")) un = un.substring(4);
-
+					
 					//TODO maybe: anvil fish cookedfish spawnegg tallergrass
-
+					
 					if(i == Item.getItemFromBlock(Blocks.wool)) un += "_" + color[j];
 					if(i == Item.getItemFromBlock(Blocks.stained_hardened_clay)) un += "_" + color[j];
 					if(i == Item.getItemFromBlock(Blocks.stained_glass)) un += "_" + color[j];
 					if(i == Item.getItemFromBlock(Blocks.stained_glass_pane)) un += "_" + color[j];
 					if(i == Item.getItemFromBlock(Blocks.carpet)) un += "_" + color[j];
 					if(i == Items.dye) un += "_" + color[15 - j];
-
+					
 					if(i == Item.getItemFromBlock(Blocks.log)) un += "_" + wood[j % 4];
 					if(i == Item.getItemFromBlock(Blocks.log2)) un += "_" + wood[j % 4 + 4];
 					if(i == Item.getItemFromBlock(Blocks.leaves)) un += "_" + wood[j % 4];
@@ -95,7 +96,7 @@ public class ItemTexturizer extends C98Mod {
 					if(i == Item.getItemFromBlock(Blocks.wooden_slab)) un += "_" + wood[j];
 					if(i == Item.getItemFromBlock(Blocks.double_wooden_slab)) un += "_" + wood[j];
 					if(i == Item.getItemFromBlock(Blocks.planks)) un += "_" + wood[j];
-
+					
 					if(i == Item.getItemFromBlock(Blocks.sandstone)) un = new String[] {"", "chiseled_", "smooth_"}[j] + un;
 					if(i == Item.getItemFromBlock(Blocks.tallgrass)) un = new String[] {"dead_bush", "tall_grass", "fern"}[j];
 					if(i == Item.getItemFromBlock(Blocks.yellow_flower)) un = "dandelion";
@@ -108,9 +109,9 @@ public class ItemTexturizer extends C98Mod {
 					if(i == Item.getItemFromBlock(Blocks.quartz_block)) un += "_" + new String[] {"default", "chiseled", "lines"}[j];
 					if(i == Items.skull) un += "_" + new String[] {"skeleton", "wither_skeleton", "zombie", "player", "creeper"}[j];
 					if(i == Items.coal && j == 1) un = "charcoal";
-
+					
 					if(c98) un = "c98-" + un;
-
+					
 					if(l.contains(un)) break;
 					l.add(un);
 					if(allnames.contains(un)) System.err.println(un);

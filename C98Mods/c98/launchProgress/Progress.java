@@ -1,8 +1,6 @@
 package c98.launchProgress;
 
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import net.minecraft.launchwrapper.Launch;
 
 public class Progress {
@@ -19,7 +17,7 @@ public class Progress {
 	}
 	
 	public static void setProgress(int prog, String msg) {
-		System.out.println(new SimpleDateFormat("HH:mm:ss").format(new Date()) + " " + prog + "%: " + msg);
+//		System.out.println(new SimpleDateFormat("HH:mm:ss").format(new Date()) + " " + prog + "%: " + msg);
 		try {
 			Class c = Launch.blackboard.get(key).getClass();
 			Method m = c.getMethod("setProgress", int.class, String.class);

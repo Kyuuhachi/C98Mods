@@ -12,7 +12,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
@@ -26,12 +25,11 @@ import c98.extraInfo.gui.*;
 import c98.extraInfo.hud.*;
 import c98.extraInfo.item.*;
 import c98.extraInfo.itemViewer.GuiSelectItem;
-import c98.extraInfo.itemViewer.GuiViewItem;
 import c98.targetLock.TargetEntity;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 
-public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, HudTopRenderHook {
+public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, HudTopRenderHook, KeyHook {
 	public static class EIConf implements CustomConfig {
 		
 		public static class TBConf {
@@ -187,24 +185,18 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, H
 	}
 	
 	@Override public void keyboardEvent(KeyBinding key) {
-		if(key == viewKey) {
-			if(mc.currentScreen instanceof GuiContainer) {
-				Slot s = ((GuiContainer)mc.currentScreen).field_147006_u;
-				if(s.getHasStack()) mc.displayGuiScreen(new GuiViewItem(s.getStack()));
-			}
-			if(mc.currentScreen == null) {
-				List<ItemStack> viableStacks = new LinkedList();
-				Entity entity = null;
-				add(viableStacks, mc.thePlayer.inventory.armorInventory);
-				if(C98Core.isModLoaded("TargetLock") && TargetLock.target() instanceof TargetEntity) {
-					entity = ((TargetEntity)TargetLock.target()).getEntity();
-					ItemStack[] stacks = entity.getLastActiveItems();
-					add(viableStacks, stacks);
-				} else add(viableStacks, new ItemStack[5]);
-				add(viableStacks, mc.thePlayer.inventory.mainInventory);
-				
-				mc.displayGuiScreen(new GuiSelectItem(viableStacks, entity instanceof EntityLivingBase ? (EntityLivingBase)entity : null));
-			}
+		if(key == viewKey && mc.currentScreen == null) {
+			List<ItemStack> viableStacks = new LinkedList();
+			Entity entity = null;
+			add(viableStacks, mc.thePlayer.inventory.armorInventory);
+			if(C98Core.isModLoaded("TargetLock") && TargetLock.target() instanceof TargetEntity) {
+				entity = ((TargetEntity)TargetLock.target()).getEntity();
+				ItemStack[] stacks = entity.getLastActiveItems();
+				add(viableStacks, stacks);
+			} else add(viableStacks, new ItemStack[5]);
+			add(viableStacks, mc.thePlayer.inventory.mainInventory);
+			
+			mc.displayGuiScreen(new GuiSelectItem(viableStacks, entity instanceof EntityLivingBase ? (EntityLivingBase)entity : null));
 		}
 	}
 	

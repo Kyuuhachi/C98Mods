@@ -5,14 +5,14 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import c98.core.*;
-import c98.core.hooks.HudRenderHook;
+import c98.core.hooks.*;
 import c98.minemap.*;
 import c98.minemap.MinemapConfig.EntityMarker;
 import c98.minemap.server.EntitySelector;
 import c98.minemap.server.MarkerManager;
 import com.google.gson.GsonBuilder;
 
-public class Minemap extends C98Mod implements HudRenderHook {
+public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHook {
 	public static MapServer mapServer;
 	private MapThread thread;
 	private KeyBinding key = new KeyBinding("Toggle map preset", Keyboard.KEY_M, C98Core.KEYBIND_CAT);
@@ -21,15 +21,15 @@ public class Minemap extends C98Mod implements HudRenderHook {
 	public static MarkerManager mgr;
 	public static MinemapConfig config;
 	private long lastStartTime;
-
+	
 	@Override public String getShortName() {
 		return "MM";
 	}
-
+	
 	@Override public void load() {
 		C98Core.registerKey(key, false);
 	}
-
+	
 	private void readConfig() {
 		EntitySelector.reloadConfig();
 		config = Json.get(this, MinemapConfig.class);
@@ -41,7 +41,7 @@ public class Minemap extends C98Mod implements HudRenderHook {
 		}
 		mgr = new MarkerManager();
 	}
-
+	
 	@Override public void keyboardEvent(KeyBinding keybinding) {
 		if(mc.currentScreen != null) return;
 		if(keybinding == key) {
@@ -56,7 +56,7 @@ public class Minemap extends C98Mod implements HudRenderHook {
 			}
 		}
 	}
-
+	
 	private void start() {
 		if(thread == null && lastStartTime + System.currentTimeMillis() > 1000) {
 			mapServer = new MapServer(mc.theWorld);
@@ -70,7 +70,7 @@ public class Minemap extends C98Mod implements HudRenderHook {
 			if(!reloadMap) lastStartTime = -System.currentTimeMillis();
 		}
 	}
-
+	
 	private void stop() {
 		if(thread != null) {
 			C98Core.removeHook(mapServer.renderer);
@@ -79,15 +79,15 @@ public class Minemap extends C98Mod implements HudRenderHook {
 			mapServer = null;
 		}
 	}
-
+	
 	@Override public void onConnect(NetHandlerPlayClient cli) {
 		reloadMap = true;
 	}
-
+	
 	@Override public void onDisconnect(NetHandlerPlayClient cli) {
 		stop();
 	}
-
+	
 	@Override public void renderHud(boolean status) {
 		if((mapServer == null || mc.theWorld != mapServer.world || reloadMap || !thread.isAlive()) && mc.currentScreen == null) {
 			stop();

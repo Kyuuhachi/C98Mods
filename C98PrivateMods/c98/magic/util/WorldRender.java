@@ -22,11 +22,7 @@ public class WorldRender {
 		if(mc.gameSettings.renderDistanceChunks >= 4) {
 			mc.entityRenderer.setupFog(-1, ptt);
 			mc.mcProfiler.endStartSection("sky");
-			glPushAttrib(GL_ALL_ATTRIB_BITS);
-			glDisable(GL_DEPTH_TEST);
-			glDisable(GL_LIGHTING);
 			mc.renderGlobal.renderSky(ptt);
-			glPopAttrib();
 		}
 		
 		glEnable(GL_FOG);

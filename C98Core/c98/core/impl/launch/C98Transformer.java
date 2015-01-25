@@ -69,7 +69,7 @@ public class C98Transformer implements IClassTransformer {
 			if(s.indexOf('-') - 1 > maxLen) maxLen = s.indexOf('-') - 1;
 		String fmt = "%-" + maxLen + "s -> %s";
 		for(String s:output)
-			Console.log(String.format(fmt, (Object[])s.split(" -> ", 2)));
+			Console.fine(String.format(fmt, (Object[])s.split(" -> ", 2)));
 	}
 	
 	private ClassInfo getNames(final String className) throws IOException {
@@ -202,11 +202,11 @@ public class C98Transformer implements IClassTransformer {
 			else if(transformerMethod.name.equals("<init>")) addInit(transformerMethod, dstMethod);
 			else addMthd(transformerMethod, dstMethod, dst, className);
 		}
-		l: for(FieldNode n:transformer.fields) {
-			for(FieldNode n2:dst.fields)
-				if(n2.name.equals(n.name)) continue l;
-			dst.fields.add(n);
-		}
+	l: for(FieldNode n:transformer.fields) {
+		for(FieldNode n2:dst.fields)
+			if(n2.name.equals(n.name)) continue l;
+		dst.fields.add(n);
+	}
 	}
 	
 	private static void genSuperCall(ClassNode dst, MethodNode dstMethod) {

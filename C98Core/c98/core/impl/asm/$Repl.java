@@ -9,6 +9,10 @@ public class $Repl implements Replacer {
 		ls.add("c98.core.impl.asm.C98Minecraft2"); //init client
 		ls.add("c98.core.impl.asm.C98DedicatedServer"); //init serv
 		ls.add("c98.core.impl.asm.C98NetHandler"); //packet stuff
+		ls.add("c98.core.impl.asm.AccessImpl"); //Implement c98.core.Access
+		ls.add("c98.core.impl.asm.C98TextureMap"); //Change block/item texture folder structure
+		ls.add("c98.core.impl.asm.C98EntityTrackerEntry"); //Custom spawn packets - send
+		ls.add("c98.core.impl.asm.C98NHPC"); //Custom spawn packets - receive
 		
 		ls.add("c98.core.impl.asm.render.C98RenderBlocks"); //render blocks
 		ls.add("c98.core.impl.asm.render.C98TERenderer"); //render TE
@@ -28,6 +32,5 @@ public class $Repl implements Replacer {
 		ls.add("c98.core.impl.asm.skin.C98RenderBiped"); //wings and blaze rods
 		ls.add("c98.core.impl.asm.skin.C98RenderPlayer");//wings and blaze rods
 		
-		ls.add("c98.core.impl.asm.AccessImpl"); //Implement c98.core.Access
 	}
 }

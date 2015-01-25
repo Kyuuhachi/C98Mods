@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.*;
-import net.minecraft.tileentity.TileEntity;
 import c98.core.hooks.HudRenderHook;
 import c98.core.impl.HookImpl;
 import c98.core.impl.Notification;
@@ -52,10 +51,6 @@ public class C98Core implements HudRenderHook {
 		return HookImpl.timer.renderPartialTicks;
 	}
 	
-	@Deprecated public static void registerTileEntity(Class<? extends TileEntity> cl, String name) {
-		TileEntity.func_145826_a(cl, name);
-	}
-	
 	@Override public void renderHud(boolean status) {
 		if(currentNotification != null) {
 			currentNotification.updateAchievementWindow();
@@ -73,7 +68,7 @@ public class C98Core implements HudRenderHook {
 	
 	public static void registerBlock(Block b, String string, int id, Item i) {
 		Block.blockRegistry.addObject(id, string, b);
-		registerItem(i, string, id);
+		if(i != null) registerItem(i, string, id);
 		b.setBlockName(string.replace(':', '.'));
 	}
 	
@@ -81,5 +76,4 @@ public class C98Core implements HudRenderHook {
 		Item.itemRegistry.addObject(id, string, i);
 		i.setUnlocalizedName(string.replace(':', '.'));
 	}
-	
 }

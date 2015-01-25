@@ -2,6 +2,7 @@ package c98.magic;
 
 import java.util.List;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,8 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -65,11 +65,28 @@ public class BlockWormhole extends BlockContainer {
 		private double y(Entity e) {
 			return e.posY - (e instanceof EntityPlayer ? 1.62 : e.getYOffset());
 		}
+		
+		@Override public double getMaxRenderDistanceSquared() {
+			return 100;
+		}
 	}
+	
+	public static IIcon magic_gate;
 	
 	public BlockWormhole() {
 		super(Blocks.obsidian.getMaterial());
 		setBlockTextureName("obsidian");
+		setLightLevel(1);
+	}
+	
+	@Override public void registerBlockIcons(IIconRegister p_149651_1_) {
+		super.registerBlockIcons(p_149651_1_);
+		magic_gate = p_149651_1_.registerIcon("c98:Magic:magic_gate");
+	}
+	
+	@Override public IIcon getIcon(IBlockAccess w, int x, int y, int z, int side) {
+		if(Direction.directionToFacing[w.getBlockMetadata(x, y, z) & 3] == side) return magic_gate;
+		return super.getIcon(w, x, y, z, side);
 	}
 	
 	@Override public TileEntity createNewTileEntity(World w, int meta) {
@@ -84,18 +101,6 @@ public class BlockWormhole extends BlockContainer {
 		return false;
 	}
 	
-	@Override public void setBlockBoundsBasedOnState(IBlockAccess w, int x, int y, int z) {
-		int meta = w.getBlockMetadata(x, y, z) & 3;
-		if(meta == 0) setBlockBounds(0, 0, 0, 1, 1, 0);
-		if(meta == 1) setBlockBounds(1, 0, 0, 1, 1, 1);
-		if(meta == 2) setBlockBounds(0, 0, 1, 1, 1, 1);
-		if(meta == 3) setBlockBounds(0, 0, 0, 0, 1, 1);
-	}
-	
-	@Override public void setBlockBoundsForItemRender() {
-		setBlockBounds(0, 0, 0, 1, 1, 1);
-	}
-	
 	@Override public void onBlockPlacedBy(World w, int x, int y, int z, EntityLivingBase e, ItemStack is) {
 		int meta = ((MathHelper.floor_double(e.rotationYaw * 4 / 360 + 0.5) & 3) + 2) % 4;
 		w.setBlockMetadataWithNotify(x, y, z, meta | is.getItemDamage() << 2, 3);
@@ -106,16 +111,30 @@ public class BlockWormhole extends BlockContainer {
 		l.add(new ItemStack(item, 1, 1));
 	}
 	
+	float f = 1F / 32;
+	
+	@Override public void setBlockBoundsBasedOnState(IBlockAccess w, int x, int y, int z) {
+		int meta = w.getBlockMetadata(x, y, z) & 3;
+		if(meta == 0) setBlockBounds(0, 0, 0, 1, 1, 0 + f);
+		if(meta == 1) setBlockBounds(1 - f, 0, 0, 1, 1, 1);
+		if(meta == 2) setBlockBounds(0, 0, 1 - f, 1, 1, 1);
+		if(meta == 3) setBlockBounds(0, 0, 0, 0 + f, 1, 1);
+	}
+	
+	@Override public void setBlockBoundsForItemRender() {
+		setBlockBounds(0, 0, 0, 1, 1, 1);
+	}
+	
 	@Override public AxisAlignedBB getCollisionBoundingBoxFromPool(World w, int x, int y, int z) {
 		return getSelectedBoundingBoxFromPool(w, x, y, z);
 	}
 	
 	@Override public AxisAlignedBB getSelectedBoundingBoxFromPool(World w, int x, int y, int z) {
 		int meta = w.getBlockMetadata(x, y, z) & 3;
-		if(meta == 0) return AxisAlignedBB.getBoundingBox(x + 0, y, z + 0, x + 1, y + 1, z + 0);
-		if(meta == 1) return AxisAlignedBB.getBoundingBox(x + 1, y, z + 0, x + 1, y + 1, z + 1);
-		if(meta == 2) return AxisAlignedBB.getBoundingBox(x + 0, y, z + 1, x + 1, y + 1, z + 1);
-		if(meta == 3) return AxisAlignedBB.getBoundingBox(x + 0, y, z + 0, x + 0, y + 1, z + 1);
+		if(meta == 0) return AxisAlignedBB.getBoundingBox(x + 0, y, z + 0, x + 1, y + 1, z + 0 + f);
+		if(meta == 1) return AxisAlignedBB.getBoundingBox(x + 1 - f, y, z + 0, x + 1, y + 1, z + 1);
+		if(meta == 2) return AxisAlignedBB.getBoundingBox(x + 0, y, z + 1 - f, x + 1, y + 1, z + 1);
+		if(meta == 3) return AxisAlignedBB.getBoundingBox(x + 0, y, z + 0, x + 0 + f, y + 1, z + 1);
 		return super.getSelectedBoundingBoxFromPool(w, x, y, z);
 	}
 	

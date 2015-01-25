@@ -1,8 +1,6 @@
 package c98.core.item;
 
 import static org.lwjgl.opengl.GL11.*;
-import org.lwjgl.opengl.GL12;
-import c98.core.util.Vector;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -13,6 +11,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
+import org.lwjgl.opengl.GL12;
+import c98.core.util.Vector;
 
 public abstract class ItemRenderBlock extends ItemRenderHook {
 	public RenderBlocks rb;

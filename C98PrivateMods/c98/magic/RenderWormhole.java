@@ -2,24 +2,129 @@ package c98.magic;
 
 import static org.lwjgl.opengl.GL11.*;
 import java.nio.FloatBuffer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL14;
 import c98.core.util.*;
 import c98.magic.util.WorldRender;
 
 public class RenderWormhole extends TileEntitySpecialRenderer {
-	private static final float WIDTH = 0.435F;
+	private static final float WIDTH = 6 / 16F;
 	private static final int MASK = 1;
 	private boolean recursion;
 	
-	@Override public void renderTileEntityAt(TileEntity t, double x, double y, double z, float ptt) {
-		BlockWormhole.TE te = (BlockWormhole.TE)t;
-		if(te.isCenter()) drawCenter(te, x, y, z, ptt);
+	@Override public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float ptt) {
+		BlockWormhole.TE te = (BlockWormhole.TE)tileentity;
+		if(!te.isCenter()) return;
+		
+		float a = (float)(x * x + y * y + z * z) / (32 * 32);
+		a = (float)Math.cbrt(a);
+		a = a * 19 / 16F - 3 / 16F;
+		if(a > 1 || recursion) a = 1;
+		
+		if(a < 1) drawGate(te, x, y, z, ptt);
+		
+		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+		
+		for(int i = -1; i <= 1; i++)
+			for(int j = -1; j <= 1; j++) {
+				glPushMatrix();
+				{
+					double x2 = x;
+					double z2 = z;
+					if(te.getDirection() == 0) x2 += i;
+					if(te.getDirection() == 1) z2 += i;
+					if(te.getDirection() == 2) x2 += i;
+					if(te.getDirection() == 3) z2 += i;
+					
+					glTranslated(x2 + 0.5, y + j + 0.5, z2 + 0.5);
+					
+					glDisable(GL_ALPHA_TEST);
+					glEnable(GL_BLEND);
+					glColorMaterial(GL_FRONT, GL_DIFFUSE);
+					glEnable(GL_COLOR_MATERIAL);
+					
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glColor4f(1, 1, 1, a * 2);
+					drawPortal(te);
+					
+					if(a > 0.5)
+					;
+					{
+						glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
+						GL14.glBlendColor(1, 1, 1, a * 2 - 1);
+						glColor4f(1, 1, 1, 1);
+						drawPortal(te);
+					}
+					
+					glDisable(GL_COLOR_MATERIAL);
+					glDisable(GL_BLEND);
+					glEnable(GL_ALPHA_TEST);
+				}
+				glPopMatrix();
+			}
+		glColor3f(1, 1, 1);
 	}
 	
-	private void drawCenter(BlockWormhole.TE te, double x, double y, double z, float ptt) {
-		if(recursion) return;
+	private void drawPortal(BlockWormhole.TE te) {
+		glBegin(GL_QUADS);
+		{
+			float u0 = BlockWormhole.magic_gate.getMinU();
+			float v0 = BlockWormhole.magic_gate.getMinV();
+			float u1 = BlockWormhole.magic_gate.getMaxU();
+			float v1 = BlockWormhole.magic_gate.getMaxV();
+			if(te.getDirection() == 0) {
+				glNormal3f(0, 0, -1);
+				glTexCoord2f(u0, v1);
+				glVertex3f(-.5F, -.5F, 0);
+				glTexCoord2f(u1, v1);
+				glVertex3f(+.5F, -.5F, 0);
+				glTexCoord2f(u1, v0);
+				glVertex3f(+.5F, +.5F, 0);
+				glTexCoord2f(u0, v0);
+				glVertex3f(-.5F, +.5F, 0);
+			}
+			if(te.getDirection() == 1) {
+				glNormal3f(1, 0, 0);
+				glTexCoord2f(u0, v1);
+				glVertex3f(0, -.5F, -.5F);
+				glTexCoord2f(u1, v1);
+				glVertex3f(0, -.5F, +.5F);
+				glTexCoord2f(u1, v0);
+				glVertex3f(0, +.5F, +.5F);
+				glTexCoord2f(u0, v0);
+				glVertex3f(0, +.5F, -.5F);
+			}
+			if(te.getDirection() == 2) {
+				glNormal3f(0, 0, 1);
+				glTexCoord2f(u0, v1);
+				glVertex3f(+.5F, -.5F, 0);
+				glTexCoord2f(u1, v1);
+				glVertex3f(-.5F, -.5F, 0);
+				glTexCoord2f(u1, v0);
+				glVertex3f(-.5F, +.5F, 0);
+				glTexCoord2f(u0, v0);
+				glVertex3f(+.5F, +.5F, 0);
+			}
+			if(te.getDirection() == 3) {
+				glNormal3f(-1, 0, 0);
+				glTexCoord2f(u0, v1);
+				glVertex3f(0, -.5F, +.5F);
+				glTexCoord2f(u1, v1);
+				glVertex3f(0, -.5F, -.5F);
+				glTexCoord2f(u1, v0);
+				glVertex3f(0, +.5F, -.5F);
+				glTexCoord2f(u0, v0);
+				glVertex3f(0, +.5F, +.5F);
+			}
+		}
+		glEnd();
+	}
+	
+	private void drawGate(BlockWormhole.TE te, double x, double y, double z, float ptt) {
 		
 		x += 0.5;
 		y += 0.5;
@@ -164,12 +269,6 @@ public class RenderWormhole extends TileEntitySpecialRenderer {
 		prMat.store(pr);
 		pr.flip();
 		glLoadMatrix(pr);
-		
-//		glBegin(GL_TRIANGLES);
-//		glVertex3d(v1.x, v1.y, v1.z);
-//		glVertex3d(v2.x, v2.y, v2.z);
-//		glVertex3d(v3.x, v3.y, v3.z);
-//		glEnd();
 	}
 	
 	private double dot(double[] v1, double[] v2) {

@@ -8,10 +8,11 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 import c98.core.impl.C98ResourcePack;
 import c98.core.impl.HookImpl;
+import c98.core.launch.ASMer;
 import c98.core.launch.CustomASMer;
 import com.google.common.collect.Multimap;
 
-public class C98Minecraft2 extends Minecraft implements CustomASMer {
+@ASMer class C98Minecraft2 extends Minecraft implements CustomASMer {
 	
 	public static class Func {
 		public static void clientInit(String s) {

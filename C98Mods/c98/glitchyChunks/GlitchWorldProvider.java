@@ -1,17 +1,11 @@
 package c98.glitchyChunks;
 
-import c98.GlitchyChunks;
-import c98.core.launch.NoInclude;
-import c98.glitchyChunks.Gen;
-import c98.glitchyChunks.Mgr;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.IChunkProvider;
+import c98.GlitchyChunks;
+import c98.core.launch.ASMer;
 
-public class GlitchWorldProvider extends WorldProvider {
-	
-	@NoInclude @Override public String getDimensionName() {
-		return null;
-	}
+@ASMer abstract class GlitchWorldProvider extends WorldProvider {
 	
 	@Override protected void registerWorldChunkManager() {
 		if(worldObj.getWorldInfo().getTerrainType() == GlitchyChunks.TYPE) worldChunkMgr = new Mgr(worldObj);

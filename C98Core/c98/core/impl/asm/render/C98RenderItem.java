@@ -7,9 +7,10 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import c98.core.Rendering;
-import c98.core.item.*;
+import c98.core.item.ItemOverlay;
+import c98.core.launch.ASMer;
 
-class C98RenderItem extends RenderItem {
+@ASMer class C98RenderItem extends RenderItem {
 	
 	@Override public void doRender(EntityItem par1EntityItem, double par2, double par4, double par6, float par8, float par9) {
 		ItemStack is = par1EntityItem.getEntityItem();

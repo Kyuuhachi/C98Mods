@@ -4,8 +4,9 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import c98.core.launch.ASMer;
 
-public class ArmorInfo extends ItemArmor {
+@ASMer class ArmorInfo extends ItemArmor {
 	public ArmorInfo(ArmorMaterial par2EnumArmorMaterial, int par3, int par4) {
 		super(par2EnumArmorMaterial, par3, par4);
 	}

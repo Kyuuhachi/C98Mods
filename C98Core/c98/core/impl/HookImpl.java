@@ -1,7 +1,6 @@
 package c98.core.impl;
 
 import static org.lwjgl.opengl.GL11.*;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
@@ -15,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.objectweb.asm.*;
 import c98.core.*;
 import c98.core.hooks.*;
 import c98.core.impl.launch.C98Tweaker;
@@ -81,14 +81,12 @@ public class HookImpl {
 	
 	public static void init() {
 		try {
-			for(C98Mod mod:C98Core.modList) {
-				Console.log("[C98Core] Loading C98Mod: " + mod);
+			for(C98Mod mod:C98Core.modList)
 				try {
 					mod.load();
 				} catch(Exception e) {
 					Console.error("Failed to load mod " + mod, e);
 				}
-			}
 			
 			Console.log.finer("Mod list: " + C98Core.modList);
 			if(C98Core.client) {
@@ -124,32 +122,36 @@ public class HookImpl {
 			C98Loader.loadMods(new C98Loader.ModHandler() {
 				@Override public void load(String name) {
 					try {
-						boolean b = false;
-						if(name.contains("/") && name.substring(0, name.lastIndexOf('/')).equals("c98")) b = true;
-						if(!b) return;
-						String className = name.split("\\.")[0]; //remove .class
-						
-						if(className.contains("$")) return;
-						className = className.replace('/', '.');
-						
-						Class modClass = null;
-						try {
-							modClass = Launch.classLoader.loadClass(className);
-						} catch(Throwable e) {
-							Console.error("Failed to load class " + className, e);
-							return;
-						}
-						
-						if(!C98Mod.class.isAssignableFrom(modClass)) return;
-						if(Modifier.isAbstract(modClass.getModifiers())) return;
-						C98Mod modInstance = (C98Mod)modClass.newInstance();
-						
-						if(modInstance != null) {
-							C98Core.modList.add(modInstance);
-							Console.log("[C98Core] C98Mod found: " + modInstance.toString());
-						}
+						ClassReader rdr = new ClassReader(C98Tweaker.class.getClassLoader().getResourceAsStream(name));
+						final String clName = name.replace(".class", "").replace("/", ".");
+						rdr.accept(new ClassVisitor(Opcodes.ASM4) {
+							@Override public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+								if(!superName.equals("c98/core/C98Mod")) return;
+								Class modClass = null;
+								try {
+									modClass = Launch.classLoader.loadClass(clName);
+								} catch(Throwable e) {
+									Console.error("Failed to load class " + clName, e);
+									return;
+								}
+								
+								C98Mod modInstance;
+								try {
+									modInstance = (C98Mod)modClass.newInstance();
+								} catch(InstantiationException | IllegalAccessException e) {
+									Console.error("Failed to create instance of " + clName, e);
+									return;
+								}
+								
+								if(modInstance != null) {
+									C98Core.modList.add(modInstance);
+									Console.log("[C98Core] C98Mod found: " + modInstance.toString());
+								}
+								
+							}
+						}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 					} catch(Throwable e) {
-						Console.error("Failed to load class " + name, e);
+						Console.error(e);
 					}
 				}
 			});

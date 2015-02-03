@@ -7,9 +7,10 @@ import net.minecraft.item.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StringUtils;
+import c98.core.launch.ASMer;
 import c98.core.util.Convert;
 
-public class FoodInfo extends ItemFood {
+@ASMer class FoodInfo extends ItemFood {
 	public FoodInfo(int par1, float par2, boolean par3) {
 		super(par1, par2, par3);
 	}

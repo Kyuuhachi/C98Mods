@@ -1,10 +1,11 @@
 package c98.core.impl.asm.render;
 
-import c98.core.Rendering;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
+import c98.core.Rendering;
+import c98.core.launch.ASMer;
 
-class C98RenderBlocks extends RenderBlocks {
+@ASMer class C98RenderBlocks extends RenderBlocks {
 	@Override public boolean renderBlockByRenderType(Block b, int i, int j, int k) {
 		if(Rendering.renderWorldBlock(this, blockAccess, b, i, j, k, b.getRenderType())) return true;
 		return super.renderBlockByRenderType(b, i, j, k);

@@ -1,12 +1,13 @@
 package c98.core.impl.asm.skin;
 
-import c98.core.impl.skin.Skins;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.EntityLivingBase;
+import c98.core.impl.skin.Skins;
+import c98.core.launch.ASMer;
 
-class C98RenderPlayer extends RenderPlayer {
+@ASMer class C98RenderPlayer extends RenderPlayer {
 	private Skins skinExtras;
-
+	
 	public C98RenderPlayer() {
 		skinExtras = new Skins(mainModel);
 	}

@@ -8,8 +8,9 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.S0EPacketSpawnObject;
 import c98.core.hooks.EntitySpawnHook;
 import c98.core.impl.HookImpl;
+import c98.core.launch.ASMer;
 
-public class C98NHPC extends NetHandlerPlayClient {
+@ASMer class C98NHPC extends NetHandlerPlayClient {
 	
 	public C98NHPC(Minecraft p_i45061_1_, GuiScreen p_i45061_2_, NetworkManager p_i45061_3_) {
 		super(p_i45061_1_, p_i45061_2_, p_i45061_3_);

@@ -6,8 +6,9 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.opengl.ARBFramebufferObject;
+import c98.core.launch.ASMer;
 
-class C98StencilFramebuffer extends Framebuffer {
+@ASMer class C98StencilFramebuffer extends Framebuffer {
 	
 	public C98StencilFramebuffer(int p_i45078_1_, int p_i45078_2_, boolean p_i45078_3_) {
 		super(p_i45078_1_, p_i45078_2_, p_i45078_3_);

@@ -5,10 +5,11 @@ import net.minecraft.inventory.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
-import c98.core.launch.*;
+import c98.core.launch.ASMer;
+import c98.core.launch.CustomASMer;
 
-public abstract class SlotInfo1 extends GuiContainer implements CustomASMer {
-	@NoInclude public SlotInfo1(Container par1Container) {
+@ASMer abstract class SlotInfo1 extends GuiContainer implements CustomASMer {
+	public SlotInfo1(Container par1Container) {
 		super(par1Container);
 	}
 	

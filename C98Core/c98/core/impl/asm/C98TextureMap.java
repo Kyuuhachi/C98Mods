@@ -2,8 +2,9 @@ package c98.core.impl.asm;
 
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
+import c98.core.launch.ASMer;
 
-public class C98TextureMap extends TextureMap {
+@ASMer class C98TextureMap extends TextureMap {
 	
 	public C98TextureMap(int p_i1281_1_, String p_i1281_2_) {
 		super(p_i1281_1_, p_i1281_2_);

@@ -1,18 +1,18 @@
 package c98.core.impl.asm.render;
 
 import static org.lwjgl.opengl.GL11.*;
-import c98.core.Rendering;
-import c98.core.launch.NoInclude;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import c98.core.Rendering;
+import c98.core.launch.ASMer;
 
-class C98ItemRenderer extends ItemRenderer {
+@ASMer class C98ItemRenderer extends ItemRenderer {
 	
 	private boolean first;
 	
-	@NoInclude public C98ItemRenderer(Minecraft mc) {
+	public C98ItemRenderer(Minecraft mc) {
 		super(mc);
 	}
 	

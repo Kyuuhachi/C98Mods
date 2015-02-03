@@ -3,8 +3,9 @@ package c98.core.impl.asm.skin;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import c98.core.launch.ASMer;
 
-abstract class C98Entity extends Entity {
+@ASMer abstract class C98Entity extends Entity {
 	public float wingAngle;
 	public float wingAnglep;
 	public boolean wingResting;

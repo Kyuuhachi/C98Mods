@@ -18,7 +18,6 @@ import org.lwjgl.input.Keyboard;
 import c98.core.*;
 import c98.core.Json.CustomConfig;
 import c98.core.hooks.*;
-import c98.core.launch.Replacer;
 import c98.core.util.NinePatch;
 import c98.extraInfo.PlayerInfo;
 import c98.extraInfo.gui.*;
@@ -66,8 +65,7 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, H
 		}
 		
 		public boolean horseStats = true, xpStats = true, furnaceInfo = true; // GUI
-		public boolean durability = true, bowInfo = true, anvilInfo = true, potionOverlay = true; // Item
-		// overlay
+		public boolean durability = true, bowInfo = true, anvilInfo = true, potionOverlay = true; // Item overlay
 		public boolean foodInfo = true, armorInfo = true; // Tooltip
 		public boolean potionInfo = true, horseInfo = true, xpInfo = true, saturationInfo = true;// HUD
 		public boolean tabInfo = true;
@@ -77,16 +75,6 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, H
 		
 		@Override public void init(GsonBuilder bldr) {
 			bldr.registerTypeAdapter(SlotConf.class, new SlotConf.Serializer());
-		}
-	}
-	
-	public static class Repl implements Replacer {
-		@Override public void register(List<String> ls) {
-			ls.add("c98.extraInfo.item.FoodInfo");
-			ls.add("c98.extraInfo.item.ArmorInfo");
-			ls.add("c98.extraInfo.item.SlotInfo1");
-			ls.add("c98.extraInfo.item.SlotInfo2");
-			ls.add("c98.extraInfo.BlockDisarmedSilverfish");
 		}
 	}
 	

@@ -66,9 +66,6 @@ public class BlockWormhole extends BlockContainer {
 			return e.posY - (e instanceof EntityPlayer ? 1.62 : e.getYOffset());
 		}
 		
-		@Override public double getMaxRenderDistanceSquared() {
-			return 100;
-		}
 	}
 	
 	public static IIcon magic_gate;

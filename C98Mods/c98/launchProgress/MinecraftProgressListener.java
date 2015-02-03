@@ -16,9 +16,8 @@ import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.Display;
 import c98.core.Console;
 import c98.core.IO;
-import c98.launchProgress.Progress.ProgressListener;
 
-class MinecraftProgressListener extends ProgressListener {
+public class MinecraftProgressListener extends ProgressListener {
 	private static List<String> strings;
 	private static int[] imgdata;
 	

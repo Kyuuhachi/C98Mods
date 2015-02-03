@@ -5,8 +5,9 @@ import net.minecraft.entity.EntityTrackerEntry;
 import net.minecraft.network.Packet;
 import c98.core.hooks.EntitySpawnHook;
 import c98.core.impl.HookImpl;
+import c98.core.launch.ASMer;
 
-public class C98EntityTrackerEntry extends EntityTrackerEntry {
+@ASMer class C98EntityTrackerEntry extends EntityTrackerEntry {
 	
 	public C98EntityTrackerEntry(Entity p_i1525_1_, int p_i1525_2_, int p_i1525_3_, boolean p_i1525_4_) {
 		super(p_i1525_1_, p_i1525_2_, p_i1525_3_, p_i1525_4_);

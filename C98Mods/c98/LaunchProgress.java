@@ -6,6 +6,7 @@ import c98.core.hooks.GuiSetHook;
 import c98.launchProgress.Progress;
 
 public class LaunchProgress extends C98Mod implements GuiSetHook {
+	
 	boolean b;
 	
 	@Override public void setGui(GuiScreen gui) {

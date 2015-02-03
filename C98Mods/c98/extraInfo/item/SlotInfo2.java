@@ -14,7 +14,7 @@ import org.objectweb.asm.tree.*;
 import c98.ExtraInfo;
 import c98.core.launch.*;
 
-public class SlotInfo2 extends GuiContainerCreative implements CustomASMer {
+@ASMer class SlotInfo2 extends GuiContainerCreative implements CustomASMer {
 	public static class Impl {
 		public static void drawIt(CreativeTabs tab, int x, int y, int u, int v, int w, int h) { //TODO this draws outside the tab, use stencil buffer
 			Color c = ExtraInfo.config.slotInfo.colors.get(tab.getTabLabel());
@@ -50,7 +50,7 @@ public class SlotInfo2 extends GuiContainerCreative implements CustomASMer {
 		}
 	}
 	
-	@NoInclude public SlotInfo2(EntityPlayer par1EntityPlayer) {
+	public SlotInfo2(EntityPlayer par1EntityPlayer) {
 		super(par1EntityPlayer);
 	}
 	

@@ -1,14 +1,11 @@
 package c98.extraInfo;
 
-import c98.ExtraInfo;
 import net.minecraft.block.BlockSilverfish;
 import net.minecraft.world.IBlockAccess;
+import c98.ExtraInfo;
+import c98.core.launch.ASMer;
 
-public class BlockDisarmedSilverfish extends BlockSilverfish {
-	
-	public BlockDisarmedSilverfish() {
-		super();
-	}
+@ASMer class BlockDisarmedSilverfish extends BlockSilverfish {
 	
 	@Override public int getBlockColor() {
 		return ExtraInfo.config.silverfish.getRGB();

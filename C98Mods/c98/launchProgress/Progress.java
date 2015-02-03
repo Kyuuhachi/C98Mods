@@ -1,45 +1,34 @@
 package c98.launchProgress;
 
-import java.lang.reflect.Method;
-import net.minecraft.launchwrapper.Launch;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.*;
 
 public class Progress {
-	public static abstract class ProgressListener {
-		abstract void setProgress(int prog, String msg);
-		
-		void close() {}
+	public static InsnList call(int i, String s) {
+		InsnList il = new InsnList();
+		il.add(new IntInsnNode(Opcodes.BIPUSH, i));
+		il.add(new LdcInsnNode(s));
+		il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "c98/launchProgress/Progress", "setProgress", "(ILjava/lang/String;)V"));
+		return il;
 	}
 	
-	private static final String key = "LaunchProgressListener";
+	private static ProgressListener listener;
 	
 	public static void setListener(ProgressListener l) {
-		Launch.blackboard.put(key, l);
+		listener = l;
 	}
 	
 	public static void setProgress(int prog, String msg) {
-//		System.out.println(new SimpleDateFormat("HH:mm:ss").format(new Date()) + " " + prog + "%: " + msg);
-		try {
-			Class c = Launch.blackboard.get(key).getClass();
-			Method m = c.getMethod("setProgress", int.class, String.class);
-			m.invoke(Launch.blackboard.get(key), prog, msg);
-		} catch(ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
+		if(listener == null) setListener(new ProgressBarListener());
+		listener.setProgress(prog, msg);
 	}
 	
 	public static void createMainWindow() {
-		if(Launch.blackboard.containsKey(key)) done();
-		ProgressListener l = new MinecraftProgressListener();
-		setListener(l);
+		done();
+		setListener(new MinecraftProgressListener());
 	}
 	
 	public static void done() {
-		try {
-			Class c = Launch.blackboard.get(key).getClass();
-			Method m = c.getMethod("close");
-			m.invoke(Launch.blackboard.get(key));
-		} catch(ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
+		if(listener != null) listener.close();
 	}
 }

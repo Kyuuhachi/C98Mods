@@ -2,16 +2,15 @@ package c98.core.impl.launch;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.logging.Handler;
 import joptsimple.*;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.launchwrapper.*;
+import org.objectweb.asm.*;
 import c98.core.Console;
 import c98.core.impl.*;
 import c98.core.impl.C98Formatter.Target;
-import c98.core.launch.Replacer;
 
 public class C98Tweaker implements ITweaker {
 	
@@ -84,22 +83,14 @@ public class C98Tweaker implements ITweaker {
 			C98Loader.loadMods(new C98Loader.ModHandler() {
 				@Override public void load(String name) {
 					try {
-						if(!name.endsWith("$Repl.class")) return;
-						String className = name.split("\\.")[0]; //remove .class
-						className = className.replace('/', '.');
-						
-						Class modClass = null;
-						try {
-							modClass = C98Tweaker.class.getClassLoader().loadClass(className);
-						} catch(Throwable e) {
-							return;
-						}
-						
-						if(!Replacer.class.isAssignableFrom(modClass)) return;
-						if(Modifier.isAbstract(modClass.getModifiers())) return;
-						Replacer replacer = (Replacer)modClass.newInstance();
-						
-						if(replacer != null) replacer.register(transformers);
+						ClassReader rdr = new ClassReader(C98Tweaker.class.getClassLoader().getResourceAsStream(name));
+						final String clName = name.replace(".class", "").replace("/", ".");
+						rdr.accept(new ClassVisitor(Opcodes.ASM4) {
+							@Override public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+								if(desc.equals("Lc98/core/launch/ASMer;")) transformers.add(clName);
+								return null;
+							}
+						}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 					} catch(Throwable e) {
 						Console.error(e);
 					}

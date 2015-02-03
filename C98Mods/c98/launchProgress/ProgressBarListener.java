@@ -1,16 +1,25 @@
 package c98.launchProgress;
 
+import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
-import c98.launchProgress.Progress.ProgressListener;
 
 public class ProgressBarListener extends ProgressListener {
 	JProgressBar bar;
 	JFrame frame;
 	
-	public ProgressBarListener(JProgressBar bar, JFrame frame) {
-		this.bar = bar;
-		this.frame = frame;
+	public ProgressBarListener() {
+		frame = new JFrame();
+		bar = new JProgressBar(0, 100);
+		bar.setStringPainted(true);
+		frame.add(bar);
+		frame.getContentPane().setPreferredSize(new Dimension(400, 40));
+		frame.pack();
+		frame.setTitle("Launching Minecraft...");
+		frame.setResizable(false);
+		frame.setLocationRelativeTo(null); //Center window
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
 	}
 	
 	@Override public void setProgress(int prog, String msg) {

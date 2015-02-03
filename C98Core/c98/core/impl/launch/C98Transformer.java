@@ -22,7 +22,6 @@ import com.google.common.collect.*;
 public class C98Transformer implements IClassTransformer {
 	private static HashMap<String, CustomASMer> asmers = new HashMap();
 	
-	private static String annotNoInclude = "L" + NoInclude.class.getName().replace('.', '/') + ";";
 	private static String annotExtend = "L" + ASMer.class.getName().replace('.', '/') + ";";
 	
 	private static class ClassInfo {
@@ -188,10 +187,8 @@ public class C98Transformer implements IClassTransformer {
 	}
 	
 	private static void handleAsm(ClassNode dst, ClassNode transformer, String className) {
-		l: for(MethodNode transformerMethod:transformer.methods) {
+		for(MethodNode transformerMethod:transformer.methods) {
 			MethodNode dstMethod = null;
-			for(AnnotationNode ann:Asm.annotations(transformerMethod))
-				if(ann.desc.equals(annotNoInclude)) continue l;
 			
 			for(MethodNode mthd:dst.methods)
 				if(transformerMethod.name.equals(mthd.name) && transformerMethod.desc.equals(mthd.desc)) {
@@ -202,11 +199,11 @@ public class C98Transformer implements IClassTransformer {
 			else if(transformerMethod.name.equals("<init>")) addInit(transformerMethod, dstMethod);
 			else addMthd(transformerMethod, dstMethod, dst, className);
 		}
-	l: for(FieldNode n:transformer.fields) {
-		for(FieldNode n2:dst.fields)
-			if(n2.name.equals(n.name)) continue l;
-		dst.fields.add(n);
-	}
+		l: for(FieldNode n:transformer.fields) {
+			for(FieldNode n2:dst.fields)
+				if(n2.name.equals(n.name)) continue l;
+			dst.fields.add(n);
+		}
 	}
 	
 	private static void genSuperCall(ClassNode dst, MethodNode dstMethod) {

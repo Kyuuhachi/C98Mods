@@ -6,7 +6,7 @@ import java.util.Iterator;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.*;
 import org.objectweb.asm.util.*;
-import c98.core.Console;
+import c98.core.C98Log;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 
@@ -53,7 +53,7 @@ public class Asm implements Iterable<AbstractInsnNode> {
 		try(FileOutputStream fos = new FileOutputStream(f)) {
 			fos.write(wr.toByteArray());
 		} catch(IOException e) {
-			e.printStackTrace();
+			C98Log.error("Failed to write to " + f.getAbsolutePath(), e);
 		}
 	}
 	
@@ -64,6 +64,6 @@ public class Asm implements Iterable<AbstractInsnNode> {
 	}
 	
 	private static void p(Printer p) {
-		Console.log(("\n" + j.join(p.text)).replace("\n", "\n\t"));
+		C98Log.log(("\n" + j.join(p.text)).replace("\n", "\n\t"));
 	}
 }

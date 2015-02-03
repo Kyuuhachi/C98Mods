@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.ClassWriter;
-import c98.core.Console;
+import c98.core.C98Log;
 
 public class C98ClassWriter extends ClassWriter {
 	
@@ -17,7 +17,7 @@ public class C98ClassWriter extends ClassWriter {
 			tr = LaunchClassLoader.class.getDeclaredMethod("transformName", String.class);
 			tr.setAccessible(true);
 		} catch(Exception e) {
-			Console.error(e);
+			C98Log.error(e);
 		}
 	}
 	
@@ -52,7 +52,7 @@ public class C98ClassWriter extends ClassWriter {
 		try {
 			return ((String)m.invoke(Launch.classLoader, s1)).replace('.', '/');
 		} catch(Exception e) {
-			Console.error(e);
+			C98Log.error(e);
 			return s1;
 		}
 	}

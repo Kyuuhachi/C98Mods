@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Console {
+public class C98Log {
 	public static final Logger log = Logger.getLogger("C98Mods");
 	public static final PrintStream stdout = new PrintStream(new FileOutputStream(FileDescriptor.out)); //System.out and System.err can be redirected
 	public static final PrintStream stderr = new PrintStream(new FileOutputStream(FileDescriptor.err));
@@ -31,6 +31,7 @@ public class Console {
 	}
 	
 	public static void error(Throwable e) { //TODO make stuff use this instead of printStackTrace
+		e.printStackTrace();
 		error("Misc error", e);
 	}
 	

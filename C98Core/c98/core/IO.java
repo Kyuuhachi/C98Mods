@@ -18,7 +18,7 @@ public class IO {
 		try {
 			return ImageIO.read(getInputStream(loc));
 		} catch(IOException e) {
-			Console.error("Failed to read image " + loc, e);
+			C98Log.error("Failed to read image " + loc, e);
 			return null;
 		}
 	}
@@ -40,7 +40,7 @@ public class IO {
 		try {
 			return man().getResource(loc).getInputStream();
 		} catch(IOException e) {
-			Console.error("Failed to open stream to " + loc, e);
+			C98Log.error("Failed to open stream to " + loc, e);
 			return null;
 		}
 	}

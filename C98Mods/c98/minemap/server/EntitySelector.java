@@ -15,7 +15,7 @@ import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import c98.core.Console;
+import c98.core.C98Log;
 import c98.core.IO;
 import c98.minemap.server.selector.*;
 
@@ -105,7 +105,7 @@ public class EntitySelector {
 			m.put(EntityThrowable.class, "Throwable");
 			classToId = m;
 		} catch(IOException e) {
-			Console.error(e);
+			C98Log.error(e);
 		}
 	}
 	

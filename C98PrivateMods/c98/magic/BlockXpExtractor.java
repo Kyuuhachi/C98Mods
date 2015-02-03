@@ -46,15 +46,14 @@ public class BlockXpExtractor extends BlockContainer {
 		@Override public void take() {
 			List<Entity> entities = getEntities();
 			Collections.sort(entities, comp);
-			Entity e = entities.get(0);
-			if(e instanceof EntityXPOrb) try {
-				((EntityXPOrb)e).xpValue--;
-				if(((EntityXPOrb)e).xpValue <= 0) e.setDead();
-			} catch(Exception e1) {
-				e1.printStackTrace();
+			Entity ent = entities.get(0);
+			if(ent instanceof EntityXPOrb) {
+				EntityXPOrb orb = (EntityXPOrb)ent;
+				orb.xpValue--;
+				if(orb.xpValue <= 0) orb.setDead();
 			}
-			if(e instanceof EntityPlayer) {
-				EntityPlayer p = (EntityPlayer)e;
+			if(ent instanceof EntityPlayer) {
+				EntityPlayer p = (EntityPlayer)ent;
 				float xp = Math.round(p.experience * p.xpBarCap()) - 1;
 				if(xp == -1) {
 					p.experienceLevel--;

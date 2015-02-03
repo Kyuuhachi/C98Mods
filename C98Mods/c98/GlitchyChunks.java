@@ -15,7 +15,7 @@ public class GlitchyChunks extends C98Mod {
 			TYPE = ctor.newInstance(7, "glitch");
 			Lang.addName(TYPE, "Glitchy Chunks");
 		} catch(Exception e) {
-			Console.error("Failed to create Glitchy world type", e);
+			C98Log.error("Failed to create Glitchy world type", e);
 		}
 	}
 }

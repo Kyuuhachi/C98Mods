@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.Display;
-import c98.core.Console;
+import c98.core.C98Log;
 import c98.core.IO;
 
 public class MinecraftProgressListener extends ProgressListener {
@@ -61,7 +61,7 @@ public class MinecraftProgressListener extends ProgressListener {
 				tex = new DynamicTexture(img);
 				loc = Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("LaunchProgress", tex);
 			} catch(Exception e) {
-				Console.error("Failed to read LaunchProgress resources", e);
+				C98Log.error("Failed to read LaunchProgress resources", e);
 			}
 		}
 	}

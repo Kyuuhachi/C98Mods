@@ -15,7 +15,7 @@ import org.objectweb.asm.commons.RemappingClassAdapter;
 import org.objectweb.asm.commons.SimpleRemapper;
 import org.objectweb.asm.tree.*;
 import sun.misc.Unsafe;
-import c98.core.Console;
+import c98.core.C98Log;
 import c98.core.launch.*;
 import com.google.common.collect.*;
 
@@ -61,14 +61,14 @@ public class C98Transformer implements IClassTransformer {
 					remapping.put(sup, st.thisClass);
 				}
 			} catch(IOException e) {
-				Console.error(e);
+				C98Log.error(e);
 			}
 		
 		for(String s:output)
 			if(s.indexOf('-') - 1 > maxLen) maxLen = s.indexOf('-') - 1;
 		String fmt = "%-" + maxLen + "s -> %s";
 		for(String s:output)
-			Console.fine(String.format(fmt, (Object[])s.split(" -> ", 2)));
+			C98Log.fine(String.format(fmt, (Object[])s.split(" -> ", 2)));
 	}
 	
 	private ClassInfo getNames(final String className) throws IOException {
@@ -77,7 +77,7 @@ public class C98Transformer implements IClassTransformer {
 		try {
 			b = transform(IOUtils.toByteArray(Launch.classLoader.findResource(className).openStream()));
 		} catch(NullPointerException e) {
-			Console.error("Couldn't find file " + className, e);
+			C98Log.error("Couldn't find file " + className, e);
 			System.exit(1);
 			return null;
 		}
@@ -124,7 +124,7 @@ public class C98Transformer implements IClassTransformer {
 			}
 			return array;
 		} catch(Exception e) {
-			Console.error(url.toString(), e);
+			C98Log.error(url.toString(), e);
 			return new byte[0];
 		}
 	}
@@ -155,7 +155,7 @@ public class C98Transformer implements IClassTransformer {
 			dst.accept(new RemappingClassAdapter(wr, new SimpleRemapper(map)));
 			b = wr.toByteArray();
 		} catch(Exception | ClassFormatError e) {
-			Console.error("Failed to transform " + name + " with transformers " + transformers.get(name), e);
+			C98Log.error("Failed to transform " + name + " with transformers " + transformers.get(name), e);
 		}
 		return b;
 	}

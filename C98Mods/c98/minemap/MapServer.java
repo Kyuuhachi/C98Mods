@@ -12,7 +12,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import c98.Minemap;
-import c98.core.Console;
+import c98.core.C98Log;
 import c98.minemap.MinemapConfig.*;
 import c98.minemap.MinemapConfig.Preset.MapType;
 import c98.minemap.MinemapConfig.WaypointMarker;
@@ -92,7 +92,7 @@ public class MapServer {
 					try {
 						clr = impl.calc(chunk, x & 15, z & 15, y);
 					} catch(Exception e) {
-						Console.error("X:" + x + ", Z:" + z, e);
+						C98Log.error("X:" + x + ", Z:" + z, e);
 					}
 					if(Minecraft.getMinecraft().gameSettings.showDebugInfo && ((x & 15) == 0 || (z & 15) == 0)) clr = clr & 0xFF000000 | (clr & 0xFEFEFE) >> 1;
 				}
@@ -130,7 +130,7 @@ public class MapServer {
 		try {
 			addMarker(l, x + 0.5, y + 0.5, z + 0.5, wpt, 0, -1, true);
 		} catch(Exception e) {
-			Console.error(String.format("Waypoint at %d %d %d", x, y == Double.NaN ? -1 : (int)y, z), e);
+			C98Log.error(String.format("Waypoint at %d %d %d", x, y == Double.NaN ? -1 : (int)y, z), e);
 		}
 	}
 	
@@ -140,7 +140,7 @@ public class MapServer {
 			if(mrkr == null) return;
 			addMarker(l, te.field_145851_c + 0.5, te.field_145848_d + 0.5, te.field_145849_e + 0.5, mrkr, 0, -1, false);
 		} catch(Exception e) {
-			Console.error(String.format("TileEntity at %d %d %d", te.field_145851_c, te.field_145848_d, te.field_145849_e), e);
+			C98Log.error(String.format("TileEntity at %d %d %d", te.field_145851_c, te.field_145848_d, te.field_145849_e), e);
 		}
 	}
 	
@@ -153,7 +153,7 @@ public class MapServer {
 			int rotation = getRotation(mrkr, e);
 			addMarker(l, e.posX, e.posY, e.posZ, mrkr, rotation, color, false);
 		} catch(Exception ex) {
-			Console.error("Entity " + e, ex);
+			C98Log.error("Entity " + e, ex);
 		}
 	}
 	

@@ -1,7 +1,7 @@
 package c98.minemap;
 
 import net.minecraft.client.Minecraft;
-import c98.core.Console;
+import c98.core.C98Log;
 
 public class MapThread extends Thread {
 	private boolean running = true;
@@ -13,7 +13,7 @@ public class MapThread extends Thread {
 		setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override public void uncaughtException(Thread arg0, Throwable arg1) {
 				mapServer.crashed = true;
-				Console.error(arg1);
+				C98Log.error(arg1);
 			}
 		});
 	}

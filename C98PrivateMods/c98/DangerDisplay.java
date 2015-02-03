@@ -80,7 +80,7 @@ public class DangerDisplay extends C98Mod implements WorldRenderHook, KeyHook {
 			for(EntityMinecartMobSpawner e:new ArrayList<EntityMinecartMobSpawner>(mc.theWorld.getEntitiesWithinAABB(EntityMinecartMobSpawner.class, bb)))
 				addSpawner(spawners, e.func_98039_d());
 		} catch(Exception e) {
-			Console.error("Failed to find spawners", e);
+			C98Log.error("Failed to find spawners", e);
 		}
 		return spawners;
 	}

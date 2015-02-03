@@ -12,7 +12,7 @@ public class ReflectHelper {
 				try {
 					field.set(dst, field.get(src));
 				} catch(Exception e) {
-					Console.error(field.toString(), e);
+					C98Log.error(field.toString(), e);
 				}
 			}
 	}

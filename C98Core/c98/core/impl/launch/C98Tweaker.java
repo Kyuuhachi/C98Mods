@@ -8,7 +8,7 @@ import joptsimple.*;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.launchwrapper.*;
 import org.objectweb.asm.*;
-import c98.core.Console;
+import c98.core.C98Log;
 import c98.core.impl.*;
 import c98.core.impl.C98Formatter.Target;
 
@@ -71,9 +71,9 @@ public class C98Tweaker implements ITweaker {
 					Handler h = (Handler)f.get(null);
 					h.setFormatter(new C98Formatter(Target.OUT));
 				} catch(Exception e) {
-					Console.error(e);
+					C98Log.error(e);
 				}
-				Console.log("Repairing output");
+				C98Log.log("Repairing output");
 				break;
 			}
 	}
@@ -92,20 +92,20 @@ public class C98Tweaker implements ITweaker {
 							}
 						}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 					} catch(Throwable e) {
-						Console.error(e);
+						C98Log.error(e);
 					}
 				}
 			});
 		} catch(Exception e) {
-			Console.error(e);
+			C98Log.error(e);
 		}
 		try {
 			Field f = LaunchClassLoader.class.getDeclaredField("transformers");
 			f.setAccessible(true);
 			List<IClassTransformer> l = (List)f.get(Launch.classLoader);
 			l.add((IClassTransformer)Launch.classLoader.loadClass("c98.core.impl.launch.C98Transformer").newInstance());
-		} catch(InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchFieldException | SecurityException e1) {
-			e1.printStackTrace();
+		} catch(InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchFieldException | SecurityException e) {
+			C98Log.error(e);
 		}
 	}
 }

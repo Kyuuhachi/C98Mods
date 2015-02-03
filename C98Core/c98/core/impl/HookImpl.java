@@ -85,10 +85,10 @@ public class HookImpl {
 				try {
 					mod.load();
 				} catch(Exception e) {
-					Console.error("Failed to load mod " + mod, e);
+					C98Log.error("Failed to load mod " + mod, e);
 				}
 			
-			Console.log.finer("Mod list: " + C98Core.modList);
+			C98Log.log.finer("Mod list: " + C98Core.modList);
 			if(C98Core.client) {
 				addHook(new C98Core());
 				if(C98Core.forge) new ForgeMenuHack(C98Core.mc);
@@ -96,16 +96,16 @@ public class HookImpl {
 				BiomeGenBase.sky.biomeName = "End";
 				C98Core.mc.gameSettings.keyBindings = getAllKeys(C98Core.mc.gameSettings.keyBindings);
 				C98Core.mc.gameSettings.loadOptions();
-				Console.log.finer("Tick: " + tickHooks);
-				Console.log.finer("Gui: " + guiHooks);
-				Console.log.finer("GuiRender: " + guiRenderHooks);
-				Console.log.finer("GuiSet: " + guiSetHooks);
-				Console.log.finer("Hud: " + hudRenderHooks);
-				Console.log.finer("HudTop: " + hudTopRenderHooks);
-				Console.log.finer("World: " + worldRenderHooks);
-				Console.log.finer("Key: " + keyHooks);
-				Console.log.finer("Connect: " + connectHooks);
-				Console.log.finer("RenderBlock: " + renderBlockHooks);
+				C98Log.log.finer("Tick: " + tickHooks);
+				C98Log.log.finer("Gui: " + guiHooks);
+				C98Log.log.finer("GuiRender: " + guiRenderHooks);
+				C98Log.log.finer("GuiSet: " + guiSetHooks);
+				C98Log.log.finer("Hud: " + hudRenderHooks);
+				C98Log.log.finer("HudTop: " + hudTopRenderHooks);
+				C98Log.log.finer("World: " + worldRenderHooks);
+				C98Log.log.finer("Key: " + keyHooks);
+				C98Log.log.finer("Connect: " + connectHooks);
+				C98Log.log.finer("RenderBlock: " + renderBlockHooks);
 			}
 		} catch(Exception e) {
 			throw new RuntimeException(e);
@@ -131,7 +131,7 @@ public class HookImpl {
 								try {
 									modClass = Launch.classLoader.loadClass(clName);
 								} catch(Throwable e) {
-									Console.error("Failed to load class " + clName, e);
+									C98Log.error("Failed to load class " + clName, e);
 									return;
 								}
 								
@@ -139,19 +139,19 @@ public class HookImpl {
 								try {
 									modInstance = (C98Mod)modClass.newInstance();
 								} catch(InstantiationException | IllegalAccessException e) {
-									Console.error("Failed to create instance of " + clName, e);
+									C98Log.error("Failed to create instance of " + clName, e);
 									return;
 								}
 								
 								if(modInstance != null) {
 									C98Core.modList.add(modInstance);
-									Console.log("[C98Core] C98Mod found: " + modInstance.toString());
+									C98Log.log("[C98Core] C98Mod found: " + modInstance.toString());
 								}
 								
 							}
 						}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 					} catch(Throwable e) {
-						Console.error(e);
+						C98Log.error(e);
 					}
 				}
 			});
@@ -159,7 +159,7 @@ public class HookImpl {
 			e.printStackTrace();
 		}
 		Collections.sort(C98Core.modList);
-		if(C98Core.modList.isEmpty()) Console.log("[C98Core] Didn't find any C98Mods :(");
+		if(C98Core.modList.isEmpty()) C98Log.log("[C98Core] Didn't find any C98Mods :(");
 		for(C98Mod mod:C98Core.modList) {
 			addHook(mod);
 			mod.preInit();

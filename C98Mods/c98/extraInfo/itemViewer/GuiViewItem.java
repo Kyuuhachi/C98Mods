@@ -15,6 +15,7 @@ import net.minecraft.nbt.*;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import c98.core.C98Log;
 import com.google.gson.*;
 import com.google.gson.internal.bind.TypeAdapters;
 
@@ -52,7 +53,7 @@ public class GuiViewItem extends GuiScreen { //TODO add tooltip for enchantment 
 			maxScroll = text.length - ROWS;
 			if(maxScroll < 0) maxScroll = 0;
 		} catch(IOException e) {
-			e.printStackTrace();
+			C98Log.error("Failed to JSONify '" + is + "'", e);
 		}
 		
 	}

@@ -83,7 +83,7 @@ public class ForgeMenuHack extends FontRenderer implements GuiSetHook, GuiHook, 
 			if(!l.contains(c98ModContainer)) l.add(0, c98ModContainer);
 			gui.fontRendererObj = this;
 		} catch(IllegalArgumentException | IllegalAccessException e) {
-			Console.error("Failed to call ForgeHandler", e);
+			C98Log.error("Failed to call ForgeHandler", e);
 		}
 	}
 	
@@ -97,7 +97,7 @@ public class ForgeMenuHack extends FontRenderer implements GuiSetHook, GuiHook, 
 			lastSelected = selected.getInt(gui);
 			lastMod = selectedMod.get(gui);
 		} catch(Exception e) {
-			Console.error("Failed to tick ForgeHandler", e);
+			C98Log.error("Failed to tick ForgeHandler", e);
 		}
 	}
 	

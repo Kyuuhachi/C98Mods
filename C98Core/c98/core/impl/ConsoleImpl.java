@@ -3,7 +3,7 @@ package c98.core.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.*;
-import c98.core.Console;
+import c98.core.C98Log;
 import c98.core.impl.C98Formatter.Target;
 import c98.core.impl.launch.C98Tweaker;
 
@@ -17,19 +17,19 @@ public class ConsoleImpl {
 				}
 			};
 			h.setLevel(Level.INFO);
-			Console.log.addHandler(h);
-			Console.log.setUseParentHandlers(false);
-		} else Console.log.setParent(Logger.getLogger("ForgeModLoader"));
-		Console.log.setLevel(Level.ALL);
+			C98Log.log.addHandler(h);
+			C98Log.log.setUseParentHandlers(false);
+		} else C98Log.log.setParent(Logger.getLogger("ForgeModLoader"));
+		C98Log.log.setLevel(Level.ALL);
 		try {
 			logFile.getParentFile().mkdirs();
 			String path = logFile.getAbsolutePath();
 			Handler handler = new FileHandler(path);
 			handler.setLevel(Level.FINER);
 			handler.setFormatter(new C98Formatter(Target.FILE));
-			Console.log.addHandler(handler);
+			C98Log.log.addHandler(handler);
 		} catch(SecurityException | IOException e) {
-			e.printStackTrace();
+			C98Log.error(e);
 		}
 	}
 }

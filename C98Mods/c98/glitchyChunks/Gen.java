@@ -8,7 +8,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.*;
 import c98.GlitchyChunks;
-import c98.core.Console;
+import c98.core.C98Log;
 
 public class Gen extends ChunkProviderGenerate {
 	private ChunkProviderGenerate normal;
@@ -60,7 +60,7 @@ public class Gen extends ChunkProviderGenerate {
 				}
 			return p;
 		} catch(IllegalArgumentException | IllegalAccessException e) {
-			Console.error(e);
+			C98Log.error(e);
 		}
 		return null;
 	}

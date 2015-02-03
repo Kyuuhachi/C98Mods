@@ -1,7 +1,6 @@
 package c98.core.impl;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
@@ -11,7 +10,7 @@ import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import net.minecraft.launchwrapper.Launch;
-import net.minecraft.launchwrapper.LaunchClassLoader;
+import c98.core.C98Log;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
@@ -26,7 +25,7 @@ public class C98Loader {
 		modDir = f;
 	}
 	
-	public static void loadMods(ModHandler h) throws Exception {
+	public static void loadMods(ModHandler h) throws IOException {
 		final List<File> files;
 		if(modDir.exists()) {
 			files = new LinkedList();
@@ -41,7 +40,7 @@ public class C98Loader {
 				try {
 					return new File(arg0.toURI());
 				} catch(URISyntaxException e) {
-					e.printStackTrace();
+					C98Log.error(e);
 					return null;
 				}
 			}
@@ -51,7 +50,7 @@ public class C98Loader {
 			else readZip(f, h);
 	}
 	
-	private static void readDir(File file, String n, ModHandler handler) throws FileNotFoundException, IOException {
+	private static void readDir(File file, String n, ModHandler handler) throws IOException {
 		File[] files = file.listFiles();
 		Arrays.sort(files);
 		for(File file2:files)
@@ -59,7 +58,7 @@ public class C98Loader {
 			else readDir(file2, n + file2.getName() + "/", handler);
 	}
 	
-	private static void readZip(File zipFile, ModHandler handler) throws FileNotFoundException, IOException {
+	private static void readZip(File zipFile, ModHandler handler) throws IOException {
 		ZipInputStream zis = new JarInputStream(new FileInputStream(zipFile));
 		while(true) {
 			ZipEntry entry = zis.getNextEntry();
@@ -69,20 +68,6 @@ public class C98Loader {
 			}
 			String name = entry.getName();
 			if(!entry.isDirectory()) load(handler, name);
-		}
-	}
-	
-	static Set<String> exclusions = new HashSet();
-	static {
-		try {
-			Field f1 = LaunchClassLoader.class.getDeclaredField("classLoaderExceptions");
-			f1.setAccessible(true);
-			exclusions.addAll((Set)f1.get(Launch.classLoader));
-			Field f2 = LaunchClassLoader.class.getDeclaredField("transformerExceptions");
-			f2.setAccessible(true);
-			exclusions.addAll((Set)f2.get(Launch.classLoader));
-		} catch(ReflectiveOperationException e) {
-			c98.core.Console.error(e);
 		}
 	}
 	

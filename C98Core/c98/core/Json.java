@@ -32,7 +32,7 @@ public class Json {
 		try {
 			obj = clz.newInstance();
 		} catch(InstantiationException | IllegalAccessException e) {
-			Console.error("Failed to create config instance " + clz, e);
+			C98Log.error("Failed to create config instance " + clz, e);
 		}
 		Gson gson = getGson(obj).create();
 		File f = new File(IO.getMinecraftDir(), "config/C98/" + mod.getName() + ".json");
@@ -60,7 +60,7 @@ public class Json {
 			String s2 = gson.toJson(obj) + "\n";
 			return !s2.equals(s);
 		} catch(Exception e) {
-			Console.error("Failed to read JSON " + f, e);
+			C98Log.error("Failed to read JSON " + f, e);
 			return false;
 		}
 		else return true;
@@ -72,7 +72,7 @@ public class Json {
 			wr.write(gson.toJson(toJObj(obj, gson)));
 			wr.write('\n');
 		} catch(IOException e) {
-			Console.error("Failed to write JSON " + f, e);
+			C98Log.error("Failed to write JSON " + f, e);
 		}
 	}
 	

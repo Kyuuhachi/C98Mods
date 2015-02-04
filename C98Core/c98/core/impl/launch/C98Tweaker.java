@@ -73,7 +73,7 @@ public class C98Tweaker implements ITweaker {
 				} catch(Exception e) {
 					C98Log.error(e);
 				}
-				C98Log.log("Repairing output");
+				C98Log.fine("Repairing output");
 				break;
 			}
 	}

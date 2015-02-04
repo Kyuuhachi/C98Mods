@@ -9,7 +9,8 @@ import c98.core.impl.launch.C98Tweaker;
 
 public class ConsoleImpl {
 	public static void init(File logFile) {
-		if(!C98Tweaker.forge) {
+		if(C98Tweaker.forge) C98Log.log.setParent(Logger.getLogger("ForgeModLoader"));
+		else {
 			Handler h = new StreamHandler(System.err, new C98Formatter(Target.OUT)) {
 				@Override public synchronized void publish(LogRecord record) {
 					super.publish(record);
@@ -19,7 +20,7 @@ public class ConsoleImpl {
 			h.setLevel(Level.INFO);
 			C98Log.log.addHandler(h);
 			C98Log.log.setUseParentHandlers(false);
-		} else C98Log.log.setParent(Logger.getLogger("ForgeModLoader"));
+		}
 		C98Log.log.setLevel(Level.ALL);
 		try {
 			logFile.getParentFile().mkdirs();

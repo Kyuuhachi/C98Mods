@@ -7,16 +7,16 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public class ReqRecipe implements IRecipe {
+public class AdvancedRecipe implements IRecipe {
 	
 	private int recipeWidth;
 	private int recipeHeight;
-	private RecipeHandler recipeItems[];
+	private RecipeSlot recipeItems[];
 	private ItemStack recipeOutput;
 	
-	private RecipeReq req;
+	private RecipeResult req;
 	
-	public ReqRecipe(int par1, int par2, RecipeHandler[] aitemstack, RecipeReq req) {
+	public AdvancedRecipe(int par1, int par2, RecipeSlot[] aitemstack, RecipeResult req) {
 		this.req = req;
 		recipeWidth = par1;
 		recipeHeight = par2;
@@ -51,7 +51,7 @@ public class ReqRecipe implements IRecipe {
 			for(int j = 0; j < 3; j++) {
 				int k = i - x;
 				int l = j - y;
-				RecipeHandler is = null;
+				RecipeSlot is = null;
 				
 				if(k >= 0 && l >= 0 && k < recipeWidth && l < recipeHeight) if(mirror) is = recipeItems[recipeWidth - k - 1 + l * recipeWidth];
 				else is = recipeItems[k + l * recipeWidth];

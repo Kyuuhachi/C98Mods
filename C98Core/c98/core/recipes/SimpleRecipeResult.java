@@ -4,10 +4,10 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 
-public class SimpleRecipeReq extends RecipeReq {
+public class SimpleRecipeResult extends RecipeResult {
 	private ItemStack is;
 	
-	public SimpleRecipeReq(ItemStack itemStack) {
+	public SimpleRecipeResult(ItemStack itemStack) {
 		is = itemStack;
 	}
 	

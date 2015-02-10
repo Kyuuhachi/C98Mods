@@ -152,8 +152,6 @@ public class HookImpl {
 		C98Core.mc.mcProfiler.startSection("c98tick");
 		C98Core.mc.mcProfiler.startSection("keys");
 		doKeys();
-		C98Core.mc.mcProfiler.endStartSection("lang");
-		LangImpl.tick();
 		if(C98Core.mc.theWorld != null && C98Core.mc.thePlayer != null && C98Core.mc.thePlayer.worldObj != null) for(TickHook mod:tickHooks) {
 			C98Core.mc.mcProfiler.endStartSection(mod.toString());
 			mod.tickGame(w);

@@ -186,7 +186,7 @@ public class HUD {
 			EntityEnderman enderman = (EntityEnderman)targetEntity;
 			y += 8;
 			IBlockState st = enderman.func_175489_ck();
-			if(st != null) drawItem(new ItemStack(st.getBlock(), st.getBlock().getMetaFromState(st)));
+			if(st != null && st.getBlock() != Blocks.air) drawItem(new ItemStack(st.getBlock(), st.getBlock().getMetaFromState(st)));
 			if(enderman.isScreaming()) s = "Angry";
 		}
 		if(target instanceof EntityBat) if(((EntityBat)target).getIsBatHanging()) s = "Hanging";

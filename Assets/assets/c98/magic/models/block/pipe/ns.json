@@ -1,0 +1,18 @@
+{
+	"textures": {
+		"particle": "blocks/obsidian",
+		"side": "c98/magic:blocks/pipe"
+	},
+	"elements": [
+		{//ns
+			"from": [4, 4, 0],
+			"to": [12, 12, 16],
+			"faces": {
+				"down":  {"uv": [4, 0, 12, 16], "texture": "#side"},
+				"up":    {"uv": [4, 0, 12, 16], "texture": "#side"},
+				"east":  {"uv": [0, 4, 16, 12], "texture": "#side"},
+				"west":  {"uv": [0, 4, 16, 12], "texture": "#side"}
+			}
+		}
+	]
+}

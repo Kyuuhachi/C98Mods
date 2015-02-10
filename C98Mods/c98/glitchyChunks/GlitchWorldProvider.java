@@ -13,7 +13,7 @@ import c98.core.launch.ASMer;
 	}
 	
 	@Override public IChunkProvider createChunkGenerator() {
-		if(worldObj.getWorldInfo().getTerrainType() == GlitchyChunks.TYPE) return new Gen(worldObj);
+		if(worldObj.getWorldInfo().getTerrainType() == GlitchyChunks.TYPE) return new Gen(worldObj, worldObj.getSeed(), worldObj.getWorldInfo().isMapFeaturesEnabled(), generatorSettings);
 		else return super.createChunkGenerator();
 	}
 }

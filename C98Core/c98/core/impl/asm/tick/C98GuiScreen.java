@@ -1,12 +1,13 @@
 package c98.core.impl.asm.tick;
 
+import java.io.IOException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import c98.core.impl.HookImpl;
 import c98.core.launch.ASMer;
 
 @ASMer class C98GuiScreen extends GuiScreen {
-	@Override public void handleInput() {
+	@Override public void handleInput() throws IOException {
 		super.handleInput();
 		HookImpl.tickGui();
 	}

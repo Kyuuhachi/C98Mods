@@ -8,15 +8,18 @@ import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import c98.Minemap;
 import c98.core.C98Log;
-import c98.minemap.MinemapConfig.*;
+import c98.minemap.MinemapConfig.EntityMarker;
+import c98.minemap.MinemapConfig.Marker;
+import c98.minemap.MinemapConfig.Preset;
 import c98.minemap.MinemapConfig.Preset.MapType;
 import c98.minemap.MinemapConfig.WaypointMarker;
-import c98.minemap.server.*;
+import c98.minemap.server.MapImpl;
 import c98.minemap.server.maptype.*;
 
 public class MapServer {
@@ -52,7 +55,7 @@ public class MapServer {
 	}
 	
 	public void update() {
-		if(mc.renderViewEntity == null || mc.renderViewEntity.isDead) {
+		if(mc.func_175606_aa() == null) {
 			crashed = true;
 			return;
 		}
@@ -75,18 +78,18 @@ public class MapServer {
 	private void updateMap(int[] newColors) {
 		int y = getPosY();
 		
-		int mapx = MathHelper.floor_double(mc.renderViewEntity.posX) - size / 2 / scale;
-		int mapz = MathHelper.floor_double(mc.renderViewEntity.posZ) - size / 2 / scale;
+		int mapx = MathHelper.floor_double(mc.func_175606_aa().posX) - size / 2 / scale;
+		int mapz = MathHelper.floor_double(mc.func_175606_aa().posZ) - size / 2 / scale;
 		
-		int partialx = (int)(mod(mc.renderViewEntity.posX) * scale);
-		int partialz = (int)(mod(mc.renderViewEntity.posZ) * scale);
+		int partialx = (int)(mod(mc.func_175606_aa().posX) * scale);
+		int partialz = (int)(mod(mc.func_175606_aa().posZ) * scale);
 		
 		for(int i = 0; i < size; i++) {
 			int x = mapx + (i + partialx) / scale;
 			impl.line(x);
 			for(int j = 0; j < size; j++) {
 				int z = mapz + (j + partialz) / scale;
-				Chunk chunk = world.getChunkFromBlockCoords(x, z);
+				Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
 				int clr = 0;
 				if(chunk != null && !chunk.isEmpty()) {
 					try {
@@ -106,7 +109,7 @@ public class MapServer {
 	}
 	
 	public int getPosY() {
-		return MathHelper.floor_double(mc.renderViewEntity.posY);
+		return MathHelper.floor_double(mc.func_175606_aa().posY);
 	}
 	
 	private List<MapMarker> fixIcons() {
@@ -114,7 +117,7 @@ public class MapServer {
 		int plY = getPosY();
 		for(Entity e:new ArrayList<Entity>(mc.theWorld.loadedEntityList))
 			markEntity(l, e, plY);
-		for(TileEntity e:new ArrayList<TileEntity>(mc.theWorld.field_147482_g))
+		for(TileEntity e:new ArrayList<TileEntity>(mc.theWorld.loadedTileEntityList))
 			markTileEntity(l, e, plY);
 		for(WaypointMarker wpt:Minemap.config.waypoints)
 			markWaypoint(l, (WaypointMarker)wpt.normalize(), plY);
@@ -138,9 +141,9 @@ public class MapServer {
 		try {
 			EntityMarker mrkr = Minemap.mgr.getMarker(te);
 			if(mrkr == null) return;
-			addMarker(l, te.field_145851_c + 0.5, te.field_145848_d + 0.5, te.field_145849_e + 0.5, mrkr, 0, -1, false);
+			addMarker(l, te.getPos().getX() + 0.5, te.getPos().getY() + 0.5, te.getPos().getZ() + 0.5, mrkr, 0, -1, false);
 		} catch(Exception e) {
-			C98Log.error(String.format("TileEntity at %d %d %d", te.field_145851_c, te.field_145848_d, te.field_145849_e), e);
+			C98Log.error(String.format("TileEntity at %d", te.getPos().toString()), e);
 		}
 	}
 	
@@ -158,7 +161,7 @@ public class MapServer {
 	}
 	
 	private int getTeamColor(Entity e, int color) throws NumberFormatException {
-		String name = e.getCommandSenderName();
+		String name = e.getName();
 		String s = name.toUpperCase();
 		boolean b = false;
 		int len = 0;
@@ -196,8 +199,8 @@ public class MapServer {
 	public void addMarker(List l, double x, double y, double z, Marker mrkr, int rotation, int color, boolean alwaysOn) {
 		if(mrkr == null) return;
 		
-		int xOnMap = round(x) - round(mc.renderViewEntity.posX);
-		int zOnMap = round(z) - round(mc.renderViewEntity.posZ);
+		int xOnMap = round(x) - round(mc.func_175606_aa().posX);
+		int zOnMap = round(z) - round(mc.func_175606_aa().posZ);
 		
 		int alpha = 256 - (int)Math.abs((y == -1 ? 0 : y - getPosY()) * 8);
 		if(alpha < mrkr.minOpacity) alpha = mrkr.minOpacity;

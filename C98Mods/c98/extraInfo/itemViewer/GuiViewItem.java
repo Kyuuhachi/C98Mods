@@ -1,9 +1,9 @@
 package c98.extraInfo.itemViewer;
 
-import static org.lwjgl.opengl.GL11.*;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.IOException;
 import java.util.*;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,6 +14,7 @@ import net.minecraft.nbt.*;
 import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import c98.core.GL;
 import com.google.common.base.Splitter;
 import com.google.gson.*;
 
@@ -115,36 +116,36 @@ public class GuiViewItem extends GuiScreen {
 	}
 	
 	private JsonElement toJson(NBTBase nbt) {
-		switch(NBTBase.NBTTypes[nbt.getId()]) {
+		switch(NBTBase.NBT_TYPES[nbt.getId()]) {
 			case "BYTE":
-				return new JsonPrimitive(((NBTTagByte)nbt).func_150290_f());
+				return new JsonPrimitive(((NBTTagByte)nbt).getByte());
 			case "SHORT":
-				return new JsonPrimitive(((NBTTagShort)nbt).func_150289_e());
+				return new JsonPrimitive(((NBTTagShort)nbt).getShort());
 			case "INT":
-				return new JsonPrimitive(((NBTTagInt)nbt).func_150287_d());
+				return new JsonPrimitive(((NBTTagInt)nbt).getInt());
 			case "LONG":
-				return new JsonPrimitive(((NBTTagLong)nbt).func_150291_c());
+				return new JsonPrimitive(((NBTTagLong)nbt).getLong());
 			case "FLOAT":
-				return new JsonPrimitive(((NBTTagFloat)nbt).func_150288_h());
+				return new JsonPrimitive(((NBTTagFloat)nbt).getFloat());
 			case "DOUBLE":
-				return new JsonPrimitive(((NBTTagDouble)nbt).func_150286_g());
+				return new JsonPrimitive(((NBTTagDouble)nbt).getDouble());
 			case "STRING":
-				return new JsonPrimitive(((NBTTagString)nbt).func_150285_a_());
+				return new JsonPrimitive(((NBTTagString)nbt).getString());
 			case "BYTE[]": {
 				JsonArray ar = new JsonArray();
-				for(byte b:((NBTTagByteArray)nbt).func_150292_c())
+				for(byte b:((NBTTagByteArray)nbt).getByteArray())
 					ar.add(new JsonPrimitive(b));
 				return ar;
 			}
 			case "INT[]": {
 				JsonArray ar = new JsonArray();
-				for(int b:((NBTTagIntArray)nbt).func_150302_c())
+				for(int b:((NBTTagIntArray)nbt).getIntArray())
 					ar.add(new JsonPrimitive(b));
 				return ar;
 			}
 			case "COMPOUND": {
 				JsonObject o = new JsonObject();
-				for(String name:(Iterable<String>)((NBTTagCompound)nbt).func_150296_c())
+				for(String name:(Iterable<String>)((NBTTagCompound)nbt).getKeySet())
 					o.add(name, toJson(((NBTTagCompound)nbt).getTag(name)));
 				return o;
 			}
@@ -165,35 +166,33 @@ public class GuiViewItem extends GuiScreen {
 		scrollbar(mouseX, mouseY);
 		
 		drawDefaultBackground();
-		glPushMatrix();
-		glTranslatef(guiLeft, guiTop, 0);
+		GL.pushMatrix();
+		GL.translate(guiLeft, guiTop);
 		
-		mc.getTextureManager().bindTexture(new ResourceLocation("c98", "ExtraInfo/item_view.png"));
+		mc.getTextureManager().bindTexture(new ResourceLocation("c98/ExtraInfo", "item_view.png"));
 		drawTexturedModalRect(0, 0, 0, 0, WIDTH, HEIGHT);
 		int scrollY = (int)((float)scroll / maxScroll * (SCROLL_H - SCROLL_KNOB_H));
 		drawTexturedModalRect(SCROLL_X, SCROLL_Y + scrollY, maxScroll != 0 ? 0 : SCROLL_W, HEIGHT, SCROLL_W, SCROLL_KNOB_H);
 		
 		int x = FIELD_X;
 		int y = FIELD_Y;
-		for(int i = scroll; i < scroll + ROWS && i < text.length; i++, y += mc.fontRenderer.FONT_HEIGHT) {
-			glColor3f(1, 1, 1);
-			mc.fontRenderer.drawString(mc.fontRenderer.trimStringToWidth(text[i].getFormattedText(), FIELD_W), x, y, 0xAFAFAF);
-			if(mouseY >= y && mouseY < y + mc.fontRenderer.FONT_HEIGHT) {
+		for(int i = scroll; i < scroll + ROWS && i < text.length; i++, y += mc.fontRendererObj.FONT_HEIGHT) {
+			GL.color(1, 1, 1);
+			mc.fontRendererObj.drawString(mc.fontRendererObj.trimStringToWidth(text[i].getFormattedText(), FIELD_W), x, y, 0xAFAFAF);
+			if(mouseY >= y && mouseY < y + mc.fontRendererObj.FONT_HEIGHT) {
 				int compX = x;
 				for(IChatComponent c:(Iterable<IChatComponent>)text[i]) {
-					compX += mc.fontRenderer.getStringWidth(c.getChatStyle().getFormattingCode() + ((ChatComponentText)c).getUnformattedTextForChat());
+					compX += mc.fontRendererObj.getStringWidth(c.getChatStyle().getFormattingCode() + ((ChatComponentText)c).getUnformattedTextForChat());
 					if(compX > mouseX) {
 						HoverEvent e = c.getChatStyle().getChatHoverEvent();
-						if(e != null) {
-							func_146283_a(Splitter.on("\n").splitToList(e.getValue().getFormattedText()), mouseX, mouseY);
-							glDisable(GL_LIGHTING);
-						}
+						if(e != null) drawHoveringText(Splitter.on("\n").splitToList(e.getValue().getFormattedText()), mouseX, mouseY);
+//							GL.disableLighting(); TODO is this needed?
 						break;
 					}
 				}
 			}
 		}
-		glPopMatrix();
+		GL.popMatrix();
 		
 		super.drawScreen(mouseX + guiLeft, mouseY + guiTop, par3);
 		
@@ -213,7 +212,7 @@ public class GuiViewItem extends GuiScreen {
 		scroll();
 	}
 	
-	@Override protected void keyTyped(char par1, int par2) {
+	@Override protected void keyTyped(char par1, int par2) throws IOException {
 		super.keyTyped(par1, par2);
 		if(par2 == Keyboard.KEY_UP) scroll--;
 		if(par2 == Keyboard.KEY_DOWN) scroll++;
@@ -223,7 +222,7 @@ public class GuiViewItem extends GuiScreen {
 		scroll();
 	}
 	
-	@Override public void handleMouseInput() {
+	@Override public void handleMouseInput() throws IOException {
 		super.handleMouseInput();
 		int dist = Mouse.getEventDWheel();
 		if(dist > 0) scroll--;

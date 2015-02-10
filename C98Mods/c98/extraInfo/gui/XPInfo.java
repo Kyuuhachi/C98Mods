@@ -15,7 +15,7 @@ public class XPInfo {
 		int xpToNextLevel = mc.thePlayer.xpBarCap();
 		int totalXP = totalXP(mc.thePlayer);
 		
-		posX = ((GuiContainer)gui).field_146999_f + 4;
+		posX = ((GuiContainer)gui).xSize + 4;
 		posY = 4;
 		
 		xpDropped(mc);
@@ -72,14 +72,14 @@ public class XPInfo {
 	}
 	
 	private static void str(String string, int x, int y) {
-		Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(string, x + posX, y + posY, 0xFFFFFF);
+		Minecraft.getMinecraft().fontRendererObj.func_175063_a(string, x + posX, y + posY, 0xFFFFFF);
 	}
 	
 	private static int totalXP(EntityPlayer thePlayer) {
 		int xp = 0;
 		for(int i = 0; i < thePlayer.experienceLevel; i++)
 			xp += i >= 30 ? 62 + (i - 30) * 7 : i >= 15 ? 17 + (i - 15) * 3 : 17;
-			xp += thePlayer.experience * thePlayer.xpBarCap();
-			return xp;
+		xp += thePlayer.experience * thePlayer.xpBarCap();
+		return xp;
 	}
 }

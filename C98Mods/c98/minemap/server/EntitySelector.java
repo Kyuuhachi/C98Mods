@@ -3,7 +3,7 @@ package c98.minemap.server;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityGolem;
@@ -54,7 +54,7 @@ public class EntitySelector {
 	
 	public static Map<String, Map<String, DataWatchObj>> attributes;
 	public static Map<Class, String> classToId;
-	private static final ResourceLocation datawatcher = new ResourceLocation("c98", "Minemap/datawatcher.txt");
+	private static final ResourceLocation datawatcher = new ResourceLocation("c98/minemap", "datawatcher.txt");
 	
 	public static DataWatchObj getParam(Entity e, String key) {
 		for(Class c = e.getClass(); c != null; c = c.getSuperclass()) {
@@ -79,7 +79,7 @@ public class EntitySelector {
 				}
 			map.get("Entity").put("name", new DataWatchObj("S", "") {
 				@Override public Object get(Entity e) {
-					return e.getCommandSenderName();
+					return e.getName();
 				}
 			});
 			attributes = map;
@@ -93,7 +93,7 @@ public class EntitySelector {
 			m.put(EntityMinecart.class, "Minecart");
 			m.put(EntityLiving.class, "NonPlayer");
 			m.put(EntityPlayer.class, "Player");
-			m.put(EntityClientPlayerMP.class, "Self");
+			m.put(EntityPlayerSP.class, "Self");
 			m.put(EntityFireball.class, "FireballBase");
 			m.put(EntityHanging.class, "Hanging");
 			m.put(EntityAmbientCreature.class, "AmbientCreature");

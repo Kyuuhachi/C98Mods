@@ -15,7 +15,7 @@ public class HorseStats {
 		GuiScreen gui = mc.currentScreen;
 		EntityHorse horse = ((GuiScreenHorseInventory)gui).field_147034_x;
 		
-		posX = ((GuiContainer)gui).field_146999_f + 4;
+		posX = ((GuiContainer)gui).xSize + 4;
 		posY = 4;
 		
 		double health = HorseInfo.attr(horse, SharedMonsterAttributes.maxHealth);
@@ -34,6 +34,6 @@ public class HorseStats {
 	}
 	
 	private static void str(String string, int x, int y) {
-		Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(string, x + posX, y + posY, 0xFFFFFF);
+		Minecraft.getMinecraft().fontRendererObj.func_175063_a(string, x + posX, y + posY, 0xFFFFFF);
 	}
 }

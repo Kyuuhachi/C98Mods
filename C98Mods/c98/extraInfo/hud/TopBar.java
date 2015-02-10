@@ -1,16 +1,13 @@
 package c98.extraInfo.hud;
 
-import static org.lwjgl.opengl.GL11.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.util.*;
 import c98.ExtraInfo;
 import c98.Minemap;
 import c98.core.C98Core;
+import c98.core.GL;
 
 public class TopBar {
 	
@@ -28,9 +25,7 @@ public class TopBar {
 		int posX = MathHelper.floor_double(mc.thePlayer.posX);
 		int posZ = MathHelper.floor_double(mc.thePlayer.posZ);
 		
-		Chunk chunk = mc.theWorld.getChunkFromBlockCoords(posX, posZ);
-		BiomeGenBase bs = chunk.getBiomeGenForWorldCoords(posX & 15, posZ & 15, mc.theWorld.getWorldChunkManager());
-		String biomeName = bs.biomeName;
+		String biomeName = mc.theWorld.getBiomeGenForCoords(new BlockPos(posX & 15, 0, posZ & 15)).biomeName;
 		
 		int size = fr.getStringWidth(biomeName);
 		ExtraInfo.drawRect(x - size - 8, -10, size + 7, 24);
@@ -51,7 +46,7 @@ public class TopBar {
 		int size = fr.getStringWidth(timeString);
 		
 		ExtraInfo.bindTexture(ExtraInfo.hud);
-		glColor3f(1, 1, 1);
+		GL.color(1, 1, 1);
 		ExtraInfo.drawTexturedRect(x, -10, 24, -10, 40, 60);
 		fr.drawString(timeString, x + 21 - size / 2, 4, 0xFFFFFF);
 		

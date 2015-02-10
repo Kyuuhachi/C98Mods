@@ -1,32 +1,22 @@
 package c98.extraInfo.item;
 
-import static org.lwjgl.opengl.GL11.*;
-import c98.core.item.ItemOverlay;
-import c98.core.util.Convert;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import c98.core.GL;
+import c98.core.ItemOverlay;
+import c98.core.util.Convert;
 
 public class Overlay implements ItemOverlay {
-	public static class DamageGetter {
-		
-		public int[] getDamage(ItemStack is) {
-			return new int[] {is.getItemDamageForDisplay(), is.getMaxDamage()};
-		}
-		
-	}
 	
-	public static DamageGetter damageGetter = new DamageGetter();
-	
-	@Override public void renderOverlay(FontRenderer font, TextureManager engine, ItemStack is, int x, int y, String customText) {
-		glScalef(0.5F, 0.5F, 0.5F);
+	@Override public void renderOverlay(FontRenderer font, ItemStack is, int x, int y, String customText) {
+		GL.pushMatrix();
+		GL.scale(0.5);
 		if(is.isItemDamaged()) {
-			int[] dmgs = damageGetter.getDamage(is);
-			int currentDmg = dmgs[0];
-			int maxDmg = dmgs[1];
+			int currentDmg = is.getItemDamage();
+			int maxDmg = is.getMaxDamage();
 			
 			int color = (int)Math.round(255.0D - currentDmg * 255.0D / maxDmg);
 			int shiftedColor = 255 - color << 16 | color << 8;
@@ -44,7 +34,7 @@ public class Overlay implements ItemOverlay {
 			drawOutline(font, unbreakStr, dx, dy);
 			font.drawString(EnumChatFormatting.LIGHT_PURPLE + unbreakStr, dx, dy, 0xFFFFFF);
 		}
-		glScalef(2, 2, 2);
+		GL.popMatrix();
 	}
 	
 	private static void drawOutline(FontRenderer font, String dmgStr, int dx, int dy) {

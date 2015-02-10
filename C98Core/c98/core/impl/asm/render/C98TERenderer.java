@@ -6,6 +6,7 @@ import c98.core.Rendering;
 import c98.core.launch.ASMer;
 
 @ASMer class C98TERenderer extends TileEntityRendererDispatcher {
+	
 	@Override public TileEntitySpecialRenderer getSpecialRendererByClass(Class par1Class) {
 		TileEntitySpecialRenderer override = Rendering.getTERenderer(par1Class);
 		if(override != null) return override;

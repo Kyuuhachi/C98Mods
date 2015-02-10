@@ -1,7 +1,9 @@
 package c98.magic;
 
+import net.minecraft.util.EnumFacing;
+
 public interface XpConnection {
 	
-	boolean canConnect(int i);
+	boolean canConnect(EnumFacing dir);
 	
 }

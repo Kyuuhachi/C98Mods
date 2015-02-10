@@ -7,8 +7,9 @@ import c98.core.C98Log;
 import c98.core.impl.C98Formatter.Target;
 import c98.core.impl.launch.C98Tweaker;
 
-public class ConsoleImpl {
+public class LogImpl {
 	public static void init(File logFile) {
+		C98Log.log.setLevel(Level.ALL);
 		if(C98Tweaker.forge) C98Log.log.setParent(Logger.getLogger("ForgeModLoader"));
 		else {
 			Handler h = new StreamHandler(System.err, new C98Formatter(Target.OUT)) {
@@ -21,7 +22,6 @@ public class ConsoleImpl {
 			C98Log.log.addHandler(h);
 			C98Log.log.setUseParentHandlers(false);
 		}
-		C98Log.log.setLevel(Level.ALL);
 		try {
 			logFile.getParentFile().mkdirs();
 			String path = logFile.getAbsolutePath();

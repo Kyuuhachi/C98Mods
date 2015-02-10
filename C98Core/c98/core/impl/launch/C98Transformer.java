@@ -139,13 +139,22 @@ public class C98Transformer implements IClassTransformer {
 			String className = name.replace('.', '/');
 			num = 0;
 			
-			for(String s:Iterables.concat(transformers.get(name), transformers.get("*"))) {
-				num++;
-				ClassNode transformer = new ClassNode();
-				new ClassReader(transform(getAsByteArray(Launch.classLoader.findResource(s)))).accept(transformer, ClassReader.EXPAND_FRAMES);
-				if(transformer.interfaces.contains(CustomASMer.class.getName().replace('.', '/'))) handleCustomASMer(dst, transformer);
-				else handleAsm(dst, transformer, className);
-			}
+			for(String s:Iterables.concat(transformers.get(name), transformers.get("*")))
+				try {
+					num++;
+					ClassNode transformer = new ClassNode();
+					new ClassReader(transform(getAsByteArray(Launch.classLoader.findResource(s)))).accept(transformer, ClassReader.EXPAND_FRAMES);
+					if(transformer.interfaces.contains(CustomASMer.class.getName().replace('.', '/'))) handleCustomASMer(dst, transformer);
+					else handleAsm(dst, transformer, className);
+				} catch(Exception e) {
+					C98Log.error("Failed to transform " + name + " with transformer " + s, e);
+				}
+			
+			dst.access = (dst.access | Opcodes.ACC_PUBLIC) & ~Opcodes.ACC_PROTECTED & ~Opcodes.ACC_PRIVATE;
+			for(MethodNode n:dst.methods)
+				n.access = (n.access | Opcodes.ACC_PUBLIC) & ~Opcodes.ACC_PROTECTED & ~Opcodes.ACC_PRIVATE;
+			for(FieldNode n:dst.fields)
+				n.access = (n.access | Opcodes.ACC_PUBLIC) & ~Opcodes.ACC_PROTECTED & ~Opcodes.ACC_PRIVATE;
 			
 			HashMap<String, String> map = new HashMap();
 			for(String s:remapping.get(className))
@@ -155,7 +164,7 @@ public class C98Transformer implements IClassTransformer {
 			dst.accept(new RemappingClassAdapter(wr, new SimpleRemapper(map)));
 			b = wr.toByteArray();
 		} catch(Exception | ClassFormatError e) {
-			C98Log.error("Failed to transform " + name + " with transformers " + transformers.get(name), e);
+			C98Log.error("Failed to transform " + name, e);
 		}
 		return b;
 	}

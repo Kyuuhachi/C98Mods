@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 public class ContainerSelectItem extends Container {
 	
@@ -18,8 +17,8 @@ public class ContainerSelectItem extends Container {
 			armorType = par6;
 		}
 		
-		@Override public IIcon getBackgroundIconIndex() {
-			return ItemArmor.func_94602_b(armorType);
+		@Override public String func_178171_c() {
+			return ItemArmor.EMPTY_SLOT_NAMES[armorType];
 		}
 	}
 	

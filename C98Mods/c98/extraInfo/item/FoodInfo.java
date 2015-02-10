@@ -16,15 +16,17 @@ import c98.core.util.Convert;
 	}
 	
 	@Override public void addInformation(ItemStack is, EntityPlayer ep, List l, boolean adv) {
-		l.add("Value: " + func_150905_g(is));
-		l.add("Saturation: " + (int)(func_150906_h(is) * func_150905_g(is) * 20) / 10F);
-		if(adv) l.add("Raw saturation: " + func_150905_g(is));
+		//Huehuehue
+		l.add("Value: " + getHealAmount(is));
+		l.add("Saturation: " + (int)(getSaturationModifier(is) * getHealAmount(is) * 20) / 10F);
+		if(adv) l.add("Raw saturation: " + getHealAmount(is));
+		
 		//Potions
 		ItemFood t = this; // *I* decide what I can, or cannot, cast
 		boolean b = t instanceof ItemAppleGold;
 		boolean isSuperGold = b && is.getItemDamage() != 0;
 		if(b) {
-			l.add(string(Potion.field_76444_x.id, 2400, 0, 100));
+			l.add(string(Potion.absorption.id, 2400, 0, 100));
 			if(isSuperGold) {
 				l.add(string(Potion.regeneration.id, 600, 4, 100));
 				l.add(string(Potion.resistance.id, 6000, 0, 100));

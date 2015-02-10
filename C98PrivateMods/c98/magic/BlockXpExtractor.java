@@ -8,6 +8,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class BlockXpExtractor extends BlockContainer {
@@ -21,10 +22,7 @@ public class BlockXpExtractor extends BlockContainer {
 		};
 		
 		private List<Entity> getEntities() {
-			int x = field_145851_c;
-			int y = field_145848_d;
-			int z = field_145849_e;
-			List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(x, y + 1, z, x + 1, y + 2, z + 1));
+			List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.fromBounds(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1));
 			ListIterator<Entity> it = entities.listIterator();
 			while(it.hasNext()) {
 				Entity e = it.next();
@@ -63,14 +61,17 @@ public class BlockXpExtractor extends BlockContainer {
 			}
 		}
 		
-		@Override public boolean canConnect(int i) {
-			return true;
+		@Override public boolean canConnect(EnumFacing i) {
+			return i == EnumFacing.DOWN;
 		}
 	}
 	
 	public BlockXpExtractor() {
 		super(Material.circuits);
-		setBlockTextureName("obsidian");
+	}
+	
+	@Override public int getRenderType() {
+		return 3;
 	}
 	
 	@Override public TileEntity createNewTileEntity(World w, int meta) {

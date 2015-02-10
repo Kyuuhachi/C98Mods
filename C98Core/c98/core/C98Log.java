@@ -31,7 +31,6 @@ public class C98Log {
 	}
 	
 	public static void error(Throwable e) { //TODO make stuff use this instead of printStackTrace
-		e.printStackTrace();
 		error("Misc error", e);
 	}
 	

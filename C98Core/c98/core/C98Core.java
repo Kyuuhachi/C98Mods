@@ -2,10 +2,13 @@ package c98.core;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.block.Block;
+import net.minecraft.block.*;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.*;
+import net.minecraft.util.ResourceLocation;
 import c98.core.hooks.HudRenderHook;
 import c98.core.impl.HookImpl;
 import c98.core.impl.Notification;
@@ -48,7 +51,7 @@ public class C98Core implements HudRenderHook {
 	}
 	
 	public static float getPartialTicks() {
-		return HookImpl.timer.renderPartialTicks;
+		return mc.timer.renderPartialTicks;
 	}
 	
 	@Override public void renderHud(boolean status) {
@@ -62,18 +65,36 @@ public class C98Core implements HudRenderHook {
 		return "C98Core";
 	}
 	
-	public static void registerBlock(Block b, String string, int id) {
-		registerBlock(b, string, id, new ItemBlock(b));
+	public static void registerBlock(Block b, int id, String string) {
+		registerBlock(b, id, string, new ItemBlock(b));
 	}
 	
-	public static void registerBlock(Block b, String string, int id, Item i) {
-		Block.blockRegistry.addObject(id, string, b);
-		if(i != null) registerItem(i, string, id);
-		b.setBlockName(string.replace(':', '.'));
+	public static void registerBlock(Block b, int id, String string, Item i) {
+		Block.blockRegistry.register(id, new ResourceLocation(string), b);
+		if(i != null) {
+			registerItem(i, id, string);
+			Item.BLOCK_TO_ITEM.put(b, i);
+		}
+		b.setUnlocalizedName(string.replace(':', '.'));
+		
+		if(b.getMaterial() == Material.air) b.useNeighborBrightness = false;
+		else {
+			boolean isStairs = b instanceof BlockStairs;
+			boolean isSlab = b instanceof BlockSlab;
+			boolean translucent = b.isTranslucent();
+			boolean transparent = b.getLightOpacity() == 0;
+			
+			if(isStairs || isSlab || translucent || transparent) b.useNeighborBrightness = true;
+		}
+		
+		for(IBlockState state:(Iterable<IBlockState>)b.getBlockState().getValidStates()) {
+			int value = Block.blockRegistry.getIDForObject(b) << 4 | b.getMetaFromState(state);
+			Block.BLOCK_STATE_IDS.put(state, value);
+		}
 	}
 	
-	public static void registerItem(Item i, String string, int id) {
-		Item.itemRegistry.addObject(id, string, i);
+	public static void registerItem(Item i, int id, String string) {
+		Item.itemRegistry.register(id, new ResourceLocation(string), i);
 		i.setUnlocalizedName(string.replace(':', '.'));
 	}
 }

@@ -1,6 +1,5 @@
 package c98.launchProgress;
 
-import static org.lwjgl.opengl.GL11.*;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -9,13 +8,11 @@ import java.util.List;
 import java.util.logging.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.Display;
-import c98.core.C98Log;
-import c98.core.IO;
+import c98.core.*;
 
 public class MinecraftProgressListener extends ProgressListener {
 	private static List<String> strings;
@@ -52,7 +49,7 @@ public class MinecraftProgressListener extends ProgressListener {
 			for(String s:loggers)
 				Logger.getLogger(s).addHandler(logHandler);
 			try {
-				strings = IOUtils.readLines(IO.getInputStream(new ResourceLocation("c98", "LaunchProgress/launch.txt")));
+				strings = IOUtils.readLines(IO.getInputStream(new ResourceLocation("c98/launchprogress", "launch.txt")));
 				BufferedImage img = IO.getImage(new ResourceLocation("textures/gui/title/mojang.png"));
 				imgWidth = img.getWidth();
 				imgHeight = img.getHeight();
@@ -128,39 +125,37 @@ public class MinecraftProgressListener extends ProgressListener {
 	
 	private static void drawTexture(Minecraft mc, ScaledResolution scRes) {
 		mc.getTextureManager().bindTexture(loc);
-		Tessellator t = Tessellator.instance;
-		t.startDrawingQuads();
-		t.setColorOpaque_I(0xFFFFFF);
-		t.addVertexWithUV(0, mc.displayHeight, 0, 0, 0);
-		t.addVertexWithUV(mc.displayWidth, mc.displayHeight, 0, 0, 0);
-		t.addVertexWithUV(mc.displayWidth, 0, 0, 0, 0);
-		t.addVertexWithUV(0, 0, 0, 0, 0);
-		t.draw();
-		glColor4f(1, 1, 1, 1);
-		t.setColorOpaque_I(0xFFFFFF);
+		
+		GL.color(1, 1, 1);
+		GL.begin();
+		GL.vertex(0, mc.displayHeight);
+		GL.vertex(mc.displayWidth, mc.displayHeight);
+		GL.vertex(mc.displayWidth, 0);
+		GL.vertex(0, 0);
+		GL.end();
 		drawRect((scRes.getScaledWidth() - 256) / 2, (scRes.getScaledHeight() - 256) / 2, 0, 0, 256, 256);
 	}
 	
 	private static void setupGl(Minecraft mc, ScaledResolution scRes) {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0, scRes.getScaledWidth_double(), scRes.getScaledHeight_double(), 0, 1000, 3000);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glTranslatef(0, 0, -2000);
-		glViewport(0, 0, mc.displayWidth, mc.displayHeight);
-		glClearColor(0, 0, 0, 0);
+		GL.clearColor(0, 0, 0, 0);
+		GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+		GL.matrixMode(GL.PROJECTION);
+		GL.loadIdentity();
+		GL.ortho(0, scRes.getScaledWidth_double(), scRes.getScaledHeight_double(), 0, 1000, 3000);
+		GL.matrixMode(GL.MODELVIEW);
+		GL.loadIdentity();
+		GL.translate(0, 0, -2000);
+		GL.viewport(0, 0, mc.displayWidth, mc.displayHeight);
+		
 	}
 	
 	private static void drawRect(int x, int y, int u, int v, int w, int h) {
 		float pix = 1F / 256;
-		Tessellator t = Tessellator.instance;
-		t.startDrawingQuads();
-		t.addVertexWithUV(x + 0, y + h, 0, (u + 0) * pix, (v + h) * pix);
-		t.addVertexWithUV(x + w, y + h, 0, (u + w) * pix, (v + h) * pix);
-		t.addVertexWithUV(x + w, y + 0, 0, (u + w) * pix, (v + 0) * pix);
-		t.addVertexWithUV(x + 0, y + 0, 0, (u + 0) * pix, (v + 0) * pix);
-		t.draw();
+		GL.begin();
+		GL.vertex(x + 0, y + h, (u + 0) * pix, (v + h) * pix);
+		GL.vertex(x + w, y + h, (u + w) * pix, (v + h) * pix);
+		GL.vertex(x + w, y + 0, (u + w) * pix, (v + 0) * pix);
+		GL.vertex(x + 0, y + 0, (u + 0) * pix, (v + 0) * pix);
+		GL.end();
 	}
 }

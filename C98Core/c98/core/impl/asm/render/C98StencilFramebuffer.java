@@ -1,11 +1,11 @@
 package c98.core.impl.asm.render;
 
-import static org.lwjgl.opengl.GL11.*;
 import java.nio.ByteBuffer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.opengl.ARBFramebufferObject;
+import org.lwjgl.opengl.GL11;
 import c98.core.launch.ASMer;
 
 @ASMer class C98StencilFramebuffer extends Framebuffer {
@@ -26,8 +26,8 @@ import c98.core.launch.ASMer;
 			if(useDepth) depthBuffer = OpenGlHelper.func_153185_f();
 			
 			setFramebufferFilter(9728);
-			glBindTexture(GL_TEXTURE_2D, framebufferTexture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, framebufferTextureWidth, framebufferTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, (ByteBuffer)null);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, framebufferTexture);
+			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, framebufferTextureWidth, framebufferTextureHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer)null);
 			OpenGlHelper.func_153171_g(OpenGlHelper.field_153198_e, framebufferObject);
 			OpenGlHelper.func_153188_a(OpenGlHelper.field_153198_e, OpenGlHelper.field_153200_g, 3553, framebufferTexture, 0);
 			if(useDepth) {

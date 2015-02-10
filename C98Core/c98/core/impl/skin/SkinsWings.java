@@ -1,12 +1,12 @@
 package c98.core.impl.skin;
 
-import static org.lwjgl.opengl.GL11.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import c98.core.GL;
 
 public class SkinsWings implements SkinExtras {
 	private static final ResourceLocation dragon = new ResourceLocation("textures/entity/enderdragon/dragon.png");
@@ -39,21 +39,20 @@ public class SkinsWings implements SkinExtras {
 	}
 	
 	@Override public void draw(EntityLivingBase ent, float time, float scale) {
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
+		GL.cullFace(GL.BACK);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(dragon);
-		glPushMatrix();
+		GL.pushMatrix();
 		
 		setAngles(ent, time);
 		
 		for(int i = 0; i < 2; ++i) {
 			wing.render(scale / 4);
-			glScalef(-1, 1, 1);
-			if(i == 0) glCullFace(GL_FRONT);
+			GL.scale(-1, 1, 1);
+			if(i == 0) GL.cullFace(GL.FRONT);
 		}
 		
-		glCullFace(GL_BACK);
-		glPopMatrix();
+		GL.cullFace(GL.BACK);
+		GL.popMatrix();
 	}
 	
 	private void setAngles(EntityLivingBase ent, float time) {

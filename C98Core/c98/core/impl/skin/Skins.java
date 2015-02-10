@@ -9,12 +9,12 @@ public class Skins {
 	public Multimap<String, SkinExtras> map = ArrayListMultimap.create();
 	
 	public Skins(ModelBase model) {
-		map.put("Caagr_98", new SkinsWings(model));
+		map.put("Caagr98", new SkinsWings(model));
 		map.put("Car0b1nius", new SkinsSticks(model));
 	}
 	
 	public void renderStuff(EntityLivingBase ent, float time, float scale) {
-		for(SkinExtras e:map.get(ent.getCommandSenderName()))
+		for(SkinExtras e:map.get(ent.getName()))
 			e.draw(ent, time, scale);
 	}
 	

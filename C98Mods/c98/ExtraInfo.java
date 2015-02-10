@@ -1,12 +1,10 @@
 package c98;
 
-import static org.lwjgl.opengl.GL11.*;
 import java.awt.Color;
 import java.lang.reflect.Type;
 import java.util.*;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.inventory.*;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -19,7 +17,6 @@ import c98.core.*;
 import c98.core.Json.CustomConfig;
 import c98.core.hooks.*;
 import c98.core.util.NinePatch;
-import c98.extraInfo.PlayerInfo;
 import c98.extraInfo.gui.*;
 import c98.extraInfo.hud.*;
 import c98.extraInfo.item.*;
@@ -28,7 +25,7 @@ import c98.targetLock.TargetEntity;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 
-public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, HudTopRenderHook, KeyHook {
+public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, KeyHook {
 	public static class EIConf implements CustomConfig {
 		
 		public static class TBConf {
@@ -68,7 +65,6 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, H
 		public boolean durability = true, bowInfo = true, anvilInfo = true, potionOverlay = true; // Item overlay
 		public boolean foodInfo = true, armorInfo = true; // Tooltip
 		public boolean potionInfo = true, horseInfo = true, xpInfo = true, saturationInfo = true;// HUD
-		public boolean tabInfo = true;
 		public Color silverfish = new Color(0xFF7F7F);
 		public TBConf topBar = new TBConf();
 		public SlotConf slotInfo = new SlotConf();
@@ -78,7 +74,7 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, H
 		}
 	}
 	
-	public static final ResourceLocation hud = new ResourceLocation("c98", "ExtraInfo/hud.png");
+	public static final ResourceLocation hud = new ResourceLocation("c98/extrainfo", "hud.png");
 	public static final ResourceLocation icons = new ResourceLocation("textures/gui/icons.png");
 	public static final ResourceLocation inventory = new ResourceLocation("textures/gui/container/inventory.png");
 	public static String format = "%.2f / %.2f", format2 = "%.2f";
@@ -90,9 +86,6 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, H
 		Rendering.addOverlayHook(new BowOverlay());
 		Rendering.addOverlayHook(new PotionOverlay());
 		C98Core.registerKey(viewKey, false);
-	}
-	
-	@Override public void postInit() {
 		config = Json.get(this, EIConf.class);
 	}
 	
@@ -105,18 +98,11 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, H
 		}
 	}
 	
-	@Override public void renderHudTop() {
-		ScaledResolution res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-		int height = res.getScaledHeight();
-		int width = res.getScaledWidth();
-		if(config.tabInfo) PlayerInfo.draw(mc, width, height);
-	}
-	
 	@Override public void renderHud(boolean bars) {
 		ScaledResolution res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int height = res.getScaledHeight();
 		int width = res.getScaledWidth();
-		FontRenderer fr = mc.fontRenderer;
+		FontRenderer fr = mc.fontRendererObj;
 		
 		if(config.topBar.enable) TopBar.drawTopBar(mc, width, fr);
 		if(config.potionInfo) PotionInfo.drawPotions(height, width, fr, mc);
@@ -135,19 +121,17 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, H
 			var7 /= 4;
 			var8 /= 2;
 		}
-		Tessellator var9 = Tessellator.instance;
-		var9.setTextureUV(0, 0);
-		var9.setTranslation(0, 0, 0);
-		var9.startDrawingQuads();
-		var9.addVertexWithUV(x + 0, y + h, 0, (u + 0) * var7, (v + h) * var8);
-		var9.addVertexWithUV(x + w, y + h, 0, (u + w) * var7, (v + h) * var8);
-		var9.addVertexWithUV(x + w, y + 0, 0, (u + w) * var7, (v + 0) * var8);
-		var9.addVertexWithUV(x + 0, y + 0, 0, (u + 0) * var7, (v + 0) * var8);
-		var9.draw();
+		GL.begin();
+		GL.vertex(x + 0, y + h, (u + 0) * var7, (v + h) * var8);
+		GL.vertex(x + w, y + h, (u + w) * var7, (v + h) * var8);
+		GL.vertex(x + w, y + 0, (u + w) * var7, (v + 0) * var8);
+		GL.vertex(x + 0, y + 0, (u + 0) * var7, (v + 0) * var8);
+		GL.end();
+		
 	}
 	
 	public static void drawRect(int x, int y, int w, int h) {
-		glColor3f(1, 1, 1);
+		GL.color(1, 1, 1);
 		bindTexture(hud);
 		NinePatch.setMargins(8);
 		NinePatch.setTexCoords(0, 0, 24, 24);
@@ -155,17 +139,13 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, H
 	}
 	
 	public static void drawTexturedRect(int x, int y, int u, int v, int w, int h) {
-		float var7 = 0.00390625F;
-		float var8 = 0.00390625F;
-		Tessellator var9 = Tessellator.instance;
-		var9.setTextureUV(0, 0);
-		var9.setTranslation(0, 0, 0);
-		var9.startDrawingQuads();
-		var9.addVertexWithUV(x + 0, y + h, 0, (u + 0) * var7, (v + h) * var8);
-		var9.addVertexWithUV(x + w, y + h, 0, (u + w) * var7, (v + h) * var8);
-		var9.addVertexWithUV(x + w, y + 0, 0, (u + w) * var7, (v + 0) * var8);
-		var9.addVertexWithUV(x + 0, y + 0, 0, (u + 0) * var7, (v + 0) * var8);
-		var9.draw();
+		
+		GL.begin();
+		GL.vertex(x + 0, y + h, (u + 0) / 256F, (v + h) / 256F);
+		GL.vertex(x + w, y + h, (u + w) / 256F, (v + h) / 256F);
+		GL.vertex(x + w, y + 0, (u + w) / 256F, (v + 0) / 256F);
+		GL.vertex(x + 0, y + 0, (u + 0) / 256F, (v + 0) / 256F);
+		GL.end();
 	}
 	
 	public static void bindTexture(ResourceLocation img) {
@@ -179,7 +159,7 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, H
 			add(viableStacks, mc.thePlayer.inventory.armorInventory);
 			if(C98Core.isModLoaded("TargetLock") && TargetLock.target() instanceof TargetEntity) {
 				entity = ((TargetEntity)TargetLock.target()).getEntity();
-				ItemStack[] stacks = entity.getLastActiveItems();
+				ItemStack[] stacks = entity.getInventory();
 				add(viableStacks, stacks);
 			} else add(viableStacks, new ItemStack[5]);
 			add(viableStacks, mc.thePlayer.inventory.mainInventory);

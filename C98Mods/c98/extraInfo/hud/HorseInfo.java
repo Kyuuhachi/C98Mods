@@ -1,18 +1,18 @@
 package c98.extraInfo.hud;
 
-import static org.lwjgl.opengl.GL11.*;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityHorse;
 import c98.ExtraInfo;
+import c98.core.GL;
 
 public class HorseInfo {
 	
-	public static void draw(int height, int width, FontRenderer fr, EntityClientPlayerMP pl, EntityHorse horse) {
+	public static void draw(int height, int width, FontRenderer fr, EntityPlayerSP pl, EntityHorse horse) {
 		ExtraInfo.bindTexture(ExtraInfo.icons);
-		glColor3f(1, 1, 1);
+		GL.color(1, 1, 1);
 		
 		float jumpCharge = pl.getHorseJumpPower();
 		int barLength = 182;

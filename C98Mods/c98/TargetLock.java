@@ -7,7 +7,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.util.*;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
@@ -81,7 +80,6 @@ public class TargetLock extends C98Mod implements TickHook, GuiHook, HudRenderHo
 			
 			if(mop != null && mop.typeOfHit == MovingObjectType.ENTITY && mop.entityHit instanceof EntityPlayer) setTarget(new TargetPlayer((EntityPlayer)mop.entityHit));
 			else if(mop != null && mop.typeOfHit == MovingObjectType.ENTITY && mop.entityHit instanceof EntityLivingBase) setTarget(new TargetEntity(mop.entityHit));
-			else if(mop != null && mop.typeOfHit == MovingObjectType.BLOCK && mc.theWorld.getBlock(mop.blockX, mop.blockY, mop.blockZ) == Blocks.wooden_button) setTarget(new TargetButton(mop.blockX, mop.blockY, mop.blockZ, mc.theWorld));
 		}
 	}
 	
@@ -91,9 +89,9 @@ public class TargetLock extends C98Mod implements TickHook, GuiHook, HudRenderHo
 		
 		MovingObjectPosition mop;
 		double d = 64;
-		mop = mc.thePlayer.rayTrace(d, 0);
+		mop = mc.thePlayer.func_174822_a(d, 0);
 		double d1 = d;
-		Vec3 vec3d = mc.thePlayer.getPosition(0);
+		Vec3 vec3d = mc.thePlayer.getPositionVector();
 		
 		if(mop != null) d1 = mop.hitVec.distanceTo(vec3d);
 		
@@ -101,7 +99,7 @@ public class TargetLock extends C98Mod implements TickHook, GuiHook, HudRenderHo
 		Vec3 v2 = vec3d.addVector(v1.xCoord * d, v1.yCoord * d, v1.zCoord * d);
 		Entity pointedEntity = null;
 		float f = 1.0F;
-		List list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.thePlayer, mc.thePlayer.boundingBox.addCoord(v1.xCoord * d, v1.yCoord * d, v1.zCoord * d).expand(f, f, f));
+		List list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().addCoord(v1.xCoord * d, v1.yCoord * d, v1.zCoord * d).expand(f, f, f));
 		double d2 = d1;
 		
 		for(int i = 0; i < list.size(); i++) {
@@ -110,7 +108,7 @@ public class TargetLock extends C98Mod implements TickHook, GuiHook, HudRenderHo
 			if(!entity.canBeCollidedWith()) continue;
 			
 			float f1 = entity.getCollisionBorderSize();
-			AxisAlignedBB axisalignedbb = entity.boundingBox.expand(f1, f1, f1);
+			AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expand(f1, f1, f1);
 			MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3d, v2);
 			
 			if(axisalignedbb.isVecInside(vec3d)) {

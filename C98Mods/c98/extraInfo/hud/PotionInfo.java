@@ -1,6 +1,5 @@
 package c98.extraInfo.hud;
 
-import static org.lwjgl.opengl.GL11.*;
 import java.util.Collection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -8,7 +7,9 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumChatFormatting;
 import c98.ExtraInfo;
-import c98.core.util.*;
+import c98.core.GL;
+import c98.core.util.Convert;
+import c98.core.util.NinePatch;
 
 public class PotionInfo {
 	
@@ -29,30 +30,30 @@ public class PotionInfo {
 			int y = -yPotOffset + yPotOffset * yMult;
 			String effectStr = Potion.getDurationString(effect);
 			drawRect2(x, y, 26, 26);
-			glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			glDisable(GL_LIGHTING);
-			glDisable(GL_DEPTH_TEST);
+			GL.color(1, 1, 1, 1);
+			GL.disableLighting();
+			GL.disableDepth();
 			ExtraInfo.bindTexture(ExtraInfo.inventory);
 			int index = pot.getStatusIconIndex();
 			if(pot.hasStatusIcon()) ExtraInfo.drawTexturedRect(x + 4, y + 4, 0 + index % 8 * 18, 198 + index / 8 * 18, 18, 18);
-			glEnable(GL_DEPTH_TEST);
+			GL.enableDepth();
 			
 			String level = Convert.toRoman(effect.getAmplifier() + 1);
 			
-			fr.drawStringWithShadow(level, x + 3, y + 3, 0xFFFFFF);
+			fr.func_175063_a(level, x + 3, y + 3, 0xFFFFFF);
 			
-			glPushMatrix();
-			glScalef(0.5F, 0.5F, 0.5F);
+			GL.pushMatrix();
+			GL.scale(0.5, 0.5, 0.5);
 			String s = (Potion.potionTypes[effect.getPotionID()].isBadEffect() ? EnumChatFormatting.RED : "") + effectStr;
-			fr.drawStringWithShadow(s, x * 2 + 48 - fr.getStringWidth(s), y * 2 + 40, 0xFFFFFF);
-			glPopMatrix();
+			fr.func_175063_a(s, x * 2 + 48 - fr.getStringWidth(s), y * 2 + 40, 0xFFFFFF);
+			GL.popMatrix();
 			++itr;
 			--yPotOffset;
 		}
 	}
 	
 	private static void drawRect2(int x, int y, int w, int h) {
-		glColor3f(1, 1, 1);
+		GL.color(1, 1, 1);
 		ExtraInfo.bindTexture(ExtraInfo.hud);
 		NinePatch.setMargins(4);
 		NinePatch.setTexCoords(0, 24, 24, 24);

@@ -1,24 +1,22 @@
 package c98.minemap;
 
-import static org.lwjgl.opengl.GL11.*;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
 import c98.Minemap;
+import c98.core.GL;
 import c98.core.IO;
 import c98.core.util.Vector;
 
 public class MapClient implements IResourceManagerReloadListener {
-	private static final ResourceLocation mapIcons = new ResourceLocation("c98", "Minemap/map_icons.png");
+	private static final ResourceLocation mapIcons = new ResourceLocation("c98/minemap", "map_icons.png");
 	private static final ResourceLocation mapBG = new ResourceLocation("textures/map/map_background.png");
 	private final int[][] sizes = new int[16][2];
 	private final float[][] texCoords = new float[16][2];
@@ -87,34 +85,36 @@ public class MapClient implements IResourceManagerReloadListener {
 			System.arraycopy(map.colors, 0, data, 0, data.length);
 		}
 		image.updateDynamicTexture();
-		glPushMatrix();
-		setupTransforms();
+		GL.pushMatrix();
+		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		float scale = 1F / sr.getScaleFactor();
+		GL.scale(scale, scale, scale);
+		Point p = Minemap.config.location.getPosition(map.size);
+		GL.translate(p.x, p.y, -1);
 		
-		float f = map.crashed && !(mc.currentScreen instanceof GuiGameOver) ? 0.5F : 1F;
-		glColor3f(1, f, f);
-		Tessellator t = Tessellator.instance;
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-		glDisable(GL_ALPHA_TEST);
-		glDisable(GL_DEPTH_TEST);
+		float color = map.crashed ? 0.5F : 1F;
+		GL.color(1, color, color);
+		GL.enableBlend();
+		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
+		GL.disableAlpha();
+		GL.disableDepth();
 		for(int i = 0; i < 2; i++) {
 			double margin = (1 - i) * 7 * map.size / 128.0;
-			mc.getTextureManager().bindTexture(i == 0 ? mapBG : texture);
-			t.setColorOpaque_F(1, 1, 1);
-			t.startDrawingQuads();
-			t.addVertexWithUV(00000000 - margin, map.size + margin, 0, 0, 1);
-			t.addVertexWithUV(map.size + margin, map.size + margin, 0, 1, 1);
-			t.addVertexWithUV(map.size + margin, 00000000 - margin, 0, 1, 0);
-			t.addVertexWithUV(00000000 - margin, 00000000 - margin, 0, 0, 0);
-			t.draw();
+			GL.bindTexture(i == 0 ? mapBG : texture);
+			GL.begin();
+			GL.vertex(00000000 - margin, map.size + margin, 0, 1);
+			GL.vertex(map.size + margin, map.size + margin, 1, 1);
+			GL.vertex(map.size + margin, 00000000 - margin, 1, 0);
+			GL.vertex(00000000 - margin, 00000000 - margin, 0, 0);
+			GL.end();
 		}
-		glColor3f(1, 1, 1);
-		glEnable(GL_ALPHA_TEST);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		mc.getTextureManager().bindTexture(mapIcons);
-		glBegin(GL_QUADS);
+		GL.color(1, 1, 1);
+		GL.enableAlpha();
+		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
+		GL.bindTexture(mapIcons);
+		
+		GL.begin();
 		for(MapMarker icon:map.markers) {
-			
 			float u0 = texCoords[icon.img][0];
 			float v0 = 00000000 / 8F;
 			float u1 = icon.img / 8F;
@@ -138,29 +138,16 @@ public class MapClient implements IResourceManagerReloadListener {
 			icon.m.transform(c3);
 			
 			Color c = new Color(icon.color);
-			glColor4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, icon.y / 255F);
-			vert(c0.x, c0.y, u0, v0);
-			vert(c1.x, c1.y, u1, v0);
-			vert(c2.x, c2.y, u1, v1);
-			vert(c3.x, c3.y, u0, v1);
 			
+			GL.color(c.getRed() / 255F, c.getGreen() / 255, c.getBlue() / 255, icon.y / 255F);
+			GL.vertex(c0.x, c0.y, u0, v0);
+			GL.vertex(c1.x, c1.y, u1, v0);
+			GL.vertex(c2.x, c2.y, u1, v1);
+			GL.vertex(c3.x, c3.y, u0, v1);
 		}
-		glEnd();
-		glDisable(GL_BLEND);
-		glEnable(GL_DEPTH_TEST);
-		glPopMatrix();
-	}
-	
-	private static void vert(double x, double y, float u, float v) {
-		glTexCoord2f(u, v);
-		glVertex2d((int)x, (int)y);
-	}
-	
-	private void setupTransforms() {
-		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-		float f = 1F / sr.getScaleFactor();
-		glScalef(f, f, f);
-		Point p = Minemap.config.location.getPosition(map.size);
-		glTranslatef(p.x, p.y, -1);
+		GL.end();
+		GL.disableBlend();
+		GL.enableDepth();
+		GL.popMatrix();
 	}
 }

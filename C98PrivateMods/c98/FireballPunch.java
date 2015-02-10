@@ -1,6 +1,7 @@
 package c98;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityLargeFireball;
@@ -32,7 +33,7 @@ public class FireballPunch extends C98Mod implements TickHook {
 		double py = y + r;
 		double pz = z + r;
 		
-		AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(mx, my, mz, px, py, pz);
+		AxisAlignedBB aabb = AxisAlignedBB.fromBounds(mx, my, mz, px, py, pz);
 		List<EntityFireball> ls = w.getEntitiesWithinAABB(EntityLargeFireball.class, aabb);
 		
 		for(EntityFireball target:ls)

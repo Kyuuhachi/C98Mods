@@ -4,37 +4,35 @@ import java.util.List;
 import java.util.Set;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Facing;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import c98.Magic;
 
 public class BlockXpPipe extends BlockContainer {
-	public static final float n = 0.25F;
-
-	public static class TE extends TileEntity implements XpPipe, XpConnection {
+	
+	public static class TE extends TileEntity implements IUpdatePlayerListBox, XpPipe, XpConnection {
 		static boolean leaking;
 		private boolean shouldLeak;
-
-		@Override public void getSources(Set<XpProvider> sources, Set<XpPipe> visited, int side) {
+		
+		@Override public void getSources(Set<XpProvider> sources, Set<XpPipe> visited, EnumFacing side) {
 			if(worldObj == null) return;
 			if(visited.contains(this)) {
 				if(!leaking) shouldLeak = true;
 				return;
 			}
 			visited.add(this);
-			for(int i = 0; i < 6; i++) {
-				if(i == side) continue; //Don't turn straight back, that's silly
-				int x = field_145851_c + Facing.offsetsXForSide[i];
-				int y = field_145848_d + Facing.offsetsYForSide[i];
-				int z = field_145849_e + Facing.offsetsZForSide[i];
-				TileEntity te = worldObj.getTileEntity(x, y, z);
-				if(te instanceof XpPipe) ((XpPipe)te).getSources(sources, visited, i ^ 1);
+			for(EnumFacing f:EnumFacing.values()) {
+				if(f == side) continue; //Don't turn straight back, that's silly
+				TileEntity te = worldObj.getTileEntity(pos.offset(f));
+				if(te instanceof XpPipe) ((XpPipe)te).getSources(sources, visited, f.getOpposite());
 				else if(te instanceof XpProvider) {
 					XpProvider p = (XpProvider)te;
 					if(p.canTake()) sources.add(p);
@@ -42,120 +40,117 @@ public class BlockXpPipe extends BlockContainer {
 			}
 		}
 		
-		@Override public boolean canConnect(int i) {
+		@Override public boolean canConnect(EnumFacing i) {
 			return true;
 		}
-
-		@Override public void updateEntity() {
-			if((shouldLeak || countConnections() == 1) && worldObj.rand.nextInt(4) == 0 && !worldObj.isClient) {
+		
+		@Override public void update() {
+			if((shouldLeak || countConnections() == 1) && worldObj.rand.nextInt(4) == 0 && !worldObj.isRemote) {
 				shouldLeak = false;
 				leaking = true;
 				if(XpUtils.canTake(this)) {
 					XpUtils.take(this);
-					worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, field_145851_c + 0.5, field_145848_d + 0.5, field_145849_e + 0.5, 1));
+					worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1));
 				}
 				leaking = false;
 			}
 		}
-
+		
 		private int countConnections() {
 			int num = 0;
-			for(int i = 0; i < 6; i++)
-				if(XpUtils.isConnected(worldObj, field_145851_c, field_145848_d, field_145849_e, i)) num++;
+			for(EnumFacing f:EnumFacing.values())
+				if(XpUtils.isConnected(worldObj, pos, f)) num++;
 			return num;
 		}
 	}
-
+	
+	public static final float inset = 0.25F;
+	public static final PropertyBool DOWN = PropertyBool.create("down");
+	public static final PropertyBool UP = PropertyBool.create("up");
+	public static final PropertyBool NORTH = PropertyBool.create("north");
+	public static final PropertyBool SOUTH = PropertyBool.create("south");
+	public static final PropertyBool WEST = PropertyBool.create("west");
+	public static final PropertyBool EAST = PropertyBool.create("east");
+	
 	public BlockXpPipe() {
 		super(Material.circuits);
-		setBlockTextureName("obsidian");
+	}
+	
+	@Override public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		if(XpUtils.isConnected(worldIn, pos, EnumFacing.DOWN)) state = state.withProperty(DOWN, true);
+		if(XpUtils.isConnected(worldIn, pos, EnumFacing.UP)) state = state.withProperty(UP, true);
+		if(XpUtils.isConnected(worldIn, pos, EnumFacing.NORTH)) state = state.withProperty(NORTH, true);
+		if(XpUtils.isConnected(worldIn, pos, EnumFacing.SOUTH)) state = state.withProperty(SOUTH, true);
+		if(XpUtils.isConnected(worldIn, pos, EnumFacing.WEST)) state = state.withProperty(WEST, true);
+		if(XpUtils.isConnected(worldIn, pos, EnumFacing.EAST)) state = state.withProperty(EAST, true);
+		return state;
+	}
+	
+	@Override protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[] {DOWN, UP, NORTH, SOUTH, WEST, EAST});
+	}
+	
+	@Override public int getMetaFromState(IBlockState state) {
+		return 0;
+	}
+	
+	@Override public int getRenderType() {
+		return 3;
+	}
+	
+	@Override public EnumWorldBlockLayer getBlockLayer() {
+		return EnumWorldBlockLayer.CUTOUT;
 	}
 	
 	@Override public TileEntity createNewTileEntity(World w, int meta) {
 		return new TE();
-	}
-
-	@Override public int getRenderType() {
-		return Magic.renderPipe;
-	}
-	
-	@Override public boolean renderAsNormalBlock() {
-		return false;
 	}
 	
 	@Override public boolean isOpaqueCube() {
 		return false;
 	}
 	
-	@Override public void setBlockBoundsBasedOnState(IBlockAccess w, int x, int y, int z) {
-		float miny = XpUtils.isConnected(w, x, y, z, 0) ? 0 : n;
-		float maxy = XpUtils.isConnected(w, x, y, z, 1) ? 1 : 1 - n;
-		float minz = XpUtils.isConnected(w, x, y, z, 2) ? 0 : n;
-		float maxz = XpUtils.isConnected(w, x, y, z, 3) ? 1 : 1 - n;
-		float minx = XpUtils.isConnected(w, x, y, z, 4) ? 0 : n;
-		float maxx = XpUtils.isConnected(w, x, y, z, 5) ? 1 : 1 - n;
+	@Override public boolean isFullCube() {
+		return false;
+	}
+	
+	@Override public void setBlockBoundsBasedOnState(IBlockAccess w, BlockPos pos) {
+		float miny = XpUtils.isConnected(w, pos, EnumFacing.DOWN) ? 0 : inset;
+		float maxy = XpUtils.isConnected(w, pos, EnumFacing.UP) ? 1 : 1 - inset;
+		float minz = XpUtils.isConnected(w, pos, EnumFacing.NORTH) ? 0 : inset;
+		float maxz = XpUtils.isConnected(w, pos, EnumFacing.SOUTH) ? 1 : 1 - inset;
+		float minx = XpUtils.isConnected(w, pos, EnumFacing.WEST) ? 0 : inset;
+		float maxx = XpUtils.isConnected(w, pos, EnumFacing.EAST) ? 1 : 1 - inset;
 		setBlockBounds(minx, miny, minz, maxx, maxy, maxz);
 	}
-
-	@Override public void addCollisionBoxesToList(World w, int x, int y, int z, AxisAlignedBB box, List list, Entity e) {
-		setBlockBounds(n, n, n, 1 - n, 1 - n, 1 - n);
-		super.addCollisionBoxesToList(w, x, y, z, box, list, e);
-		if(XpUtils.isConnected(w, x, y, z, 0)) {
-			setBlockBounds(n, 0.0F, n, 1 - n, n, 1 - n);
-			super.addCollisionBoxesToList(w, x, y, z, box, list, e);
+	
+	@Override public void addCollisionBoxesToList(World w, BlockPos pos, IBlockState state, AxisAlignedBB box, List list, Entity e) {
+		setBlockBounds(inset, inset, inset, 1 - inset, 1 - inset, 1 - inset);
+		super.addCollisionBoxesToList(w, pos, state, box, list, e);
+		if(XpUtils.isConnected(w, pos, EnumFacing.DOWN)) {
+			setBlockBounds(inset, 0.0F, inset, 1 - inset, inset, 1 - inset);
+			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(XpUtils.isConnected(w, x, y, z, 1)) {
-			setBlockBounds(n, 1 - n, n, 1 - n, 1, 1 - n);
-			super.addCollisionBoxesToList(w, x, y, z, box, list, e);
+		if(XpUtils.isConnected(w, pos, EnumFacing.UP)) {
+			setBlockBounds(inset, 1 - inset, inset, 1 - inset, 1, 1 - inset);
+			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(XpUtils.isConnected(w, x, y, z, 2)) {
-			setBlockBounds(n, n, 0, 1 - n, 1 - n, n);
-			super.addCollisionBoxesToList(w, x, y, z, box, list, e);
+		if(XpUtils.isConnected(w, pos, EnumFacing.NORTH)) {
+			setBlockBounds(inset, inset, 0, 1 - inset, 1 - inset, inset);
+			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(XpUtils.isConnected(w, x, y, z, 3)) {
-			setBlockBounds(n, n, 1 - n, 1 - n, 1 - n, 1);
-			super.addCollisionBoxesToList(w, x, y, z, box, list, e);
+		if(XpUtils.isConnected(w, pos, EnumFacing.SOUTH)) {
+			setBlockBounds(inset, inset, 1 - inset, 1 - inset, 1 - inset, 1);
+			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(XpUtils.isConnected(w, x, y, z, 4)) {
-			setBlockBounds(0, n, n, n, 1 - n, 1 - n);
-			super.addCollisionBoxesToList(w, x, y, z, box, list, e);
+		if(XpUtils.isConnected(w, pos, EnumFacing.WEST)) {
+			setBlockBounds(0, inset, inset, inset, 1 - inset, 1 - inset);
+			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(XpUtils.isConnected(w, x, y, z, 5)) {
-			setBlockBounds(1 - n, n, n, 1, 1 - n, 1 - n);
-			super.addCollisionBoxesToList(w, x, y, z, box, list, e);
+		if(XpUtils.isConnected(w, pos, EnumFacing.EAST)) {
+			setBlockBounds(1 - inset, inset, inset, 1, 1 - inset, 1 - inset);
+			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
 		setBlockBoundsForItemRender();
-	}
-
-	public void render(RenderBlocks rb, IBlockAccess w, int x, int y, int z) {
-		rb.setRenderAllFaces(true);
-		rb.setRenderBounds(n, n, n, 1 - n, 1 - n, 1 - n);
-		rb.renderStandardBlock(this, x, y, z);
-		if(XpUtils.isConnected(w, x, y, z, 0)) {
-			rb.setRenderBounds(n, 0.0F, n, 1 - n, n, 1 - n);
-			rb.renderStandardBlock(this, x, y, z);
-		}
-		if(XpUtils.isConnected(w, x, y, z, 1)) {
-			rb.setRenderBounds(n, 1 - n, n, 1 - n, 1, 1 - n);
-			rb.renderStandardBlock(this, x, y, z);
-		}
-		if(XpUtils.isConnected(w, x, y, z, 2)) {
-			rb.setRenderBounds(n, n, 0, 1 - n, 1 - n, n);
-			rb.renderStandardBlock(this, x, y, z);
-		}
-		if(XpUtils.isConnected(w, x, y, z, 3)) {
-			rb.setRenderBounds(n, n, 1 - n, 1 - n, 1 - n, 1);
-			rb.renderStandardBlock(this, x, y, z);
-		}
-		if(XpUtils.isConnected(w, x, y, z, 4)) {
-			rb.setRenderBounds(0, n, n, n, 1 - n, 1 - n);
-			rb.renderStandardBlock(this, x, y, z);
-		}
-		if(XpUtils.isConnected(w, x, y, z, 5)) {
-			rb.setRenderBounds(1 - n, n, n, 1, 1 - n, 1 - n);
-			rb.renderStandardBlock(this, x, y, z);
-		}
-		rb.setRenderBounds(0, 0, 0, 1, 1, 1);
-		rb.setRenderAllFaces(false);
 	}
 }

@@ -1,6 +1,6 @@
 package c98.core;
 
-import java.util.*;
+import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -94,12 +94,17 @@ public class Recipes {
 		return new ReqRecipe(width, height, array, req);
 	}
 	
-	public static void addSmelting(Block in, ItemStack out, float xp) {
-		FurnaceRecipes.smelting().func_151393_a(in, out, xp);
+	//Why the hell are all those three methods named differently
+	public static void addSmelting(Item in, ItemStack out, float xp) {
+		FurnaceRecipes.instance().addSmelting(in, out, xp);
 	}
 	
-	public static void addSmelting(Item in, ItemStack out, float xp) {
-		FurnaceRecipes.smelting().func_151396_a(in, out, xp);
+	public static void addSmelting(ItemStack in, ItemStack out, float xp) {
+		FurnaceRecipes.instance().addSmeltingRecipe(in, out, xp);
+	}
+	
+	public static void addSmelting(Block in, ItemStack out, float xp) {
+		FurnaceRecipes.instance().addSmeltingRecipeForBlock(in, out, xp);
 	}
 	
 }

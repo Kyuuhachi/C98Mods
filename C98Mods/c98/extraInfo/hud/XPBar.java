@@ -1,15 +1,15 @@
 package c98.extraInfo.hud;
 
-import static org.lwjgl.opengl.GL11.*;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import c98.ExtraInfo;
+import c98.core.GL;
 
 public class XPBar {
 	
 	public static void draw(int height, int width, FontRenderer fr, EntityPlayer p) {
 		ExtraInfo.bindTexture(ExtraInfo.icons);
-		glColor3f(1, 1, 1);
+		GL.color(1, 1, 1);
 		int beginX = width / 2 - 91;
 		int maxXP = p.xpBarCap();
 		short barLength = 182;

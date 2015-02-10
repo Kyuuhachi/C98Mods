@@ -22,10 +22,6 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 	public static MinemapConfig config;
 	private long lastStartTime;
 	
-	@Override public String getShortName() {
-		return "MM";
-	}
-	
 	@Override public void load() {
 		C98Core.registerKey(key, false);
 	}
@@ -36,7 +32,7 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 		if(mc.theWorld != null) {
 			GsonBuilder gson = Json.getGson(config);
 			gson.registerTypeAdapter(EntityMarker[].class, new SuperListAdapter());
-			File f = new File(IO.getMinecraftDir(), "config/C98/" + getName() + "/" + mc.theWorld.provider.dimensionId + ".json");
+			File f = new File(IO.getMinecraftDir(), "config/C98/" + getName() + "/" + mc.theWorld.provider.getDimensionId() + ".json");
 			Json.read(f, config, gson.create());
 		}
 		mgr = new MarkerManager();

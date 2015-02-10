@@ -1,23 +1,23 @@
 package c98.targetLock;
 
-import c98.TargetLock;
+import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.StringUtils;
+import c98.TargetLock;
 
 public class TargetPlayer extends TargetEntity {
 	public TargetPlayer(EntityPlayer e) {
-		name = StringUtils.stripControlCodes(e.getCommandSenderName());
+		uuid = e.getUniqueID();
 	}
 	
-	private String name;
+	private UUID uuid;
 	private int noTargetFrames;
 	
 	@Override public Entity getEntity() {
 		for(Object o:Minecraft.getMinecraft().theWorld.playerEntities) {
 			EntityPlayer p = (EntityPlayer)o;
-			if(StringUtils.stripControlCodes(p.getCommandSenderName()).equals(name)) {
+			if(p.getUniqueID().equals(uuid)) {
 				noTargetFrames = -1;
 				return p;
 			}

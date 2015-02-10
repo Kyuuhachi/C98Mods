@@ -29,7 +29,7 @@ public class ForgeMenuHack extends FontRenderer implements GuiSetHook, GuiHook, 
 	
 	public ForgeMenuHack(Minecraft minecraft) {
 		super(minecraft.gameSettings, new ResourceLocation("textures/font/ascii.png"), minecraft.getTextureManager(), false);
-		ReflectHelper.copy(minecraft.fontRenderer, this);
+		ReflectHelper.copy(minecraft.fontRendererObj, this);
 		initRefl();
 		C98Core.addHook(this);
 	}
@@ -55,18 +55,18 @@ public class ForgeMenuHack extends FontRenderer implements GuiSetHook, GuiHook, 
 		} catch(ReflectiveOperationException e) {}
 	}
 	
-	@Override public int drawString(String str, int x, int y, int color, boolean shadow) {
+	@Override public int func_175065_a(String str, float x, float y, int color, boolean shadow) {
 		if(str.startsWith(string())) {
 			skip = 2;
-			int i = super.drawString("C98Core", x + 28, y + 10, color, shadow);
-			XCube.drawImage(x + 4, y + 1);
+			int i = super.func_175065_a("C98Core", x + 28, y + 10, color, shadow);
+			XCube.drawImage((int)x + 4, (int)y + 1);
 			return i;
 		}
 		if(skip > 0) {
 			skip--;
 			return 0;
 		}
-		return super.drawString(str, x, y, color, shadow);
+		return super.func_175065_a(str, x, y, color, shadow);
 	}
 	
 	@Override public String trimStringToWidth(String par1Str, int par2) {

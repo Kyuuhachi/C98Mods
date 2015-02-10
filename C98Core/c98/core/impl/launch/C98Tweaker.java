@@ -32,7 +32,7 @@ public class C98Tweaker implements ITweaker {
 		ArgumentAcceptingOptionSpec<File> gameDirOpt = op.accepts("gameDir").withRequiredArg().ofType(File.class).defaultsTo(new File("."), new File[0]);
 		OptionSet opts = op.parse(args1.toArray(new String[0]));
 		File file = new File(opts.valueOf(gameDirOpt), "logs/c98mods.log");
-		ConsoleImpl.init(file);
+		LogImpl.init(file);
 		
 		args.addAll(args1);
 		add(profile, "--version");

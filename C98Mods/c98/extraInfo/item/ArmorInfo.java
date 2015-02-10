@@ -14,6 +14,6 @@ import c98.core.launch.ASMer;
 	@Override public void addInformation(ItemStack is, EntityPlayer ep, List l, boolean adv) {
 		l.add("Protection: " + damageReduceAmount);
 		int i = getColor(is);
-		if(getArmorMaterial() == ArmorMaterial.CLOTH && i != 0xA06540) l.add(String.format("Color: %06X", i));
+		if(getArmorMaterial() == ArmorMaterial.LEATHER && i != 0xA06540) l.add(String.format("Color: %06X", i));
 	}
 }

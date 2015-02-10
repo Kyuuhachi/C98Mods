@@ -18,8 +18,7 @@ import c98.core.launch.*;
 				if(insn instanceof MethodInsnNode) {
 					MethodInsnNode min = (MethodInsnNode)insn;
 					if(min.getOpcode() == Opcodes.INVOKEVIRTUAL && min.desc.equals("(II)V") && min.owner.equals(node.name)) {
-						AbstractInsnNode renderHud = new MethodInsnNode(Opcodes.INVOKESTATIC, "c98/core/impl/HookImpl", "renderGui", "()V");
-						n.instructions.insert(insn, renderHud);
+						n.instructions.insert(insn, new MethodInsnNode(Opcodes.INVOKESTATIC, "c98/core/impl/HookImpl", "renderGui", "()V"));
 						break l;
 					}
 				}

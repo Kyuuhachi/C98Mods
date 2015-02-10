@@ -23,15 +23,15 @@ public class TargetEntity implements Target {
 	}
 	
 	@Override public double getX() {
-		return (getEntity().boundingBox.minX + getEntity().boundingBox.maxX) / 2;
+		return (getEntity().getEntityBoundingBox().minX + getEntity().getEntityBoundingBox().maxX) / 2;
 	}
 	
 	@Override public double getY() {
-		return (getEntity().boundingBox.minY + getEntity().boundingBox.maxY) / 2;
+		return (getEntity().getEntityBoundingBox().minY + getEntity().getEntityBoundingBox().maxY) / 2;
 	}
 	
 	@Override public double getZ() {
-		return (getEntity().boundingBox.minZ + getEntity().boundingBox.maxZ) / 2;
+		return (getEntity().getEntityBoundingBox().minZ + getEntity().getEntityBoundingBox().maxZ) / 2;
 	}
 	
 }

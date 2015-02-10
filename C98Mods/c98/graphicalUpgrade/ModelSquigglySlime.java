@@ -100,9 +100,6 @@ public class ModelSquigglySlime extends ModelBase {
 		body.rotationPointZ = MathHelper.sin(progress * 0.375F) * flatness * 0.25F;
 	}
 	
-	/**
-	 * Sets the models various rotation angles then renders the model.
-	 */
 	@Override public void render(Entity entity, float wut, float x, float y, float z, float yaw, float delta) {
 		float sliminess = 0, progress = 0;
 		if(entity != null && entity instanceof EntityLiving) {

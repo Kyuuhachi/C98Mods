@@ -11,6 +11,7 @@ import c98.GlitchyChunks;
 import c98.core.C98Log;
 
 public class Gen extends ChunkProviderGenerate {
+	
 	private ChunkProviderGenerate normal;
 	private ChunkProviderHell nether;
 	private ChunkProviderEnd end;
@@ -20,14 +21,14 @@ public class Gen extends ChunkProviderGenerate {
 	private boolean struct;
 	private Random rand;
 	
-	public Gen(World wld) {
-		super(wld, wld.getSeed(), wld.getWorldInfo().isMapFeaturesEnabled());
+	public Gen(World wld, long seed, boolean structs, String settings) {
+		super(wld, seed, structs, settings);
 		world = wld;
-		seed = wld.getSeed();
-		struct = wld.getWorldInfo().isMapFeaturesEnabled();
+		this.seed = seed;
+		struct = structs;
 		rand = new Random(seed);
-		normal = new ChunkProviderGenerate(wld, seed, struct);
-		nether = new ChunkProviderHell(wld, seed);
+		normal = new ChunkProviderGenerate(wld, seed, struct, settings);
+		nether = new ChunkProviderHell(wld, structs, seed);
 		end = new ChunkProviderEnd(wld, seed);
 		flat = new HashMap();
 	}

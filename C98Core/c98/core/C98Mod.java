@@ -13,20 +13,14 @@ public abstract class C98Mod implements Comparable<C98Mod> {
 		return getName();
 	}
 	
-	public String getShortName() {
-		StringBuilder str = new StringBuilder();
-		for(char c:getName().toCharArray())
-			if(Character.isUpperCase(c)) str.append(c);
-		return str.toString();
-	}
-	
 	@Override public int compareTo(C98Mod o) {
 		return getName().compareTo(o.getName());
 	}
 	
-	public void preInit() {}
-	
 	public void load() {}
 	
-	public void postInit() {}
+	/*
+	 * Register blocks, items, and models in this phase
+	 */
+	public void preinit() {}
 }

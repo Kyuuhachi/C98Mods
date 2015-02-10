@@ -2,7 +2,7 @@ package c98.glitchyChunks;
 
 import java.util.*;
 import net.minecraft.client.gui.GuiFlatPresets;
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.*;
 import net.minecraft.world.gen.FlatGeneratorInfo;
@@ -40,18 +40,18 @@ public class Mgr extends WorldChunkManager {
 			List presets = GuiFlatPresets.field_146431_f;
 			String s = ((GuiFlatPresets.LayerItem)presets.get(rand.nextInt(presets.size()))).field_148233_c;
 			FlatGeneratorInfo var2 = FlatGeneratorInfo.createFlatGeneratorFromString(s);
-			if(!flat.containsKey(s)) flat.put(s, new WorldChunkManagerHell(BiomeGenBase.func_150568_d(var2.getBiome()), 0.5F));
+			if(!flat.containsKey(s)) flat.put(s, new WorldChunkManagerHell(BiomeGenBase.getBiome(var2.getBiome()), 0.5F));
 			p = flat.get(s);
 		} else p = normal;
 		
-		GenLayer[] layers = GenLayer.initializeAllBiomeGenerators(rand.nextLong(), world.getWorldInfo().getTerrainType());
+		GenLayer[] layers = GenLayer.func_180781_a(rand.nextLong(), world.getWorldInfo().getTerrainType(), world.getWorldInfo().getGeneratorOptions());
 		p.genBiomes = layers[0];
 		p.biomeIndexLayer = layers[1];
 		return p;
 	}
 	
-	@Override public ChunkPosition func_150795_a(int par1, int par2, int par3, List par4List, Random par5Random) {
-		return get(par1, par2).func_150795_a(par1, par2, par3, par4List, par5Random);
+	@Override public BlockPos findBiomePosition(int x, int z, int range, List biomes, Random random) {
+		return get(x, z).findBiomePosition(x, z, range, biomes, random);
 	}
 	
 	@Override public boolean areBiomesViable(int par1, int par2, int par3, List par4List) {
@@ -62,8 +62,8 @@ public class Mgr extends WorldChunkManager {
 		return get(par2, par3).getBiomeGenAt(par1ArrayOfBiomeGenBase, par2, par3, par4, par5, par6);
 	}
 	
-	@Override public BiomeGenBase getBiomeGenAt(int par1, int par2) {
-		return get(par1, par2).getBiomeGenAt(par1, par2);
+	@Override public BiomeGenBase func_180631_a(BlockPos p_180631_1_) {
+		return get(p_180631_1_.getX(), p_180631_1_.getZ()).func_180631_a(p_180631_1_);
 	}
 	
 	@Override public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5) {

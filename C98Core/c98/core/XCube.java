@@ -1,11 +1,10 @@
 package c98.core;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
 import java.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
@@ -14,7 +13,7 @@ public class XCube {
 	private static int ttx = -1, tty = -1;
 	
 	public static void drawImage(int x, int y) {
-		glColor3f(1, 1, 1);
+		GL.color(1, 1, 1);
 		y += 4;
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.getTextureManager().bindTexture(achievement_background);
@@ -34,78 +33,69 @@ public class XCube {
 	}
 	
 	private static ScaledResolution drawIt(int x, int y, Minecraft mc) {
-		Tessellator t = Tessellator.instance;
-		glPushMatrix();
+		GL.pushMatrix();
 		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-		glDisable(GL_TEXTURE_2D);
-		glDisable(GL_DEPTH_TEST);
-		glLineWidth(1);
+		GL.disableTexture();
+		GL.disableDepth();
+		GL.lineWidth(1);
 		
-		glTranslatef(x - 2, y + 3, -3);
+		GL.translate(x - 2, y + 3, -3);
 		
-		drawCube(t);
-		drawFace(t);
+		drawCube();
+		drawFace();
 		
-		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_DEPTH_TEST);
+		GL.enableDepth();
+		GL.enableTexture();
 		
-		glPopMatrix();
+		GL.popMatrix();
 		return sr;
 	}
 	
-	private static void drawFace(Tessellator t) {
+	private static void drawFace() {
 		if(C98Core.modList.size() == 0 || C98Core.modList.size() >= 5 && C98Core.isModLoaded("GraphicalUpgrade")) {
-			glTranslatef(3, 1, 0);
-			glScalef(0.5F, 0.5F, 1);
-			glTranslatef(0, 1, 0);
+			GL.translate(3, 1);
+			GL.scale(0.5);
+			GL.translate(0, 1);
 			
-			t.startDrawing(GL_QUADS);
+			GL.begin();
 			//Right eye
-			t.addVertex(5, 6, 0);
-			t.addVertex(3, 6, 0);
-			t.addVertex(3, 8, 0);
-			t.addVertex(5, 8, 0);
+			GL.vertex(5, 6);
+			GL.vertex(3, 6);
+			GL.vertex(3, 8);
+			GL.vertex(5, 8);
 			//Left eye
-			t.addVertex(9, 8, 0);
-			t.addVertex(7, 8, 0);
-			t.addVertex(7, 10, 0);
-			t.addVertex(9, 10, 0);
-			t.draw();
+			GL.vertex(9, 8);
+			GL.vertex(7, 8);
+			GL.vertex(7, 10);
+			GL.vertex(9, 10);
 			
-			t.startDrawing(GL_LINE_STRIP);
-			t.addVertex(1, 10, 0); //Mouth
+			GL.end();
+			
+			GL.begin(GL.LINE_STRIP);
+			GL.vertex(1, 10);//Mouth
 			if(C98Core.modList.size() >= 5) { //Happy
-				t.addVertex(6, 14, 0);
-				t.addVertex(8, 14, 0);
+				GL.vertex(6, 14);
+				GL.vertex(8, 14);
 			}
-			t.addVertex(11, 15, 0);
-			t.draw();
+			GL.vertex(11, 15);
+			GL.end();
 		}
 	}
 	
-	private static void drawCube(Tessellator t) {
+	private static void drawCube() {
 		Minecraft mc = Minecraft.getMinecraft();
 		for(int i = 0; i < 2; i++) {
-			int x = 0;
-			if(i == 0) {
-				glColor3f(0, 0, 0);
-				x = GL_QUADS;
-			}
-			if(i == 1) {
-				glColor3f(0, 1, 0);
-				x = GL_LINE_LOOP;
-			}
-			glPushMatrix();
+			GL.pushMatrix();
 			
-			glScalef(10, 10, 10);
-			glTranslatef(1, 0.5F, 1);
-			glScalef(1, 1, -1);
+			GL.scale(10);
+			GL.translate(1, 0.5F, 1);
+			GL.scale(1, 1, -1);
 			
-			glRotatef(210, 1, 0, 0);
-			glRotatef(45, 0, 1, 0);
-			glRotatef(-90, 0, 1, 0);
+			GL.rotate(210, 1, 0, 0);
+			GL.rotate(45, 0, 1, 0);
+			GL.rotate(-90, 0, 1, 0);
 			
-			glTranslatef(-0.5F, -0.5F, -0.5F);
+			GL.translate(-0.5F, -0.5F, -0.5F);
 			
 			float f = 0;
 			float F = 1;
@@ -113,51 +103,47 @@ public class XCube {
 				f = -1 / 16F;
 				F = 17 / 16F;
 			}
+			
+			GL.color(0, i, 0);
+			if(i == 1) GL.polygonMode(GL.LINE);
+			GL.begin();
 			if(i == 1) {
 				ScaledResolution r = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 				float G = F - 2F / (16 * r.getScaleFactor());
-				t.startDrawing(x);
-				t.addVertex(F, f, G);
-				t.addVertex(F, f, f);
-				t.addVertex(F, G, f);
-				t.addVertex(F, G, G);
-				t.draw();
+				GL.vertex(F, f, G);
+				GL.vertex(F, f, f);
+				GL.vertex(F, G, f);
+				GL.vertex(F, G, G);
 				
-				t.startDrawing(x);
-				t.addVertex(f, G, F);
-				t.addVertex(f, f, F);
-				t.addVertex(F, f, F);
-				t.addVertex(F, G, F);
-				t.draw();
+				GL.vertex(f, G, F);
+				GL.vertex(f, f, F);
+				GL.vertex(F, f, F);
+				GL.vertex(F, G, F);
 			}
-			t.startDrawing(x);
-			t.addVertex(F, f, F);
-			t.addVertex(F, f, f);
-			t.addVertex(F, F, f);
-			t.addVertex(F, F, F);
-			t.draw();
+			GL.vertex(F, f, F);
+			GL.vertex(F, f, f);
+			GL.vertex(F, F, f);
+			GL.vertex(F, F, F);
 			
-			t.startDrawing(x);
-			t.addVertex(f, F, F);
-			t.addVertex(f, f, F);
-			t.addVertex(F, f, F);
-			t.addVertex(F, F, F);
-			t.draw();
+			GL.vertex(f, F, F);
+			GL.vertex(f, f, F);
+			GL.vertex(F, f, F);
+			GL.vertex(F, F, F);
 			
-			t.startDrawing(x);
-			t.addVertex(F, F, F);
-			t.addVertex(F, F, f);
-			t.addVertex(f, F, f);
-			t.addVertex(f, F, F);
-			t.draw();
+			GL.vertex(F, F, F);
+			GL.vertex(F, F, f);
+			GL.vertex(f, F, f);
+			GL.vertex(f, F, F);
+			GL.end();
+			if(i == 1) GL.polygonMode(GL.FILL);
 			
-			glPopMatrix();
+			GL.popMatrix();
 		}
 	}
 	
 	private static void drawTexturedModalRect(int x, int y, int u, int v, int w, int h) {
 		float px = 1 / 256F;
-		Tessellator t = Tessellator.instance;
+		WorldRenderer t = Tessellator.getInstance().getWorldRenderer();
 		t.startDrawingQuads();
 		t.addVertexWithUV(x + 0, y + h, 0, (u + 0) * px, (v + h) * px);
 		t.addVertexWithUV(x + w, y + h, 0, (u + w) * px, (v + h) * px);
@@ -171,7 +157,7 @@ public class XCube {
 	}
 	
 	private static void drawTooltip(int x, int y) {
-		List list = new LinkedList();
+		List<String> list = new LinkedList();
 		Minecraft mc = Minecraft.getMinecraft();
 		StringBuilder sb = new StringBuilder();
 		final int n = 3;
@@ -186,15 +172,12 @@ public class XCube {
 		}
 		if(sb.length() != 0) list.add(sb.toString());
 		
-		glDisable(GL_RESCALE_NORMAL);
-		glDisable(GL_DEPTH_TEST);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		int w = 0;
 		Iterator iter = list.iterator();
 		
 		while(iter.hasNext()) {
 			String s = (String)iter.next();
-			int stringWidth = mc.fontRenderer.getStringWidth(s);
+			int stringWidth = mc.fontRendererObj.getStringWidth(s);
 			if(stringWidth > w) w = stringWidth;
 		}
 		
@@ -210,6 +193,16 @@ public class XCube {
 		if(drawx + w > width) drawx -= 28 + w;
 		if(drawY + h + 6 > height) drawY = height - h - 6;
 		
+		GL.disableRescaleNormal();
+		GL.disableDepth();
+		
+		GL.disableTexture();
+		GL.enableBlend();
+		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
+		GL.disableAlpha();
+		GL.shadeMode(GL.SMOOTH);
+		
+		GL.begin();
 		int black = ~0xFEFFFEF;
 		int border1 = 0x505000FF;
 		int border2 = 0x5028007F;
@@ -224,14 +217,20 @@ public class XCube {
 		drawGradientRect(drawx - 3,     drawY - 3,     drawx + w + 3, drawY - 3 + 1, border1, border1);
 		drawGradientRect(drawx - 3,     drawY + h + 2, drawx + w + 3, drawY + h + 3, border2, border2);
 		//@on
-		for(int var12 = 0; var12 < list.size(); ++var12) {
-			String var13 = (String)list.get(var12);
-			mc.fontRenderer.drawStringWithShadow(var13, drawx, drawY, -1);
+		GL.end();
+		
+		GL.shadeMode(GL.FLAT);
+		GL.enableAlpha();
+		GL.disableBlend();
+		GL.enableTexture();
+		
+		for(String s:list) {
+			mc.fontRendererObj.func_175063_a(s, drawx, drawY, -1);
 			drawY += 10;
 		}
 		
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_RESCALE_NORMAL);
+		GL.enableDepth();
+		GL.enableRescaleNormal();
 	}
 	
 	private static void drawGradientRect(int x0, int y0, int x1, int y1, int c0, int c1) {
@@ -245,28 +244,13 @@ public class XCube {
 		float g1 = (c1 >> 010 & 0xFF) / 255F;
 		float b1 = (c1 >> 000 & 0xFF) / 255F;
 		
-		glDisable(GL_TEXTURE_2D);
-		glEnable(GL_BLEND);
-		glDisable(GL_ALPHA_TEST);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glShadeModel(GL_SMOOTH);
+		GL.color(r0, g0, b0, a0);
+		GL.vertex(x1, y0, 0);
+		GL.vertex(x0, y0, 0);
 		
-		Tessellator t = Tessellator.instance;
-		t.startDrawingQuads();
+		GL.color(r1, g1, b1, a1);
+		GL.vertex(x0, y1, 0);
+		GL.vertex(x1, y1, 0);
 		
-		t.setColorRGBA_F(r0, g0, b0, a0);
-		t.addVertex(x1, y0, 0);
-		t.addVertex(x0, y0, 0);
-		
-		t.setColorRGBA_F(r1, g1, b1, a1);
-		t.addVertex(x0, y1, 0);
-		t.addVertex(x1, y1, 0);
-		
-		t.draw();
-		
-		glShadeModel(GL_FLAT);
-		glDisable(GL_BLEND);
-		glEnable(GL_ALPHA_TEST);
-		glEnable(GL_TEXTURE_2D);
 	}
 }

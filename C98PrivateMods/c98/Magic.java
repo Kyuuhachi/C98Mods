@@ -1,48 +1,39 @@
 package c98;
 
+import java.util.Arrays;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S0EPacketSpawnObject;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import c98.core.*;
 import c98.core.hooks.EntitySpawnHook;
-import c98.core.hooks.RenderBlockHook;
 import c98.magic.*;
 
-public class Magic extends C98Mod implements RenderBlockHook, EntitySpawnHook {
+public class Magic extends C98Mod implements EntitySpawnHook {
 	public static Block extractor = new BlockXpExtractor().setCreativeTab(CreativeTabs.tabRedstone);
 	public static Block pipe = new BlockXpPipe().setCreativeTab(CreativeTabs.tabRedstone);
-	public static Block tap = new BlockXpTap().setCreativeTab(CreativeTabs.tabRedstone);
-	public static Block wormhole = new BlockWormhole().setCreativeTab(CreativeTabs.tabRedstone);
-	public static int renderPipe = Rendering.newBlockModel(false);
+	public static Block gate = new BlockMagicGate().setCreativeTab(CreativeTabs.tabRedstone);
+	
+	@Override public void preinit() {
+		C98Core.registerBlock(extractor, 220, "c98/magic:extractor");
+		C98Core.registerBlock(pipe, 221, "c98/magic:pipe");
+		C98Core.registerBlock(gate, 222, "c98/magic:magic_gate");
+		Models.registerBlockModel(extractor, Arrays.asList("c98/magic:extractor"), null);
+		Models.registerBlockModel(pipe, Arrays.asList("c98/magic:pipe"), new StateMap.Builder().build());
+		Models.registerBlockModel(gate, Arrays.asList("c98/magic:magic_gate"), new StateMap.Builder().build());
+	}
 	
 	@Override public void load() {
-		C98Core.registerBlock(extractor, "c98:extractor", 210);
-		TileEntity.func_145826_a(BlockXpExtractor.TE.class, "XpExtractor");
-		C98Core.registerBlock(pipe, "c98:pipe", 211);
-		TileEntity.func_145826_a(BlockXpPipe.TE.class, "XpPipe");
-		C98Core.registerBlock(tap, "c98:tap", 212);
-		TileEntity.func_145826_a(BlockXpTap.TE.class, "XpTap");
-		C98Core.registerBlock(wormhole, "c98:wormhole", 213);
-		TileEntity.func_145826_a(BlockWormhole.TE.class, "Wormhole");
-		Rendering.setTERenderer(BlockWormhole.TE.class, new RenderWormhole());
-		
-		Lang.addName(extractor, "Experience Extractor");
-		Lang.addName(pipe, "Experience Pipe");
-		Lang.addName(tap, "Experience Tap");
+		TileEntity.addMapping(BlockXpExtractor.TE.class, "XpConverter");
+		TileEntity.addMapping(BlockXpPipe.TE.class, "XpPipe");
+		TileEntity.addMapping(BlockMagicGate.TE.class, "MagicGate");
+		Rendering.setTERenderer(BlockMagicGate.TE.class, new RenderMagicGate());
 	}
-	
-	@Override public void renderWorldBlock(RenderBlocks rb, IBlockAccess w, int i, int j, int k, Block block, int rdr) {
-		if(rdr == renderPipe) ((BlockXpPipe)block).render(rb, w, i, j, k);
-	}
-	
-	@Override public void renderInvBlock(RenderBlocks rb, Block block, int meta, int rdr) {}
 	
 	@Override public Packet getPacket(Entity e) {
 		if(e instanceof EntityXPOrb) {
@@ -61,4 +52,5 @@ public class Magic extends C98Mod implements RenderBlockHook, EntitySpawnHook {
 		}
 		return null;
 	}
+	
 }

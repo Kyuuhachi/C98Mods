@@ -15,18 +15,18 @@ public class GuiSelectItem extends GuiContainer {
 		entity = selected;
 	}
 	
-	@Override protected void func_146976_a(float par1, int mouseX, int mouseY) {
-		mc.getTextureManager().bindTexture(new ResourceLocation("c98", "ExtraInfo/item_select.png"));
-		drawTexturedModalRect(field_147003_i, field_147009_r, 0, 0, field_146999_f, field_147000_g);
+	private void drawEntity(int x, int y, int sc, int h, int mouseX, int mouseY, EntityLivingBase e) {
+		x += guiTop;
+		y += guiLeft;
+		GuiInventory.drawEntityOnScreen(x, y, sc, (float)x - mouseX, (float)(y - sc / 3 * 5) - mouseY, e);
+	}
+	
+	@Override protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		mc.getTextureManager().bindTexture(new ResourceLocation("c98/extrainfo", "item_select.png"));
+		drawTexturedModalRect(guiTop, guiLeft, 0, 0, xSize, ySize);
 		
 		drawEntity(51, 75, 30, 70, mouseX, mouseY, mc.thePlayer);
 		if(entity != null) drawEntity(123, 51, 20, 43, mouseX, mouseY, entity);
-	}
-	
-	private void drawEntity(int x, int y, int sc, int h, int mouseX, int mouseY, EntityLivingBase e) {
-		x += field_147003_i;
-		y += field_147009_r;
-		GuiInventory.func_147046_a(x, y, sc, (float)x - mouseX, (float)(y - sc / 3 * 5) - mouseY, e);
 	}
 	
 }

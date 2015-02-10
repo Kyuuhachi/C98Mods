@@ -2,11 +2,11 @@ package c98.minemap.server.selector;
 
 import java.util.LinkedList;
 import java.util.List;
-import c98.minemap.server.EntitySelector;
-import c98.minemap.server.EntitySelector.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import c98.minemap.server.EntitySelector;
+import c98.minemap.server.EntitySelector.DataWatchObj;
 
 public class Selector {
 	public class Attr {
@@ -58,7 +58,7 @@ public class Selector {
 		for(Class c = e.getClass(); c != null; c = c.getSuperclass())
 			if(name.equals(EntitySelector.classToId.get(c))) {
 				boolean b = e instanceof TileEntityMobSpawner && !attrs.isEmpty() && attrs.get(0).attrName.equals("entity");
-				if(b) return attrs.get(0).matches(((TileEntityMobSpawner)e).func_145881_a().func_98281_h());
+				if(b) return attrs.get(0).matches(((TileEntityMobSpawner)e).getSpawnerBaseLogic().getEntityNameToSpawn());
 				else return attrs.isEmpty();
 			}
 		return false;

@@ -1,9 +1,9 @@
 package c98.targetLock;
 
-import static org.lwjgl.opengl.GL11.*;
 import java.util.Map;
 import java.util.Map.Entry;
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockColored;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -14,45 +14,45 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.scoreboard.*;
 import net.minecraft.util.EnumChatFormatting;
 import c98.ExtraInfo;
 import c98.TargetLock;
+import c98.core.GL;
 
 public class HUD {
-	private RenderItem item = new RenderItem();
+	private RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 	private int y;
 	private Minecraft mc;
 	private Entity targetEntity;
-
+	
 	public HUD(Minecraft m) {
 		mc = m;
 	}
-
+	
 	public void render(Target t) {
 		if(t instanceof TargetEntity) {
 			targetEntity = ((TargetEntity)t).getEntity();
 			if(targetEntity != null) drawData();
 		}
 	}
-
+	
 	private void drawData() {
 		y = 8;
-		mc.fontRenderer.drawStringWithShadow(getTargetName(), 8, y, 0xFFFFFF);
+		mc.fontRendererObj.func_175063_a(getTargetName(), 8, y, 0xFFFFFF);
 		y += 8;
 		if(targetEntity instanceof EntityPlayer) {
 			String[] s0 = {"Player list", "Sidebar", "Over head"};
 			EntityPlayer p = mc.thePlayer;
 			Scoreboard board = p.getWorldScoreboard();
 			for(int i = 0; i < 3; i++) {
-				ScoreObjective obj = board.func_96539_a(i);
-
+				ScoreObjective obj = board.getObjectiveInDisplaySlot(i);
+				
 				if(obj != null) {
-					Score score = board.func_96529_a(p.getCommandSenderName(), obj);
+					Score score = board.getValueFromObjective(p.getName(), obj);
 					String s = s0[i] + ": " + score.getScorePoints() + " " + obj.getDisplayName();
-					mc.fontRenderer.drawStringWithShadow(s, 8, y, 0xFFFFFF);
+					mc.fontRendererObj.func_175063_a(s, 8, y, 0xFFFFFF);
 					y += 8;
 				}
 			}
@@ -63,19 +63,19 @@ public class HUD {
 				if(i == 1) d = ((EntityHorse)targetEntity).getHorseJumpStrength();
 				if(i == 2) d = ((EntityHorse)targetEntity).getEntityAttribute(SharedMonsterAttributes.maxHealth).getAttributeValue();
 				String s = new String[] {"S", "J", "H"}[i];
-				mc.fontRenderer.drawStringWithShadow(String.format("%s %.3f", s, d), 8, y, 0xFFFFFF);
+				mc.fontRendererObj.func_175063_a(String.format("%s %.3f", s, d), 8, y, 0xFFFFFF);
 				y += 8;
 			}
 			double d = ((EntityHorse)targetEntity).getHorseJumpStrength();
 			d = getHeight(d);
-			mc.fontRenderer.drawStringWithShadow(String.format("Jumps %.3f blocks", d), 8, y, 0xFFFFFF);
+			mc.fontRendererObj.func_175063_a(String.format("Jumps %.3f blocks", d), 8, y, 0xFFFFFF);
 			y += 8;
 		}
-		mc.fontRenderer.drawStringWithShadow(getExtraData(), 8, y, 0xFFFFFF);
+		mc.fontRendererObj.func_175063_a(getExtraData(), 8, y, 0xFFFFFF);
 		y += 8;
 		if(targetEntity instanceof EntityLivingBase && TargetLock.cfg.drawArmor) drawArmor();
 	}
-
+	
 	private static double getHeight(double strength) {
 		final double gravity = 0.08;
 		final double airResistance = 0.98;
@@ -87,7 +87,7 @@ public class HUD {
 		}
 		return height;
 	}
-
+	
 	private void drawArmor() {
 		EntityLivingBase target = (EntityLivingBase)targetEntity;
 		float var6 = 240;
@@ -101,16 +101,16 @@ public class HUD {
 		y += 4;
 		drawDamageIcons();
 	}
-
+	
 	private void drawDamageIcons() {
 		if(!(targetEntity instanceof EntityLivingBase)) return;
 		EntityLivingBase tgt = (EntityLivingBase)targetEntity;
 		ExtraInfo.bindTexture(ExtraInfo.icons);
-		glColor4f(1, 1, 1, 1);
+		GL.color(1, 1, 1, 1);
 		int i = tgt.getTotalArmorValue();
 		if(i != 0) for(int var25 = 0; var25 < 10; ++var25) {
 			int x = 8 + var25 * 8;
-
+			
 			if(var25 * 2 + 1 < i) mc.ingameGUI.drawTexturedModalRect(x, y, 34, 9, 9, 9);
 			if(var25 * 2 + 1 == i) mc.ingameGUI.drawTexturedModalRect(x, y, 25, 9, 9, 9);
 			if(var25 * 2 + 1 > i) mc.ingameGUI.drawTexturedModalRect(x, y, 16, 9, 9, 9);
@@ -126,35 +126,35 @@ public class HUD {
 		}
 		y += (int)(health / 2 / 10) * 8;
 	}
-
+	
 	private void drawItem(ItemStack is) {
 		y += 8;
 		String name = is.getDisplayName();
 		if(is.hasDisplayName()) name = EnumChatFormatting.ITALIC + name;
-		mc.fontRenderer.drawStringWithShadow(name, 12, y, 0xFFFF00);
+		mc.fontRendererObj.func_175063_a(name, 12, y, 0xFFFF00);
 		y++;
 		Map<Integer, Integer> map = EnchantmentHelper.getEnchantments(is);
 		int pos = 0;
 		for(Entry<Integer, Integer> entry:map.entrySet())
-			mc.fontRenderer.drawStringWithShadow(getEnch(entry.getKey(), entry.getValue()), 25, y + (pos += mc.fontRenderer.FONT_HEIGHT), 0xFFFFFF);
-
-		pos = map.size() * mc.fontRenderer.FONT_HEIGHT / 2;
+			mc.fontRendererObj.func_175063_a(getEnch(entry.getKey(), entry.getValue()), 25, y + (pos += mc.fontRendererObj.FONT_HEIGHT), 0xFFFFFF);
+		
+		pos = map.size() * mc.fontRendererObj.FONT_HEIGHT / 2;
 		if(pos < 8) pos = 8;
 		int x = 8;
-		glEnable(GL_LIGHTING);
-		item.zLevel = 100;
-		item.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), is, x, y + pos);
-		item.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), is, x, y + pos);
-		item.zLevel = 0;
-		glDisable(GL_LIGHTING);
-
-		y += Math.max(16, map.size() * mc.fontRenderer.FONT_HEIGHT) + 6;
+		GL.enableLighting();
+		renderItem.zLevel = 100;
+		renderItem.func_180450_b(is, x, y + pos);
+		renderItem.func_175030_a(mc.fontRendererObj, is, x, y + pos);
+		renderItem.zLevel = 0;
+		GL.disableLighting();
+		
+		y += Math.max(16, map.size() * mc.fontRendererObj.FONT_HEIGHT) + 6;
 	}
-
+	
 	private static String getEnch(int id, int level) {
 		return Enchantment.enchantmentsList[id].getTranslatedName(level);
 	}
-
+	
 	private String getExtraData() {
 		if(!(targetEntity instanceof EntityLivingBase)) return "";
 		EntityLivingBase target = (EntityLivingBase)targetEntity;
@@ -163,34 +163,30 @@ public class HUD {
 			case 1:
 				s = "Small";
 				break;
-
+			
 			case 2:
 				s = "Medium";
 				break;
-
+			
 			case 4:
 				s = "Big";
 				break;
 		}
-		if(target instanceof EntityTameable) try {
+		if(target instanceof EntityTameable) {
 			if(((EntityTameable)target).getOwner() == null) s = "Owner: none";
 			else s = "Owner: " + ((EntityTameable)target).func_152113_b();
 			if(((EntityTameable)target).isSitting()) s += ", sitting";
-		} catch(NullPointerException e) {
-			s = "Crashed when getting owner... I hate Tropicraft.";
 		}
 		if(target instanceof EntitySheep) {
-			int i = ((EntitySheep)target).getFleeceColor();
 			y += 8;
-			drawItem(new ItemStack(Blocks.wool, 1, i));
+			drawItem(new ItemStack(Blocks.wool, 1, Blocks.wool.getMetaFromState(Blocks.wool.getDefaultState().withProperty(BlockColored.COLOR, ((EntitySheep)target).func_175509_cj()))));
 			if(((EntitySheep)target).getSheared()) s = "Sheared";
 		}
 		if(target instanceof EntityEnderman) {
 			EntityEnderman enderman = (EntityEnderman)targetEntity;
-			Block carried = enderman.func_146080_bZ();
-			int carriedMeta = enderman.getCarryingData();
 			y += 8;
-			if(Item.getItemFromBlock(carried) != null) drawItem(new ItemStack(carried, 1, carriedMeta));
+			IBlockState st = enderman.func_175489_ck();
+			if(st != null) drawItem(new ItemStack(st.getBlock(), st.getBlock().getMetaFromState(st)));
 			if(enderman.isScreaming()) s = "Angry";
 		}
 		if(target instanceof EntityBat) if(((EntityBat)target).getIsBatHanging()) s = "Hanging";
@@ -227,11 +223,11 @@ public class HUD {
 		else s += "Age = " + ((EntityAgeable)target).getGrowingAge();
 		return s;
 	}
-
+	
 	private String getTargetName() {
 		String s = EntityList.getEntityString(targetEntity);
-		if(targetEntity instanceof EntityPlayer) s = ((EntityPlayer)targetEntity).getCommandSenderName();
+		if(targetEntity instanceof EntityPlayer) s = ((EntityPlayer)targetEntity).getName();
 		return s;
 	}
-
+	
 }

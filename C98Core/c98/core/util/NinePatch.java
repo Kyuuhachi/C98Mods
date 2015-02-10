@@ -1,7 +1,7 @@
 package c98.core.util;
 
 import java.awt.Rectangle;
-import net.minecraft.client.renderer.Tessellator;
+import c98.core.GL;
 
 /**
  * Helper class for drawing nine-patches
@@ -37,13 +37,8 @@ public final class NinePatch {
 	}
 	
 	public static void draw(final int x, final int y, int w, int h) {
-		wasDrawing = false;
-		try {
-			Tessellator.instance.startDrawingQuads();
-		} catch(IllegalStateException e) {
-			wasDrawing = true;
-		}
-		Tessellator.instance.addTranslation(x, y, 0);
+		wasDrawing = GL.isDrawing();
+		if(!wasDrawing) GL.begin();
 		Rectangle[][] patches = new Rectangle[3][3];
 		int middleWidth = w - left - right;
 		int middleHeight = h - top - bottom;
@@ -81,12 +76,11 @@ public final class NinePatch {
 			patches[1][2] = null;
 			patches[2][2] = null;
 		}
-		draw(patches, w, h);
-		Tessellator.instance.addTranslation(-x, -y, 0);
-		if(!wasDrawing) Tessellator.instance.draw();
+		draw(patches, x, y, w, h);
+		if(!wasDrawing) GL.end();
 	}
 	
-	private static void draw(Rectangle[][] patches, int w, int h) {
+	private static void draw(Rectangle[][] patches, int x, int y, int w, int h) {
 		int[] widths = {-1, -1, -1};
 		int[] heights = {-1, -1, -1};
 		for(int i = 0; i < 3; i++)
@@ -108,12 +102,11 @@ public final class NinePatch {
 				for(int i = 0; i < py; i++)
 					if(heights[i] != -1) patchY += heights[i];
 				
-				if(patches[px][py] != null) draw(widths, heights, tw, th, px, py, patchX, patchY);
+				if(patches[px][py] != null) draw(widths, heights, tw, th, px, py, patchX + x, patchY + y);
 			}
 	}
 	
 	private static void draw(int[] widths, int[] heights, int tw, int th, int px, int py, int patchX, int patchY) {
-		Tessellator t = Tessellator.instance;
 		int width = widths[px];
 		int height = heights[py];
 		
@@ -142,10 +135,10 @@ public final class NinePatch {
 				float U = u + w / 256F;
 				float V = v + h / 256F;
 				
-				t.addVertexWithUV(x + 0, y + 0, 0, u, v);
-				t.addVertexWithUV(x + 0, y + h, 0, u, V);
-				t.addVertexWithUV(x + w, y + h, 0, U, V);
-				t.addVertexWithUV(x + w, y + 0, 0, U, v);
+				GL.vertex(x + 0, y + 0, u, v);
+				GL.vertex(x + 0, y + h, u, V);
+				GL.vertex(x + w, y + h, U, V);
+				GL.vertex(x + w, y + 0, U, v);
 			}
 	}
 }

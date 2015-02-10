@@ -4,7 +4,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class ReqRecipe implements IRecipe {
@@ -40,14 +40,9 @@ public class ReqRecipe implements IRecipe {
 		return false;
 	}
 	
-	private static ChunkCoordinates getTableLoc(InventoryCrafting inv) {
+	private static BlockPos getTableLoc(InventoryCrafting inv) {
 		Container cont = inv.eventHandler;
-		if(cont instanceof ContainerWorkbench) {
-			int x = ((ContainerWorkbench)cont).posX;
-			int y = ((ContainerWorkbench)cont).posY;
-			int z = ((ContainerWorkbench)cont).posZ;
-			return new ChunkCoordinates(x, y, z);
-		}
+		if(cont instanceof ContainerWorkbench) return ((ContainerWorkbench)cont).field_178145_h;
 		return null;
 	}
 	
@@ -78,5 +73,17 @@ public class ReqRecipe implements IRecipe {
 	
 	@Override public final int getRecipeSize() {
 		return recipeWidth * recipeHeight;
+	}
+	
+	@Override public ItemStack[] func_179532_b(InventoryCrafting inv) { //TODO let recipes choose that themselves
+		ItemStack[] result = new ItemStack[inv.getSizeInventory()];
+		
+		for(int i = 0; i < result.length; ++i) {
+			ItemStack is = inv.getStackInSlot(i);
+			
+			if(is != null && is.getItem().hasContainerItem()) result[i] = new ItemStack(is.getItem().getContainerItem());
+		}
+		
+		return result;
 	}
 }

@@ -19,7 +19,7 @@ public class MapThread extends Thread {
 	}
 	
 	@Override public void run() {
-		while(running && !mapServer.crashed && Minecraft.getMinecraft().renderViewEntity != null)
+		while(running && !mapServer.crashed && Minecraft.getMinecraft().func_175606_aa() != null)
 			mapServer.update();
 	}
 	

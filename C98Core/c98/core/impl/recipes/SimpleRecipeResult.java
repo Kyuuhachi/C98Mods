@@ -1,8 +1,9 @@
-package c98.core.recipes;
+package c98.core.impl.recipes;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import c98.core.Recipes.RecipeResult;
 
 public class SimpleRecipeResult extends RecipeResult {
 	private ItemStack is;

@@ -1,4 +1,4 @@
-package c98.core.recipes;
+package c98.core.impl.recipes;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.*;
@@ -6,6 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import c98.core.Recipes.RecipeResult;
+import c98.core.Recipes.RecipeSlot;
 
 public class AdvancedRecipe implements IRecipe {
 	

@@ -1,36 +1,103 @@
 package c98.minemap.server.selector;
 
-import java.util.*;
-import c98.minemap.server.EntitySelector;
+import java.util.LinkedList;
+import c98.minemap.server.selector.Tokenizer.Token;
+import c98.minemap.server.selector.propinst.*;
 
 public class Parser {
 	
 	private static LinkedList tokens;
+	private static int pos;
 	
 	public static Selector parse(LinkedList t) {
 		tokens = new LinkedList(t);
-		Selector s = parseSelector();
-		return s;
+		pos = 0;
+		return parseSelector();
 	}
 	
 	private static Selector parseSelector() {
+		if(isEmpty()) throw error("Empty selector");
 		Selector s = new Selector();
-		s.setName(((WordToken)tokens.pop()).word);
-		if(!tokens.isEmpty() && tokens.peek().equals("start")) while(true) {
-			if(tokens.pop().equals("end")) break;
-			if(tokens.peek() instanceof WordToken && typeof(s.name, (WordToken)tokens.peek()).equals("B")) s.addAttr(((WordToken)tokens.pop()).word, "neq", 0);
-			else if(tokens.peek().equals("not") && tokens.get(1) instanceof WordToken && typeof(s.name, (WordToken)tokens.get(1)).equals("B")) {
-				tokens.pop();
-				s.addAttr(((WordToken)tokens.pop()).word, "eq", 0);
-			} else if(tokens.get(0) instanceof WordToken && typeof(s.name, (WordToken)tokens.get(0)).equals("S")) s.addAttr(((WordToken)tokens.pop()).word, (String)tokens.pop(), ((StringToken)tokens.pop()).string);
-			else if(tokens.get(0) instanceof WordToken && typeof(s.name, (WordToken)tokens.get(0)).equals("N")) s.addAttr(((WordToken)tokens.pop()).word, (String)tokens.pop(), ((NumberToken)tokens.pop()).number);
-			else if(tokens.get(0) instanceof WordToken && typeof(s.name, (WordToken)tokens.get(0)).equals("E")) s.addAttr(((WordToken)tokens.pop()).word, (String)tokens.pop(), parseSelector());
+		if(get() instanceof String) s.name = (String)remove();
+		if(isEmpty()) return s;
+		if(get() != Tokenizer.BEGIN) throw expected("parameter list");
+		remove();
+		while(true) {
+			s.addProp(parseProp(s.name));
+			if(get() != Tokenizer.COMMA && get() != Tokenizer.END) throw expected("comma or end");
+			if(remove() == Tokenizer.END) break;
 		}
 		return s;
 	}
 	
-	private static String typeof(String name, WordToken var) {
-		return EntitySelector.attributes.get(name).get(var.word).type;
+	private static PropertyInstance parseProp(String owner) {
+		boolean invert = false;
+		if(removeIf(Tokenizer.NOT)) invert = true;
+		if(!(get() instanceof String)) throw expected("property name");
+		String name = (String)remove();
+		if(SelectorProperties.typeof(owner, name) == null) throw error("Property " + name + " not found");
+		switch(SelectorProperties.typeof(owner, name)) {
+			case "boolean":
+				return new BooleanPropertyInstance(SelectorProperties.getBoolean(owner, name), invert);
+			case "string":
+				if(removeIf(Tokenizer.EQUAL)) return new StringPropertyInstance(SelectorProperties.getString(owner, name), (String)remove(), invert);
+				break;
+			case "float":
+				if(removeIf(Tokenizer.LESS)) return new FloatPropertyInstance(SelectorProperties.getFloat(owner, name), (Float)remove(), -1, invert);
+				if(removeIf(Tokenizer.EQUAL)) return new FloatPropertyInstance(SelectorProperties.getFloat(owner, name), (Float)remove(), 0, invert);
+				if(removeIf(Tokenizer.GREATER)) return new FloatPropertyInstance(SelectorProperties.getFloat(owner, name), (Float)remove(), 1, invert);
+				break;
+			case "int":
+				if(removeIf(Tokenizer.LESS)) return new IntPropertyInstance(SelectorProperties.getInt(owner, name), ((Float)remove()).intValue(), -1, invert);
+				if(removeIf(Tokenizer.EQUAL)) return new IntPropertyInstance(SelectorProperties.getInt(owner, name), ((Float)remove()).intValue(), 0, invert);
+				if(removeIf(Tokenizer.GREATER)) return new IntPropertyInstance(SelectorProperties.getInt(owner, name), ((Float)remove()).intValue(), 1, invert);
+				break;
+		}
+		throw expected(SelectorProperties.typeof(owner, name) + " comparision");
 	}
 	
+	private static RuntimeException expected(String string) {
+		String s = toString(get());
+		return error("Expected " + string + ", found " + s);
+	}
+	
+	private static RuntimeException error(String string) {
+		StringBuilder sb = new StringBuilder(string);
+		sb.append(". (");
+		String s = "";
+		for(Object o:tokens) {
+			sb.append(s);
+			s = ",";
+			sb.append(toString(o));
+		}
+		sb.append(")");
+		return new IllegalArgumentException(sb.toString());
+	}
+	
+	private static String toString(Object token) {
+		if(token instanceof String) return "\"" + token + "\"";
+		if(token instanceof Float) return token.toString();
+		if(token instanceof Token) return "'" + token + "'";
+		return String.valueOf(token);
+	}
+	
+	private static boolean isEmpty() {
+		return pos >= tokens.size();
+	}
+	
+	private static Object get() {
+		return isEmpty() ? null : tokens.get(pos);
+	}
+	
+	private static Object remove() {
+		Object o = get();
+		pos++;
+		return o;
+	}
+	
+	private static boolean removeIf(Token t) {
+		boolean b = get() == t;
+		if(b) remove();
+		return b;
+	}
 }

@@ -8,8 +8,6 @@ import c98.core.*;
 import c98.core.hooks.*;
 import c98.minemap.*;
 import c98.minemap.MinemapConfig.EntityMarker;
-import c98.minemap.server.EntitySelector;
-import c98.minemap.server.MarkerManager;
 import com.google.gson.GsonBuilder;
 
 public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHook {
@@ -18,7 +16,6 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 	private KeyBinding key = new KeyBinding("Toggle map preset", Keyboard.KEY_M, C98Core.KEYBIND_CAT);
 	private int currentPreset;
 	private boolean reloadMap;
-	public static MarkerManager mgr;
 	public static MinemapConfig config;
 	private long lastStartTime;
 	
@@ -27,7 +24,6 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 	}
 	
 	private void readConfig() {
-		EntitySelector.reloadConfig();
 		config = Json.get(this, MinemapConfig.class);
 		if(mc.theWorld != null) {
 			GsonBuilder gson = Json.getGson(config);
@@ -35,7 +31,6 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 			File f = new File(IO.getMinecraftDir(), "config/C98/" + getName() + "/" + mc.theWorld.provider.getDimensionId() + ".json");
 			Json.read(f, config, gson.create());
 		}
-		mgr = new MarkerManager();
 	}
 	
 	@Override public void keyboardEvent(KeyBinding keybinding) {

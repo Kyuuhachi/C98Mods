@@ -69,7 +69,7 @@ public class EntitySelector {
 		SelectorProperties.add(new SimpleBooleanProperty("powered", EntityMinecartFurnace.class, 16, 0));
 		SelectorProperties.add(new SimpleIntProperty    ("skin", EntityOcelot.class, 18));
 		SelectorProperties.add(new SimpleBooleanProperty("saddled", EntityPig.class, 16, 0));
-		//TODO sheep color
+		SelectorProperties.add(new StringEntityProperty ("color",EntitySheep.class) {@Override public String getValue(Entity e) {return ((EntitySheep)e).func_175509_cj().getName();}});
 		SelectorProperties.add(new SimpleBooleanProperty("sheared", EntitySheep.class, 16, 4));
 		SelectorProperties.add(new SimpleBooleanProperty("wither", EntitySkeleton.class, 13, 0));
 		SelectorProperties.add(new SimpleIntProperty    ("size", EntitySlime.class, 16));

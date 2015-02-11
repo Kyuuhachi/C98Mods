@@ -2,7 +2,8 @@ package c98;
 
 import java.lang.reflect.Constructor;
 import net.minecraft.world.WorldType;
-import c98.core.*;
+import c98.core.C98Log;
+import c98.core.C98Mod;
 
 public class GlitchyChunks extends C98Mod {
 	public static WorldType TYPE;
@@ -13,7 +14,6 @@ public class GlitchyChunks extends C98Mod {
 			Constructor<WorldType> ctor = WorldType.class.getDeclaredConstructor(int.class, String.class);
 			ctor.setAccessible(true);
 			TYPE = ctor.newInstance(7, "glitch");
-			Lang.addName(TYPE, "Glitchy Chunks");
 		} catch(Exception e) {
 			C98Log.error("Failed to create Glitchy world type", e);
 		}

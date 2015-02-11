@@ -139,7 +139,7 @@ public class MapServer {
 	
 	private void markTileEntity(List<MapMarker> l, TileEntity te, int plY) {
 		try {
-			EntityMarker mrkr = Minemap.mgr.getMarker(te);
+			EntityMarker mrkr = getMarker(te);
 			if(mrkr == null) return;
 			addMarker(l, te.getPos().getX() + 0.5, te.getPos().getY() + 0.5, te.getPos().getZ() + 0.5, mrkr, 0, -1, false);
 		} catch(Exception e) {
@@ -149,7 +149,7 @@ public class MapServer {
 	
 	private void markEntity(List<MapMarker> l, Entity e, int plY) {
 		try {
-			EntityMarker mrkr = Minemap.mgr.getMarker(e);
+			EntityMarker mrkr = getMarker(e);
 			if(mrkr == null) return;
 			int color = -1;
 			if(mrkr.teamColor) color = getTeamColor(e, color);
@@ -257,5 +257,21 @@ public class MapServer {
 			colors = new int[size * size];
 			renderer = new MapClient(this);
 		}
+	}
+	
+	public EntityMarker getMarker(Entity e) {
+		for(EntityMarker type:Minemap.config.markers) {
+			EntityMarker norm = (EntityMarker)type.normalize();
+			if(norm.compiledSelector.matches(e)) return norm;
+		}
+		return null;
+	}
+	
+	public EntityMarker getMarker(TileEntity e) {
+		for(EntityMarker type:Minemap.config.markers) {
+			EntityMarker norm = (EntityMarker)type.normalize();
+			if(norm.compiledSelector.matches(e)) return norm;
+		}
+		return null;
 	}
 }

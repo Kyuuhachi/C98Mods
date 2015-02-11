@@ -1,9 +1,8 @@
 package c98.core.impl;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 import javax.imageio.ImageIO;
 import net.minecraft.client.resources.DefaultResourcePack;
 import net.minecraft.client.resources.IResourcePack;
@@ -11,14 +10,20 @@ import net.minecraft.client.resources.data.IMetadataSection;
 import net.minecraft.client.resources.data.IMetadataSerializer;
 import net.minecraft.util.ResourceLocation;
 import c98.core.C98Core;
+import c98.core.C98Mod;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonObject;
 
-public class C98ResourcePack implements IResourcePack {
-	
+public class C98ResourcePack implements IResourcePack { //TODO sounds.json
+
 	@Override public InputStream getInputStream(ResourceLocation l) throws IOException {
 		if(l.getResourceDomain().equals("c98") && l.getResourcePath().startsWith("lang/")) {
-			//TODO .lang files
+			List<InputStream> streams = new ArrayList();
+			for(C98Mod mod:C98Core.modList) {
+				ResourceLocation loc = new ResourceLocation(l.getResourceDomain() + "/" + mod.getName().toLowerCase(), l.getResourcePath());
+				if(resourceExists(loc)) streams.add(getInputStream(loc));
+			}
+			return new SequenceInputStream(Collections.enumeration(streams));
 		}
 		return C98Core.class.getResourceAsStream("/assets/" + l.getResourceDomain() + "/" + l.getResourcePath());
 	}

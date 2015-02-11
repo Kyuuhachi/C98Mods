@@ -1,13 +1,14 @@
-package c98.core.recipes;
+package c98.core.impl.recipes;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import c98.core.Recipes.RecipeSlot;
 
-public class SimpleRecipeHandler extends RecipeHandler {
+public class SimpleRecipeSlot extends RecipeSlot {
 	private ItemStack item;
 	
-	public SimpleRecipeHandler(ItemStack i) {
+	public SimpleRecipeSlot(ItemStack i) {
 		item = i;
 	}
 	

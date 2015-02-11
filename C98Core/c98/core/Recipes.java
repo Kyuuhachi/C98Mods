@@ -2,17 +2,27 @@ package c98.core;
 
 import java.util.HashMap;
 import net.minecraft.block.Block;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
-import c98.core.recipes.*;
+import net.minecraft.util.BlockPos;
+import c98.core.impl.recipes.*;
 
 public class Recipes {
+	public static abstract class RecipeSlot {
+		public abstract boolean valid(ItemStack is, InventoryCrafting inv, BlockPos coords, int x, int y, int gridX, int gridY, boolean mirrored);
+	}
+	
+	public static abstract class RecipeResult {
+		public abstract ItemStack getResult(InventoryCrafting inv, BlockPos coords, int gridX, int gridY, boolean mirror);
+	}
+	
 	public static void addReqRecipe(Object o, Object... recipe) {
-		RecipeReq req = null;
+		RecipeResult req = null;
 		
-		if(o instanceof RecipeReq) req = (RecipeReq)o;
-		else req = new SimpleRecipeReq(getStack(o));
+		if(o instanceof RecipeResult) req = (RecipeResult)o;
+		else req = new SimpleRecipeResult(getStack(o));
 		
 		CraftingManager.getInstance().getRecipeList().add(compileReqRecipe(recipe, req));
 	}
@@ -62,7 +72,7 @@ public class Recipes {
 		return new ShapedRecipes(width, height, array, result);
 	}
 	
-	private static Object compileReqRecipe(Object[] recipe, RecipeReq req) {
+	private static Object compileReqRecipe(Object[] recipe, RecipeResult req) {
 		String s = "";
 		int width = 0;
 		int height = 0;
@@ -78,20 +88,20 @@ public class Recipes {
 			} else {
 				char ch = (char)recipe[i];
 				i++;
-				RecipeHandler handler = null;
+				RecipeSlot handler = null;
 				Object o = recipe[i];
 				
-				if(o instanceof RecipeHandler) handler = (RecipeHandler)o;
-				else o = new SimpleRecipeHandler(getStack(o));
+				if(o instanceof RecipeSlot) handler = (RecipeSlot)o;
+				else o = new SimpleRecipeSlot(getStack(o));
 				
 				symbols.put(ch, handler);
 			}
 		
-		RecipeHandler array[] = new RecipeHandler[width * height];
+		RecipeSlot array[] = new RecipeSlot[width * height];
 		
 		for(int i = 0; i < width * height; i++)
-			array[i] = (RecipeHandler)symbols.get(s.charAt(i));
-		return new ReqRecipe(width, height, array, req);
+			array[i] = (RecipeSlot)symbols.get(s.charAt(i));
+		return new AdvancedRecipe(width, height, array, req);
 	}
 	
 	//Why the hell are all those three methods named differently

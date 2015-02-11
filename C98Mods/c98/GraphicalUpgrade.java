@@ -5,6 +5,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.ModelVillager;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.tileentity.TileEntitySign;
@@ -30,10 +31,10 @@ public class GraphicalUpgrade extends C98Mod {
 	private ModelRenderer testificateHat;
 	
 	@Override public void load() {
-		setupRSignRenderer();
+		Rendering.setTERenderer(TileEntitySign.class, new TileEntityRoadSignRenderer());
 		Rendering.setRenderer(EntityXPOrb.class, new RenderRainbowXP(Minecraft.getMinecraft().getRenderManager()));
 		((RendererLivingEntity)Rendering.getRenderer(EntitySheep.class)).addLayer(new LayerColoredSheep((RenderSheep)Rendering.getRenderer(EntitySheep.class)));
-		((RendererLivingEntity)Rendering.getRenderer(EntitySheep.class)).mainModel = new ModelSquigglySlime(16);
+		((RendererLivingEntity)Rendering.getRenderer(EntitySlime.class)).mainModel = new ModelSquigglySlime(16);
 		
 		ModelVillager base = (ModelVillager)((RenderVillager)Rendering.getRenderer(EntityVillager.class)).mainModel;
 		testificateHat = new ModelRenderer(base).setTextureSize(64, 64);
@@ -48,11 +49,5 @@ public class GraphicalUpgrade extends C98Mod {
 	private void reloadConfig() {
 		config = Json.get(this, GUConf.class);
 		testificateHat.isHidden = !config.testificateHats;
-		if(config.rainbowXP.useBW) XPPattern.defColors = new int[] {0xFFFFFF, 0xFF0000, 0xFFFF00, 0x00FF00, 0x00FFFF, 0x0000FF, 0xFF00FF, 0x000000};
-		else XPPattern.defColors = new int[] {0xFF0000, 0xFFFF00, 0x00FF00, 0x00FFFF, 0x0000FF, 0xFF00FF};
-	}
-	
-	private static void setupRSignRenderer() {
-		Rendering.setTERenderer(TileEntitySign.class, new TileEntityRoadSignRenderer());
 	}
 }

@@ -1,6 +1,5 @@
 package c98.minemap;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -137,9 +136,7 @@ public class MapClient implements IResourceManagerReloadListener {
 			icon.m.transform(c2);
 			icon.m.transform(c3);
 			
-			Color c = new Color(icon.color);
-			
-			GL.color(c.getRed() / 255F, c.getGreen() / 255, c.getBlue() / 255, icon.y / 255F);
+			GL.color(icon.color);
 			GL.vertex(c0.x, c0.y, u0, v0);
 			GL.vertex(c1.x, c1.y, u1, v0);
 			GL.vertex(c2.x, c2.y, u1, v1);

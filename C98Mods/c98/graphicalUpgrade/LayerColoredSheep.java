@@ -2,13 +2,13 @@ package c98.graphicalUpgrade;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelSheep2;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderSheep;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
+import c98.core.GL;
 
 public class LayerColoredSheep implements LayerRenderer {
 	private static final ResourceLocation TEXTURE = new ResourceLocation("c98/graphicalupgrade", "entity/sheep_wool.png");
@@ -24,20 +24,20 @@ public class LayerColoredSheep implements LayerRenderer {
 	}
 	
 	public void doRenderLayer(EntitySheep e, float p_177162_2_, float p_177162_3_, float p_177162_4_, float p_177162_5_, float p_177162_6_, float p_177162_7_, float p_177162_8_) {
-		if(!e.getSheared() && !e.isInvisible()) {
+		if(!e.isInvisible()) {
 			sheepRenderer.bindTexture(TEXTURE);
 			if(e.hasCustomName() && "jeb_".equals(e.getCustomNameTag())) {
-				int var10 = e.ticksExisted / 25 + e.getEntityId();
-				int var11 = EnumDyeColor.values().length;
-				int var12 = var10 % var11;
-				int var13 = (var10 + 1) % var11;
-				float var14 = (e.ticksExisted % 25 + p_177162_4_) / 25.0F;
-				float[] var15 = EntitySheep.func_175513_a(EnumDyeColor.func_176764_b(var12));
-				float[] var16 = EntitySheep.func_175513_a(EnumDyeColor.func_176764_b(var13));
-				GlStateManager.color(var15[0] * (1.0F - var14) + var16[0] * var14, var15[1] * (1.0F - var14) + var16[1] * var14, var15[2] * (1.0F - var14) + var16[2] * var14);
+				int tick = e.ticksExisted / 25 + e.getEntityId();
+				int numColors = EnumDyeColor.values().length;
+				int color1 = tick % numColors;
+				int color2 = (tick + 1) % numColors;
+				float f = (e.ticksExisted % 25 + p_177162_4_) / 25.0F;
+				float[] rgb1 = EntitySheep.func_175513_a(EnumDyeColor.func_176764_b(color1));
+				float[] rgb2 = EntitySheep.func_175513_a(EnumDyeColor.func_176764_b(color2));
+				GL.color(rgb1[0] * (1.0F - f) + rgb2[0] * f, rgb1[1] * (1.0F - f) + rgb2[1] * f, rgb1[2] * (1.0F - f) + rgb2[2] * f);
 			} else {
-				float[] var9 = EntitySheep.func_175513_a(e.func_175509_cj());
-				GlStateManager.color(var9[0], var9[1], var9[2]);
+				float[] rgb = EntitySheep.func_175513_a(e.func_175509_cj());
+				GL.color(rgb[0], rgb[1], rgb[2]);
 			}
 			
 			sheepModel.setModelAttributes(sheepRenderer.getMainModel());

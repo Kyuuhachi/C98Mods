@@ -6,7 +6,7 @@ import org.lwjgl.opengl.Display;
 import com.google.gson.*;
 import c98.core.Json.CustomConfig;
 import c98.minemap.MinemapConfig.Preset.MapType;
-import c98.minemap.server.EntitySelector;
+import c98.minemap.server.selector.EntitySelector;
 import c98.minemap.server.selector.Selector;
 
 public class MinemapConfig implements CustomConfig {

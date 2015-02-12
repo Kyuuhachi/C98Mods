@@ -7,21 +7,19 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
-import c98.core.hooks.HudRenderHook;
 import c98.core.impl.HookImpl;
-import c98.core.impl.Notification;
 import c98.core.impl.launch.C98Tweaker;
 
-public class C98Core implements HudRenderHook {
+public class C98Core {
 	public static final String KEYBIND_CAT = "C98Mods";
 	public static final String URL = "https://cubic.muncher.se/modded"; //TODO change to /r/C98Mods when that opens
 	public static boolean client;
 	public static boolean forge = C98Tweaker.forge;
 	public static Minecraft mc;
 	public static List<C98Mod> modList = new ArrayList();
-	private static Notification currentNotification;
 	
 	public static void addHook(Object hook) {
 		HookImpl.addHook(hook);
@@ -32,18 +30,7 @@ public class C98Core implements HudRenderHook {
 	}
 	
 	public static boolean isModLoaded(String string) {
-		for(C98Mod mod:modList)
-			if(mod.getName().equalsIgnoreCase(string)) return true;
-		return false;
-	}
-	
-	public static void displayMessage(ItemStack itemStack, String string, String string2) {
-		Notification gui = new Notification(mc, itemStack, string, string2);
-		currentNotification = gui;
-	}
-	
-	public static void displayMessage(ItemStack itemStack, String string, boolean on) {
-		displayMessage(itemStack, string, on ? "\2472ON" : "\2474OFF");
+		return modList.stream().anyMatch((mod) -> mod.getName().equals(string));
 	}
 	
 	public static void registerKey(KeyBinding key, boolean continous) {
@@ -52,13 +39,6 @@ public class C98Core implements HudRenderHook {
 	
 	public static float getPartialTicks() {
 		return mc.timer.renderPartialTicks;
-	}
-	
-	@Override public void renderHud(boolean status) {
-		if(currentNotification != null) {
-			currentNotification.updateAchievementWindow();
-			if(currentNotification.achievementTime == 0) currentNotification = null;
-		}
 	}
 	
 	@Override public String toString() {
@@ -87,7 +67,7 @@ public class C98Core implements HudRenderHook {
 			if(isStairs || isSlab || translucent || transparent) b.useNeighborBrightness = true;
 		}
 		
-		for(IBlockState state:(Iterable<IBlockState>)b.getBlockState().getValidStates()) {
+		for(IBlockState state : (Iterable<IBlockState>)b.getBlockState().getValidStates()) {
 			int value = Block.blockRegistry.getIDForObject(b) << 4 | b.getMetaFromState(state);
 			Block.BLOCK_STATE_IDS.put(state, value);
 		}

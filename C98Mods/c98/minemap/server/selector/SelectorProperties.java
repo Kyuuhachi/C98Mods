@@ -1,49 +1,52 @@
 package c98.minemap.server.selector;
 
 import java.util.HashMap;
+import java.util.Map;
 import c98.minemap.server.selector.prop.*;
 
 public class SelectorProperties {
-	private static HashMap<String, HashMap<String, SelectorProperty>> map = new HashMap();
-	private static HashMap<String, String> parent = new HashMap();
+	public static final String BOOLEAN = "boolean", STRING = "string", FLOAT = "float", INT = "int";
+	private static Map<String, HashMap<String, SelectorProperty>> props = new HashMap();
+	private static Map<String, HashMap<String, String>> types = new HashMap();
+	private static Map<String, String> parent = new HashMap();
 	
-	public static BooleanProperty getBoolean(String c, String name) {
-		return (BooleanProperty)get(c, name);
-	}
-	
-	public static StringProperty getString(String c, String name) {
-		return (StringProperty)get(c, name);
-	}
-	
-	public static FloatProperty getFloat(String c, String name) {
-		return (FloatProperty)get(c, name);
-	}
-	
-	public static IntProperty getInt(String c, String name) {
-		return (IntProperty)get(c, name);
-	}
-	
-	public static String typeof(String c, String name) {
-		SelectorProperty prop = get(c, name);
-		if(prop instanceof BooleanProperty) return "boolean";
-		if(prop instanceof StringProperty) return "string";
-		if(prop instanceof FloatProperty) return "float";
-		if(prop instanceof IntProperty) return "int";
-		return null;
-	}
-	
-	private static SelectorProperty get(String c, String name) {
+	public static SelectorProperty get(String c, String name) {
 		while(c != null) {
-			if(map.containsKey(c) && map.get(c).containsKey(name)) return map.get(c).get(name);
+			if(props.containsKey(c) && props.get(c).containsKey(name)) return props.get(c).get(name);
 			c = parent.get(c);
 		}
 		return null;
 	}
 	
-	public static void add(SelectorProperty prop) {
-		String key = EntitySelector.classToId.get(prop.clazz);
-		parent.put(key, EntitySelector.classToId.get(prop.clazz.getSuperclass()));
-		if(!map.containsKey(key)) map.put(key, new HashMap());
-		map.get(key).put(prop.name, prop);
+	public static String getType(String c, String name) {
+		while(c != null) {
+			if(types.containsKey(c) && types.get(c).containsKey(name)) return types.get(c).get(name);
+			c = parent.get(c);
+		}
+		return null;
 	}
+	
+	public static void addEntity(String name, Class clazz, SimpleProperty prop) {
+		add(name, clazz, prop.getType(), prop);
+	}
+	
+	public static void addEntity(String name, Class clazz, String type, EntityProperty prop) {
+		add(name, clazz, type, prop);
+	}
+	
+	public static void addTileEntity(String name, Class clazz, String type, TileEntityProperty prop) {
+		add(name, clazz, type, prop);
+	}
+	
+	private static void add(String name, Class clazz, String type, SelectorProperty prop) {
+		String key = EntitySelector.classToId.get(clazz);
+		parent.put(key, EntitySelector.classToId.get(clazz.getSuperclass()));
+		if(!props.containsKey(key)) {
+			props.put(key, new HashMap());
+			types.put(key, new HashMap());
+		}
+		props.get(key).put(name, prop);
+		types.get(key).put(name, type);
+	}
+	
 }

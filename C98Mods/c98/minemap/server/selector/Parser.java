@@ -2,6 +2,7 @@ package c98.minemap.server.selector;
 
 import java.util.LinkedList;
 import c98.minemap.server.selector.Tokenizer.Token;
+import c98.minemap.server.selector.prop.SelectorProperty;
 import c98.minemap.server.selector.propinst.*;
 
 public class Parser {
@@ -35,25 +36,26 @@ public class Parser {
 		if(removeIf(Tokenizer.NOT)) invert = true;
 		if(!(get() instanceof String)) throw expected("property name");
 		String name = (String)remove();
-		if(SelectorProperties.typeof(owner, name) == null) throw error("Property " + name + " not found");
-		switch(SelectorProperties.typeof(owner, name)) {
+		SelectorProperty prop = SelectorProperties.get(owner, name);
+		if(prop == null) throw error("Property " + name + " not found");
+		switch(SelectorProperties.getType(owner, name)) {
 			case "boolean":
-				return new BooleanPropertyInstance(SelectorProperties.getBoolean(owner, name), invert);
+				return new BooleanPropertyInstance(SelectorProperties.get(owner, name), invert);
 			case "string":
-				if(removeIf(Tokenizer.EQUAL)) return new StringPropertyInstance(SelectorProperties.getString(owner, name), (String)remove(), invert);
+				if(removeIf(Tokenizer.EQUAL)) return new StringPropertyInstance(SelectorProperties.get(owner, name), (String)remove(), invert);
 				break;
 			case "float":
-				if(removeIf(Tokenizer.LESS)) return new FloatPropertyInstance(SelectorProperties.getFloat(owner, name), (Float)remove(), -1, invert);
-				if(removeIf(Tokenizer.EQUAL)) return new FloatPropertyInstance(SelectorProperties.getFloat(owner, name), (Float)remove(), 0, invert);
-				if(removeIf(Tokenizer.GREATER)) return new FloatPropertyInstance(SelectorProperties.getFloat(owner, name), (Float)remove(), 1, invert);
+				if(removeIf(Tokenizer.LESS)) return new FloatPropertyInstance(SelectorProperties.get(owner, name), (Float)remove(), -1, invert);
+				if(removeIf(Tokenizer.EQUAL)) return new FloatPropertyInstance(SelectorProperties.get(owner, name), (Float)remove(), 0, invert);
+				if(removeIf(Tokenizer.GREATER)) return new FloatPropertyInstance(SelectorProperties.get(owner, name), (Float)remove(), 1, invert);
 				break;
 			case "int":
-				if(removeIf(Tokenizer.LESS)) return new IntPropertyInstance(SelectorProperties.getInt(owner, name), ((Float)remove()).intValue(), -1, invert);
-				if(removeIf(Tokenizer.EQUAL)) return new IntPropertyInstance(SelectorProperties.getInt(owner, name), ((Float)remove()).intValue(), 0, invert);
-				if(removeIf(Tokenizer.GREATER)) return new IntPropertyInstance(SelectorProperties.getInt(owner, name), ((Float)remove()).intValue(), 1, invert);
+				if(removeIf(Tokenizer.LESS)) return new IntPropertyInstance(SelectorProperties.get(owner, name), ((Float)remove()).intValue(), -1, invert);
+				if(removeIf(Tokenizer.EQUAL)) return new IntPropertyInstance(SelectorProperties.get(owner, name), ((Float)remove()).intValue(), 0, invert);
+				if(removeIf(Tokenizer.GREATER)) return new IntPropertyInstance(SelectorProperties.get(owner, name), ((Float)remove()).intValue(), 1, invert);
 				break;
 		}
-		throw expected(SelectorProperties.typeof(owner, name) + " comparision");
+		throw expected(SelectorProperties.getType(owner, name) + " comparision");
 	}
 	
 	private static RuntimeException expected(String string) {
@@ -65,7 +67,7 @@ public class Parser {
 		StringBuilder sb = new StringBuilder(string);
 		sb.append(". (");
 		String s = "";
-		for(Object o:tokens) {
+		for(Object o : tokens) {
 			sb.append(s);
 			s = ",";
 			sb.append(toString(o));

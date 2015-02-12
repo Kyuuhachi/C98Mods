@@ -82,7 +82,7 @@ public class Json {
 	
 	public static <T> T merge(T o1, JsonObject obj2, Gson gson) {
 		JsonObject obj = toJObj(o1, gson);
-		for(Entry<String, JsonElement> e:obj2.entrySet())
+		for(Entry<String, JsonElement> e : obj2.entrySet())
 			if(e.getValue().isJsonObject()) try {
 				Field f = o1.getClass().getField(e.getKey());
 				Object child = f.get(o1);

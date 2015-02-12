@@ -6,8 +6,6 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityMinecartMobSpawner;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.*;
@@ -32,10 +30,7 @@ public class DangerDisplay extends C98Mod implements WorldRenderHook, KeyHook {
 	}
 	
 	@Override public void keyboardEvent(KeyBinding var1) {
-		if(mc.currentScreen == null && var1 == key) {
-			display = !display;
-			C98Core.displayMessage(new ItemStack(Items.skull), "DangerDisplay:", display);
-		}
+		if(mc.currentScreen == null && var1 == key) display = !display;
 	}
 	
 	@Override public void renderWorld() {

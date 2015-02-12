@@ -53,7 +53,7 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 			public boolean enable = true;
 			public Map<String, Color> colors = new LinkedHashMap();
 			{
-				for(CreativeTabs tab:CreativeTabs.creativeTabArray)
+				for(CreativeTabs tab : CreativeTabs.creativeTabArray)
 					if(tab != null && tab != CreativeTabs.tabAllSearch && tab != CreativeTabs.tabInventory) {
 						String s = tab.getTabLabel();
 						colors.put(s, new Color(Color.HSBtoRGB(s.hashCode() / 360F, 1, 1)));
@@ -169,7 +169,7 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 	}
 	
 	private static void add(List<ItemStack> viableStacks, ItemStack[] stacks) {
-		if(stacks != null) for(ItemStack is:stacks)
+		if(stacks != null) for(ItemStack is : stacks)
 			viableStacks.add(is);
 	}
 	

@@ -2,23 +2,23 @@ package c98.minemap.server.selector.propinst;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import c98.minemap.server.selector.prop.BooleanProperty;
+import c98.minemap.server.selector.prop.*;
 
 public class BooleanPropertyInstance implements PropertyInstance {
-	public BooleanProperty prop;
+	public SelectorProperty prop;
 	public boolean invert;
 	
-	public BooleanPropertyInstance(BooleanProperty prop, boolean invert) {
+	public BooleanPropertyInstance(SelectorProperty prop, boolean invert) {
 		this.prop = prop;
 		this.invert = invert;
 	}
 	
 	@Override public boolean matches(Entity e) {
-		return prop.getValue(e) != invert;
+		return ((EntityProperty<Boolean>)prop).getValue(e) == Boolean.TRUE != invert;
 	}
 	
 	@Override public boolean matches(TileEntity e) {
-		return prop.getValue(e) != invert;
+		return ((TileEntityProperty<Boolean>)prop).getValue(e) == Boolean.TRUE != invert;
 	}
 	
 }

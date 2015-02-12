@@ -224,7 +224,7 @@ public class XCube {
 		GL.disableBlend();
 		GL.enableTexture();
 		
-		for(String s:list) {
+		for(String s : list) {
 			mc.fontRendererObj.func_175063_a(s, drawx, drawY, -1);
 			drawY += 10;
 		}

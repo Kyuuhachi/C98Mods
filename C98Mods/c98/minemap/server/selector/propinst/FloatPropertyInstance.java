@@ -2,15 +2,15 @@ package c98.minemap.server.selector.propinst;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import c98.minemap.server.selector.prop.FloatProperty;
+import c98.minemap.server.selector.prop.*;
 
 public class FloatPropertyInstance implements PropertyInstance {
-	public FloatProperty prop;
+	public SelectorProperty prop;
 	public float val;
 	public int op;
 	public boolean invert;
 	
-	public FloatPropertyInstance(FloatProperty prop, float val, int op, boolean invert) {
+	public FloatPropertyInstance(SelectorProperty prop, float val, int op, boolean invert) {
 		this.prop = prop;
 		this.val = val;
 		this.op = op;
@@ -18,11 +18,11 @@ public class FloatPropertyInstance implements PropertyInstance {
 	}
 	
 	@Override public boolean matches(Entity e) {
-		return compare(prop.getValue(e), val) != invert;
+		return compare(((EntityProperty<Float>)prop).getValue(e), val) != invert;
 	}
 	
 	@Override public boolean matches(TileEntity e) {
-		return compare(prop.getValue(e), val) != invert;
+		return compare(((TileEntityProperty<Float>)prop).getValue(e), val) != invert;
 	}
 	
 	private boolean compare(float a, float b) {

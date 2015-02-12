@@ -7,8 +7,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.*;
+import c98.core.impl.GLImpl;
 
-public class GL { //TODO make stuff use this
+public class GL {
 	public static class stencil {
 		private static int msk;
 		private static boolean creating;
@@ -67,29 +68,29 @@ public class GL { //TODO make stuff use this
 			}
 			
 			public static void draw() {
-//				b.bindFramebufferTexture();
-//				matrixMode(PROJECTION);
-//				pushMatrix();
-//				loadIdentity();
-//				ortho(0, 1, 0, 1, 0, 1);
-//				matrixMode(MODELVIEW);
-//				pushMatrix();
-//				loadIdentity();
-//
-//				color(1, 1, 1);
-//				begin();
-//				{
-//					vertex(0, 0, 0, 0);
-//					vertex(1, 0, 1, 0);
-//					vertex(1, 1, 1, 1);
-//					vertex(0, 1, 0, 1);
-//				}
-//				end();
-//
-//				matrixMode(PROJECTION);
-//				popMatrix();
-//				matrixMode(MODELVIEW);
-//				popMatrix();
+				b.bindFramebufferTexture();
+				matrixMode(PROJECTION);
+				pushMatrix();
+				loadIdentity();
+				ortho(0, 1, 0, 1, 0, 1);
+				matrixMode(MODELVIEW);
+				pushMatrix();
+				loadIdentity();
+				
+				color(1, 1, 1);
+				begin();
+				{
+					vertex(0, 0, 0, 0);
+					vertex(1, 0, 1, 0);
+					vertex(1, 1, 1, 1);
+					vertex(0, 1, 0, 1);
+				}
+				end();
+				
+				matrixMode(PROJECTION);
+				popMatrix();
+				matrixMode(MODELVIEW);
+				popMatrix();
 			}
 			
 			public static void end() {
@@ -113,8 +114,6 @@ public class GL { //TODO make stuff use this
 	public static final int EMISSION = GL_EMISSION, AMBIENT = GL_AMBIENT, DIFFUSE = GL_DIFFUSE, SPECULAR = GL_SPECULAR, AMBIENT_AND_DIFFUSE = GL_AMBIENT_AND_DIFFUSE;
 	
 	//@off
-	public static void pushAttrib() {glPushAttrib(-1);} //Yeah, GlStateManager has a pushAttrib, but that one only pushes ENABLE and LIGHTING
-	public static void popAttrib() {glPopAttrib();}
 	
 	public static void enableAlpha() {GlStateManager.enableAlpha();}
 	public static void disableAlpha() {GlStateManager.disableAlpha();}
@@ -217,4 +216,13 @@ public class GL { //TODO make stuff use this
 	public static void polygonMode(int mode) {glPolygonMode(GL_FRONT_AND_BACK, mode);}
 	//@on
 	
+	public static void pushAttrib() {
+		glPushAttrib(GL_ALL_ATTRIB_BITS);
+		GLImpl.pushAttrib();
+	}
+	
+	public static void popAttrib() {
+		GLImpl.popAttrib();
+		glPopAttrib();
+	}
 }

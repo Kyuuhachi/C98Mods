@@ -10,12 +10,12 @@ import net.minecraft.util.BlockPos;
 import c98.core.impl.recipes.*;
 
 public class Recipes {
-	public static abstract class RecipeSlot {
-		public abstract boolean valid(ItemStack is, InventoryCrafting inv, BlockPos coords, int x, int y, int gridX, int gridY, boolean mirrored);
+	@FunctionalInterface public static interface RecipeSlot {
+		public boolean valid(ItemStack is, InventoryCrafting inv, BlockPos coords, int x, int y, int gridX, int gridY, boolean mirrored);
 	}
 	
-	public static abstract class RecipeResult {
-		public abstract ItemStack getResult(InventoryCrafting inv, BlockPos coords, int gridX, int gridY, boolean mirror);
+	@FunctionalInterface public static interface RecipeResult {
+		public ItemStack getResult(InventoryCrafting inv, BlockPos coords, int gridX, int gridY, boolean mirror);
 	}
 	
 	public static void addReqRecipe(Object o, Object... recipe) {

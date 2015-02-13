@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import c98.core.Recipes.RecipeResult;
 
-public class SimpleRecipeResult extends RecipeResult {
+public class SimpleRecipeResult implements RecipeResult {
 	private ItemStack is;
 	
 	public SimpleRecipeResult(ItemStack itemStack) {

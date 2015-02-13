@@ -39,20 +39,20 @@ public class Parser {
 		SelectorProperty prop = SelectorProperties.get(owner, name);
 		if(prop == null) throw error("Property " + name + " not found");
 		switch(SelectorProperties.getType(owner, name)) {
-			case "boolean":
-				return new BooleanPropertyInstance(SelectorProperties.get(owner, name), invert);
-			case "string":
-				if(removeIf(Tokenizer.EQUAL)) return new StringPropertyInstance(SelectorProperties.get(owner, name), (String)remove(), invert);
+			case SelectorProperties.BOOLEAN:
+				return new BooleanPropertyInstance(prop, invert);
+			case SelectorProperties.STRING:
+				if(removeIf(Tokenizer.EQUAL)) return new StringPropertyInstance(prop, (String)remove(), invert);
 				break;
-			case "float":
-				if(removeIf(Tokenizer.LESS)) return new FloatPropertyInstance(SelectorProperties.get(owner, name), (Float)remove(), -1, invert);
-				if(removeIf(Tokenizer.EQUAL)) return new FloatPropertyInstance(SelectorProperties.get(owner, name), (Float)remove(), 0, invert);
-				if(removeIf(Tokenizer.GREATER)) return new FloatPropertyInstance(SelectorProperties.get(owner, name), (Float)remove(), 1, invert);
+			case SelectorProperties.FLOAT:
+				if(removeIf(Tokenizer.LESS)) return new FloatPropertyInstance(prop, (Float)remove(), -1, invert);
+				if(removeIf(Tokenizer.EQUAL)) return new FloatPropertyInstance(prop, (Float)remove(), 0, invert);
+				if(removeIf(Tokenizer.GREATER)) return new FloatPropertyInstance(prop, (Float)remove(), 1, invert);
 				break;
-			case "int":
-				if(removeIf(Tokenizer.LESS)) return new IntPropertyInstance(SelectorProperties.get(owner, name), ((Float)remove()).intValue(), -1, invert);
-				if(removeIf(Tokenizer.EQUAL)) return new IntPropertyInstance(SelectorProperties.get(owner, name), ((Float)remove()).intValue(), 0, invert);
-				if(removeIf(Tokenizer.GREATER)) return new IntPropertyInstance(SelectorProperties.get(owner, name), ((Float)remove()).intValue(), 1, invert);
+			case SelectorProperties.INT:
+				if(removeIf(Tokenizer.LESS)) return new IntPropertyInstance(prop, ((Float)remove()).intValue(), -1, invert);
+				if(removeIf(Tokenizer.EQUAL)) return new IntPropertyInstance(prop, ((Float)remove()).intValue(), 0, invert);
+				if(removeIf(Tokenizer.GREATER)) return new IntPropertyInstance(prop, ((Float)remove()).intValue(), 1, invert);
 				break;
 		}
 		throw expected(SelectorProperties.getType(owner, name) + " comparision");

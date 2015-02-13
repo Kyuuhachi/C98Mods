@@ -9,8 +9,6 @@ import net.minecraft.item.Item;
 import c98.core.impl.ModelImpl;
 
 public class Models {
-	//Arrays.asList("c98/magic:extractor")
-	
 	public static void registerBlockModel(Block b, List<String> models, IStateMapper block) {
 		ModelImpl.ModelEntry e = new ModelImpl.ModelEntry();
 		e.blockModels = block;

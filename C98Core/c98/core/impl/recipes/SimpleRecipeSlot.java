@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import c98.core.Recipes.RecipeSlot;
 
-public class SimpleRecipeSlot extends RecipeSlot {
+public class SimpleRecipeSlot implements RecipeSlot {
 	private ItemStack item;
 	
 	public SimpleRecipeSlot(ItemStack i) {

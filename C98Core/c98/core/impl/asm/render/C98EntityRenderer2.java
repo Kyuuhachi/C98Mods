@@ -1,10 +1,10 @@
 package c98.core.impl.asm.render;
 
+import jdk.internal.org.objectweb.asm.Opcodes;
+import jdk.internal.org.objectweb.asm.tree.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.resources.IResourceManager;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.*;
 import c98.core.launch.*;
 
 @ASMer class C98EntityRenderer2 extends EntityRenderer implements CustomASMer {
@@ -13,10 +13,10 @@ import c98.core.launch.*;
 	}
 	
 	@Override public void asm(ClassNode node) { //TODO look for 7424 (GL_FLAT) instead of "hand"
-		for(MethodNode n:node.methods)
-			for(AbstractInsnNode insn:new Asm(n))
+		for(MethodNode n : node.methods)
+			for(AbstractInsnNode insn : new Asm(n))
 				if(insn instanceof LdcInsnNode) if(((LdcInsnNode)insn).cst.equals("hand")) {
-					AbstractInsnNode renderWorld = new MethodInsnNode(Opcodes.INVOKESTATIC, "c98/core/impl/HookImpl", "renderWorld", "()V");
+					AbstractInsnNode renderWorld = new MethodInsnNode(Opcodes.INVOKESTATIC, "c98/core/impl/HookImpl", "renderWorld", "()V", false);
 					n.instructions.insert(insn, renderWorld);
 				}
 	}

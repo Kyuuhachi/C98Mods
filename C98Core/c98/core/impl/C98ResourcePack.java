@@ -17,10 +17,12 @@ import com.google.gson.JsonObject;
 public class C98ResourcePack implements IResourcePack { //TODO sounds.json
 
 	@Override public InputStream getInputStream(ResourceLocation l) throws IOException {
-		if(l.getResourceDomain().equals("c98") && l.getResourcePath().startsWith("lang/")) {
+		String ns = l.getResourceDomain();
+		String path = l.getResourcePath();
+		if(ns.equals("c98") && path.startsWith("lang/")) { //TODO Java8 this
 			List<InputStream> streams = new ArrayList();
-			for(C98Mod mod:C98Core.modList) {
-				ResourceLocation loc = new ResourceLocation(l.getResourceDomain() + "/" + mod.getName().toLowerCase(), l.getResourcePath());
+			for(C98Mod mod : C98Core.modList) {
+				ResourceLocation loc = new ResourceLocation(ns + "/" + mod.getName().toLowerCase(), path);
 				if(resourceExists(loc)) streams.add(getInputStream(loc));
 			}
 			return new SequenceInputStream(Collections.enumeration(streams));

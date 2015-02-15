@@ -4,10 +4,10 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Handler;
+import jdk.internal.org.objectweb.asm.*;
 import joptsimple.*;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.launchwrapper.*;
-import org.objectweb.asm.*;
 import c98.core.C98Log;
 import c98.core.impl.*;
 import c98.core.impl.C98Formatter.Target;
@@ -62,7 +62,7 @@ public class C98Tweaker implements ITweaker {
 		l.addClassLoaderExclusion("org.objectweb.asm.");
 		l.addClassLoaderExclusion("com.google.common.");
 		l.addTransformerExclusion("c98.core.launch.");
-		for(IClassTransformer t:l.getTransformers())
+		for(IClassTransformer t : l.getTransformers())
 			if(t.getClass().getName().contains("fml")) {
 				try {
 					Class FMLRelaunchLog = Class.forName("cpw.mods.fml.relauncher.FMLRelaunchLog$ConsoleLogThread");

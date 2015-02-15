@@ -1,6 +1,7 @@
 package c98.core.impl;
 
 import java.util.*;
+import jdk.internal.org.objectweb.asm.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
@@ -13,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.objectweb.asm.*;
 import c98.core.*;
 import c98.core.hooks.*;
 import c98.core.impl.launch.C98Tweaker;
@@ -107,7 +107,7 @@ public class HookImpl {
 		}
 		Collections.sort(C98Core.modList);
 		if(C98Core.modList.isEmpty()) C98Log.log("[C98Core] Didn't find any C98Mods :(");
-		for(C98Mod mod:C98Core.modList) {
+		for(C98Mod mod : C98Core.modList) {
 			addHook(mod);
 			mod.preinit();
 		}
@@ -115,7 +115,7 @@ public class HookImpl {
 	
 	public static void loadMods() {
 		try {
-			for(C98Mod mod:C98Core.modList)
+			for(C98Mod mod : C98Core.modList)
 				mod.load();
 			C98Log.log("Loaded C98Mods");
 			C98Log.fine("Mod list: " + C98Core.modList);
@@ -135,7 +135,7 @@ public class HookImpl {
 	public static void tickGui() {
 		C98Core.mc.mcProfiler.startSection("c98tickGui");
 		GuiScreen g = C98Core.mc.currentScreen;
-		if(g != null) for(GuiHook mod:guiHooks) {
+		if(g != null) for(GuiHook mod : guiHooks) {
 			C98Core.mc.mcProfiler.startSection(mod.toString());
 			mod.tickGui(g);
 			C98Core.mc.mcProfiler.endSection();
@@ -148,7 +148,7 @@ public class HookImpl {
 		C98Core.mc.mcProfiler.startSection("c98tick");
 		C98Core.mc.mcProfiler.startSection("keys");
 		doKeys();
-		if(C98Core.mc.theWorld != null && C98Core.mc.thePlayer != null && C98Core.mc.thePlayer.worldObj != null) for(TickHook mod:tickHooks) {
+		if(C98Core.mc.theWorld != null && C98Core.mc.thePlayer != null && C98Core.mc.thePlayer.worldObj != null) for(TickHook mod : tickHooks) {
 			C98Core.mc.mcProfiler.endStartSection(mod.toString());
 			mod.tickGame(w);
 		}
@@ -159,7 +159,7 @@ public class HookImpl {
 	public static void renderGui() {
 		C98Core.mc.mcProfiler.startSection("c98renderGui");
 		GuiScreen g = C98Core.mc.currentScreen;
-		if(g != null) for(GuiRenderHook mod:guiRenderHooks) {
+		if(g != null) for(GuiRenderHook mod : guiRenderHooks) {
 			C98Core.mc.mcProfiler.startSection(mod.toString());
 			mod.renderGui(g);
 			C98Core.mc.mcProfiler.endSection();
@@ -179,7 +179,7 @@ public class HookImpl {
 		GL.pushMatrix();
 		GL.translate(-x, -y, -z);
 		
-		for(WorldRenderHook mod:worldRenderHooks) {
+		for(WorldRenderHook mod : worldRenderHooks) {
 			C98Core.mc.mcProfiler.startSection(mod.toString());
 			mod.renderWorld();
 			C98Core.mc.mcProfiler.endSection();
@@ -206,7 +206,7 @@ public class HookImpl {
 //		GL.translate(0, 0, -2000);
 //		GL.enableAlpha();
 		
-		for(HudRenderHook mod:hudRenderHooks) {
+		for(HudRenderHook mod : hudRenderHooks) {
 			C98Core.mc.mcProfiler.startSection(mod.toString());
 			mod.renderHud(C98Core.mc.playerController.shouldDrawHUD());
 			C98Core.mc.mcProfiler.endSection();
@@ -223,12 +223,12 @@ public class HookImpl {
 	}
 	
 	public static void setGui(GuiScreen par1GuiScreen) {
-		for(GuiSetHook mod:guiSetHooks)
+		for(GuiSetHook mod : guiSetHooks)
 			mod.setGui(par1GuiScreen);
 	}
 	
 	private static void doKeys() {
-		if(Keyboard.isCreated()) for(Map.Entry<KeyBinding, boolean[]> entry:keyBindings.entrySet()) {
+		if(Keyboard.isCreated()) for(Map.Entry<KeyBinding, boolean[]> entry : keyBindings.entrySet()) {
 			int key = entry.getKey().getKeyCode();
 			boolean down;
 			
@@ -239,7 +239,7 @@ public class HookImpl {
 			boolean prevDown = flags[1];
 			flags[1] = down;
 			
-			if(down && (!prevDown || flags[0])) for(KeyHook mod:keyHooks)
+			if(down && (!prevDown || flags[0])) for(KeyHook mod : keyHooks)
 				mod.keyboardEvent(entry.getKey());
 		}
 	}
@@ -251,12 +251,12 @@ public class HookImpl {
 	}
 	
 	public static void onConnect() {
-		for(ConnectHook mod:connectHooks)
+		for(ConnectHook mod : connectHooks)
 			mod.onConnect(C98Core.mc.getNetHandler());
 	}
 	
 	public static void onDisconnect() {
-		for(ConnectHook mod:connectHooks)
+		for(ConnectHook mod : connectHooks)
 			mod.onDisconnect(C98Core.mc.getNetHandler());
 	}
 	

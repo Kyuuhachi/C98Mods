@@ -2,72 +2,62 @@ package c98.core.impl.launch;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
+import java.util.function.IntFunction;
+import jdk.internal.org.objectweb.asm.*;
+import jdk.internal.org.objectweb.asm.tree.ClassNode;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.objectweb.asm.*;
-import org.objectweb.asm.commons.RemappingClassAdapter;
-import org.objectweb.asm.commons.SimpleRemapper;
-import org.objectweb.asm.tree.*;
-import sun.misc.Unsafe;
 import c98.core.C98Log;
-import c98.core.launch.*;
-import com.google.common.collect.*;
+import c98.core.launch.ASMer;
+import c98.core.launch.CustomASMer;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 public class C98Transformer implements IClassTransformer {
-	private static HashMap<String, CustomASMer> asmers = new HashMap();
 	
 	private static String annotExtend = "L" + ASMer.class.getName().replace('.', '/') + ";";
+	private static String casm = CustomASMer.class.getName().replace('.', '/');
 	
 	private static class ClassInfo {
 		String[] superClasses;
 		String thisClass;
 	}
 	
-	private static Unsafe unsafe; //Define custom ASMer classes
-	{
-		try {
-			Field field = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
-			field.setAccessible(true);
-			unsafe = (sun.misc.Unsafe)field.get(null);
-		} catch(Exception e) {
-			throw new AssertionError(e);
-		}
-	}
-	
-	private static int num; //Used for multiple transformers on one class
-	public static Multimap<String, String> transformers = HashMultimap.create(); //Transform class A using transformers B[]
+	public static int num; //Used for multiple transformers on one class
+	public static Multimap<String, ClassNode> transformers = HashMultimap.create(); //Transform class A using transformers B[]
 	public static Multimap<String, String> remapping = HashMultimap.create(); //Remap references to B[] to A
 	
 	public C98Transformer() {
 		TreeSet<String> output = new TreeSet();
 		int maxLen = 0;
-		for(String s:C98Tweaker.transformers)
+		for(String s : C98Tweaker.transformers)
 			try {
 				String name = s.replace('.', '/') + ".class";
 				ClassInfo st = getNames(name);
 				if(st.superClasses == null) throw new NullPointerException(st.thisClass);
-				for(String sup:st.superClasses) {
+				for(String sup : st.superClasses) {
 					if(sup.contains(".")) throw new IllegalArgumentException(st.thisClass + " contains a source-format @ASMer tag!");
 					
 					output.add("[C98Core] " + sup + " -> " + st.thisClass);
 					
-					transformers.put(sup.replace('/', '.'), st.thisClass + ".class");
+					ClassNode transformer = new ClassNode();
+					new ClassReader(transform(getAsByteArray(Launch.classLoader.findResource(st.thisClass + ".class")))).accept(transformer, ClassReader.EXPAND_FRAMES);
+					transformers.put(sup.replace('/', '.'), transformer);
 					remapping.put(sup, st.thisClass);
 				}
 			} catch(IOException e) {
 				C98Log.error(e);
 			}
 		
-		for(String s:output)
+		for(String s : output)
 			if(s.indexOf('-') - 1 > maxLen) maxLen = s.indexOf('-') - 1;
 		String fmt = "%-" + maxLen + "s -> %s";
-		for(String s:output)
+		for(String s : output)
 			C98Log.fine(String.format(fmt, (Object[])s.split(" -> ", 2)));
 	}
 	
@@ -110,7 +100,7 @@ public class C98Transformer implements IClassTransformer {
 	}
 	
 	public byte[] transform(byte[] b) {
-		for(IClassTransformer transformer:Launch.classLoader.getTransformers())
+		for(IClassTransformer transformer : Launch.classLoader.getTransformers())
 			if(transformer != this) b = transformer.transform("ASDF", "GHJKL", b);
 		return b;
 	}
@@ -129,149 +119,44 @@ public class C98Transformer implements IClassTransformer {
 		}
 	}
 	
-	@Override public byte[] transform(String oldName, String name, byte[] b) {
-		if(b == null) return b; //why is this needed
+	@Override public byte[] transform(String oldName, String name, byte[] bytes) {
+		if(bytes == null) return bytes; //why is this needed
 		try {
 			ClassNode dst = new ClassNode();
-			new ClassReader(b).accept(dst, ClassReader.EXPAND_FRAMES);
-			dst.version = Opcodes.V1_5;
+			new ClassReader(bytes).accept(dst, 0);
 			
 			String className = name.replace('.', '/');
 			num = 0;
 			
-			for(String s:Iterables.concat(transformers.get(name), transformers.get("*")))
+			List<ClassNode> t = new LinkedList();
+			t.addAll(transformers.get(name));
+			t.addAll(transformers.get("*"));
+			t.sort((a, b) -> Boolean.compare(b.interfaces.contains(casm), a.interfaces.contains(casm)));
+			
+			for(ClassNode transformer : t)
 				try {
 					num++;
-					ClassNode transformer = new ClassNode();
-					new ClassReader(transform(getAsByteArray(Launch.classLoader.findResource(s)))).accept(transformer, ClassReader.EXPAND_FRAMES);
-					if(transformer.interfaces.contains(CustomASMer.class.getName().replace('.', '/'))) handleCustomASMer(dst, transformer);
-					else handleAsm(dst, transformer, className);
+					if(transformer.interfaces.contains(casm)) CustomAsm.handle(dst, transformer, className);
+					else StandardAsm.handle(dst, transformer, className);
 				} catch(Exception e) {
-					C98Log.error("Failed to transform " + name + " with transformer " + s, e);
+					C98Log.error("Failed to transform " + name + " with transformer " + transformer.name, e);
 				}
 			
-			dst.access = (dst.access | Opcodes.ACC_PUBLIC) & ~Opcodes.ACC_PROTECTED & ~Opcodes.ACC_PRIVATE;
-			for(MethodNode n:dst.methods)
-				n.access = (n.access | Opcodes.ACC_PUBLIC) & ~Opcodes.ACC_PROTECTED & ~Opcodes.ACC_PRIVATE;
-			for(FieldNode n:dst.fields)
-				n.access = (n.access | Opcodes.ACC_PUBLIC) & ~Opcodes.ACC_PROTECTED & ~Opcodes.ACC_PRIVATE;
+			IntFunction<Integer> func = (int i) -> (i | Opcodes.ACC_PUBLIC) & ~Opcodes.ACC_PROTECTED & ~Opcodes.ACC_PRIVATE;
+			dst.access = func.apply(dst.access);
+			dst.methods.forEach(a -> a.access = func.apply(a.access));
+			dst.fields.forEach(a -> a.access = func.apply(a.access));
 			
 			HashMap<String, String> map = new HashMap();
-			for(String s:remapping.get(className))
+			for(String s : remapping.get(className))
 				map.put(s, className);
 			
-			ClassWriter wr = new C98ClassWriter();
-			dst.accept(new RemappingClassAdapter(wr, new SimpleRemapper(map)));
-			b = wr.toByteArray();
+			ClassWriter wr = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			dst.accept(wr);
+			bytes = wr.toByteArray();
 		} catch(Exception | ClassFormatError e) {
 			C98Log.error("Failed to transform " + name, e);
 		}
-		return b;
-	}
-	
-	public void handleCustomASMer(ClassNode dst, ClassNode asmer) throws InstantiationException, IllegalAccessException {
-		if(!asmers.containsKey(asmer.name)) {
-			asmer.superName = "java/lang/Object";
-			asmer.access &= ~Opcodes.ACC_ABSTRACT;
-			asmer.access |= Opcodes.ACC_PUBLIC;
-			List<MethodNode> me = asmer.methods;
-			for(int i = 0; i < me.size();)
-				if(me.get(i).name.equals("<init>")) me.remove(me.get(i));
-				else i++;
-			MethodNode mv = new MethodNode(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);
-			mv.visitCode();
-			mv.visitVarInsn(Opcodes.ALOAD, 0);
-			mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
-			mv.visitInsn(Opcodes.RETURN);
-			mv.visitMaxs(2, 1);
-			mv.visitEnd();
-			asmer.methods.add(mv);
-			
-			ClassWriter wr = new ClassWriter(0);
-			asmer.accept(wr);
-			byte[] clzB = wr.toByteArray();
-			asmers.put(asmer.name, (CustomASMer)unsafe.defineClass(null, clzB, 0, clzB.length, getClass().getClassLoader(), null).newInstance());
-		}
-		asmers.get(asmer.name).asm(dst);
-	}
-	
-	private static void handleAsm(ClassNode dst, ClassNode transformer, String className) {
-		for(MethodNode transformerMethod:transformer.methods) {
-			MethodNode dstMethod = null;
-			
-			for(MethodNode mthd:dst.methods)
-				if(transformerMethod.name.equals(mthd.name) && transformerMethod.desc.equals(mthd.desc)) {
-					dstMethod = mthd;
-					break;
-				}
-			if(transformerMethod.name.equals("<clinit>")) addClinit(transformerMethod, dstMethod, dst);
-			else if(transformerMethod.name.equals("<init>")) addInit(transformerMethod, dstMethod);
-			else addMthd(transformerMethod, dstMethod, dst, className);
-		}
-		l: for(FieldNode n:transformer.fields) {
-			for(FieldNode n2:dst.fields)
-				if(n2.name.equals(n.name)) continue l;
-			dst.fields.add(n);
-		}
-	}
-	
-	private static void genSuperCall(ClassNode dst, MethodNode dstMethod) {
-		String methodName = dstMethod.name + "$C98_" + num;
-		String[] exceptions = dstMethod.exceptions.toArray(new String[0]);
-		MethodNode newMthd = new MethodNode(dstMethod.access, methodName, dstMethod.desc, dstMethod.signature, exceptions);
-		Type mthdDsc = Type.getMethodType(dstMethod.desc);
-		int i = 1; //skip var 0=this
-		newMthd.visitVarInsn(Opcodes.ALOAD, 0);
-		for(Type t:mthdDsc.getArgumentTypes()) {
-			newMthd.visitVarInsn(t.getOpcode(Opcodes.ILOAD), i);
-			i += t.getSize();
-		}
-		newMthd.visitMethodInsn(Opcodes.INVOKESPECIAL, dst.superName, dstMethod.name, dstMethod.desc);
-		newMthd.visitInsn(mthdDsc.getReturnType().getOpcode(Opcodes.IRETURN));
-		dst.methods.add(newMthd);
-	}
-	
-	private static void addMthd(MethodNode transformerMethod, MethodNode dstMethod, ClassNode dst, String className) {
-		if(dstMethod != null) dstMethod.name += "$C98_" + num;
-		else {
-			boolean hasSuper = false;
-			for(AbstractInsnNode n:new Asm(transformerMethod))
-				if(n instanceof MethodInsnNode) {
-					MethodInsnNode mn = (MethodInsnNode)n;
-					if(mn.owner.equals(dst.name) && mn.name.equals(transformerMethod.name) && mn.desc.equals(transformerMethod.desc)) {
-						hasSuper = true;
-						break;
-					}
-				}
-			if(hasSuper) genSuperCall(dst, transformerMethod);
-		}
-		dst.methods.add(transformerMethod);
-		for(AbstractInsnNode node:new Asm(transformerMethod))
-			if(node instanceof MethodInsnNode) {
-				MethodInsnNode mth = (MethodInsnNode)node;
-				if(mth.owner.equals(className) && mth.name.equals(transformerMethod.name) && !mth.name.equals("<init>")) mth.name += "$C98_" + num; //For super.blah() calls
-			}
-	}
-	
-	private static void addInit(MethodNode transformerMethod, MethodNode dstMethod) {
-		for(AbstractInsnNode node:new Asm(transformerMethod)) {
-			transformerMethod.instructions.remove(node);
-			if(node instanceof MethodInsnNode) break; //Super() call, this function could surely be better
-		}
-		AbstractInsnNode ret = dstMethod.instructions.getLast();
-		while(!(ret.getOpcode() >= Opcodes.IRETURN && ret.getOpcode() <= Opcodes.RETURN))
-			ret = ret.getPrevious();
-		dstMethod.instructions.remove(ret);//Remove the RETURN
-		dstMethod.instructions.add(transformerMethod.instructions);
-	}
-	
-	private static void addClinit(MethodNode transformerMethod, MethodNode dstMethod, ClassNode clazz) {
-		if(dstMethod == null) {
-			clazz.methods.add(transformerMethod);
-			return;
-		}
-		
-		dstMethod.instructions.remove(dstMethod.instructions.getLast().getPrevious());//Remove the RETURN
-		dstMethod.instructions.add(transformerMethod.instructions);
+		return bytes;
 	}
 }

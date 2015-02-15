@@ -1,14 +1,14 @@
 package c98.launchProgress;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.*;
+import jdk.internal.org.objectweb.asm.Opcodes;
+import jdk.internal.org.objectweb.asm.tree.*;
 
 public class Progress {
 	public static InsnList call(int i, String s) {
 		InsnList il = new InsnList();
 		il.add(new IntInsnNode(Opcodes.BIPUSH, i));
 		il.add(new LdcInsnNode(s));
-		il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "c98/launchProgress/Progress", "setProgress", "(ILjava/lang/String;)V"));
+		il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "c98/launchProgress/Progress", "setProgress", "(ILjava/lang/String;)V", false));
 		return il;
 	}
 	

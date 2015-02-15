@@ -130,7 +130,6 @@ public class StandardAsm {
 		
 		dstMethod.instructions.remove(dstMethod.instructions.getLast()); //RETURN
 		dstMethod.instructions.add(transformerMethod.instructions);
-		Asm.print(dstMethod);
 	}
 	
 	private static String renameOriginal(String name) {

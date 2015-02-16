@@ -2,18 +2,18 @@ package c98.magic;
 
 import java.nio.FloatBuffer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.BufferUtils;
 import c98.core.GL;
 import c98.core.util.Matrix;
 import c98.core.util.Vector;
 import c98.magic.util.WorldRender;
 
-public class RenderMagicGate extends TileEntitySpecialRenderer { //TODO this still doesn't work. 1.8 is hard.
+public class RenderMagicGate extends TileEntitySpecialRenderer {
 	private static final float WIDTH = 6 / 16F;
 	private static final int MASK = 1;
 	private boolean recursion;
@@ -27,9 +27,9 @@ public class RenderMagicGate extends TileEntitySpecialRenderer { //TODO this sti
 		a = a * 19 / 16F - 3 / 16F;
 		if(a > 1 || recursion) a = 1;
 		
-//		if(a < 1) drawGate(te, x, y, z, ptt);
+		if(a < 1) drawGate(te, x, y, z, ptt);
 		
-		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+		GL.bindTexture(TextureMap.locationBlocksTexture);
 		
 		for(int i = -1; i <= 1; i++)
 			for(int j = -1; j <= 1; j++) {
@@ -56,7 +56,7 @@ public class RenderMagicGate extends TileEntitySpecialRenderer { //TODO this sti
 						GL.blendFunc(GL.CONSTANT_ALPHA, GL.ONE_MINUS_CONSTANT_ALPHA);
 						GL.blendColor(1, 1, 1, a * 2 - 1);
 						GL.color(1, 1, 1);
-//						drawPortal(te);
+						drawPortal(te);
 					}
 					GL.disableColorMaterial();
 					GL.disableBlend();
@@ -68,36 +68,40 @@ public class RenderMagicGate extends TileEntitySpecialRenderer { //TODO this sti
 	}
 	
 	private void drawPortal(BlockMagicGate.TE te) {
-		GL.bindTexture(new ResourceLocation("c98/magic", "textures/blocks/magic_gate.png"));
+		TextureAtlasSprite icon = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("c98/magic:blocks/magic_gate");
+		float u0 = icon.getMinU();
+		float v0 = icon.getMinV();
+		float u1 = icon.getMaxU();
+		float v1 = icon.getMaxV();
 		GL.begin();
 		{
 			if(te.getDirection() == EnumFacing.SOUTH) {
 				GL.normal(0, 0, -1);
-				GL.vertex(-.5F, -.5F, 0, 0, 1);
-				GL.vertex(+.5F, -.5F, 0, 1, 1);
-				GL.vertex(+.5F, +.5F, 0, 1, 0);
-				GL.vertex(-.5F, +.5F, 0, 0, 0);
+				GL.vertex(-.5F, -.5F, 0, u0, v1);
+				GL.vertex(+.5F, -.5F, 0, u1, v1);
+				GL.vertex(+.5F, +.5F, 0, u1, v0);
+				GL.vertex(-.5F, +.5F, 0, u0, v0);
 			}
 			if(te.getDirection() == EnumFacing.WEST) {
 				GL.normal(1, 0, 0);
-				GL.vertex(0, -.5F, -.5F, 0, 1);
-				GL.vertex(0, -.5F, +.5F, 1, 1);
-				GL.vertex(0, +.5F, +.5F, 1, 0);
-				GL.vertex(0, +.5F, -.5F, 0, 0);
+				GL.vertex(0, -.5F, -.5F, u0, v1);
+				GL.vertex(0, -.5F, +.5F, u1, v1);
+				GL.vertex(0, +.5F, +.5F, u1, v0);
+				GL.vertex(0, +.5F, -.5F, u0, v0);
 			}
 			if(te.getDirection() == EnumFacing.NORTH) {
 				GL.normal(0, 0, 1);
-				GL.vertex(+.5F, -.5F, 0, 0, 1);
-				GL.vertex(-.5F, -.5F, 0, 1, 1);
-				GL.vertex(-.5F, +.5F, 0, 1, 0);
-				GL.vertex(+.5F, +.5F, 0, 0, 0);
+				GL.vertex(+.5F, -.5F, 0, u0, v1);
+				GL.vertex(-.5F, -.5F, 0, u1, v1);
+				GL.vertex(-.5F, +.5F, 0, u1, v0);
+				GL.vertex(+.5F, +.5F, 0, u0, v0);
 			}
 			if(te.getDirection() == EnumFacing.EAST) {
 				GL.normal(-1, 0, 0);
-				GL.vertex(0, -.5F, +.5F, 0, 1);
-				GL.vertex(0, -.5F, -.5F, 1, 1);
-				GL.vertex(0, +.5F, -.5F, 1, 0);
-				GL.vertex(0, +.5F, +.5F, 0, 0);
+				GL.vertex(0, -.5F, +.5F, u0, v1);
+				GL.vertex(0, -.5F, -.5F, u1, v1);
+				GL.vertex(0, +.5F, -.5F, u1, v0);
+				GL.vertex(0, +.5F, +.5F, u0, v0);
 			}
 		}
 		GL.end();
@@ -111,7 +115,7 @@ public class RenderMagicGate extends TileEntitySpecialRenderer { //TODO this sti
 		
 		GL.color(1, 1, 1);
 		
-		GL.fbo.fullscreen.init();
+		GL.fbo.fullscreen.create();
 		{
 			GL.pushMatrix();
 			{
@@ -138,6 +142,7 @@ public class RenderMagicGate extends TileEntitySpecialRenderer { //TODO this sti
 					if(te.getDirection() == EnumFacing.EAST) ofx += d;
 					recursion = true;
 					GL.matrixMode(GL.MODELVIEW);
+					GL.disableLighting();
 					WorldRender.renderWorld(ptt, ofx, 0, ofz);
 					GL.matrixMode(GL.PROJECTION);
 					recursion = false;
@@ -147,14 +152,14 @@ public class RenderMagicGate extends TileEntitySpecialRenderer { //TODO this sti
 			}
 			GL.popMatrix();
 		}
-		GL.fbo.fullscreen.end();
-		
+		GL.fbo.fullscreen.finish();
 		GL.stencil.begin(MASK);
 		{
 			GL.stencil.clear();
 			GL.pushAttrib();
 			{
 				GL.disableTexture();
+				GL.depthMask(true);
 				drawField(te, x, y, z);
 			}
 			GL.popAttrib();
@@ -166,12 +171,8 @@ public class RenderMagicGate extends TileEntitySpecialRenderer { //TODO this sti
 			{
 				GL.disableBlend();
 				GL.disableAlpha();
-				GL.depthFunc(GL.ALWAYS);
-				GL.color(1, 1, 1);
+				GL.disableDepth();
 				GL.fbo.fullscreen.draw();
-				GL.disableTexture();
-				GL.colorMask(false, false, false, false);
-//				drawField(te, x, y, z); //Set depth to the correct amount
 			}
 			GL.popAttrib();
 		}

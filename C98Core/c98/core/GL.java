@@ -15,7 +15,7 @@ public class GL {
 		private static boolean creating;
 		
 		public static void clear() {
-			glClear(GL_STENCIL_BUFFER_BIT);
+			GL.clear(GL.STENCIL_BUFFER_BIT);
 		}
 		
 		public static void begin(int mask) {
@@ -23,8 +23,8 @@ public class GL {
 			creating = true;
 			glEnable(GL_STENCIL_TEST);
 			glStencilMask(msk);
-			glDepthMask(false);
-			glColorMask(false, false, false, false);
+			depthMask(false);
+			colorMask(false, false, false, false);
 			glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 			glStencilFunc(GL_ALWAYS, msk, msk);
 		}
@@ -32,8 +32,8 @@ public class GL {
 		public static void end() {
 			creating = false;
 			glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-			glColorMask(true, true, true, true);
-			glDepthMask(true);
+			colorMask(true, true, true, true);
+			depthMask(true);
 			glStencilMask(0);
 			glDisable(GL_STENCIL_TEST);
 		}
@@ -58,7 +58,7 @@ public class GL {
 		public static class fullscreen {
 			private static Framebuffer b;
 			
-			public static void init() {
+			public static void create() {
 				if(b == null || b.framebufferWidth != Display.getWidth() || b.framebufferHeight != Display.getHeight()) {
 					if(b != null) b.deleteFramebuffer();
 					b = new Framebuffer(Display.getWidth(), Display.getHeight(), true);
@@ -93,7 +93,7 @@ public class GL {
 				popMatrix();
 			}
 			
-			public static void end() {
+			public static void finish() {
 				Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
 			}
 		}
@@ -198,7 +198,7 @@ public class GL {
 	public static void resetColor() {GlStateManager.func_179117_G();}
 	
 	private static boolean drawing;
-	public static void begin() {begin(QUADS);}
+	public static void begin() {glBegin(QUADS);drawing=true;}
 	public static void begin(int type) {glBegin(type);drawing=true;}
 	public static void end() {glEnd();drawing=false;}
 	public static boolean isDrawing() {return drawing;}
@@ -224,5 +224,9 @@ public class GL {
 	public static void popAttrib() {
 		GLImpl.popAttrib();
 		glPopAttrib();
+	}
+	
+	public static void checkError(String s) {
+		Minecraft.getMinecraft().checkGLError(s);
 	}
 }

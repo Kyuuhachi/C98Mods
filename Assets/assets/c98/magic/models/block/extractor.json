@@ -1,6 +1,45 @@
 {
-	"parent": "block/cube_all",
+	"ambientocclusion": false,
 	"textures": {
-		"all": "blocks/dragon_egg"
-	}
+		"particle": "c98/magic:blocks/hopper_outside",
+		"top": "c98/magic:blocks/magic_still",
+		"side": "c98/magic:blocks/machine_side",
+		"pipe": "c98/magic:blocks/pipe"
+	},
+	"elements": [
+		{
+			"from": [4, 0, 4],
+			"to": [12, 2, 12],
+			"faces": {
+				"down":  {"texture": "#pipe"},
+				"north": {"texture": "#pipe"},
+				"south": {"texture": "#pipe"},
+				"west":  {"texture": "#pipe"},
+				"east":  {"texture": "#pipe"}
+			}
+		},
+		{
+			"from": [2, 2, 2],
+			"to": [14, 12, 14],
+			"faces": {
+				"down":  {"texture": "#bottom"},
+				"north": {"texture": "#side"},
+				"south": {"texture": "#side"},
+				"west":  {"texture": "#side"},
+				"east":  {"texture": "#side"}
+			}
+		},
+		{
+			"from": [0, 12, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"down":  {"texture": "#bottom"},
+				"up":    {"texture": "#top"},
+				"north": {"texture": "#side"},
+				"south": {"texture": "#side"},
+				"west":  {"texture": "#side"},
+				"east":  {"texture": "#side"}
+			}
+		}
+	]
 }

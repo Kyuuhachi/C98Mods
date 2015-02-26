@@ -37,7 +37,7 @@ public class BlockXpExtractor extends BlockContainer {
 			return entities;
 		}
 		
-		@Override public boolean canTake() {
+		@Override public boolean canTake(EnumFacing face) {
 			return !getEntities().isEmpty();
 		}
 		

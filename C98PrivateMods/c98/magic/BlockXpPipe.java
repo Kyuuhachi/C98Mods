@@ -29,13 +29,13 @@ public class BlockXpPipe extends BlockContainer {
 				return;
 			}
 			visited.add(this);
-			for(EnumFacing f:EnumFacing.values()) {
+			for(EnumFacing f : EnumFacing.values()) {
 				if(f == side) continue; //Don't turn straight back, that's silly
 				TileEntity te = worldObj.getTileEntity(pos.offset(f));
 				if(te instanceof XpPipe) ((XpPipe)te).getSources(sources, visited, f.getOpposite());
 				else if(te instanceof XpProvider) {
 					XpProvider p = (XpProvider)te;
-					if(p.canTake()) sources.add(p);
+					if(p.canTake(f.getOpposite())) sources.add(p);
 				}
 			}
 		}
@@ -58,7 +58,7 @@ public class BlockXpPipe extends BlockContainer {
 		
 		private int countConnections() {
 			int num = 0;
-			for(EnumFacing f:EnumFacing.values())
+			for(EnumFacing f : EnumFacing.values())
 				if(XpUtils.isConnected(worldObj, pos, f)) num++;
 			return num;
 		}

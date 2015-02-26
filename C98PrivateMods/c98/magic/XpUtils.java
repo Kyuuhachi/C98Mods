@@ -11,9 +11,9 @@ public class XpUtils {
 	public static boolean canTake(TileEntity te) {
 		Set<XpPipe> visited = new HashSet();
 		
-		for(EnumFacing f:EnumFacing.values()) {
+		for(EnumFacing f : EnumFacing.values()) {
 			TileEntity e = te.getWorld().getTileEntity(te.getPos().offset(f));
-			if(e instanceof XpProvider && ((XpProvider)e).canTake()) return true;
+			if(e instanceof XpProvider && ((XpProvider)e).canTake(f.getOpposite())) return true;
 			if(e instanceof XpPipe) {
 				Set<XpProvider> sources = new HashSet();
 				((XpPipe)e).getSources(sources, visited, f.getOpposite());
@@ -26,9 +26,9 @@ public class XpUtils {
 	public static void take(TileEntity te) {
 		Set<XpProvider> sources = new HashSet();
 		Set<XpPipe> visited = new HashSet();
-		for(EnumFacing f:EnumFacing.values()) {
+		for(EnumFacing f : EnumFacing.values()) {
 			TileEntity e = te.getWorld().getTileEntity(te.getPos().offset(f));
-			if(e instanceof XpProvider && ((XpProvider)e).canTake()) sources.add((XpProvider)e);
+			if(e instanceof XpProvider && ((XpProvider)e).canTake(f.getOpposite())) sources.add((XpProvider)e);
 			if(e instanceof XpPipe) ((XpPipe)e).getSources(sources, visited, f.getOpposite());
 		}
 		XpProvider p = new ArrayList<XpProvider>(sources).get(te.getWorld().rand.nextInt(sources.size()));

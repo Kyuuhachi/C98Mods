@@ -1,39 +1,32 @@
 package c98.core;
 
-import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import c98.core.impl.ModelImpl;
 
 public class Models {
+	public static final ItemMeshDefinition DEFAULT_ITEM = is -> new ModelResourceLocation((ResourceLocation)Item.itemRegistry.getNameForObject(is.getItem()), "inventory");
+	public static final IStateMapper DEFAULT_BLOCK = new StateMap.Builder().build();
+	
 	public static void registerBlockModel(Block b, IStateMapper block) {
-		ModelImpl.ModelEntry e = new ModelImpl.ModelEntry();
-		e.blockModels = block;
-		ModelImpl.map.put(Item.getItemFromBlock(b), e);
+		ModelImpl.blockModels.put(b, block);
 	}
 	
-	public static void registerBlockModel(Block b, ItemMeshDefinition item, IStateMapper block) {
-		registerItemModel(Item.getItemFromBlock(b), item, block);
+	public static void registerBlockModel(Block b) {
+		registerBlockModel(b, DEFAULT_BLOCK);
 	}
 	
-	public static void registerItemModel(Item i, ItemMeshDefinition item, IStateMapper block) {
-		ModelImpl.ModelEntry e = new ModelImpl.ModelEntry();
-		e.itemModels = item;
-		e.blockModels = block;
-		ModelImpl.map.put(i, e);
+	public static void registerItemModel(Item i, ItemMeshDefinition item) {
+		ModelImpl.itemModels.put(i, item);
 	}
 	
-	public static void registerBlockModel(Block b, Map<Integer, String> item, IStateMapper block) {
-		registerItemModel(Item.getItemFromBlock(b), item, block);
-	}
-	
-	public static void registerItemModel(Item i, Map<Integer, String> item, IStateMapper block) {
-		ModelImpl.ModelEntry e = new ModelImpl.ModelEntry();
-		e.meta = item;
-		e.blockModels = block;
-		ModelImpl.map.put(i, e);
+	public static void registerItemModel(Item i) {
+		registerItemModel(i, DEFAULT_ITEM);
 	}
 	
 }

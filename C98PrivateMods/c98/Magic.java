@@ -1,7 +1,6 @@
 package c98;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -24,10 +23,10 @@ public class Magic extends C98Mod implements EntitySpawnHook {
 		C98Core.registerBlock(pipe, 221, "c98/magic:pipe");
 		C98Core.registerBlock(gate, 222, "c98/magic:magic_gate");
 		C98Core.registerBlock(cell, 223, "c98/magic:cell");
-		Models.registerBlockModel(extractor, null);
-		Models.registerBlockModel(pipe, new StateMap.Builder().build());
-		Models.registerBlockModel(gate, new StateMap.Builder().build());
-		Models.registerBlockModel(cell, new StateMap.Builder().build());
+		Models.registerBlockModel(extractor);
+		Models.registerBlockModel(pipe);
+		Models.registerBlockModel(gate);
+		Models.registerBlockModel(cell);
 	}
 	
 	@Override public void load() {

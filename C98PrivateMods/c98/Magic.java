@@ -19,7 +19,7 @@ public class Magic extends C98Mod implements EntitySpawnHook {
 	public static Block xpCollector = new BlockXpCollector().setCreativeTab(CreativeTabs.tabRedstone);
 	public static Block xpPipe = new BlockXpPipe().setCreativeTab(CreativeTabs.tabRedstone);
 	public static Block magicGate = new BlockMagicGate().setCreativeTab(CreativeTabs.tabRedstone);
-	public static Block xpCell = new BlockXpCell().setCreativeTab(CreativeTabs.tabRedstone);
+	public static Block xpTank = new BlockXpTank().setCreativeTab(CreativeTabs.tabRedstone);
 	public static Block itemPipe = new BlockItemPipe().setCreativeTab(CreativeTabs.tabRedstone);
 	public static Block itemExtractor = new BlockItemExtractor().setCreativeTab(CreativeTabs.tabRedstone);
 	public static Block itemInserter = new BlockItemInserter().setCreativeTab(CreativeTabs.tabRedstone);
@@ -28,14 +28,14 @@ public class Magic extends C98Mod implements EntitySpawnHook {
 		C98Core.registerBlock(xpCollector, 220, "c98/magic:xp_collector");
 		C98Core.registerBlock(xpPipe, 221, "c98/magic:xp_pipe");
 		C98Core.registerBlock(magicGate, 222, "c98/magic:magic_gate");
-		C98Core.registerBlock(xpCell, 223, "c98/magic:xp_cell");
+		C98Core.registerBlock(xpTank, 223, "c98/magic:xp_tank");
 		C98Core.registerBlock(itemPipe, 224, "c98/magic:item_pipe");
 		C98Core.registerBlock(itemExtractor, 225, "c98/magic:item_extractor");
 		C98Core.registerBlock(itemInserter, 226, "c98/magic:item_inserter");
 		Models.registerBlockModel(xpCollector);
 		Models.registerBlockModel(xpPipe);
 		Models.registerBlockModel(magicGate);
-		Models.registerBlockModel(xpCell);
+		Models.registerBlockModel(xpTank);
 		Models.registerBlockModel(itemPipe);
 		Models.registerBlockModel(itemExtractor);
 		Models.registerBlockModel(itemInserter);
@@ -45,7 +45,7 @@ public class Magic extends C98Mod implements EntitySpawnHook {
 		TileEntity.addMapping(BlockXpCollector.TE.class, "XpCollector");
 		TileEntity.addMapping(BlockXpPipe.TE.class, "XpPipe");
 		TileEntity.addMapping(BlockMagicGate.TE.class, "MagicGate");
-		TileEntity.addMapping(BlockXpCell.TE.class, "XpCell");
+		TileEntity.addMapping(BlockXpTank.TE.class, "XpCell");
 		TileEntity.addMapping(BlockItemPipe.TE.class, "ItemPipe");
 		TileEntity.addMapping(BlockItemExtractor.TE.class, "ItemExtractor");
 		TileEntity.addMapping(BlockItemInserter.TE.class, "ItemInserter");

@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class BlockXpCell extends BlockContainer {
+public class BlockXpTank extends BlockContainer {
 	public static final int MAX = 16;
 	
 	public static class TE extends TileEntity implements IUpdatePlayerListBox, IXpSource, IXpConnection {
@@ -64,7 +64,7 @@ public class BlockXpCell extends BlockContainer {
 	public static final int MAX_CHARGE = 7;
 	public static final PropertyInteger CHARGE = PropertyInteger.create("charge", 0, MAX_CHARGE);
 	
-	public BlockXpCell() {
+	public BlockXpTank() {
 		super(Material.circuits);
 	}
 	

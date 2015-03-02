@@ -1,14 +1,14 @@
 package c98.magic.item;
 
 import java.util.function.Predicate;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import c98.magic.BlockPipe;
 
-public class BlockItemPipe extends BlockContainer {
+public class BlockItemPipe extends BlockPipe {
 	public static class TE extends TileEntity implements IItemPipe, IItemConnection {
 		@Override public Predicate<ItemStack> getFilter() {
 			return null;

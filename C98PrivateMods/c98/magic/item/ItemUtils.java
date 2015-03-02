@@ -9,36 +9,39 @@ import net.minecraft.util.EnumFacing;
 
 public class ItemUtils {
 	
-	public static List<ItemSlot> getItems(TileEntity te) {
+	public static List<ItemSlot> getItems(IItemConnection te) {
 		assert te instanceof IItemConnection;
-		Set<TileEntity> visited = new HashSet();
+		Set<IItemConnection> visited = new HashSet();
 		List<ItemSlot> slots = new LinkedList();
-		List<TileEntity> toVisit = new LinkedList();
+		List<IItemConnection> toVisit = new LinkedList();
 		visited.add(te);
 		toVisit.add(te);
 		bfs(te, visited, slots, toVisit, is -> is != null);
 		return slots;
 	}
 	
-	private static void bfs(TileEntity te, Set<TileEntity> visited, List<ItemSlot> slots, List<TileEntity> toVisit, Predicate<ItemStack> filter) {
+	private static void bfs(IItemConnection te, Set<IItemConnection> visited, List<ItemSlot> slots, List<IItemConnection> toVisit, Predicate<ItemStack> filter) {
 		while(!toVisit.isEmpty()) {
-			TileEntity c = toVisit.remove(0);
+			IItemConnection c = toVisit.remove(0);
 			for(EnumFacing f : EnumFacing.values())
-				if(((IItemConnection)c).canConnect(f)) {
+				if(c.canConnect(f)) {
 					TileEntity t = te.getWorld().getTileEntity(c.getPos().offset(f));
-					if(t instanceof IItemConnection && ((IItemConnection)t).canConnect(f.getOpposite()) && !visited.contains(t)) {
-						visited.add(t);
-						if(t instanceof IItemPipe) {
-							Predicate<ItemStack> filter2 = ((IItemPipe)t).getFilter();
-							if(filter2 == null) toVisit.add(t);
-							else bfs(t, visited, slots, new LinkedList(), filter.and(filter2));
-						}
-						if(t instanceof IItemSource) {
-							IInventory inv = ((IItemSource)t).getStacks(f);
-							if(inv == null) continue;
-							for(int i = 0; i < inv.getSizeInventory(); i++) {
-								ItemStack is = inv.getStackInSlot(i);
-								if(filter.test(is)) slots.add(new ItemSlot(inv, i)); //TODO some slots doesn't like being taken from
+					if(t instanceof IItemConnection) {
+						IItemConnection c2 = (IItemConnection)t;
+						if(c2.canConnect(f.getOpposite()) && !visited.contains(c2)) {
+							visited.add(c2);
+							if(c2 instanceof IItemPipe) {
+								Predicate<ItemStack> filter2 = ((IItemPipe)c2).getFilter();
+								if(filter2 == null) toVisit.add(c2);
+								else bfs(c2, visited, slots, new LinkedList(), filter.and(filter2));
+							}
+							if(c2 instanceof IItemSource) {
+								IInventory inv = ((IItemSource)c2).getStacks(f);
+								if(inv == null) continue;
+								for(int i = 0; i < inv.getSizeInventory(); i++) {
+									ItemStack is = inv.getStackInSlot(i);
+									if(filter.test(is)) slots.add(new ItemSlot(inv, i)); //TODO some slots doesn't like being taken from
+								}
 							}
 						}
 					}

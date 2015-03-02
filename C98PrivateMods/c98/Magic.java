@@ -13,24 +13,24 @@ import c98.core.hooks.EntitySpawnHook;
 import c98.magic.*;
 
 public class Magic extends C98Mod implements EntitySpawnHook {
-	public static Block extractor = new BlockXpExtractor().setCreativeTab(CreativeTabs.tabRedstone);
+	public static Block collector = new BlockXpCollector().setCreativeTab(CreativeTabs.tabRedstone);
 	public static Block pipe = new BlockXpPipe().setCreativeTab(CreativeTabs.tabRedstone);
 	public static Block gate = new BlockMagicGate().setCreativeTab(CreativeTabs.tabRedstone);
 	public static Block cell = new BlockXpCell().setCreativeTab(CreativeTabs.tabRedstone);
 	
 	@Override public void preinit() {
-		C98Core.registerBlock(extractor, 220, "c98/magic:extractor");
+		C98Core.registerBlock(collector, 220, "c98/magic:collector");
 		C98Core.registerBlock(pipe, 221, "c98/magic:pipe");
 		C98Core.registerBlock(gate, 222, "c98/magic:magic_gate");
 		C98Core.registerBlock(cell, 223, "c98/magic:cell");
-		Models.registerBlockModel(extractor);
+		Models.registerBlockModel(collector);
 		Models.registerBlockModel(pipe);
 		Models.registerBlockModel(gate);
 		Models.registerBlockModel(cell);
 	}
 	
 	@Override public void load() {
-		TileEntity.addMapping(BlockXpExtractor.TE.class, "XpConverter");
+		TileEntity.addMapping(BlockXpCollector.TE.class, "XpCollector");
 		TileEntity.addMapping(BlockXpPipe.TE.class, "XpPipe");
 		TileEntity.addMapping(BlockMagicGate.TE.class, "MagicGate");
 		TileEntity.addMapping(BlockXpCell.TE.class, "XpCell");

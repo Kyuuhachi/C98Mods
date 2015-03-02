@@ -11,7 +11,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class BlockXpExtractor extends BlockContainer {
+public class BlockXpCollector extends BlockContainer {
 	public static class TE extends TileEntity implements XpProvider, XpConnection {
 		private static Comparator<Entity> comp = new Comparator<Entity>() {
 			@Override public int compare(Entity o1, Entity o2) {
@@ -66,7 +66,7 @@ public class BlockXpExtractor extends BlockContainer {
 		}
 	}
 	
-	public BlockXpExtractor() {
+	public BlockXpCollector() {
 		super(Material.circuits);
 	}
 	

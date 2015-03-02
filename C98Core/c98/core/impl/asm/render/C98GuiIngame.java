@@ -27,9 +27,7 @@ import c98.core.launch.*;
 			new ClassReader(getClass().getName() + "$FieldName").accept(clz, 0);
 			for(AbstractInsnNode n : new Asm(clz.methods.get(0)))
 				if(n instanceof FieldInsnNode) showDebug = (FieldInsnNode)n;
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
+		} catch(IOException e) {}
 		
 		for(MethodNode method : node.methods)
 			for(AbstractInsnNode insn : new Asm(method))

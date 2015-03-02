@@ -30,7 +30,7 @@ public class C98Log {
 		log.log(Level.SEVERE, s, e);
 	}
 	
-	public static void error(Throwable e) { //TODO make stuff use this instead of printStackTrace
+	public static void error(Throwable e) {
 		error("Misc error", e);
 	}
 	

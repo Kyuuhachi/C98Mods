@@ -16,14 +16,14 @@ public class BlockXpCell extends BlockContainer {
 	public static final int MAX = 16;
 	
 	public static class TE extends TileEntity implements IUpdatePlayerListBox, IXpSource, IXpConnection {
-		private int stored;
+		private int charge;
 		
 		@Override public boolean canTake(EnumFacing face) {
-			return face != EnumFacing.UP && stored > 0; //It takes from the top, it can't send there.
+			return face != EnumFacing.UP && charge > 0; //It takes from the top, it can't send there.
 		}
 		
 		@Override public void take() {
-			stored--;
+			charge--;
 			updateState();
 		}
 		
@@ -32,33 +32,34 @@ public class BlockXpCell extends BlockContainer {
 		}
 		
 		@Override public void update() {
-			if(stored < MAX - 1 && XpUtils.canTake(this)) {
+			if(charge < MAX - 1 && XpUtils.canTake(this)) { //TODO make it only take from the top
 				XpUtils.take(this);
-				stored++;
+				charge++;
 				updateState();
 			}
 		}
 		
 		private void updateState() {
 			IBlockState s = worldObj.getBlockState(pos);
-			int oldVal = (int)s.getValue(STORED);
-			int newVal = stored * 16 / MAX;
-			if(newVal >= 16) newVal = 15;
-			if(oldVal != newVal) worldObj.setBlockState(pos, s.withProperty(STORED, newVal));
+			int oldVal = (int)s.getValue(CHARGE);
+			int newVal = charge * 16 / MAX;
+			if(newVal > MAX_CHARGE) newVal = MAX_CHARGE;
+			if(oldVal != newVal) worldObj.setBlockState(pos, s.withProperty(CHARGE, newVal));
 		}
 		
 		@Override public void writeToNBT(NBTTagCompound compound) {
 			super.writeToNBT(compound);
-			compound.setInteger("stored", stored);
+			compound.setInteger("charge", charge);
 		}
 		
 		@Override public void readFromNBT(NBTTagCompound compound) {
 			super.readFromNBT(compound);
-			stored = compound.getInteger("stored");
+			charge = compound.getInteger("charge");
 		}
 	}
 	
-	public static final PropertyInteger STORED = PropertyInteger.create("stored", 0, 15);
+	public static final int MAX_CHARGE = 7;
+	public static final PropertyInteger CHARGE = PropertyInteger.create("charge", 0, MAX_CHARGE);
 	
 	public BlockXpCell() {
 		super(Material.circuits);
@@ -73,15 +74,15 @@ public class BlockXpCell extends BlockContainer {
 	}
 	
 	@Override protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] {STORED});
+		return new BlockState(this, new IProperty[] {CHARGE});
 	}
 	
 	@Override public int getMetaFromState(IBlockState state) {
-		return (int)state.getValue(STORED);
+		return (int)state.getValue(CHARGE);
 	}
 	
 	@Override public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(STORED, meta);
+		return getDefaultState().withProperty(CHARGE, meta);
 	}
 	
 }

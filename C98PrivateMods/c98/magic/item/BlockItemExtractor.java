@@ -13,7 +13,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class BlockItemIn extends BlockContainer {
+public class BlockItemExtractor extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 	
 	public static class TE extends TileEntity implements IItemSource, IItemConnection {
@@ -28,7 +28,7 @@ public class BlockItemIn extends BlockContainer {
 		}
 	}
 	
-	public BlockItemIn() {
+	public BlockItemExtractor() {
 		super(Material.circuits);
 	}
 	

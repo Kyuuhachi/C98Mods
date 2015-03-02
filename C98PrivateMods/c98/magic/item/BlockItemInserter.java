@@ -15,7 +15,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class BlockItemOut extends BlockContainer {
+public class BlockItemInserter extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 	
 	public static class TE extends TileEntity implements IItemConnection, IUpdatePlayerListBox {
@@ -33,7 +33,7 @@ public class BlockItemOut extends BlockContainer {
 		}
 	}
 	
-	public BlockItemOut() {
+	public BlockItemInserter() {
 		super(Material.circuits);
 	}
 	

@@ -1,4 +1,4 @@
-package c98.magic.util;
+package c98.magic;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EffectRenderer;

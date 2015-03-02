@@ -1,4 +1,4 @@
-package c98.magic;
+package c98.magic.xp;
 
 import java.util.*;
 import net.minecraft.block.BlockContainer;
@@ -12,7 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class BlockXpCollector extends BlockContainer {
-	public static class TE extends TileEntity implements XpProvider, XpConnection {
+	public static class TE extends TileEntity implements IXpSource, IXpConnection {
 		private static Comparator<Entity> comp = new Comparator<Entity>() {
 			@Override public int compare(Entity o1, Entity o2) {
 				boolean b1 = o1 instanceof EntityXPOrb;

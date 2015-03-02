@@ -1,7 +1,7 @@
-package c98.magic;
+package c98.magic.item;
 
 import net.minecraft.util.EnumFacing;
 
-public interface XpConnection {
+public interface IItemConnection {
 	boolean canConnect(EnumFacing f);
 }

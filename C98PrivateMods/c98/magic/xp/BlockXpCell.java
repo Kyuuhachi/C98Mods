@@ -1,4 +1,4 @@
-package c98.magic;
+package c98.magic.xp;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 public class BlockXpCell extends BlockContainer {
 	public static final int MAX = 16;
 	
-	public static class TE extends TileEntity implements IUpdatePlayerListBox, XpProvider, XpConnection {
+	public static class TE extends TileEntity implements IUpdatePlayerListBox, IXpSource, IXpConnection {
 		private int stored;
 		
 		@Override public boolean canTake(EnumFacing face) {

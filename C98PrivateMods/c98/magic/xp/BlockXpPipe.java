@@ -1,4 +1,4 @@
-package c98.magic;
+package c98.magic.xp;
 
 import java.util.List;
 import java.util.Set;
@@ -17,12 +17,19 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockXpPipe extends BlockContainer {
+	private static final float inset = 0.25F;
+	public static final PropertyBool DOWN = PropertyBool.create("down");
+	public static final PropertyBool UP = PropertyBool.create("up");
+	public static final PropertyBool NORTH = PropertyBool.create("north");
+	public static final PropertyBool SOUTH = PropertyBool.create("south");
+	public static final PropertyBool WEST = PropertyBool.create("west");
+	public static final PropertyBool EAST = PropertyBool.create("east");
 	
-	public static class TE extends TileEntity implements IUpdatePlayerListBox, XpPipe, XpConnection {
+	public static class TE extends TileEntity implements IUpdatePlayerListBox, IXpPipe, IXpConnection {
 		static boolean leaking;
 		private boolean shouldLeak;
 		
-		@Override public void getSources(Set<XpProvider> sources, Set<XpPipe> visited, EnumFacing side) {
+		@Override public void getSources(Set<IXpSource> sources, Set<IXpPipe> visited, EnumFacing side) {
 			if(worldObj == null) return;
 			if(visited.contains(this)) {
 				if(!leaking) shouldLeak = true;
@@ -32,9 +39,9 @@ public class BlockXpPipe extends BlockContainer {
 			for(EnumFacing f : EnumFacing.values()) {
 				if(f == side) continue; //Don't turn straight back, that's silly
 				TileEntity te = worldObj.getTileEntity(pos.offset(f));
-				if(te instanceof XpPipe) ((XpPipe)te).getSources(sources, visited, f.getOpposite());
-				else if(te instanceof XpProvider) {
-					XpProvider p = (XpProvider)te;
+				if(te instanceof IXpPipe) ((IXpPipe)te).getSources(sources, visited, f.getOpposite());
+				else if(te instanceof IXpSource) {
+					IXpSource p = (IXpSource)te;
 					if(p.canTake(f.getOpposite())) sources.add(p);
 				}
 			}
@@ -63,14 +70,6 @@ public class BlockXpPipe extends BlockContainer {
 			return num;
 		}
 	}
-	
-	public static final float inset = 0.25F;
-	public static final PropertyBool DOWN = PropertyBool.create("down");
-	public static final PropertyBool UP = PropertyBool.create("up");
-	public static final PropertyBool NORTH = PropertyBool.create("north");
-	public static final PropertyBool SOUTH = PropertyBool.create("south");
-	public static final PropertyBool WEST = PropertyBool.create("west");
-	public static final PropertyBool EAST = PropertyBool.create("east");
 	
 	public BlockXpPipe() {
 		super(Material.circuits);

@@ -1,8 +1,8 @@
-package c98.magic;
+package c98.magic.xp;
 
 import net.minecraft.util.EnumFacing;
 
-public interface XpProvider {
+public interface IXpSource {
 	boolean canTake(EnumFacing f);
 	
 	void take();

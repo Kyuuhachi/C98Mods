@@ -11,7 +11,6 @@ import org.lwjgl.BufferUtils;
 import c98.core.GL;
 import c98.core.util.Matrix;
 import c98.core.util.Vector;
-import c98.magic.util.WorldRender;
 
 public class RenderMagicGate extends TileEntitySpecialRenderer {
 	private static final float WIDTH = 6 / 16F;

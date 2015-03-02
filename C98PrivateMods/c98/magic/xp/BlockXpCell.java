@@ -42,7 +42,10 @@ public class BlockXpCell extends BlockContainer {
 		private void updateState() {
 			IBlockState s = worldObj.getBlockState(pos);
 			int oldVal = (int)s.getValue(CHARGE);
-			int newVal = charge * 16 / MAX;
+			int newVal;
+			if(charge == 0) newVal = 0;
+			else if(charge == MAX - 1) newVal = MAX_CHARGE;
+			else newVal = (charge - 1) * (MAX_CHARGE - 2) / (MAX - 2);
 			if(newVal > MAX_CHARGE) newVal = MAX_CHARGE;
 			if(oldVal != newVal) worldObj.setBlockState(pos, s.withProperty(CHARGE, newVal));
 		}

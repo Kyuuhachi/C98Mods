@@ -22,6 +22,7 @@ public class BlockXpCollector extends BlockContainer {
 		};
 		
 		private List<Entity> getEntities() {
+			if(!hasWorldObj()) return new ArrayList();
 			List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.fromBounds(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1));
 			ListIterator<Entity> it = entities.listIterator();
 			while(it.hasNext()) {

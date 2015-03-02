@@ -2,8 +2,7 @@ package c98.magic.xp;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.properties.*;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,7 +46,7 @@ public class BlockXpTank extends BlockContainer {
 			else if(charge == MAX - 1) newVal = MAX_CHARGE;
 			else newVal = (charge - 1) * (MAX_CHARGE - 2) / (MAX - 2);
 			if(newVal > MAX_CHARGE) newVal = MAX_CHARGE;
-			if(oldVal != newVal) worldObj.setBlockState(pos, s.withProperty(CHARGE, newVal));
+			if(oldVal != newVal) worldObj.setBlockState(pos, s.withProperty(CHARGE, newVal).withProperty(ACTIVE, Math.random() < 0.5F));
 		}
 		
 		@Override public void writeToNBT(NBTTagCompound compound) {
@@ -63,6 +62,7 @@ public class BlockXpTank extends BlockContainer {
 	
 	public static final int MAX_CHARGE = 7;
 	public static final PropertyInteger CHARGE = PropertyInteger.create("charge", 0, MAX_CHARGE);
+	public static final PropertyBool ACTIVE = PropertyBool.create("active");
 	
 	public BlockXpTank() {
 		super(Material.circuits);
@@ -77,15 +77,15 @@ public class BlockXpTank extends BlockContainer {
 	}
 	
 	@Override protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] {CHARGE});
+		return new BlockState(this, new IProperty[] {CHARGE, ACTIVE});
 	}
 	
 	@Override public int getMetaFromState(IBlockState state) {
-		return (int)state.getValue(CHARGE);
+		return (int)state.getValue(CHARGE) | ((boolean)state.getValue(ACTIVE) ? 8 : 0);
 	}
 	
 	@Override public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(CHARGE, meta);
+		return getDefaultState().withProperty(CHARGE, meta & 7).withProperty(ACTIVE, (meta & 8) != 0);
 	}
 	
 }

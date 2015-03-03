@@ -1,6 +1,7 @@
 package c98.graphicalUpgrade;
 
 import net.minecraft.block.BlockFence;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiEditSign;
@@ -28,8 +29,8 @@ public class TileEntityRoadSignRenderer extends TileEntitySignRenderer {
 		if(b) super.renderTileEntityAt(sign, x, y, z, delta, breakage);
 		else {
 			EnumFacing facing = EnumFacing.getFront(sign.getBlockMetadata());
-			
-			if(sign.getWorld().getBlockState(sign.getPos().offset(facing, -1)).getBlock() instanceof BlockFence) {
+			IBlockState state = sign.getWorld().getBlockState(sign.getPos().offset(facing.getOpposite()));
+			if(state != null && state.getBlock() instanceof BlockFence) {
 				modelSign.signStick.showModel = false;
 				
 				float rot = 0;

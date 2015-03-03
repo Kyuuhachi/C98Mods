@@ -1,5 +1,5 @@
 {
-	"parent": "c98/magic:pipe/n",
+	"parent": "c98/magic:block/xp_pipe/n",
 	"display": {
 		"thirdperson": {
 			"rotation": [-90, 0, 0],

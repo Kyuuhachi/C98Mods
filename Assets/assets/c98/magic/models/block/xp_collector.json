@@ -1,7 +1,7 @@
 {
 	"ambientocclusion": false,
 	"textures": {
-		"particle": "c98/magic:blocks/hopper_outside",
+		"particle": "blocks/hopper_outside",
 		"top": "c98/magic:blocks/magic_still",
 		"side": "c98/magic:blocks/machine_side",
 		"pipe": "c98/magic:blocks/pipe"

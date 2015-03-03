@@ -1,5 +1,5 @@
 {
-	"parent": "c98/magic:collector",
+	"parent": "c98/magic:block/xp_collector",
 	"display": {
 		"thirdperson": {
 			"rotation": [10, -45, 170],

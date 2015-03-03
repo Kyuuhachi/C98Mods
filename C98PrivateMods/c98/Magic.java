@@ -32,13 +32,13 @@ public class Magic extends C98Mod implements EntitySpawnHook {
 		C98Core.registerBlock(itemPipe, 224, "c98/magic:item_pipe");
 		C98Core.registerBlock(itemExtractor, 225, "c98/magic:item_extractor");
 		C98Core.registerBlock(itemInserter, 226, "c98/magic:item_inserter");
-		Models.registerBlockModel(xpCollector);
-		Models.registerBlockModel(xpPipe);
+		Models.registerModel(xpCollector);
+		Models.registerModel(xpPipe);
 		Models.registerBlockModel(magicGate);
-		Models.registerBlockModel(xpTank);
-		Models.registerBlockModel(itemPipe);
-		Models.registerBlockModel(itemExtractor);
-		Models.registerBlockModel(itemInserter);
+		Models.registerModel(xpTank);
+		Models.registerModel(itemPipe);
+		Models.registerModel(itemExtractor);
+		Models.registerModel(itemInserter);
 	}
 	
 	@Override public void load() {

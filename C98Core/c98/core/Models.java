@@ -29,4 +29,9 @@ public class Models {
 		registerItemModel(i, DEFAULT_ITEM);
 	}
 	
+	public static void registerModel(Block b) {
+		registerBlockModel(b);
+		registerItemModel(Item.getItemFromBlock(b));
+	}
+	
 }

@@ -11,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import c98.magic.xp.XpUtils;
 
 public abstract class BlockPipe extends BlockContainer {
 	
@@ -28,14 +27,16 @@ public abstract class BlockPipe extends BlockContainer {
 	}
 	
 	@Override public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		if(XpUtils.isConnected(worldIn, pos, EnumFacing.DOWN)) state = state.withProperty(DOWN, true);
-		if(XpUtils.isConnected(worldIn, pos, EnumFacing.UP)) state = state.withProperty(UP, true);
-		if(XpUtils.isConnected(worldIn, pos, EnumFacing.NORTH)) state = state.withProperty(NORTH, true);
-		if(XpUtils.isConnected(worldIn, pos, EnumFacing.SOUTH)) state = state.withProperty(SOUTH, true);
-		if(XpUtils.isConnected(worldIn, pos, EnumFacing.WEST)) state = state.withProperty(WEST, true);
-		if(XpUtils.isConnected(worldIn, pos, EnumFacing.EAST)) state = state.withProperty(EAST, true);
+		if(isConnected(worldIn, pos, EnumFacing.DOWN)) state = state.withProperty(DOWN, true);
+		if(isConnected(worldIn, pos, EnumFacing.UP)) state = state.withProperty(UP, true);
+		if(isConnected(worldIn, pos, EnumFacing.NORTH)) state = state.withProperty(NORTH, true);
+		if(isConnected(worldIn, pos, EnumFacing.SOUTH)) state = state.withProperty(SOUTH, true);
+		if(isConnected(worldIn, pos, EnumFacing.WEST)) state = state.withProperty(WEST, true);
+		if(isConnected(worldIn, pos, EnumFacing.EAST)) state = state.withProperty(EAST, true);
 		return state;
 	}
+	
+	public abstract boolean isConnected(IBlockAccess worldIn, BlockPos pos, EnumFacing facing);
 	
 	@Override protected BlockState createBlockState() {
 		return new BlockState(this, new IProperty[] {DOWN, UP, NORTH, SOUTH, WEST, EAST});
@@ -58,39 +59,39 @@ public abstract class BlockPipe extends BlockContainer {
 	}
 	
 	@Override public void setBlockBoundsBasedOnState(IBlockAccess w, BlockPos pos) {
-		float miny = XpUtils.isConnected(w, pos, EnumFacing.DOWN) ? 0 : inset;
-		float maxy = XpUtils.isConnected(w, pos, EnumFacing.UP) ? 1 : 1 - inset;
-		float minz = XpUtils.isConnected(w, pos, EnumFacing.NORTH) ? 0 : inset;
-		float maxz = XpUtils.isConnected(w, pos, EnumFacing.SOUTH) ? 1 : 1 - inset;
-		float minx = XpUtils.isConnected(w, pos, EnumFacing.WEST) ? 0 : inset;
-		float maxx = XpUtils.isConnected(w, pos, EnumFacing.EAST) ? 1 : 1 - inset;
+		float miny = isConnected(w, pos, EnumFacing.DOWN) ? 0 : inset;
+		float maxy = isConnected(w, pos, EnumFacing.UP) ? 1 : 1 - inset;
+		float minz = isConnected(w, pos, EnumFacing.NORTH) ? 0 : inset;
+		float maxz = isConnected(w, pos, EnumFacing.SOUTH) ? 1 : 1 - inset;
+		float minx = isConnected(w, pos, EnumFacing.WEST) ? 0 : inset;
+		float maxx = isConnected(w, pos, EnumFacing.EAST) ? 1 : 1 - inset;
 		setBlockBounds(minx, miny, minz, maxx, maxy, maxz);
 	}
 	
 	@Override public void addCollisionBoxesToList(World w, BlockPos pos, IBlockState state, AxisAlignedBB box, List list, Entity e) {
 		setBlockBounds(inset, inset, inset, 1 - inset, 1 - inset, 1 - inset);
 		super.addCollisionBoxesToList(w, pos, state, box, list, e);
-		if(XpUtils.isConnected(w, pos, EnumFacing.DOWN)) {
+		if(isConnected(w, pos, EnumFacing.DOWN)) {
 			setBlockBounds(inset, 0.0F, inset, 1 - inset, inset, 1 - inset);
 			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(XpUtils.isConnected(w, pos, EnumFacing.UP)) {
+		if(isConnected(w, pos, EnumFacing.UP)) {
 			setBlockBounds(inset, 1 - inset, inset, 1 - inset, 1, 1 - inset);
 			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(XpUtils.isConnected(w, pos, EnumFacing.NORTH)) {
+		if(isConnected(w, pos, EnumFacing.NORTH)) {
 			setBlockBounds(inset, inset, 0, 1 - inset, 1 - inset, inset);
 			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(XpUtils.isConnected(w, pos, EnumFacing.SOUTH)) {
+		if(isConnected(w, pos, EnumFacing.SOUTH)) {
 			setBlockBounds(inset, inset, 1 - inset, 1 - inset, 1 - inset, 1);
 			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(XpUtils.isConnected(w, pos, EnumFacing.WEST)) {
+		if(isConnected(w, pos, EnumFacing.WEST)) {
 			setBlockBounds(0, inset, inset, inset, 1 - inset, 1 - inset);
 			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(XpUtils.isConnected(w, pos, EnumFacing.EAST)) {
+		if(isConnected(w, pos, EnumFacing.EAST)) {
 			setBlockBounds(1 - inset, inset, inset, 1, 1 - inset, 1 - inset);
 			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}

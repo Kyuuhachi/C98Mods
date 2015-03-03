@@ -92,7 +92,7 @@ public class C98Tweaker implements ITweaker {
 							}
 						}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 					} catch(Throwable e) {
-						C98Log.error(e);
+						C98Log.error("Loading class " + name, e);
 					}
 				}
 			});

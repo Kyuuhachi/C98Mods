@@ -5,7 +5,9 @@ import java.util.function.Predicate;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 
 public class ItemUtils {
 	
@@ -48,4 +50,13 @@ public class ItemUtils {
 				}
 		}
 	}
+	
+	public static boolean isConnected(IBlockAccess w, BlockPos pos, EnumFacing dir) {
+		TileEntity ths = w.getTileEntity(pos);
+		if(ths instanceof IItemConnection && !((IItemConnection)ths).canConnect(dir)) return false;
+		TileEntity e = w.getTileEntity(pos.offset(dir));
+		if(e instanceof IItemConnection && ((IItemConnection)e).canConnect(dir.getOpposite())) return true;
+		return false;
+	}
+	
 }

@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.World;
 
 public class BlockXpTank extends BlockContainer {
@@ -70,6 +71,10 @@ public class BlockXpTank extends BlockContainer {
 	
 	@Override public int getRenderType() {
 		return 3;
+	}
+	
+	@Override public EnumWorldBlockLayer getBlockLayer() {
+		return EnumWorldBlockLayer.CUTOUT;
 	}
 	
 	@Override public TileEntity createNewTileEntity(World w, int meta) {

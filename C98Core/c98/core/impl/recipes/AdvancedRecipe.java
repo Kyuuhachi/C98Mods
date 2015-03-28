@@ -77,7 +77,7 @@ public class AdvancedRecipe implements IRecipe {
 		return recipeWidth * recipeHeight;
 	}
 	
-	@Override public ItemStack[] func_179532_b(InventoryCrafting inv) { //TODO let recipes choose that themselves
+	@Override public ItemStack[] func_179532_b(InventoryCrafting inv) { //result items left in slots //TODO let recipes choose that themselves
 		ItemStack[] result = new ItemStack[inv.getSizeInventory()];
 		
 		for(int i = 0; i < result.length; ++i) {

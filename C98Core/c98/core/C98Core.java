@@ -7,6 +7,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
@@ -76,5 +78,9 @@ public class C98Core {
 	public static void registerItem(Item i, int id, String string) {
 		Item.itemRegistry.register(id, new ResourceLocation(string), i);
 		i.setUnlocalizedName(string.replace(':', '.'));
+	}
+	
+	public static void registerEntity(Class<? extends Entity> class1, String string, int id) {
+		EntityList.addMapping(class1, string, id);
 	}
 }

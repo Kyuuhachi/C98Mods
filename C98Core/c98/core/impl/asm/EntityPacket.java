@@ -3,11 +3,11 @@ package c98.core.impl.asm;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityTrackerEntry;
+import net.minecraft.entity.*;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S0EPacketSpawnObject;
+import net.minecraft.world.WorldServer;
 import c98.core.hooks.EntitySpawnHook;
 import c98.core.impl.HookImpl;
 import c98.core.launch.ASMer;
@@ -20,7 +20,7 @@ import com.mojang.authlib.GameProfile;
 	}
 	
 	@Override public Packet func_151260_c() {
-		for(EntitySpawnHook mod:HookImpl.entitySpawnHooks) {
+		for(EntitySpawnHook mod : HookImpl.entitySpawnHooks) {
 			Packet p = mod.getPacket(trackedEntity);
 			if(p != null) return p;
 		}
@@ -35,7 +35,7 @@ import com.mojang.authlib.GameProfile;
 	}
 	
 	@Override public void handleSpawnObject(S0EPacketSpawnObject p) {
-		for(EntitySpawnHook mod:HookImpl.entitySpawnHooks) {
+		for(EntitySpawnHook mod : HookImpl.entitySpawnHooks) {
 			Entity e = mod.getEntity(clientWorldController, p);
 			if(e != null) {
 				e.serverPosX = p.func_148997_d();
@@ -58,5 +58,18 @@ import com.mojang.authlib.GameProfile;
 			}
 		}
 		super.handleSpawnObject(p);
+	}
+}
+
+@ASMer class Tracker extends EntityTracker {
+	
+	public Tracker(WorldServer p_i1516_1_) {
+		super(p_i1516_1_);
+	}
+	
+	@Override public void trackEntity(Entity p_72785_1_) {
+		for(EntitySpawnHook mod : HookImpl.entitySpawnHooks)
+			if(mod.addEntityToTracker(this, p_72785_1_)) return;
+		super.trackEntity(p_72785_1_);
 	}
 }

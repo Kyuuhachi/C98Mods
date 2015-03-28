@@ -34,6 +34,7 @@ public class HookImpl {
 	public static List<KeyHook> keyHooks = new ArrayList();
 	public static List<ConnectHook> connectHooks = new ArrayList();
 	public static List<EntitySpawnHook> entitySpawnHooks = new ArrayList();
+	public static List<PacketHook> packetHooks = new ArrayList();
 	public static HashMap<KeyBinding, boolean[]> keyBindings = new LinkedHashMap(); //the boolean[] contains [continuous, wasPressed]
 	
 	public static void addHook(Object hook) {
@@ -47,6 +48,7 @@ public class HookImpl {
 		if(hook instanceof KeyHook) keyHooks.add((KeyHook)hook);
 		if(hook instanceof ConnectHook) connectHooks.add((ConnectHook)hook);
 		if(hook instanceof EntitySpawnHook) entitySpawnHooks.add((EntitySpawnHook)hook);
+		if(hook instanceof PacketHook) packetHooks.add((PacketHook)hook);
 		if(hook instanceof IResourceManagerReloadListener) ((SimpleReloadableResourceManager)C98Core.mc.getResourceManager()).reloadListeners.add(hook);
 	}
 	
@@ -61,6 +63,7 @@ public class HookImpl {
 		if(hook instanceof KeyHook) keyHooks.remove(hook);
 		if(hook instanceof ConnectHook) connectHooks.remove(hook);
 		if(hook instanceof EntitySpawnHook) entitySpawnHooks.remove(hook);
+		if(hook instanceof PacketHook) packetHooks.remove(hook);
 		if(hook instanceof IResourceManagerReloadListener) ((SimpleReloadableResourceManager)C98Core.mc.getResourceManager()).reloadListeners.remove(hook);
 	}
 	

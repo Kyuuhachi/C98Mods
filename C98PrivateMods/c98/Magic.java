@@ -3,6 +3,7 @@ package c98;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityTracker;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S0EPacketSpawnObject;
@@ -68,6 +69,10 @@ public class Magic extends C98Mod implements EntitySpawnHook {
 			return new EntityXPOrb(w, x, y, z, p.func_149009_m());
 		}
 		return null;
+	}
+	
+	@Override public boolean addEntityToTracker(EntityTracker tr, Entity e) {
+		return false;
 	}
 	
 }

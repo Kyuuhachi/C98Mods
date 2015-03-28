@@ -14,11 +14,11 @@ import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonObject;
 
 public class C98ResourcePack implements IResourcePack { //TODO sounds.json
-
+	
 	@Override public InputStream getInputStream(ResourceLocation l) {
 		String ns = l.getResourceDomain();
 		String path = l.getResourcePath();
-		if(ns.equals("c98") && path.startsWith("lang/")) return C98Core.modList.stream().map(mod -> mod.getName()).map(name -> name.toLowerCase()).map(name -> new ResourceLocation(ns + "/" + name, path)).filter(loc -> resourceExists(loc)).map(loc -> getInputStream(loc)).reduce((a, b) -> new SequenceInputStream(a, b)).get();
+		if(ns.equals("c98") && path.startsWith("lang/")) return C98Core.modList.stream().map(mod -> mod.getName()).map(name -> name.toLowerCase()).map(name -> new ResourceLocation(ns + "/" + name, path)).filter(loc -> resourceExists(loc)).map(loc -> getInputStream(loc)).reduce(new ByteArrayInputStream(new byte[0]), (a, b) -> new SequenceInputStream(a, b));
 		return C98Core.class.getResourceAsStream("/assets/" + l.getResourceDomain() + "/" + l.getResourcePath());
 	}
 	

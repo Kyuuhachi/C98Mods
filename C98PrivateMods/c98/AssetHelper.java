@@ -41,7 +41,6 @@ public class AssetHelper extends C98Mod {
 			PrintStream ps = new PrintStream(f);
 			e.printStackTrace(ps);
 			ps.close();
-			System.out.println("Missing file: " + f.getAbsolutePath());
 		}
 	}
 }

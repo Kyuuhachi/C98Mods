@@ -1,27 +1,29 @@
 package c98.core.impl.skin;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import c98.core.GL;
 
-public class SkinsSticks implements SkinExtras {
+public class SkinsSticks implements LayerRenderer {
 	
 	private ModelRenderer[] sticks = new ModelRenderer[12];
 	
-	public SkinsSticks(ModelBase model) {
+	public SkinsSticks(RenderPlayer rdr) {
 		for(int i = 0; i < sticks.length; ++i) {
-			sticks[i] = new ModelRenderer(model, 0, 16);
+			sticks[i] = new ModelRenderer(rdr.getMainModel(), 0, 16);
 			sticks[i].addBox(0, 0, 0, 2, 8, 2);
 		}
 	}
 	
 	private static final ResourceLocation blazeTextures = new ResourceLocation("textures/entity/blaze.png");
 	
-	@Override public void draw(EntityLivingBase ent, float time, float scale) {
+	@Override public void doRenderLayer(EntityLivingBase p_177141_1_, float p_177141_2_, float p_177141_3_, float p_177141_4_, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale) {
+		float time = p_177141_5_;
 		GL.color(0, 1, 0);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(blazeTextures);
 		float angle = time * (float)Math.PI * -0.1F;
@@ -55,6 +57,10 @@ public class SkinsSticks implements SkinExtras {
 			sticks[i].render(scale);
 		
 		GL.color(1, 1, 1);
+	}
+	
+	@Override public boolean shouldCombineTextures() {
+		return false;
 	}
 	
 }

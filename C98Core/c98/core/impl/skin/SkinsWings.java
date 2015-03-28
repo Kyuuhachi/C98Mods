@@ -1,20 +1,24 @@
 package c98.core.impl.skin;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import c98.core.GL;
 
-public class SkinsWings implements SkinExtras {
+public class SkinsWings implements LayerRenderer {
 	private static final ResourceLocation dragon = new ResourceLocation("textures/entity/enderdragon/dragon.png");
 	
 	private ModelRenderer wing;
 	private ModelRenderer wingTip;
 	
-	public SkinsWings(ModelBase model) {
+	public SkinsWings(RenderPlayer rdr) {
+		ModelBase model = rdr.getMainModel();
 		int prevHeight = model.textureHeight;
 		int prevWidth = model.textureWidth;
 		model.textureHeight = 256;
@@ -38,24 +42,28 @@ public class SkinsWings implements SkinExtras {
 		model.textureHeight = prevHeight;
 	}
 	
-	@Override public void draw(EntityLivingBase ent, float time, float scale) {
-		GL.cullFace(GL.BACK);
-		Minecraft.getMinecraft().getTextureManager().bindTexture(dragon);
-		GL.pushMatrix();
-		
-		setAngles(ent, time);
-		
-		for(int i = 0; i < 2; ++i) {
+	@Override public void doRenderLayer(EntityLivingBase ent, float p_177141_2_, float p_177141_3_, float p_177141_4_, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale) {
+//		System.out.println(EntityPlayer.getUUID(((EntityPlayer)ent).getGameProfile()));
+		if(ent.getName().equals("Caagr98") && !ent.isInvisible()) {
+			setAngles((AbstractClientPlayer)ent, p_177141_5_);
+			Minecraft.getMinecraft().getTextureManager().bindTexture(dragon);
+			
+			GL.enableCull();
+			GL.pushMatrix();
+			
+			GL.cullFace(GL.BACK);
 			wing.render(scale / 4);
 			GL.scale(-1, 1, 1);
-			if(i == 0) GL.cullFace(GL.FRONT);
+			GL.cullFace(GL.FRONT);
+			wing.render(scale / 4);
+			GL.cullFace(GL.BACK);
+			
+			GL.popMatrix();
+			GL.disableCull();
 		}
-		
-		GL.cullFace(GL.BACK);
-		GL.popMatrix();
 	}
 	
-	private void setAngles(EntityLivingBase ent, float time) {
+	private void setAngles(AbstractClientPlayer ent, float time) {
 		float ang = ent.wingAngle * (float)Math.PI * 2;
 		
 		float wingx0 = 0.125F - MathHelper.cos(ang) * 0.2F;
@@ -76,7 +84,11 @@ public class SkinsWings implements SkinExtras {
 		wingTip.rotateAngleY = 0;
 		wingTip.rotateAngleZ = wingz1p + (wingz1 - wingz1p) * (time % 1);
 		
-		if(ent.isSneaking()) wing.offsetY = 0.3F;
+		if(ent.isSneaking()) wing.offsetY = 0.2F;
 		else wing.offsetY = 0;
+	}
+	
+	@Override public boolean shouldCombineTextures() {
+		return false;
 	}
 }

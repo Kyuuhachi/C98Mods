@@ -1,19 +1,20 @@
 package c98.core.impl.asm.skin;
 
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import c98.core.launch.ASMer;
+import com.mojang.authlib.GameProfile;
 
-@ASMer abstract class C98Entity extends EntityLivingBase {
+@ASMer abstract class C98WingFlap extends AbstractClientPlayer {
 	public float wingAngle;
 	public float wingAnglep;
 	public boolean wingResting;
 	public boolean wingRestingp;
 	
-	public C98Entity(World par1World) {
-		super(par1World);
+	public C98WingFlap(World par1World, GameProfile profile) {
+		super(par1World, profile);
 	}
 	
 	@Override public void onUpdate() {

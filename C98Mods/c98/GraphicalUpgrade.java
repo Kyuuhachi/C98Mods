@@ -25,6 +25,7 @@ public class GraphicalUpgrade extends C98Mod {
 		public boolean testificateHats = true;
 		public boolean squigglySlimes = true;
 		public boolean coloredShearedSheep = true;
+		public boolean holdMultiple = true;
 	}
 	
 	public static GUConf config;

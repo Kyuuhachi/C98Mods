@@ -75,5 +75,8 @@ public class SkinsWings implements SkinExtras {
 		wingTip.rotateAngleX = 0;
 		wingTip.rotateAngleY = 0;
 		wingTip.rotateAngleZ = wingz1p + (wingz1 - wingz1p) * (time % 1);
+		
+		if(ent.isSneaking()) wing.offsetY = 0.3F;
+		else wing.offsetY = 0;
 	}
 }

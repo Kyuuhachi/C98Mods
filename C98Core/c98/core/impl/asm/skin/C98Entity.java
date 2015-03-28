@@ -1,11 +1,12 @@
 package c98.core.impl.asm.skin;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import c98.core.launch.ASMer;
 
-@ASMer abstract class C98Entity extends Entity {
+@ASMer abstract class C98Entity extends EntityLivingBase {
 	public float wingAngle;
 	public float wingAnglep;
 	public boolean wingResting;
@@ -17,6 +18,7 @@ import c98.core.launch.ASMer;
 	
 	@Override public void onUpdate() {
 		super.onUpdate();
+		
 		wingAnglep = wingAngle;
 		wingRestingp = wingResting;
 		
@@ -33,6 +35,5 @@ import c98.core.launch.ASMer;
 		wingAngle += f;
 		
 		if(wingResting) wingAngle = 0.15F;
-		
 	}
 }

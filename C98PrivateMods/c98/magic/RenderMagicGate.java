@@ -66,7 +66,7 @@ public class RenderMagicGate extends TileEntitySpecialRenderer {
 		GL.color(1, 1, 1);
 	}
 	
-	private void drawPortal(BlockMagicGate.TE te) {
+	private static void drawPortal(BlockMagicGate.TE te) {
 		TextureAtlasSprite icon = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("c98/magic:blocks/magic_gate");
 		float u0 = icon.getMinU();
 		float v0 = icon.getMinV();
@@ -178,7 +178,7 @@ public class RenderMagicGate extends TileEntitySpecialRenderer {
 		GL.stencil.disable();
 	}
 	
-	private void drawField(BlockMagicGate.TE te, double x, double y, double z) {
+	private static void drawField(BlockMagicGate.TE te, double x, double y, double z) {
 		GL.pushMatrix();
 		{
 			GL.translate(x, y, z);
@@ -215,7 +215,7 @@ public class RenderMagicGate extends TileEntitySpecialRenderer {
 		GL.popMatrix();
 	}
 	
-	private void plane(Vector v1, Vector v2, Vector v3) {
+	private static void plane(Vector v1, Vector v2, Vector v3) {
 		FloatBuffer mv = BufferUtils.createFloatBuffer(16);
 		GL.getFloat(GL.MODELVIEW_MATRIX, mv);
 		Matrix mvMat = new Matrix().load(mv);
@@ -249,7 +249,7 @@ public class RenderMagicGate extends TileEntitySpecialRenderer {
 		GL.loadMatrix(pr);
 	}
 	
-	private double dot(double[] v1, double[] v2) {
+	private static double dot(double[] v1, double[] v2) {
 		return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2] + v1[3] * v2[3];
 	}
 	

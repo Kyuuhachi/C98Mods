@@ -32,8 +32,8 @@ public class ItemTexturizer extends C98Mod implements KeyHook {
 	 * effects are only active if this field is true.
 	 */
 	public static final boolean ENABLE = false;
-	int n = 16;
-	KeyBinding k = new KeyBinding("Create item sheet", Keyboard.KEY_I, C98Core.KEYBIND_CAT);
+	private static int n = 16;
+	private static KeyBinding k = new KeyBinding("Create item sheet", Keyboard.KEY_I, C98Core.KEYBIND_CAT);
 	
 	@Override public void load() {
 		if(ENABLE) C98Core.registerKey(k, false);
@@ -55,7 +55,7 @@ public class ItemTexturizer extends C98Mod implements KeyHook {
 		
 		int x = 1;
 		ri.func_175042_a(new ItemStack(Blocks.stone_slab, 1, 2), 0, 0);
-		for(int s:variants) {
+		for(int s : variants) {
 			Item i = (Item)Item.itemRegistry.getObjectById(s >>> 16);
 			ResourceLocation l = shapes.get(s);
 			String name = l.getResourcePath();
@@ -79,7 +79,7 @@ public class ItemTexturizer extends C98Mod implements KeyHook {
 		};
 	}
 	
-	private void initGl(Collection collection, Framebuffer fb, RenderItem ri) {
+	private static void initGl(Collection collection, Framebuffer fb, RenderItem ri) {
 		fb.bindFramebuffer(true);
 		GL.enableBlend();
 		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
@@ -96,7 +96,7 @@ public class ItemTexturizer extends C98Mod implements KeyHook {
 		GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
 	}
 	
-	private void saveImage(Framebuffer fb, int x, File f) {
+	private static void saveImage(Framebuffer fb, int x, File f) {
 		fb.unbindFramebuffer();
 		fb.bindFramebufferTexture();
 		IntBuffer buf = BufferUtils.createIntBuffer(fb.framebufferWidth * fb.framebufferHeight);

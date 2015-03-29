@@ -50,7 +50,7 @@ public class GuiViewItem extends GuiScreen {
 		NBTTagCompound nbt = new NBTTagCompound();
 		is.writeToNBT(nbt);
 		
-		writeJsonElement(toJson(nbt), 0, indent(0), "");
+		writeJsonElement(toJson(nbt), 0, newline(0), "");
 		
 		text = components.toArray(new IChatComponent[0]);
 		maxScroll = text.length - ROWS;
@@ -68,27 +68,27 @@ public class GuiViewItem extends GuiScreen {
 		List<Map.Entry<String, JsonElement>> entries = new ArrayList(j.entrySet());
 		for(int i = 0; i < entries.size(); i++) {
 			Map.Entry<String, JsonElement> e = entries.get(i);
-			comp = indent(indent + 1);
+			comp = newline(indent + 1);
 			IChatComponent val = comp(e.getKey(), key).appendSibling(comp(": ", punctuation));
 			comp.appendSibling(val);
 			comp = writeJsonElement(e.getValue(), indent + 1, val, path + e.getKey() + "/");
 			if(i != entries.size() - 1) comp.appendSibling(comp(",", punctuation));
 		}
-		return indent(indent).appendSibling(comp("}", bracket));
+		return newline(indent).appendSibling(comp("}", bracket));
 	}
 	
 	private IChatComponent writeJsonArray(JsonArray j, int indent, IChatComponent comp, String path) {
 		comp.appendSibling(comp("[", squarebracket));
 		for(int i = 0; i < j.size(); i++) {
 			JsonElement e = j.get(i);
-			comp = indent(indent + 1);
+			comp = newline(indent + 1);
 			comp = writeJsonElement(e, indent + 1, comp, path + "[]/");
 			if(i != j.size() - 1) comp.appendSibling(comp(",", punctuation));
 		}
-		return indent(indent).appendSibling(comp("]", squarebracket));
+		return newline(indent).appendSibling(comp("]", squarebracket));
 	}
 	
-	private IChatComponent writeJsonPrimitive(JsonElement j, int indent, IChatComponent comp, String path) {
+	private static IChatComponent writeJsonPrimitive(JsonElement j, int indent, IChatComponent comp, String path) {
 		IChatComponent val = null;
 		if(j.isJsonNull()) val = comp("null", keyword);
 		else {
@@ -102,11 +102,11 @@ public class GuiViewItem extends GuiScreen {
 		return comp;
 	}
 	
-	private IChatComponent comp(String s, ChatStyle style) {
+	private static IChatComponent comp(String s, ChatStyle style) {
 		return new ChatComponentText(s).setChatStyle(style.createShallowCopy());
 	}
 	
-	private IChatComponent indent(int i) {
+	private IChatComponent newline(int i) {
 		StringBuilder sb = new StringBuilder();
 		for(int j = 0; j < i; j++)
 			sb.append("  ");
@@ -133,19 +133,19 @@ public class GuiViewItem extends GuiScreen {
 				return new JsonPrimitive(((NBTTagString)nbt).getString());
 			case "BYTE[]": {
 				JsonArray ar = new JsonArray();
-				for(byte b:((NBTTagByteArray)nbt).getByteArray())
+				for(byte b : ((NBTTagByteArray)nbt).getByteArray())
 					ar.add(new JsonPrimitive(b));
 				return ar;
 			}
 			case "INT[]": {
 				JsonArray ar = new JsonArray();
-				for(int b:((NBTTagIntArray)nbt).getIntArray())
+				for(int b : ((NBTTagIntArray)nbt).getIntArray())
 					ar.add(new JsonPrimitive(b));
 				return ar;
 			}
 			case "COMPOUND": {
 				JsonObject o = new JsonObject();
-				for(String name:(Iterable<String>)((NBTTagCompound)nbt).getKeySet())
+				for(String name : (Iterable<String>)((NBTTagCompound)nbt).getKeySet())
 					o.add(name, toJson(((NBTTagCompound)nbt).getTag(name)));
 				return o;
 			}
@@ -181,7 +181,7 @@ public class GuiViewItem extends GuiScreen {
 			mc.fontRendererObj.drawString(mc.fontRendererObj.trimStringToWidth(text[i].getFormattedText(), FIELD_W), x, y, 0xAFAFAF);
 			if(mouseY >= y && mouseY < y + mc.fontRendererObj.FONT_HEIGHT) {
 				int compX = x;
-				for(IChatComponent c:(Iterable<IChatComponent>)text[i]) {
+				for(IChatComponent c : (Iterable<IChatComponent>)text[i]) {
 					compX += mc.fontRendererObj.getStringWidth(c.getChatStyle().getFormattingCode() + ((ChatComponentText)c).getUnformattedTextForChat());
 					if(compX > mouseX) {
 						HoverEvent e = c.getChatStyle().getChatHoverEvent();
@@ -254,7 +254,7 @@ public class GuiViewItem extends GuiScreen {
 	@Override protected void actionPerformed(GuiButton par1GuiButton) {
 //		boolean pretty = par1GuiButton.id == 2;
 		StringBuilder sb = new StringBuilder();
-		for(IChatComponent c:components)
+		for(IChatComponent c : components)
 			sb.append(c.getUnformattedText()).append("\n"); //TODO copy raw json
 		String s = sb.toString();
 		Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();

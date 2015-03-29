@@ -34,7 +34,7 @@ public class AssetHelper extends C98Mod {
 			}
 		}
 		
-		private void create(ResourceLocation l, Exception e) throws IOException {
+		private static void create(ResourceLocation l, Exception e) throws IOException {
 			File f = new File("missingAssets/" + l.getResourceDomain() + "/" + l.getResourcePath());
 			f.getParentFile().mkdirs();
 			f.createNewFile();

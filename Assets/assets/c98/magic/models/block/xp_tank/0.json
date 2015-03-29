@@ -1,0 +1,52 @@
+{
+	"textures": {
+		"particle": "blocks/lapis_block",
+		"top": "c98/magic:blocks/machine_top",
+		"side": "c98/magic:blocks/xp_tank_side",
+		"light": "c98/magic:blocks/torch"
+	},
+	"elements": [
+		{//outer
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"down":  {"texture": "#top",  "cullface": "down"},
+				"up":    {"texture": "#top",  "cullface": "up"},
+				"north": {"texture": "#side", "cullface": "north"},
+				"south": {"texture": "#side", "cullface": "south"},
+				"west":  {"texture": "#side", "cullface": "west"},
+				"east":  {"texture": "#side", "cullface": "east"}
+			}
+		},
+		{//north
+			"from": [2, 1, 2],
+			"to": [14, 15, 0],
+			"faces": {
+				"down":  {"texture": "#top",  "cullface": "north"},
+				"up":    {"texture": "#top",  "cullface": "north"},
+				"west":  {"texture": "#top", "cullface": "north"},
+				"east":  {"texture": "#top", "cullface": "north"}
+			}
+		},
+		{//panel 1
+			"from": [1, 1, 1],
+			"to": [15, 2, 15],
+			"faces": {
+				"north": {"texture": "#p1", "cullface": "north"},
+				"south": {"texture": "#p1", "cullface": "south"},
+				"west":  {"texture": "#p1", "cullface": "west"},
+				"east":  {"texture": "#p1", "cullface": "east"}
+			}
+		},
+		{//core 1
+			"from": [2, 1, 2],
+			"to": [14, 2, 14],
+			"faces": {
+				"north": {"texture": "#c1"},
+				"south": {"texture": "#c1"},
+				"west":  {"texture": "#c1"},
+				"east":  {"texture": "#c1"}
+			}
+		}
+	]
+}

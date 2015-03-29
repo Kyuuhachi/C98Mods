@@ -1,0 +1,20 @@
+{
+	"variants": {
+		"active=false,charge=0":{"model": "c98/magic:xp_tank/0"},
+		"active=false,charge=1":{"model": "c98/magic:xp_tank/0"},
+		"active=false,charge=2":{"model": "c98/magic:xp_tank/0"},
+		"active=false,charge=3":{"model": "c98/magic:xp_tank/0"},
+		"active=false,charge=4":{"model": "c98/magic:xp_tank/0"},
+		"active=false,charge=5":{"model": "c98/magic:xp_tank/0"},
+		"active=false,charge=6":{"model": "c98/magic:xp_tank/0"},
+		"active=false,charge=7":{"model": "c98/magic:xp_tank/0"},
+		"active=true,charge=0": {"model": "c98/magic:xp_tank/0"},
+		"active=true,charge=1": {"model": "c98/magic:xp_tank/0"},
+		"active=true,charge=2": {"model": "c98/magic:xp_tank/0"},
+		"active=true,charge=3": {"model": "c98/magic:xp_tank/0"},
+		"active=true,charge=4": {"model": "c98/magic:xp_tank/0"},
+		"active=true,charge=5": {"model": "c98/magic:xp_tank/0"},
+		"active=true,charge=6": {"model": "c98/magic:xp_tank/0"},
+		"active=true,charge=7": {"model": "c98/magic:xp_tank/0"}
+	}
+}

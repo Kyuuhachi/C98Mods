@@ -1,6 +1,6 @@
 {
 	"textures": {
-		"particle": "blocks/obsidian",
+		"particle": "blocks/enchanting_table_bottom",
 		"side": "c98/magic:blocks/pipe",
 		"end": "c98/magic:blocks/pipe_end",
 		"leak": "c98/magic:blocks/magic_still"

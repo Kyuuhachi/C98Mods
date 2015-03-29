@@ -159,6 +159,7 @@ public class GL {
 	public static void enableTexture() {GlStateManager.func_179098_w();}
 	public static void disableTexture() {GlStateManager.func_179090_x();}
 	public static void bindTexture(ResourceLocation loc) {Minecraft.getMinecraft().getTextureManager().bindTexture(loc);}
+	public static void bindTexture(int tex) {GlStateManager.func_179144_i(tex);}
 	
 	public static void enableNormalize() {GlStateManager.enableNormalize();}
 	public static void disableNormalize() {GlStateManager.disableNormalize();}

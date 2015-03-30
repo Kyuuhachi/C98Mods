@@ -26,8 +26,8 @@ public class ModelJSON {
 		}
 	}
 	
-	public void render() {
-		assembly.render();
+	public void render(RenderParams params) {
+		assembly.render(params);
 	}
 	
 	public void setAngX(String name, float f) {

@@ -9,12 +9,16 @@ import net.minecraft.util.ResourceLocation;
 import c98.core.GL;
 
 public class RenderJSONCreeper extends RenderJSON {
+	private static final ResourceLocation CREEPER_ARMOR = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
+	private static final ResourceLocation CREEPER = new ResourceLocation("textures/entity/creeper/creeper.png");
+	private static final RenderParams CHARGE = new RenderParams().offset(1).noTex(true);
+	
 	public RenderJSONCreeper(RenderManager mgr, ModelJSON model) {
 		super(mgr, model);
 	}
 	
 	@Override protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
-		return new ResourceLocation("textures/entity/creeper/creeper.png");
+		return CREEPER;
 	}
 	
 	@Override public void setAngles(float swing, float swingAmount, float age, float yaw, float pitch, Entity ent) {
@@ -42,6 +46,30 @@ public class RenderJSONCreeper extends RenderJSON {
 			int alpha = (int)(flash * 0.2 * 255);
 			alpha = MathHelper.clamp_int(alpha, 0, 255);
 			return alpha << 24 | 0xFFFFFF;
+		}
+	}
+	
+	@Override protected void renderModel(EntityLivingBase e, float ptt) {
+		super.renderModel(e, ptt);
+		if(((EntityCreeper)e).getPowered()) {
+			GL.depthMask(!e.isInvisible());
+			bindTexture(CREEPER_ARMOR);
+			GL.matrixMode(GL.TEXTURE);
+			GL.loadIdentity();
+			float translate = e.ticksExisted + ptt;
+			GL.translate(translate / 100, translate / 100);
+			GL.scale(1F / 64, 1F / 32, 1);
+			GL.matrixMode(GL.MODELVIEW);
+			GL.enableBlend();
+			GL.color(0.5F, 0.5F, 0.5F);
+			GL.disableLighting();
+			GL.blendFunc(GL.ONE, GL.ONE);
+			model.render(CHARGE);
+			GL.matrixMode(GL.TEXTURE);
+			GL.loadIdentity();
+			GL.matrixMode(GL.MODELVIEW);
+			GL.enableLighting();
+			GL.disableBlend();
 		}
 	}
 }

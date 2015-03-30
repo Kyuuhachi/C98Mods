@@ -22,12 +22,14 @@
 		{
 			"name": "right_arm",
 			"source": "c98/resourcefulentities:player/arm",
-			"origin": [4, 10, 0]
+			"origin": [5, 10, 0],
+			"rotation": [-90, -5.73, 2.86]
 		},
 		{
 			"name": "left_arm",
 			"source": "c98/resourcefulentities:player/arm",
-			"origin": [-4, 10, 0],
+			"origin": [-5, 10, 0],
+			"rotation": [-90, 5.73, -2.86]
 			"mirror": true
 		},
 		{

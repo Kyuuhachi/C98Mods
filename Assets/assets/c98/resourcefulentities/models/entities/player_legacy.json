@@ -2,13 +2,13 @@
 	"name": "body",
 	"source": "c98/resourcefulentities:player/body",
 	"origin": [0, 12, 0],
-	"texture": "builtin:skin",
+	"texture": "builtin/skin",
 	"texsize": [64, 32],
 	"children": [
 		{
 			"name": "head",
 			"source": "c98/resourcefulentities:head_top",
-			"origin": [0, 12, 0]
+			"origin": [0, 12, 0],
 			"children": [
 				{
 					"name": "head_outer",
@@ -44,9 +44,9 @@
 		{
 			"name": "cape",
 			"source": "c98/resourcefulentities:player/cape",
-			"origin": [0, 12, -2]
-			"texture": "builtin:cape",
-			"texsize": [64, 32],
+			"origin": [0, 12, -2],
+			"texture": "builtin/cape",
+			"texsize": [64, 32]
 		}
 	]
 }

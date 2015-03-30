@@ -56,20 +56,11 @@ public abstract class Component {
 		return o.has(name) ? o.get(name).getAsString() : def;
 	}
 	
-	protected static float[] getFloatArray(JsonObject o, String name, float[] def) {
+	private static float[] getFloatArray(JsonObject o, String name, float[] def) {
 		return o.has(name) ? toFloat3(o.get(name).getAsJsonArray()) : def;
 	}
 	
-	protected static float[] toFloat3(JsonArray a) {
+	private static float[] toFloat3(JsonArray a) {
 		return new float[] {a.get(0).getAsFloat(), a.get(1).getAsFloat(), a.get(2).getAsFloat()};
 	}
-	
-	protected static int[] getIntArray(JsonObject o, String name, int[] def) {
-		return o.has(name) ? toInt2(o.get(name).getAsJsonArray()) : def;
-	}
-	
-	private static int[] toInt2(JsonArray a) {
-		return new int[] {a.get(0).getAsInt(), a.get(1).getAsInt()};
-	}
-	
 }

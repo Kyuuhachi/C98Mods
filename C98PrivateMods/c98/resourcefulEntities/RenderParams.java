@@ -1,12 +1,14 @@
 package c98.resourcefulEntities;
 
 public class RenderParams {
-	public float offset;
+	public float expand;
 	public boolean noTex;
 	public String name;
+	public float u, v;
+	public int texw, texh;
 	
-	public RenderParams offset(float f) {
-		offset = f;
+	public RenderParams expand(float f) {
+		expand = f;
 		return this;
 	}
 	

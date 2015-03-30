@@ -3,6 +3,7 @@
 	"source": "c98/resourcefulentities:creeper/body",
 	"origin": [0, 6, 0],
 	"texture": "entity/creeper/creeper",
+	"texsize": [64, 32],
 	"children": [
 		{
 			"name": "head",
@@ -10,22 +11,22 @@
 			"origin": [0, 12, 0]
 		},
 		{
-			"name": "left_leg",
+			"name": "right_leg",
 			"source": "c98/resourcefulentities:creeper/leg",
 			"origin": [2, 0, 4]
 		},
 		{
-			"name": "right_leg",
+			"name": "left_leg",
 			"source": "c98/resourcefulentities:creeper/leg",
 			"origin": [-2, 0, 4]
 		},
 		{
-			"name": "right_leg",
+			"name": "left_leg",
 			"source": "c98/resourcefulentities:creeper/leg",
 			"origin": [2, 0, -4]
 		},
 		{
-			"name": "left_leg",
+			"name": "right_leg",
 			"source": "c98/resourcefulentities:creeper/leg",
 			"origin": [-2, 0, -4]
 		}

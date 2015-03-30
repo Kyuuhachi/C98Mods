@@ -8,7 +8,7 @@ import net.minecraft.entity.monster.EntityCreeper;
 import c98.core.C98Mod;
 import c98.core.Rendering;
 import c98.resourcefulEntities.ModelJSON;
-import c98.resourcefulEntities.RenderJSONCreeper;
+import c98.resourcefulEntities.models.RenderJSONCreeper;
 
 public class ResourcefulEntities extends C98Mod implements IResourceManagerReloadListener {
 	private List<ModelJSON> models = new ArrayList();

@@ -43,7 +43,6 @@ public class SkinsWings implements LayerRenderer {
 	}
 	
 	@Override public void doRenderLayer(EntityLivingBase ent, float p_177141_2_, float p_177141_3_, float p_177141_4_, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale) {
-//		System.out.println(EntityPlayer.getUUID(((EntityPlayer)ent).getGameProfile()));
 		if(ent.getName().equals("Caagr98") && !ent.isInvisible()) {
 			setAngles((AbstractClientPlayer)ent, p_177141_5_);
 			Minecraft.getMinecraft().getTextureManager().bindTexture(dragon);

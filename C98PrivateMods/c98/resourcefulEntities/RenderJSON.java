@@ -14,16 +14,18 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import org.lwjgl.BufferUtils;
 import c98.core.C98Log;
 import c98.core.GL;
 
 public abstract class RenderJSON extends Render {
-	protected final ModelJSON model;
-	private static FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
 	private static final DynamicTexture white = new DynamicTexture(16, 16);
+	private static final RenderParams DEFAULT = new RenderParams();
+	private static FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
+	
+	protected final ModelJSON model;
+	
 	static {
 		Arrays.fill(white.getTextureData(), -1);
 		white.updateDynamicTexture();
@@ -74,19 +76,18 @@ public abstract class RenderJSON extends Render {
 			float swing = e.limbSwing - e.limbSwingAmount * (1 - ptt);
 			if(e.isChild()) swing *= 3;
 			if(swingAmount > 1) swingAmount = 1;
-			System.out.println(swing + " " + swingAmount);
 			setAngles(swing, swingAmount, age, yawdiff, pitch, e);
 			
 			GL.enableAlpha();
 			
-			if(false/*field_177098_i*/) {
+			if(renderManager.field_178639_r) {
 				boolean var18 = func_177088_c(e);
-				renderModel(e, swing, swingAmount, age, yawdiff, pitch, scale);
+				renderModel(e, swing, swingAmount, age, yawdiff, pitch, scale, ptt);
 				
 				if(var18) func_180565_e();
 			} else {
 				boolean var18 = func_177090_c(e, ptt);
-				renderModel(e, swing, swingAmount, age, yawdiff, pitch, scale);
+				renderModel(e, swing, swingAmount, age, yawdiff, pitch, scale, ptt);
 				if(var18) func_177091_f();
 				
 				GL.depthMask(true);
@@ -105,16 +106,14 @@ public abstract class RenderJSON extends Render {
 		GL.enableCull();
 		GL.popMatrix();
 		
-		if(!false/*field_177098_i*/) super.doRender(e, x, y, z, p_76986_8_, ptt);
+		if(!renderManager.field_178639_r) super.doRender(e, x, y, z, p_76986_8_, ptt);
 	}
 	
-	protected void renderModel(EntityLivingBase e, float swingSpeed, float swingAmount, float age, float yaw, float pitch, float scale) {
+	protected void renderModel(EntityLivingBase e, float swingSpeed, float swingAmount, float age, float yaw, float pitch, float scale, float ptt) {
 		boolean visible = !e.isInvisible();
 		boolean visibleToPlayer = !visible && !e.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer);
 		
 		if(visible || visibleToPlayer) {
-			if(!bindEntityTexture(e)) return;
-			
 			if(visibleToPlayer) {
 				GL.color(1, 1, 1, 0.15F);
 				GL.depthMask(false);
@@ -124,7 +123,8 @@ public abstract class RenderJSON extends Render {
 			}
 			GL.pushMatrix();
 			GL.scale(scale, scale, scale);
-			model.render();
+			if(renderManager.field_178639_r) model.render(DEFAULT);
+			else renderModel(e, ptt);
 			GL.popMatrix();
 			
 			if(visibleToPlayer) {
@@ -135,6 +135,10 @@ public abstract class RenderJSON extends Render {
 		}
 	}
 	
+	protected void renderModel(EntityLivingBase e, float ptt) {
+		model.render(DEFAULT);
+	}
+	
 	protected void renderLayers(EntityLivingBase e, float swingSpeed, float swingAmount, float ptt, float age, float yawdiff, float pitch, float scale) {
 //		for(LayerRenderer layer : field_177097_h) {
 //			boolean var11 = func_177092_a(e, ptt, layer.shouldCombineTextures());
@@ -142,6 +146,10 @@ public abstract class RenderJSON extends Render {
 //
 //			if(var11) func_177091_f();
 //		}
+	}
+	
+	@Override protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
+		return null;
 	}
 	
 	protected int getColorMultiplier(EntityLivingBase e, float brightness, float ptt) {

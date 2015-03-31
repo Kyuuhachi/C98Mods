@@ -22,25 +22,25 @@
 		{
 			"name": "right_arm",
 			"source": "c98/resourcefulentities:player/arm",
-			"origin": [5, 10, 0],
+			"origin": [-5, 10, 0],
 			"rotation": [-90, -5.73, 2.86]
 		},
 		{
 			"name": "left_arm",
 			"source": "c98/resourcefulentities:player/arm",
-			"origin": [-5, 10, 0],
+			"origin": [5, 10, 0],
 			"rotation": [-90, 5.73, -2.86]
 			"mirror": true
 		},
 		{
 			"name": "right_leg",
 			"source": "c98/resourcefulentities:player/leg",
-			"origin": [1.9, 0, 0]
+			"origin": [-1.9, 0, 0]
 		},
 		{
 			"name": "left_leg",
 			"source": "c98/resourcefulentities:player/leg",
-			"origin": [-1.9, 0, 0],
+			"origin": [1.9, 0, 0],
 			"mirror": true
 		}
 	]

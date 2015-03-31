@@ -6,7 +6,7 @@
 	"texsize": [64, 64],
 	"children": [
 		{
-			"name": "body_outer",
+			"name": "jacket",
 			"source": "c98/resourcefulentities:player/body",
 			"origin": [0, 0, 0],
 			"expand": 0.5,
@@ -18,7 +18,7 @@
 			"origin": [0, 12, 0],
 			"children": [
 				{
-					"name": "head_outer",
+					"name": "hat",
 					"source": "c98/resourcefulentities:head_top",
 					"origin": [0, 0, 0],
 					"expand": 0.5,
@@ -29,10 +29,10 @@
 		{
 			"name": "right_arm",
 			"source": "c98/resourcefulentities:player/arm_slim",
-			"origin": [5, 10, 0],
+			"origin": [-5, 10, 0],
 			"children": [
 				{
-					"name": "right_arm_outer",
+					"name": "right_sleeve",
 					"source": "c98/resourcefulentities:player/arm_slim",
 					"origin": [0, 0, 0],
 					"expand": 0.5,
@@ -43,13 +43,13 @@
 		{
 			"name": "left_arm",
 			"source": "c98/resourcefulentities:player/arm_slim",
-			"origin": [-5, 10, 0],
+			"origin": [5, 10, 0],
 			"mirror": true,
 			"mirroruv": false,
 			"uvoffset": [-8, 32],
 			"children": [
 				{
-					"name": "left_arm_outer",
+					"name": "left_sleeve",
 					"source": "c98/resourcefulentities:player/arm_slim",
 					"origin": [0, 0, 0],
 					"expand": 0.5,
@@ -60,10 +60,10 @@
 		{
 			"name": "right_leg",
 			"source": "c98/resourcefulentities:player/leg",
-			"origin": [1.9, 0, 0],
+			"origin": [-1.9, 0, 0],
 			"children": [
 				{
-					"name": "right_leg_outer",
+					"name": "right_pants_leg",
 					"source": "c98/resourcefulentities:player/leg",
 					"origin": [0, 0, 0],
 					"expand": 0.5,
@@ -74,13 +74,13 @@
 		{
 			"name": "left_leg",
 			"source": "c98/resourcefulentities:player/leg",
-			"origin": [-1.9, 0, 0],
+			"origin": [1.9, 0, 0],
 			"mirror": true,
 			"mirroruv": false,
 			"uvoffset": [16, 32],
 			"children": [
 				{
-					"name": "left_leg_outer",
+					"name": "left_pants_leg",
 					"source": "c98/resourcefulentities:player/leg",
 					"origin": [0, 0, 0],
 					"expand": 0.5,

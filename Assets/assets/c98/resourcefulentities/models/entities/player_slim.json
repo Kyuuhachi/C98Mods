@@ -3,7 +3,7 @@
 	"source": "c98/resourcefulentities:player/body",
 	"origin": [0, 12, 0],
 	"texture": "builtin/skin",
-	"texsize": [64, 32],
+	"texsize": [64, 64],
 	"children": [
 		{
 			"name": "body_outer",
@@ -91,6 +91,7 @@
 		{
 			"name": "cape",
 			"source": "c98/resourcefulentities:player/cape",
+			"hide": true,
 			"origin": [0, 12, -2],
 			"texture": "builtin/cape",
 			"texsize": [64, 32]

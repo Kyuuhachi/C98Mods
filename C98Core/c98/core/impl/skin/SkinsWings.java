@@ -7,6 +7,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import c98.core.GL;
@@ -43,7 +44,7 @@ public class SkinsWings implements LayerRenderer {
 	}
 	
 	@Override public void doRenderLayer(EntityLivingBase ent, float p_177141_2_, float p_177141_3_, float p_177141_4_, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale) {
-		if(ent.getName().equals("Caagr98") && !ent.isInvisible()) {
+		if(ent.getName().equals("Caagr98") && !ent.isInvisible() && ((AbstractClientPlayer)ent).func_175148_a(EnumPlayerModelParts.CAPE)) {
 			setAngles((AbstractClientPlayer)ent, p_177141_5_);
 			Minecraft.getMinecraft().getTextureManager().bindTexture(dragon);
 			

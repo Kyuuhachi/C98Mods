@@ -1,9 +1,11 @@
 package c98.core.impl.skin;
 
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.*;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.util.ResourceLocation;
 import c98.core.GL;
 
@@ -50,7 +52,7 @@ public class SkinsWitchHat implements LayerRenderer {
 	}
 	
 	@Override public void doRenderLayer(EntityLivingBase ent, float p_177141_2_, float p_177141_3_, float p_177141_4_, float p_177141_5_, float p_177141_6_, float p_177141_7_, float p_177141_8_) {
-		if(ent.getName().equals("deadmau5") && !ent.isInvisible()) { //TODO change name
+		if(ent.getName().equals("deadmau5") && !ent.isInvisible() && ((AbstractClientPlayer)ent).func_175148_a(EnumPlayerModelParts.CAPE)) { //TODO change name
 			rdr.bindTexture(witch);
 			
 			GL.pushMatrix();

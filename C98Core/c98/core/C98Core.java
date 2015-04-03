@@ -17,7 +17,7 @@ import c98.core.impl.launch.C98Tweaker;
 
 public class C98Core {
 	public static final String KEYBIND_CAT = "C98Mods";
-	public static final String URL = "https://cubic.muncher.se/modded"; //TODO change to /r/C98Mods when that opens
+	public static final String URL = "https://www.reddit.com/r/C98Mods";
 	public static boolean client;
 	public static boolean forge = C98Tweaker.forge;
 	public static Minecraft mc;

@@ -75,7 +75,7 @@ public class HookImpl {
 						ClassReader rdr = new ClassReader(C98Tweaker.class.getClassLoader().getResourceAsStream(name));
 						final String clName = name.replace(".class", "").replace("/", ".");
 						rdr.accept(new ClassVisitor(Opcodes.ASM4) {
-							@Override public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+							@Override public void visit(int version, int access, String classname, String signature, String superName, String[] interfaces) {
 								if(!superName.equals("c98/core/C98Mod")) return;
 								Class modClass = null;
 								try {

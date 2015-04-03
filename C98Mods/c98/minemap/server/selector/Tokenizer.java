@@ -4,15 +4,15 @@ import java.util.*;
 
 public class Tokenizer {
 	static class Token {
-		public String s;
+		public String ch;
 		
 		public Token(String string) {
-			s = string;
+			ch = string;
 			TOKEN_TYPES.add(this);
 		}
 		
 		@Override public String toString() {
-			return s;
+			return ch;
 		}
 		
 	}
@@ -42,10 +42,10 @@ public class Tokenizer {
 				else if(isNumber()) tokens.add(getNumber());
 				else if(isString()) tokens.add(getString());
 				else {
-					for(Token t:TOKEN_TYPES)
-						if(s.startsWith(t.s, pos)) {
+					for(Token t : TOKEN_TYPES)
+						if(s.startsWith(t.ch, pos)) {
 							tokens.add(t);
-							pos += t.s.length();
+							pos += t.ch.length();
 							continue loop;
 						}
 					throw new IllegalArgumentException("Unexpected character '" + s.charAt(pos) + "'");

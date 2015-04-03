@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import c98.core.launch.ASMer;
 import com.mojang.authlib.GameProfile;
 
-@ASMer abstract class C98WingFlap extends AbstractClientPlayer {
+@SuppressWarnings("hiding") @ASMer abstract class C98WingFlap extends AbstractClientPlayer {
 	public float wingAngle;
 	public float wingAnglep;
 	public boolean wingResting;

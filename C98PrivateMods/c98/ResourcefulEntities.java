@@ -9,14 +9,20 @@ import c98.core.C98Mod;
 import c98.core.Rendering;
 import c98.resourcefulEntities.ModelJSON;
 import c98.resourcefulEntities.models.RenderJSONCreeper;
+import c98.resourcefulEntities.models.RenderJSONPlayer;
 
 public class ResourcefulEntities extends C98Mod implements IResourceManagerReloadListener {
 	private List<ModelJSON> models = new ArrayList();
 	
 	@Override public void load() {
-		ModelJSON creeper = new ModelJSON("c98/resourcefulentities:creeper");
-		models.add(creeper);
-		Rendering.setRenderer(EntityCreeper.class, new RenderJSONCreeper(Rendering.manager, creeper));
+		Rendering.setRenderer(EntityCreeper.class, new RenderJSONCreeper(Rendering.manager, model("c98/resourcefulentities:creeper")));
+		Rendering.setPlayerRenderer("default", new RenderJSONPlayer(Rendering.manager, model("c98/resourcefulentities:player_default")));
+	}
+	
+	private ModelJSON model(String string) {
+		ModelJSON model = new ModelJSON(string);
+		models.add(model);
+		return model;
 	}
 	
 	@Override public void onResourceManagerReload(IResourceManager mgr) {

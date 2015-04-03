@@ -23,6 +23,7 @@ import c98.core.launch.ASMer;
 	}
 	
 	private static ResourceLocation modify(ResourceLocation l) {
+		if(l == null) return null;
 		if(l.getResourceDomain().contains("/")) return new ResourceLocation(l.getResourceDomain().split("/", 2)[0], l.getResourceDomain().split("/", 2)[1] + "/" + l.getResourcePath());
 		return l;
 	}

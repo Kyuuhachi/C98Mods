@@ -19,12 +19,14 @@ import org.lwjgl.BufferUtils;
 import c98.core.C98Log;
 import c98.core.GL;
 
-public abstract class RenderJSON extends Render {
+public abstract class RenderJSON<E extends EntityLivingBase> extends Render {
+	public static final float PI = (float)Math.PI;
 	private static final DynamicTexture white = new DynamicTexture(16, 16);
-	private static final RenderParams DEFAULT = new RenderParams();
+	public static final RenderParams DEFAULT_PARAMS = new RenderParams();
 	private static FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
 	
 	protected final ModelJSON model;
+	public E currentEntity;
 	
 	static {
 		Arrays.fill(white.getTextureData(), -1);
@@ -34,27 +36,36 @@ public abstract class RenderJSON extends Render {
 	public RenderJSON(RenderManager mgr, ModelJSON model) {
 		super(mgr);
 		this.model = model;
+		model.owner = this;
 	}
 	
-	protected abstract void setAngles(float swing, float swingAmount, float age, float yaw, float pitch, Entity ent);
+	protected void setAngles(float swing, float swingAmount, float age, float yaw, float pitch) {
+		model.rotY("head", yaw / Component.RAD);
+		model.rotX("head", pitch / Component.RAD);
+		float ang = MathHelper.cos(swing * 2 / 3) * swingAmount;
+		model.rotX("right_arm", -ang);
+		model.rotX("left_arm", ang);
+		model.rotX("right_leg", ang * 1.4F);
+		model.rotX("left_leg", -ang * 1.4F);
+	}
 	
-	protected void setupTransforms(EntityLivingBase e, float ptt) {}
+	public void preRenderCallback(float ptt, float scale) {}
+	
+	public void updateVars(float ptt) {}
 	
 	@Override public void doRender(Entity ent, double x, double y, double z, float p_76986_8_, float ptt) {
-		EntityLivingBase e = (EntityLivingBase)ent;
+		currentEntity = (E)ent;
+		updateVars(ptt);
 		GL.pushMatrix();
 		GL.disableCull();
-//		mainModel.swingProgress = getSwingProgress(e, ptt);
-//		mainModel.isRiding = e.isRiding();
-//		mainModel.isChild = e.isChild();
 		
 		try {
-			float yaw = interpolateRotation(e.prevRenderYawOffset, e.renderYawOffset, ptt);
-			float yawhead = interpolateRotation(e.prevRotationYawHead, e.rotationYawHead, ptt);
+			float yaw = interpolateRotation(currentEntity.prevRenderYawOffset, currentEntity.renderYawOffset, ptt);
+			float yawhead = interpolateRotation(currentEntity.prevRotationYawHead, currentEntity.rotationYawHead, ptt);
 			float yawdiff = yawhead - yaw;
 			
-			if(e.isRiding() && e.ridingEntity instanceof EntityLivingBase) {
-				EntityLivingBase var13 = (EntityLivingBase)e.ridingEntity;
+			if(currentEntity.isRiding() && currentEntity.ridingEntity instanceof EntityLivingBase) {
+				EntityLivingBase var13 = (EntityLivingBase)currentEntity.ridingEntity;
 				yaw = interpolateRotation(var13.prevRenderYawOffset, var13.renderYawOffset, ptt);
 				yawdiff = yawhead - yaw;
 				float actualYawDiff = MathHelper.wrapAngleTo180_float(yawdiff);
@@ -64,36 +75,35 @@ public abstract class RenderJSON extends Render {
 				if(actualYawDiff * actualYawDiff > 2500) yaw += actualYawDiff * 0.2F;
 			}
 			
-			float pitch = e.prevRotationPitch + (e.rotationPitch - e.prevRotationPitch) * ptt;
-			renderLivingAt(e, x, y, z);
-			float age = getAge(e, ptt);
-			rotateCorpse(e, age, yaw, ptt);
+			float pitch = currentEntity.prevRotationPitch + (currentEntity.rotationPitch - currentEntity.prevRotationPitch) * ptt;
+			renderLivingAt(x, y, z);
+			float age = getAge(ptt);
+			rotateCorpse(age, yaw, ptt);
 			GL.enableRescaleNormal();
 			GL.scale(-1, -1, 1);
-			setupTransforms(e, ptt);
 			float scale = 0.0625F;
-			float swingAmount = e.prevLimbSwingAmount + (e.limbSwingAmount - e.prevLimbSwingAmount) * ptt;
-			float swing = e.limbSwing - e.limbSwingAmount * (1 - ptt);
-			if(e.isChild()) swing *= 3;
+			preRenderCallback(ptt, scale);
+			float swingAmount = currentEntity.prevLimbSwingAmount + (currentEntity.limbSwingAmount - currentEntity.prevLimbSwingAmount) * ptt;
+			float swing = currentEntity.limbSwing - currentEntity.limbSwingAmount * (1 - ptt);
+			if(currentEntity.isChild()) swing *= 3;
 			if(swingAmount > 1) swingAmount = 1;
-			setAngles(swing, swingAmount, age, yawdiff, pitch, e);
+			setAngles(swing, swingAmount, age, yawdiff, pitch);
 			
 			GL.enableAlpha();
 			
 			if(renderManager.field_178639_r) {
-				boolean var18 = func_177088_c(e);
-				renderModel(e, swing, swingAmount, age, yawdiff, pitch, scale, ptt);
+				boolean var18 = func_177088_c();
+				renderModel(swing, swingAmount, age, yawdiff, pitch, scale, ptt);
 				
 				if(var18) func_180565_e();
 			} else {
-				boolean var18 = func_177090_c(e, ptt);
-				renderModel(e, swing, swingAmount, age, yawdiff, pitch, scale, ptt);
+				boolean var18 = func_177090_c(ptt);
+				renderModel(swing, swingAmount, age, yawdiff, pitch, scale, ptt);
 				if(var18) func_177091_f();
 				
 				GL.depthMask(true);
-				
-				if(!(e instanceof EntityPlayer) || !((EntityPlayer)e).func_175149_v()) renderLayers(e, swing, swingAmount, ptt, age, yawdiff, pitch, scale);
 			}
+			model.reset();
 			
 			GL.disableRescaleNormal();
 		} catch(Exception ex) {
@@ -106,12 +116,12 @@ public abstract class RenderJSON extends Render {
 		GL.enableCull();
 		GL.popMatrix();
 		
-		if(!renderManager.field_178639_r) super.doRender(e, x, y, z, p_76986_8_, ptt);
+		if(!renderManager.field_178639_r) super.doRender(currentEntity, x, y, z, p_76986_8_, ptt);
 	}
 	
-	protected void renderModel(EntityLivingBase e, float swingSpeed, float swingAmount, float age, float yaw, float pitch, float scale, float ptt) {
-		boolean visible = !e.isInvisible();
-		boolean visibleToPlayer = !visible && !e.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer);
+	protected void renderModel(float swingSpeed, float swingAmount, float age, float yaw, float pitch, float scale, float ptt) {
+		boolean visible = !currentEntity.isInvisible();
+		boolean visibleToPlayer = !visible && !currentEntity.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer);
 		
 		if(visible || visibleToPlayer) {
 			if(visibleToPlayer) {
@@ -123,8 +133,8 @@ public abstract class RenderJSON extends Render {
 			}
 			GL.pushMatrix();
 			GL.scale(scale, scale, scale);
-			if(renderManager.field_178639_r) model.render(DEFAULT);
-			else renderModel(e, ptt);
+			if(renderManager.field_178639_r) model.render(DEFAULT_PARAMS);
+			else renderModel(ptt);
 			GL.popMatrix();
 			
 			if(visibleToPlayer) {
@@ -135,32 +145,23 @@ public abstract class RenderJSON extends Render {
 		}
 	}
 	
-	protected void renderModel(EntityLivingBase e, float ptt) {
-		model.render(DEFAULT);
+	protected void renderModel(float ptt) {
+		model.render(DEFAULT_PARAMS);
 	}
 	
-	protected void renderLayers(EntityLivingBase e, float swingSpeed, float swingAmount, float ptt, float age, float yawdiff, float pitch, float scale) {
-//		for(LayerRenderer layer : field_177097_h) {
-//			boolean var11 = func_177092_a(e, ptt, layer.shouldCombineTextures());
-//			layer.doRenderLayer(e, swingSpeed, swingAmount, ptt, age, yawdiff, pitch, scale);
-//
-//			if(var11) func_177091_f();
-//		}
-	}
-	
-	@Override protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
+	@Override public ResourceLocation getEntityTexture(Entity p_110775_1_) {
 		return null;
 	}
 	
-	protected int getColorMultiplier(EntityLivingBase e, float brightness, float ptt) {
+	protected int getColorMultiplier(float brightness, float ptt) {
 		return 0;
 	}
 	
-	protected boolean func_177092_a(EntityLivingBase e, float ptt, boolean combineTextures) {
-		float brightness = e.getBrightness(ptt);
-		int color = getColorMultiplier(e, brightness, ptt);
+	protected boolean func_177092_a(float ptt, boolean combineTextures) {
+		float brightness = currentEntity.getBrightness(ptt);
+		int color = getColorMultiplier(brightness, ptt);
 		boolean nontransparent = (color >> 24 & 255) > 0;
-		boolean isRed = e.hurtTime > 0 || e.deathTime > 0;
+		boolean isRed = currentEntity.hurtTime > 0 || currentEntity.deathTime > 0;
 		
 		if(!nontransparent && !isRed) return false;
 		else if(!nontransparent && !combineTextures) return false;
@@ -266,15 +267,15 @@ public abstract class RenderJSON extends Render {
 		GL.setActiveTexture(OpenGlHelper.defaultTexUnit);
 	}
 	
-	protected boolean func_177090_c(EntityLivingBase e, float ptt) {
-		return func_177092_a(e, ptt, true);
+	protected boolean func_177090_c(float ptt) {
+		return func_177092_a(ptt, true);
 	}
 	
-	protected boolean func_177088_c(EntityLivingBase e) {
+	protected boolean func_177088_c() {
 		int rgb = 0xFFFFFF;
 		
-		if(e instanceof EntityPlayer) {
-			ScorePlayerTeam score = (ScorePlayerTeam)e.getTeam();
+		if(currentEntity instanceof EntityPlayer) {
+			ScorePlayerTeam score = (ScorePlayerTeam)currentEntity.getTeam();
 			
 			if(score != null) {
 				String format = FontRenderer.getFormatFromString(score.getColorPrefix());
@@ -305,32 +306,32 @@ public abstract class RenderJSON extends Render {
 		GL.setActiveTexture(OpenGlHelper.defaultTexUnit);
 	}
 	
-	protected float getDeathMaxRotation(EntityLivingBase e) {
+	protected float getDeathMaxRotation() {
 		return 90;
 	}
 	
-	protected void rotateCorpse(EntityLivingBase e, float age, float yaw, float ptt) {
+	public void rotateCorpse(float age, float yaw, float ptt) {
 		GL.rotate(180 - yaw, 0, 1, 0);
 		
-		if(e.deathTime > 0) {
-			float var5 = (e.deathTime + ptt - 1) / 20 * 1.6F;
+		if(currentEntity.deathTime > 0) {
+			float var5 = (currentEntity.deathTime + ptt - 1) / 20 * 1.6F;
 			var5 = MathHelper.sqrt_float(var5);
 			
 			if(var5 > 1) var5 = 1;
 			
-			GL.rotate(var5 * getDeathMaxRotation(e), 0, 0, 1);
+			GL.rotate(var5 * getDeathMaxRotation(), 0, 0, 1);
 		} else {
-			String var6 = EnumChatFormatting.getTextWithoutFormattingCodes(e.getName());
+			String var6 = EnumChatFormatting.getTextWithoutFormattingCodes(currentEntity.getName());
 			
-			if(var6 != null && (var6.equals("Dinnerbone") || var6.equals("Grumm")) && (!(e instanceof EntityPlayer) || ((EntityPlayer)e).func_175148_a(EnumPlayerModelParts.CAPE))) {
-				GL.translate(0, e.height + 0.1F, 0);
+			if(var6 != null && (var6.equals("Dinnerbone") || var6.equals("Grumm")) && (!(currentEntity instanceof EntityPlayer) || ((EntityPlayer)currentEntity).func_175148_a(EnumPlayerModelParts.CAPE))) {
+				GL.translate(0, currentEntity.height + 0.1F, 0);
 				GL.rotate(180, 0, 0, 1);
 			}
 		}
 	}
 	
-	protected float getAge(EntityLivingBase e, float ptt) {
-		return e.ticksExisted + ptt;
+	protected float getAge(float ptt) {
+		return currentEntity.ticksExisted + ptt;
 	}
 	
 	protected float interpolateRotation(float prev, float next, float ptt) {
@@ -341,7 +342,11 @@ public abstract class RenderJSON extends Render {
 		return prev + ptt * interp;
 	}
 	
-	protected void renderLivingAt(EntityLivingBase e, double x, double y, double z) {
+	public void renderLivingAt(double x, double y, double z) {
 		GL.translate(x, y, z);
+	}
+	
+	public ResourceLocation getPath(ResourceLocation texture) {
+		return new ResourceLocation(texture.getResourceDomain(), "textures/" + texture.getResourcePath() + ".png");
 	}
 }

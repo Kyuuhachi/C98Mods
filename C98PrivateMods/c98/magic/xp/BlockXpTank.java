@@ -2,7 +2,7 @@ package c98.magic.xp;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.*;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,13 +13,13 @@ import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.World;
 
 public class BlockXpTank extends BlockContainer {
-	public static final int MAX = 16;
+	public static final int MAX = 256;
 	
 	public static class TE extends TileEntity implements IUpdatePlayerListBox, IXpSource, IXpConnection {
 		private int charge;
 		
 		@Override public boolean canTake(EnumFacing face) {
-			return face != EnumFacing.UP && charge > 0; //It takes from the top, it can't send there.
+			return charge > 0;
 		}
 		
 		@Override public void take() {
@@ -27,12 +27,16 @@ public class BlockXpTank extends BlockContainer {
 			updateState();
 		}
 		
-		@Override public boolean canConnect(EnumFacing i) {
-			return true;
+		@Override public boolean isXpInput(EnumFacing f) {
+			return f == EnumFacing.UP;
+		}
+		
+		@Override public boolean isXpOutput(EnumFacing f) {
+			return f == EnumFacing.DOWN;
 		}
 		
 		@Override public void update() {
-			if(charge < MAX - 1 && XpUtils.canTake(this)) { //TODO make it only take from the top
+			if(charge < MAX - 1 && XpUtils.canTake(this)) {
 				XpUtils.take(this);
 				charge++;
 				updateState();
@@ -45,9 +49,10 @@ public class BlockXpTank extends BlockContainer {
 			int newVal;
 			if(charge == 0) newVal = 0;
 			else if(charge == MAX - 1) newVal = MAX_CHARGE;
-			else newVal = (charge - 1) * (MAX_CHARGE - 2) / (MAX - 2);
+			else newVal = charge * MAX_CHARGE / (MAX - 2);
 			if(newVal > MAX_CHARGE) newVal = MAX_CHARGE;
-			if(oldVal != newVal) worldObj.setBlockState(pos, s.withProperty(CHARGE, newVal).withProperty(ACTIVE, Math.random() < 0.5F));
+			System.out.println(charge + " " + newVal);
+			if(oldVal != newVal) worldObj.setBlockState(pos, s.withProperty(CHARGE, newVal));
 		}
 		
 		@Override public void writeToNBT(NBTTagCompound compound) {
@@ -61,9 +66,8 @@ public class BlockXpTank extends BlockContainer {
 		}
 	}
 	
-	public static final int MAX_CHARGE = 7;
+	public static final int MAX_CHARGE = 14;
 	public static final PropertyInteger CHARGE = PropertyInteger.create("charge", 0, MAX_CHARGE);
-	public static final PropertyBool ACTIVE = PropertyBool.create("active");
 	
 	public BlockXpTank() {
 		super(Material.circuits);
@@ -82,15 +86,15 @@ public class BlockXpTank extends BlockContainer {
 	}
 	
 	@Override protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] {CHARGE, ACTIVE});
+		return new BlockState(this, CHARGE);
 	}
 	
 	@Override public int getMetaFromState(IBlockState state) {
-		return (int)state.getValue(CHARGE) | ((boolean)state.getValue(ACTIVE) ? 8 : 0);
+		return (int)state.getValue(CHARGE);
 	}
 	
 	@Override public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(CHARGE, meta & 7).withProperty(ACTIVE, (meta & 8) != 0);
+		return getDefaultState().withProperty(CHARGE, meta);
 	}
 	
 }

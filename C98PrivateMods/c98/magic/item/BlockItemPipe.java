@@ -16,7 +16,11 @@ public class BlockItemPipe extends BlockPipe {
 			return null;
 		}
 		
-		@Override public boolean canConnect(EnumFacing f) {
+		@Override public boolean isItemInput(EnumFacing f) {
+			return true;
+		}
+		
+		@Override public boolean isItemOutput(EnumFacing f) {
 			return true;
 		}
 	}

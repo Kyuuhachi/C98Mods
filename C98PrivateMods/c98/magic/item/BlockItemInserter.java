@@ -24,13 +24,19 @@ public class BlockItemInserter extends BlockContainer {
 			List<ItemSlot> slots = ItemUtils.getItems(this);
 			if(slots.isEmpty()) return;
 			int idx = worldObj.rand.nextInt(slots.size());
+			
 			EntityItem it = new EntityItem(worldObj, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, slots.get(idx).take());
 			worldObj.spawnEntityInWorld(it); //TODO add to container instead
 		}
 		
-		@Override public boolean canConnect(EnumFacing f) {
-			return worldObj.getBlockState(pos).getValue(FACING) == f.getOpposite();
+		@Override public boolean isItemInput(EnumFacing f) {
+			return f == worldObj.getBlockState(getPos()).getValue(FACING);
 		}
+		
+		@Override public boolean isItemOutput(EnumFacing f) {
+			return false;
+		}
+		
 	}
 	
 	public BlockItemInserter() {

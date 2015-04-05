@@ -12,6 +12,7 @@ public class XpUtils {
 		Set<IXpPipe> visited = new HashSet();
 		
 		for(EnumFacing f : EnumFacing.values()) {
+			if(!isConnected(te.getWorld(), te.getPos(), f)) continue;
 			TileEntity e = te.getWorld().getTileEntity(te.getPos().offset(f));
 			if(e instanceof IXpSource && ((IXpSource)e).canTake(f.getOpposite())) return true;
 			if(e instanceof IXpPipe) {
@@ -27,6 +28,7 @@ public class XpUtils {
 		Set<IXpSource> sources = new HashSet();
 		Set<IXpPipe> visited = new HashSet();
 		for(EnumFacing f : EnumFacing.values()) {
+			if(!isConnected(te.getWorld(), te.getPos(), f)) continue;
 			TileEntity e = te.getWorld().getTileEntity(te.getPos().offset(f));
 			if(e instanceof IXpSource && ((IXpSource)e).canTake(f.getOpposite())) sources.add((IXpSource)e);
 			if(e instanceof IXpPipe) ((IXpPipe)e).getSources(sources, visited, f.getOpposite());
@@ -37,10 +39,9 @@ public class XpUtils {
 	
 	public static boolean isConnected(IBlockAccess w, BlockPos pos, EnumFacing dir) {
 		TileEntity ths = w.getTileEntity(pos);
-		if(ths instanceof IXpConnection && !((IXpConnection)ths).canConnect(dir)) return false;
-		TileEntity e = w.getTileEntity(pos.offset(dir));
-		if(e instanceof IXpConnection && ((IXpConnection)e).canConnect(dir.getOpposite())) return true;
-		return false;
+		TileEntity oth = w.getTileEntity(pos.offset(dir));
+		if(!(ths instanceof IXpConnection)) return false;
+		if(!(oth instanceof IXpConnection)) return false;
+		return ((IXpConnection)ths).isXpInput(dir) && ((IXpConnection)oth).isXpOutput(dir.getOpposite());
 	}
-	
 }

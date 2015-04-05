@@ -8,6 +8,7 @@ import c98.core.launch.Asm;
 
 public class StandardAsm {
 	public static void handle(ClassNode dst, ClassNode transformer, String className) {
+		dst.version = Math.max(dst.version, transformer.version);
 		for(MethodNode transformerMethod : transformer.methods) {
 			MethodNode dstMethod = null;
 			

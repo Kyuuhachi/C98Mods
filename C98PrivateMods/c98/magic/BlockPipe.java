@@ -3,7 +3,6 @@ package c98.magic;
 import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -27,19 +26,23 @@ public abstract class BlockPipe extends BlockContainer {
 	}
 	
 	@Override public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		if(isConnected(worldIn, pos, EnumFacing.DOWN)) state = state.withProperty(DOWN, true);
-		if(isConnected(worldIn, pos, EnumFacing.UP)) state = state.withProperty(UP, true);
-		if(isConnected(worldIn, pos, EnumFacing.NORTH)) state = state.withProperty(NORTH, true);
-		if(isConnected(worldIn, pos, EnumFacing.SOUTH)) state = state.withProperty(SOUTH, true);
-		if(isConnected(worldIn, pos, EnumFacing.WEST)) state = state.withProperty(WEST, true);
-		if(isConnected(worldIn, pos, EnumFacing.EAST)) state = state.withProperty(EAST, true);
+		if(connected(worldIn, pos, EnumFacing.DOWN)) state = state.withProperty(DOWN, true);
+		if(connected(worldIn, pos, EnumFacing.UP)) state = state.withProperty(UP, true);
+		if(connected(worldIn, pos, EnumFacing.NORTH)) state = state.withProperty(NORTH, true);
+		if(connected(worldIn, pos, EnumFacing.SOUTH)) state = state.withProperty(SOUTH, true);
+		if(connected(worldIn, pos, EnumFacing.WEST)) state = state.withProperty(WEST, true);
+		if(connected(worldIn, pos, EnumFacing.EAST)) state = state.withProperty(EAST, true);
 		return state;
+	}
+	
+	public final boolean connected(IBlockAccess worldIn, BlockPos pos, EnumFacing facing) {
+		return isConnected(worldIn, pos, facing) || isConnected(worldIn, pos.offset(facing), facing.getOpposite());
 	}
 	
 	public abstract boolean isConnected(IBlockAccess worldIn, BlockPos pos, EnumFacing facing);
 	
 	@Override protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] {DOWN, UP, NORTH, SOUTH, WEST, EAST});
+		return new BlockState(this, DOWN, UP, NORTH, SOUTH, WEST, EAST);
 	}
 	
 	@Override public int getMetaFromState(IBlockState state) {
@@ -59,39 +62,39 @@ public abstract class BlockPipe extends BlockContainer {
 	}
 	
 	@Override public void setBlockBoundsBasedOnState(IBlockAccess w, BlockPos pos) {
-		float miny = isConnected(w, pos, EnumFacing.DOWN) ? 0 : inset;
-		float maxy = isConnected(w, pos, EnumFacing.UP) ? 1 : 1 - inset;
-		float minz = isConnected(w, pos, EnumFacing.NORTH) ? 0 : inset;
-		float maxz = isConnected(w, pos, EnumFacing.SOUTH) ? 1 : 1 - inset;
-		float minx = isConnected(w, pos, EnumFacing.WEST) ? 0 : inset;
-		float maxx = isConnected(w, pos, EnumFacing.EAST) ? 1 : 1 - inset;
+		float miny = connected(w, pos, EnumFacing.DOWN) ? 0 : inset;
+		float maxy = connected(w, pos, EnumFacing.UP) ? 1 : 1 - inset;
+		float minz = connected(w, pos, EnumFacing.NORTH) ? 0 : inset;
+		float maxz = connected(w, pos, EnumFacing.SOUTH) ? 1 : 1 - inset;
+		float minx = connected(w, pos, EnumFacing.WEST) ? 0 : inset;
+		float maxx = connected(w, pos, EnumFacing.EAST) ? 1 : 1 - inset;
 		setBlockBounds(minx, miny, minz, maxx, maxy, maxz);
 	}
 	
 	@Override public void addCollisionBoxesToList(World w, BlockPos pos, IBlockState state, AxisAlignedBB box, List list, Entity e) {
 		setBlockBounds(inset, inset, inset, 1 - inset, 1 - inset, 1 - inset);
 		super.addCollisionBoxesToList(w, pos, state, box, list, e);
-		if(isConnected(w, pos, EnumFacing.DOWN)) {
+		if(connected(w, pos, EnumFacing.DOWN)) {
 			setBlockBounds(inset, 0.0F, inset, 1 - inset, inset, 1 - inset);
 			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(isConnected(w, pos, EnumFacing.UP)) {
+		if(connected(w, pos, EnumFacing.UP)) {
 			setBlockBounds(inset, 1 - inset, inset, 1 - inset, 1, 1 - inset);
 			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(isConnected(w, pos, EnumFacing.NORTH)) {
+		if(connected(w, pos, EnumFacing.NORTH)) {
 			setBlockBounds(inset, inset, 0, 1 - inset, 1 - inset, inset);
 			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(isConnected(w, pos, EnumFacing.SOUTH)) {
+		if(connected(w, pos, EnumFacing.SOUTH)) {
 			setBlockBounds(inset, inset, 1 - inset, 1 - inset, 1 - inset, 1);
 			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(isConnected(w, pos, EnumFacing.WEST)) {
+		if(connected(w, pos, EnumFacing.WEST)) {
 			setBlockBounds(0, inset, inset, inset, 1 - inset, 1 - inset);
 			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}
-		if(isConnected(w, pos, EnumFacing.EAST)) {
+		if(connected(w, pos, EnumFacing.EAST)) {
 			setBlockBounds(1 - inset, inset, inset, 1, 1 - inset, 1 - inset);
 			super.addCollisionBoxesToList(w, pos, state, box, list, e);
 		}

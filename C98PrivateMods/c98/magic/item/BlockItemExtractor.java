@@ -23,9 +23,14 @@ public class BlockItemExtractor extends BlockContainer {
 			return null;
 		}
 		
-		@Override public boolean canConnect(EnumFacing f) {
-			return worldObj.getBlockState(pos).getValue(FACING) == f;
+		@Override public boolean isItemInput(EnumFacing f) {
+			return false;
 		}
+		
+		@Override public boolean isItemOutput(EnumFacing f) {
+			return f.getOpposite() == worldObj.getBlockState(getPos()).getValue(FACING);
+		}
+		
 	}
 	
 	public BlockItemExtractor() {

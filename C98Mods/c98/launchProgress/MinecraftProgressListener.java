@@ -6,13 +6,16 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.List;
 import java.util.logging.*;
+import javax.imageio.ImageIO;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.resources.DefaultResourcePack;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.Display;
-import c98.core.*;
+import c98.core.C98Log;
+import c98.core.GL;
 
 public class MinecraftProgressListener extends ProgressListener {
 	private static List<String> strings;
@@ -46,11 +49,11 @@ public class MinecraftProgressListener extends ProgressListener {
 	
 	private static void init() {
 		if(imgdata == null) {
-			for(String s:loggers)
+			for(String s : loggers)
 				Logger.getLogger(s).addHandler(logHandler);
 			try {
-				strings = IOUtils.readLines(IO.getInputStream(new ResourceLocation("c98/launchprogress", "launch.txt")));
-				BufferedImage img = IO.getImage(new ResourceLocation("textures/gui/title/mojang.png"));
+				strings = IOUtils.readLines(MinecraftProgressListener.class.getResourceAsStream("/assets/c98/launchprogress/launch.txt"));
+				BufferedImage img = ImageIO.read(DefaultResourcePack.class.getResourceAsStream("/assets/minecraft/textures/gui/title/mojang.png"));
 				imgWidth = img.getWidth();
 				imgHeight = img.getHeight();
 				imgdata = new int[imgWidth * imgHeight];
@@ -64,7 +67,7 @@ public class MinecraftProgressListener extends ProgressListener {
 	}
 	
 	@Override void close() {
-		for(String s:loggers)
+		for(String s : loggers)
 			Logger.getLogger(s).removeHandler(logHandler);
 		logHandler.close();
 	}

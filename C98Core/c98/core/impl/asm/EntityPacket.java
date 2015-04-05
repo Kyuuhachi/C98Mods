@@ -4,8 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.*;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
+import net.minecraft.network.*;
 import net.minecraft.network.play.server.S0EPacketSpawnObject;
 import net.minecraft.world.WorldServer;
 import c98.core.hooks.EntitySpawnHook;
@@ -35,6 +34,7 @@ import com.mojang.authlib.GameProfile;
 	}
 	
 	@Override public void handleSpawnObject(S0EPacketSpawnObject p) {
+		PacketThreadUtil.func_180031_a(p, this, gameController);
 		for(EntitySpawnHook mod : HookImpl.entitySpawnHooks) {
 			Entity e = mod.getEntity(clientWorldController, p);
 			if(e != null) {
@@ -43,12 +43,12 @@ import com.mojang.authlib.GameProfile;
 				e.serverPosZ = p.func_148994_f();
 				e.rotationPitch = p.func_149008_j() * 360 / 256.0F;
 				e.rotationYaw = p.func_149006_k() * 360 / 256.0F;
-				Entity[] var12 = e.getParts();
-				if(var12 != null) {
-					int var10 = p.func_149001_c() - e.getEntityId();
+				Entity[] parts = e.getParts();
+				if(parts != null) {
+					int partIndex = p.func_149001_c() - e.getEntityId();
 					
-					for(int var11 = 0; var11 < var12.length; ++var11)
-						var12[var11].setEntityId(var12[var11].getEntityId() + var10);
+					for(int var11 = 0; var11 < parts.length; ++var11)
+						parts[var11].setEntityId(parts[var11].getEntityId() + partIndex);
 				}
 				
 				e.setEntityId(p.func_149001_c());

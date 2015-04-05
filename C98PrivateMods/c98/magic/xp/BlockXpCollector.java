@@ -62,8 +62,12 @@ public class BlockXpCollector extends BlockContainer {
 			}
 		}
 		
-		@Override public boolean canConnect(EnumFacing i) {
-			return i == EnumFacing.DOWN;
+		@Override public boolean isXpInput(EnumFacing f) {
+			return false;
+		}
+		
+		@Override public boolean isXpOutput(EnumFacing f) {
+			return f == EnumFacing.DOWN;
 		}
 	}
 	

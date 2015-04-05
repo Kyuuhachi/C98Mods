@@ -14,12 +14,24 @@ import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonObject;
 
 public class C98ResourcePack implements IResourcePack { //TODO sounds.json
-	
 	@Override public InputStream getInputStream(ResourceLocation l) {
+		InputStream lang = getLangs(this, l);
+		return lang != null ? lang : C98Core.class.getResourceAsStream("/assets/" + l.getResourceDomain() + "/" + l.getResourcePath());
+	}
+	
+	public static InputStream getLangs(IResourcePack pack, ResourceLocation l) {
 		String ns = l.getResourceDomain();
 		String path = l.getResourcePath();
-		if(ns.equals("c98") && path.startsWith("lang/")) return C98Core.modList.stream().map(mod -> mod.getName()).map(name -> name.toLowerCase()).map(name -> new ResourceLocation(ns + "/" + name, path)).filter(loc -> resourceExists(loc)).map(loc -> getInputStream(loc)).reduce(new ByteArrayInputStream(new byte[0]), (a, b) -> new SequenceInputStream(a, b));
-		return C98Core.class.getResourceAsStream("/assets/" + l.getResourceDomain() + "/" + l.getResourcePath());
+		if(ns.equals("c98") && path.startsWith("lang/")) return C98Core.modList.stream().map(mod -> mod.getName()).map(name -> name.toLowerCase()).map(name -> new ResourceLocation(ns + "/" + name, path)).filter(loc -> pack.resourceExists(loc)).map(loc -> getInputStream(pack, loc)).filter(s -> s != null).reduce(new ByteArrayInputStream(new byte[0]), (a, b) -> new SequenceInputStream(a, b));
+		return null;
+	}
+	
+	private static InputStream getInputStream(IResourcePack pack, ResourceLocation loc) {
+		try {
+			return pack.getInputStream(loc);
+		} catch(IOException e) {
+			return null;
+		}
 	}
 	
 	@Override public boolean resourceExists(ResourceLocation l) {

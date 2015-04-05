@@ -26,11 +26,11 @@ public class ItemUtils {
 		while(!toVisit.isEmpty()) {
 			IItemConnection c = toVisit.remove(0);
 			for(EnumFacing f : EnumFacing.values())
-				if(c.canConnect(f)) {
+				if(c.isItemOutput(f)) {
 					TileEntity t = te.getWorld().getTileEntity(c.getPos().offset(f));
 					if(t instanceof IItemConnection) {
 						IItemConnection c2 = (IItemConnection)t;
-						if(c2.canConnect(f.getOpposite()) && !visited.contains(c2)) {
+						if(c2.isItemInput(f.getOpposite()) && !visited.contains(c2)) {
 							visited.add(c2);
 							if(c2 instanceof IItemPipe) {
 								Predicate<ItemStack> filter2 = ((IItemPipe)c2).getFilter();
@@ -53,10 +53,9 @@ public class ItemUtils {
 	
 	public static boolean isConnected(IBlockAccess w, BlockPos pos, EnumFacing dir) {
 		TileEntity ths = w.getTileEntity(pos);
-		if(ths instanceof IItemConnection && !((IItemConnection)ths).canConnect(dir)) return false;
-		TileEntity e = w.getTileEntity(pos.offset(dir));
-		if(e instanceof IItemConnection && ((IItemConnection)e).canConnect(dir.getOpposite())) return true;
-		return false;
+		TileEntity oth = w.getTileEntity(pos.offset(dir));
+		if(!(ths instanceof IItemConnection)) return false;
+		if(!(oth instanceof IItemConnection)) return false;
+		return ((IItemConnection)ths).isItemOutput(dir) && ((IItemConnection)oth).isItemInput(dir.getOpposite());
 	}
-	
 }

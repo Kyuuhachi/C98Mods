@@ -1,20 +1,7 @@
 {
+	"parent": "c98/magic:block/pipe/none",
 	"textures": {
 		"particle": "blocks/enchanting_table_bottom",
 		"side": "c98/magic:blocks/pipe"
-	},
-	"elements": [
-		{
-			"from": [4, 4, 4],
-			"to": [12, 12, 12],
-			"faces": {
-				"down":  {"texture": "#side"},
-				"up":    {"texture": "#side"},
-				"north": {"texture": "#side"},
-				"south": {"texture": "#side"},
-				"east":  {"texture": "#side"},
-				"west":  {"texture": "#side"}
-			}
-		}
-	]
+	}
 }

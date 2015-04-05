@@ -1,5 +1,5 @@
 {
-	"parent": "c98/magic:block/xp_pipe/inventory",
+	"parent": "c98/magic:block/item_pipe/inventory",
 	"display": {
 		"thirdperson": {
 			"rotation": [10, -45, 170],

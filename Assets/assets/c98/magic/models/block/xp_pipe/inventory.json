@@ -1,0 +1,44 @@
+{
+	"textures": {
+		"particle": "blocks/enchanting_table_bottom",
+		"side": "c98/magic:blocks/pipe",
+		"end": "c98/magic:blocks/pipe_end",
+		"leak": "c98/magic:blocks/magic_still"
+	},
+	"elements": [
+		{
+			"from": [4, 0, 4],
+			"to": [12, 16, 12],
+			"faces": {
+				"down":  {"texture": "#end"},
+				"up":    {"texture": "#end"},
+				"east":  {"texture": "#side"},
+				"west":  {"texture": "#side"},
+				"north": {"texture": "#side"},
+				"south": {"texture": "#side"}
+			}
+		},
+		{
+			"from": [5, 1, 5],
+			"to": [11, 0, 11],
+			"faces": {
+				"down":  {"texture": "#leak"},
+				"east":  {"texture": "#side"},
+				"west":  {"texture": "#side"},
+				"north": {"texture": "#side"},
+				"south": {"texture": "#side"}
+			}
+		},
+		{
+			"from": [5, 16, 5],
+			"to": [11, 15, 11],
+			"faces": {
+				"up":    {"texture": "#leak"},
+				"east":  {"texture": "#side"},
+				"west":  {"texture": "#side"},
+				"north": {"texture": "#side"},
+				"south": {"texture": "#side"}
+			}
+		}
+	]
+}

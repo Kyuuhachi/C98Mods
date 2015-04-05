@@ -5,7 +5,8 @@
 		"side": "c98/magic:blocks/xp_tank_side",
 		"inside": "blocks/obsidian",
 		"seal": "blocks/gold_block",
-		"coil": "blocks/lapis_block"
+		"coil": "blocks/lapis_block",
+		"ccoil": "c98/magic:blocks/magic_still"
 	},
 	"elements": [
 		{//outside
@@ -21,15 +22,25 @@
 			}
 		},
 		{//coil
-			"from": [2, 0.5, 2],
+			"from": [2, 5, 2],
 			"to": [14, 15.5, 14],
 			"faces": {
-				"down":  {"texture": "#seal", "cullface": "down"},
 				"up":    {"texture": "#seal", "cullface": "up"},
 				"north": {"texture": "#coil", "cullface": "north"},
 				"south": {"texture": "#coil", "cullface": "south"},
 				"west":  {"texture": "#coil", "cullface": "west"},
 				"east":  {"texture": "#coil", "cullface": "east"}
+			}
+		},
+		{//ccoil
+			"from": [2, 0.5, 2],
+			"to": [14, 5, 14],
+			"faces": {
+				"down":  {"texture": "#seal", "cullface": "up"},
+				"north": {"texture": "#ccoil", "cullface": "north"},
+				"south": {"texture": "#ccoil", "cullface": "south"},
+				"west":  {"texture": "#ccoil", "cullface": "west"},
+				"east":  {"texture": "#ccoil", "cullface": "east"}
 			}
 		},
 		{//down

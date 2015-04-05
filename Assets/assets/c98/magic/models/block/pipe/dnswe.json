@@ -1,0 +1,34 @@
+{
+	"elements": [
+		{//d
+			"from": [4, 0, 4],
+			"to": [12, 12, 12],
+			"faces": {
+				"north": {"texture": "#side"},
+				"south": {"texture": "#side"},
+				"east":  {"texture": "#side"},
+				"west":  {"texture": "#side"}
+			}
+		},
+		{//ns
+			"from": [4, 4, 0],
+			"to": [12, 12, 16],
+			"faces": {
+				"down":  {"texture": "#side"},
+				"up":    {"texture": "#side"},
+				"east":  {"texture": "#side"},
+				"west":  {"texture": "#side"}
+			}
+		},
+		{//we
+			"from": [0, 4, 4],
+			"to": [16, 12, 12],
+			"faces": {
+				"down":  {"texture": "#side"},
+				"up":    {"texture": "#side"},
+				"north": {"texture": "#side"},
+				"south": {"texture": "#side"}
+			}
+		}
+	]
+}

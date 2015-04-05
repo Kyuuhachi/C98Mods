@@ -1,38 +1,7 @@
 {
+	"parent": "c98/magic:block/pipe/dnse",
 	"textures": {
 		"particle": "blocks/enchanting_table_bottom",
 		"side": "c98/magic:blocks/pipe"
-	},
-	"elements": [
-		{//d
-			"from": [4, 0, 4],
-			"to": [12, 12, 12],
-			"faces": {
-				"north": {"texture": "#side"},
-				"south": {"texture": "#side"},
-				"east":  {"texture": "#side"},
-				"west":  {"texture": "#side"}
-			}
-		},
-		{//ns
-			"from": [4, 4, 0],
-			"to": [12, 12, 16],
-			"faces": {
-				"down":  {"texture": "#side"},
-				"up":    {"texture": "#side"},
-				"east":  {"texture": "#side"},
-				"west":  {"texture": "#side"}
-			}
-		},
-		{//e
-			"from": [4, 4, 4],
-			"to": [16, 12, 12],
-			"faces": {
-				"down":  {"texture": "#side"},
-				"up":    {"texture": "#side"},
-				"north": {"texture": "#side"},
-				"south": {"texture": "#side"}
-			}
-		}
-	]
+	}
 }

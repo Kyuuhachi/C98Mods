@@ -1,3 +1,7 @@
-tile.c98/magic.extractor.name=Peritio Converter
-tile.c98/magic.pipe.name=Peritio Conduit
-tile.c98/magic.magic_gate.name=Magic Gate
+tile.c98/magic.xp_collector.name=XP Extractor
+tile.c98/magic.xp_pipe.name=XP Conduit
+tile.c98/magic.xp_tank.name=XP Cell
+tile.c98/magic.item_extractor.name=Item Extractor
+tile.c98/magic.item_pipe.name=Item Pipe
+tile.c98/magic.item_inserter.name=Item Inserter
+tile.c98/magic.furnace.name=Magic Furnace

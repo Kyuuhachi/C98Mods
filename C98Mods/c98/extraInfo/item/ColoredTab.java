@@ -20,10 +20,11 @@ import c98.core.launch.ASMer;
 	@Override protected void func_147051_a(CreativeTabs p_147051_1_) {
 		drawnTab = p_147051_1_;
 		super.func_147051_a(p_147051_1_);
-		drawnTab = p_147051_1_;
+		drawnTab = null;
 	}
 	
 	@Override public void drawTexturedModalRect(int x, int y, int u, int v, int w, int h) {
+		GL.color(1, 1, 1);
 		if(drawnTab == null) {
 			super.drawTexturedModalRect(x, y, u, v, w, h);
 			return;

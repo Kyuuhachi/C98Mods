@@ -68,6 +68,7 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 		public Color silverfish = new Color(0xFF7F7F);
 		public TBConf topBar = new TBConf();
 		public SlotConf slotInfo = new SlotConf();
+		public boolean drawXpInCreative = true;
 		
 		@Override public void init(GsonBuilder bldr) {
 			bldr.registerTypeAdapter(SlotConf.class, new SlotConf.Serializer());
@@ -98,20 +99,16 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 		}
 	}
 	
-	@Override public void renderHud(boolean bars) {
+	@Override public void postRenderHud(HudElement e) {
 		ScaledResolution res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int height = res.getScaledHeight();
 		int width = res.getScaledWidth();
 		FontRenderer fr = mc.fontRendererObj;
-		
-		if(config.topBar.enable) TopBar.drawTopBar(mc, width, fr);
-		if(config.potionInfo) PotionInfo.drawPotions(height, width, fr, mc);
-		
-		if(bars && config.saturationInfo) SaturationInfo.draw(mc, width, height);
-		if(mc.thePlayer.isRidingHorse()) {
-			if(config.horseInfo) HorseInfo.draw(height, width, fr, mc.thePlayer, (EntityHorse)mc.thePlayer.ridingEntity);
-		} else if(mc.playerController.gameIsSurvivalOrAdventure() && config.xpInfo) XPBar.draw(height, width, fr, mc.thePlayer);
-		
+		if(e == HudElement.FOOD && config.saturationInfo) SaturationInfo.draw(mc, width, height);
+		if(e == HudElement.EXP_BAR && config.xpInfo) XPBar.draw(height, width, fr, mc.thePlayer);
+		if(e == HudElement.JUMP_BAR && config.horseInfo) HorseInfo.draw(height, width, fr, mc.thePlayer, (EntityHorse)mc.thePlayer.ridingEntity);
+		if(e == HudElement.ALL && config.topBar.enable) TopBar.drawTopBar(mc, width, fr);
+		if(e == HudElement.ALL && config.potionInfo) PotionInfo.drawPotions(height, width, fr, mc);
 	}
 	
 	public static void drawSunMoon(int x, int y, int u, int v, int w, int h, boolean moon) {

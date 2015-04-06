@@ -93,10 +93,6 @@ public class MapClient implements IResourceManagerReloadListener {
 		
 		float color = map.crashed ? 0.5F : 1F;
 		GL.color(1, color, color);
-		GL.enableBlend();
-		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
-		GL.disableAlpha();
-		GL.disableDepth();
 		for(int i = 0; i < 2; i++) {
 			double margin = (1 - i) * 7 * map.size / 128.0;
 			GL.bindTexture(i == 0 ? mapBG : texture);
@@ -108,12 +104,10 @@ public class MapClient implements IResourceManagerReloadListener {
 			GL.end();
 		}
 		GL.color(1, 1, 1);
-		GL.enableAlpha();
-		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 		GL.bindTexture(mapIcons);
 		
 		GL.begin();
-		for(MapMarker icon:map.markers) {
+		for(MapMarker icon : map.markers) {
 			float u0 = texCoords[icon.img][0];
 			float v0 = 00000000 / 8F;
 			float u1 = icon.img / 8F;
@@ -143,8 +137,7 @@ public class MapClient implements IResourceManagerReloadListener {
 			GL.vertex(c3.x, c3.y, u0, v1);
 		}
 		GL.end();
-		GL.disableBlend();
-		GL.enableDepth();
+		
 		GL.popMatrix();
 	}
 }

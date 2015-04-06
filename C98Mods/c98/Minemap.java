@@ -79,13 +79,15 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 		stop();
 	}
 	
-	@Override public void renderHud(boolean status) {
-		if((mapServer == null || mc.theWorld != mapServer.world || reloadMap || !thread.isAlive()) && mc.currentScreen == null) {
-			stop();
-			readConfig();
-			start();
-			reloadMap = false;
+	@Override public void postRenderHud(HudElement e) {
+		if(e == HudElement.ALL) {
+			if((mapServer == null || mc.theWorld != mapServer.world || reloadMap || !thread.isAlive()) && mc.currentScreen == null) {
+				stop();
+				readConfig();
+				start();
+				reloadMap = false;
+			}
+			if(mapServer != null) mapServer.render();
 		}
-		if(mapServer != null) mapServer.render();
 	}
 }

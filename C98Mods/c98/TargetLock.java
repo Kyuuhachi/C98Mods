@@ -16,6 +16,8 @@ import c98.core.*;
 import c98.core.hooks.*;
 import c98.targetLock.*;
 
+//TODO repair this
+
 public class TargetLock extends C98Mod implements TickHook, GuiHook, HudRenderHook, KeyHook {
 	public static class TLConf {
 		public boolean drawArmor = true;
@@ -34,8 +36,8 @@ public class TargetLock extends C98Mod implements TickHook, GuiHook, HudRenderHo
 		hud = new HUD(mc);
 	}
 	
-	@Override public void renderHud(boolean status) {
-		hud.render(target());
+	@Override public void postRenderHud(HudElement e) {
+		if(e == HudElement.ALL) hud.render(target());
 	}
 	
 	public static Target target() {

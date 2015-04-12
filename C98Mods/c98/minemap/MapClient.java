@@ -84,6 +84,7 @@ public class MapClient implements IResourceManagerReloadListener {
 			System.arraycopy(map.colors, 0, data, 0, data.length);
 		}
 		image.updateDynamicTexture();
+		GL.enableAlpha();
 		GL.pushMatrix();
 		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		float scale = 1F / sr.getScaleFactor();

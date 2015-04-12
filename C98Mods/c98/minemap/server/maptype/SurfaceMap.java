@@ -17,13 +17,13 @@ public class SurfaceMap extends MapImpl {
 		int maxY = chunk.getHeight(x, z) + 1;
 		Block id = null;
 		
-		if(maxY > 1) {
+		if(maxY >= 0) {
 			do {
 				--maxY;
 				id = chunk.getBlock(x, maxY, z);
-			} while(maxY > 0 && id.getMapColor(chunk.getBlockState(new BlockPos(x, maxY, z))) == MapColor.airColor);
+			} while(maxY >= 0 && id.getMapColor(chunk.getBlockState(new BlockPos(x, maxY, z))) == MapColor.airColor);
 			
-			if(maxY > 0 && id.getMaterial().isLiquid()) {
+			if(maxY >= 0 && id.getMaterial().isLiquid()) {
 				int liquidBottom = maxY - 1;
 				Block bottomID;
 				
@@ -46,7 +46,7 @@ public class SurfaceMap extends MapImpl {
 		
 		int color = 0;
 		
-		if(id != null && maxY > 0) {
+		if(id != null && maxY >= 0) {
 			MapColor materialColor = chunk.getBlockState(new BlockPos(x, maxY, z)).getBlock().getMapColor(chunk.getBlockState(new BlockPos(x, maxY, z)));
 			
 			if(materialColor == MapColor.waterColor) {

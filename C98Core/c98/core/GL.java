@@ -195,7 +195,7 @@ public class GL {
 	
 	public static void color(float r, float g, float b, float a) {GlStateManager.color(r,g,b,a);}
 	public static void color(float r, float g, float b) {color(r,g,b, 1);}
-	public static void color(int rgb) {color((rgb>>16&255)/255F,(rgb>>8&255)/255F,(rgb>>0&255)/255F,(rgb>>24&255)/255F);}
+	public static void color(int rgba) {color((rgba>>16&255)/255F,(rgba>>8&255)/255F,(rgba>>0&255)/255F,(rgba>>24&255)/255F);}
 	public static void resetColor() {GlStateManager.func_179117_G();}
 	
 	private static boolean drawing;

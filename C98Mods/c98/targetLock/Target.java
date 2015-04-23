@@ -1,9 +1,9 @@
 package c98.targetLock;
 
 public interface Target {
-	public double getX();
+	public double getX(float ptt);
 	
-	public double getY();
+	public double getY(float ptt);
 	
-	public double getZ();
+	public double getZ(float ptt);
 }

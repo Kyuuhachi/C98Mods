@@ -10,6 +10,7 @@ import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.*;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 import c98.core.*;
 import c98.core.hooks.KeyHook;
@@ -33,7 +34,7 @@ public class DangerDisplay extends C98Mod implements WorldRenderHook, KeyHook {
 		if(mc.currentScreen == null && var1 == key) display = !display;
 	}
 	
-	@Override public void renderWorld() {
+	@Override public void renderWorld(World world, float ptt) {
 		if(!display) return;
 		int pX = MathHelper.floor_double(mc.func_175606_aa().posX);
 		int pY = MathHelper.floor_double(mc.func_175606_aa().posY);

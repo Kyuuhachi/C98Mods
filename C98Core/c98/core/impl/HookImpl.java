@@ -186,7 +186,7 @@ public class HookImpl {
 		
 		for(WorldRenderHook mod : worldRenderHooks) {
 			C98Core.mc.mcProfiler.startSection(mod.toString());
-			mod.renderWorld();
+			mod.renderWorld(C98Core.mc.theWorld, C98Core.getPartialTicks());
 			C98Core.mc.mcProfiler.endSection();
 		}
 		GL.popMatrix();
@@ -195,37 +195,6 @@ public class HookImpl {
 		
 		C98Core.mc.mcProfiler.endSection();
 	}
-	
-//	public static void renderHud() {
-//		if(C98Core.mc.playerController.enableEverythingIsScrewedUpMode()) return;
-//		C98Core.mc.mcProfiler.startSection("c98renderHud");
-//
-////		GL.matrixMode(GL.PROJECTION);
-////		GL.pushMatrix();
-////		GL.loadIdentity();
-////		ScaledResolution var1 = new ScaledResolution(C98Core.mc, C98Core.mc.displayWidth, C98Core.mc.displayHeight);
-////		GL.ortho(0.0D, var1.getScaledWidth_double(), var1.getScaledHeight_double(), 0.0D, 1000.0D, 3000.0D);
-////		GL.matrixMode(GL.MODELVIEW);
-////		GL.pushMatrix();
-////		GL.loadIdentity();
-////		GL.translate(0, 0, -2000);
-////		GL.enableAlpha();
-//
-//		for(HudRenderHook mod : hudRenderHooks) {
-//			C98Core.mc.mcProfiler.startSection(mod.toString());
-//			mod.renderHud(C98Core.mc.playerController.shouldDrawHUD());
-//			C98Core.mc.mcProfiler.endSection();
-//		}
-//		C98Core.mc.getTextureManager().bindTexture(Gui.icons);
-//
-////		GL.disableAlpha();
-////		GL.matrixMode(GL.PROJECTION);
-////		GL.popMatrix();
-////		GL.matrixMode(GL.MODELVIEW);
-////		GL.popMatrix();
-//
-//		C98Core.mc.mcProfiler.endSection();
-//	}
 	
 	public static void setGui(GuiScreen par1GuiScreen) {
 		for(GuiSetHook mod : guiSetHooks)

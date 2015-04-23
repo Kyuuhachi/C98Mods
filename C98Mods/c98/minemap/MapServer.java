@@ -2,7 +2,6 @@ package c98.minemap;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
@@ -21,7 +20,6 @@ public class MapServer {
 	public List<MapMarkerInstance> markers = new ArrayList();
 	public int[] colors;
 	public boolean crashed;
-	public int[] mapColors;
 	public MapHandler impl;
 	private int scale;
 	
@@ -130,13 +128,6 @@ public class MapServer {
 			size = p.size;
 			scale = p.scale;
 			impl = MinemapPlugin.getMapHandler_(p.type);
-			impl.mapRenderer = this;
-			
-			MapColor[] a = MapColor.mapColorArray;
-			int[] col = new int[a.length];
-			for(int i = 0; i < col.length; i++)
-				if(a[i] != null) col[i] = a[i].colorValue;
-			mapColors = col;
 			
 			colors = new int[size * size];
 			renderer = new MapClient(this);

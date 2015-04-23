@@ -1,10 +1,10 @@
-package c98.minemap.server.selector;
+package c98.minemapMarkers.selector;
 
 import java.util.LinkedList;
 import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import c98.minemap.server.selector.propinst.PropertyInstance;
+import c98.minemapMarkers.selector.propinst.PropertyInstance;
 
 public class Selector {
 	public String name;

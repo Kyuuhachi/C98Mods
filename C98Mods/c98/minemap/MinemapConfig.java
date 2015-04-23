@@ -1,15 +1,10 @@
 package c98.minemap;
 
-import java.awt.Color;
 import java.awt.Point;
 import org.lwjgl.opengl.Display;
-import com.google.gson.*;
-import c98.core.Json.CustomConfig;
-import c98.minemap.MinemapConfig.Preset.MapType;
-import c98.minemap.server.selector.EntitySelector;
-import c98.minemap.server.selector.Selector;
+import c98.Minemap;
 
-public class MinemapConfig implements CustomConfig {
+public class MinemapConfig {
 	public static enum MapLocation {
 		//@off
 		NW, N , NE,
@@ -28,95 +23,22 @@ public class MinemapConfig implements CustomConfig {
 		}
 	}
 	
-	public static class Marker implements Cloneable {
-		public Color color;
-		public Integer shape;
-		public Integer zLevel;
-		public Float size;
-		public Integer minOpacity;
-		public Boolean rotate;
-		private transient Marker norm;
-		
-		@Override protected Marker clone() {
-			try {
-				return (Marker)super.clone();
-			} catch(CloneNotSupportedException e) {
-				return null;
-			}
-		}
-		
-		public Marker normalize() {
-			if(norm == null) norm = normalize_();
-			return norm;
-		}
-		
-		protected Marker normalize_() {
-			Marker m = clone();
-			m.color = color != null ? color : Color.WHITE;
-			m.shape = shape != null ? shape : 0;
-			m.zLevel = zLevel != null ? zLevel : 0;
-			m.size = size != null ? size : 1;
-			m.minOpacity = minOpacity != null ? minOpacity : 64;
-			m.rotate = rotate != null ? rotate : true;
-			return m;
-		}
-	}
-	
-	public static class EntityMarker extends Marker {
-		public String selector = "";
-		public transient Selector compiledSelector;
-		public Boolean teamColor;
-		
-		@Override protected Marker normalize_() {
-			EntityMarker m = (EntityMarker)super.normalize_();
-			m.teamColor = teamColor != null ? teamColor : false;
-			m.compiledSelector = EntitySelector.parse(selector);
-			return m;
-		}
-	}
-	
-	public static class WaypointMarker extends Marker {
-		public int[] position = new int[0];
-	}
-	
 	public static class Preset {
-		public static enum MapType {
-			NORMAL,
-			CAVEMAP,
-			LIGHTMAP,
-			LIGHTCAVEMAP,
-			BIOME;
-		}
-		
 		public int size = 256;
-		public MapType type = MapType.NORMAL;
+		public String type = Minemap.NORMAL;
 		public int scale = 1;
 		public Boolean hidden;
 	}
 	
 	public MapLocation location = MapLocation.NE;
 	public Preset[] presets = null; //generate in ctor
-	public EntityMarker[] markers = null; //generate in ctor
-	public WaypointMarker[] waypoints = {};
-	public int numDirections = 16;
+	public int iconDirections = 16;
+	public boolean iconSmooth = false;
 	
 	public MinemapConfig() {
-		EntityMarker player = new EntityMarker();
-		EntityMarker self = new EntityMarker();
-		player.selector = "Player";
-		player.zLevel = 1;
-		self.selector = "Self";
-		self.zLevel = 99;
-		self.color = Color.GREEN;
-		markers = new EntityMarker[] {self, player};
 		Preset normal = new Preset();
 		Preset cave = new Preset();
-		cave.type = MapType.CAVEMAP;
+		cave.type = Minemap.CAVEMAP;
 		presets = new Preset[] {normal, cave};
-	}
-	
-	@Override public void init(GsonBuilder bldr) {
-//		bldr.registerTypeAdapter(EntityMarker.class, new MarkerSerializer());
-//		bldr.registerTypeAdapter(WaypointMarker.class, new WaypointSerializer());
 	}
 }

@@ -1,4 +1,4 @@
-package c98.minemap.server.selector;
+package c98.minemapMarkers.selector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,7 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.*;
 import net.minecraft.tileentity.TileEntity;
-import c98.minemap.server.selector.prop.*;
+import c98.minemapMarkers.selector.prop.*;
 
 public class EntitySelector {
 	public static Map<Class, String> classToId = new HashMap();

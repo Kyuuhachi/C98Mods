@@ -1,7 +1,7 @@
-package c98.minemap.server.selector.prop;
+package c98.minemapMarkers.selector.prop;
 
 import net.minecraft.entity.Entity;
-import c98.minemap.server.selector.SelectorProperties;
+import c98.minemapMarkers.selector.SelectorProperties;
 
 public final class SimpleIntProperty implements SimpleProperty<Integer> {
 	public int idx;

@@ -3,13 +3,13 @@ package c98.minemap;
 import c98.core.util.Matrix;
 import c98.core.util.Vector;
 
-public class MapMarker implements Comparable<MapMarker> {
+public class MapMarkerInstance implements Comparable<MapMarkerInstance> {
 	public int img, color, x, y, z, rot;
 	private int zLevel;
 	public float size;
 	public Matrix m = new Matrix();
 	
-	public MapMarker(int icon, int color, int posX, int posY, int posZ, int r, int zLevel, float size, int mapsize) {
+	public MapMarkerInstance(int icon, int color, int posX, int posY, int posZ, int r, int zLevel, float size, int mapsize) {
 		img = icon & 7;
 		this.color = color;
 		x = posX;
@@ -32,12 +32,8 @@ public class MapMarker implements Comparable<MapMarker> {
 		m.translate(new Vector(-0.125, 0.125, 0));
 	}
 	
-	@Override public int compareTo(MapMarker arg0) {
+	@Override public int compareTo(MapMarkerInstance arg0) {
 		return Integer.compare(zLevel, arg0.zLevel);
 	}
-	
-//	@Override public String toString() {
-//		return "c98.minimap.MapMarker[icon=" + img + ", color=" + new Color(color) + ", pos=[" + x + " " + y + " " + z + "]]";
-//	}
 	
 }

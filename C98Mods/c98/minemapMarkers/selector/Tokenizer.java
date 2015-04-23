@@ -1,4 +1,4 @@
-package c98.minemap.server.selector;
+package c98.minemapMarkers.selector;
 
 import java.util.*;
 

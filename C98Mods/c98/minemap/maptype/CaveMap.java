@@ -1,12 +1,12 @@
-package c98.minemap.server.maptype;
+package c98.minemap.maptype;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.chunk.Chunk;
-import c98.minemap.server.MapImpl;
+import c98.minemap.api.MapHandler;
 
-public class CaveMap extends MapImpl {
+public class CaveMap extends MapHandler {
 	@Override public int calc(Chunk chunk, int x, int z, int plY) {
 		boolean down = false;
 		boolean up = false;

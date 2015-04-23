@@ -1,11 +1,11 @@
-package c98.minemap.server.maptype;
+package c98.minemap.maptype;
 
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.chunk.Chunk;
-import c98.minemap.server.MapImpl;
+import c98.minemap.api.MapHandler;
 
-public class LightMap extends MapImpl {
+public class LightMap extends MapHandler {
 	private boolean cave;
 	
 	public LightMap(boolean b) {

@@ -1,19 +1,25 @@
 package c98;
 
-import java.io.File;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import c98.core.*;
 import c98.core.hooks.*;
 import c98.minemap.*;
-import c98.minemap.MinemapConfig.EntityMarker;
-import com.google.gson.GsonBuilder;
+import c98.minemap.api.MapHandler;
+import c98.minemap.api.MinemapPlugin;
+import c98.minemap.maptype.*;
 
-public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHook {
+public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHook, MinemapPlugin {
+	public static final String NORMAL = "surface";
+	public static final String CAVEMAP = "cave";
+	public static final String LIGHTMAP = "light";
+	public static final String LIGHTCAVEMAP = "lightcave";
+	public static final String BIOME = "biome";
+	
 	public static MapServer mapServer;
 	private MapThread thread;
-	private KeyBinding key = new KeyBinding("Toggle map preset", Keyboard.KEY_M, C98Core.KEYBIND_CAT);
+	private KeyBinding key = new KeyBinding("Minemap", Keyboard.KEY_M, C98Core.KEYBIND_CAT);
 	private int currentPreset;
 	private boolean reloadMap;
 	public static MinemapConfig config;
@@ -21,16 +27,11 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 	
 	@Override public void load() {
 		C98Core.registerKey(key, false);
+		MinemapPlugin.register(this);
 	}
 	
-	private void readConfig() {
+	@Override public void reloadConfig() {
 		config = Json.get(this, MinemapConfig.class);
-		if(mc.theWorld != null) {
-			GsonBuilder gson = Json.getGson(config);
-			gson.registerTypeAdapter(EntityMarker[].class, new SuperListAdapter());
-			File f = new File(IO.getMinecraftDir(), "config/C98/" + getName() + "/" + mc.theWorld.provider.getDimensionId() + ".json");
-			Json.read(f, config, gson.create());
-		}
 	}
 	
 	@Override public void keyboardEvent(KeyBinding keybinding) {
@@ -83,11 +84,19 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 		if(e == HudElement.ALL) {
 			if((mapServer == null || mc.theWorld != mapServer.world || reloadMap || !thread.isAlive()) && mc.currentScreen == null) {
 				stop();
-				readConfig();
+				MinemapPlugin.plugins.forEach(p -> p.reloadConfig());
 				start();
 				reloadMap = false;
 			}
 			if(mapServer != null) mapServer.render();
 		}
+	}
+	
+	@Override public MapHandler getMapHandler(String type) {
+		if(type.equals(CAVEMAP)) return new CaveMap();
+		if(type.equals(LIGHTMAP)) return new LightMap(false);
+		if(type.equals(LIGHTCAVEMAP)) return new LightMap(true);
+		if(type.equals(BIOME)) return new BiomeMap();
+		return null;
 	}
 }

@@ -1,4 +1,4 @@
-package c98.minemap.server.selector.propinst;
+package c98.minemapMarkers.selector.propinst;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;

@@ -1,9 +1,9 @@
-package c98.minemap.server;
+package c98.minemap.api;
 
 import net.minecraft.world.chunk.Chunk;
 import c98.minemap.MapServer;
 
-public abstract class MapImpl {
+public abstract class MapHandler {
 	public MapServer mapRenderer;
 	
 	public abstract int calc(Chunk chunk, int x, int z, int plY);

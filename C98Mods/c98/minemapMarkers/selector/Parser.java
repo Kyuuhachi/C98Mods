@@ -1,9 +1,9 @@
-package c98.minemap.server.selector;
+package c98.minemapMarkers.selector;
 
 import java.util.LinkedList;
-import c98.minemap.server.selector.Tokenizer.Token;
-import c98.minemap.server.selector.prop.SelectorProperty;
-import c98.minemap.server.selector.propinst.*;
+import c98.minemapMarkers.selector.Tokenizer.Token;
+import c98.minemapMarkers.selector.prop.SelectorProperty;
+import c98.minemapMarkers.selector.propinst.*;
 
 public class Parser {
 	

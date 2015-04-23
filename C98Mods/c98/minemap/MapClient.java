@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import c98.Minemap;
 import c98.core.GL;
 import c98.core.IO;
@@ -107,8 +108,15 @@ public class MapClient implements IResourceManagerReloadListener {
 		GL.color(1, 1, 1);
 		GL.bindTexture(mapIcons);
 		
+		if(Minemap.config.iconSmooth) {
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			GL.enableBlend();
+			GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
+		}
+		
 		GL.begin();
-		for(MapMarker icon : map.markers) {
+		for(MapMarkerInstance icon : map.markers) {
 			float u0 = texCoords[icon.img][0];
 			float v0 = 00000000 / 8F;
 			float u1 = icon.img / 8F;
@@ -138,6 +146,8 @@ public class MapClient implements IResourceManagerReloadListener {
 			GL.vertex(c3.x, c3.y, u0, v1);
 		}
 		GL.end();
+		
+		if(Minemap.config.iconSmooth) GL.disableBlend();
 		
 		GL.popMatrix();
 	}

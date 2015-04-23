@@ -1,12 +1,12 @@
-package c98.minemap.server.maptype;
+package c98.minemap.maptype;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.chunk.Chunk;
-import c98.minemap.server.MapImpl;
+import c98.minemap.api.MapHandler;
 
-public class SurfaceMap extends MapImpl {
+public class SurfaceMap extends MapHandler {
 	
 	private int prevHeight;
 	

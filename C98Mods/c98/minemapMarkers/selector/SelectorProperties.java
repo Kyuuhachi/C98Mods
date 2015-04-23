@@ -1,8 +1,8 @@
-package c98.minemap.server.selector;
+package c98.minemapMarkers.selector;
 
 import java.util.HashMap;
 import java.util.Map;
-import c98.minemap.server.selector.prop.*;
+import c98.minemapMarkers.selector.prop.*;
 
 public class SelectorProperties {
 	public static final String BOOLEAN = "boolean", STRING = "string", FLOAT = "float", INT = "int";

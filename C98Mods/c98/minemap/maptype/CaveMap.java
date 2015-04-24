@@ -20,7 +20,7 @@ public class CaveMap extends MapHandler {
 				id = chunk.getBlock(x, plY - 1, z);
 				
 				if(id == null) visibleBlockFound = false;
-				else if(plY > 0 && id.getMapColor(chunk.getBlockState(new BlockPos(x, plY, z))) == MapColor.airColor) visibleBlockFound = false;
+				else if(plY > 0 && id.getMapColor(chunk.getBlockState(new BlockPos(x, plY - 1, z))) == MapColor.airColor) visibleBlockFound = false;
 				
 				if(!visibleBlockFound) {
 					down = true;

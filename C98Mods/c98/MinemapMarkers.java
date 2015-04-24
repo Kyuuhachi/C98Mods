@@ -75,7 +75,7 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 	public static Config config;
 	
 	@Override public void load() {
-//		MinemapPlugin.register(this);
+		MinemapPlugin.register(this);
 	}
 	
 	@Override public void reloadConfig() {

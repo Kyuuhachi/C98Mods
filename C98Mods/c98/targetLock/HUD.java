@@ -20,6 +20,7 @@ import net.minecraft.util.EnumChatFormatting;
 import c98.ExtraInfo;
 import c98.TargetLock;
 import c98.core.GL;
+import c98.core.util.Convert;
 
 public class HUD {
 	private RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
@@ -135,7 +136,7 @@ public class HUD {
 		y++;
 		Map<Integer, Integer> map = EnchantmentHelper.getEnchantments(is);
 		int pos = 0;
-		for(Entry<Integer, Integer> entry:map.entrySet())
+		for(Entry<Integer, Integer> entry : map.entrySet())
 			mc.fontRendererObj.func_175063_a(getEnch(entry.getKey(), entry.getValue()), 25, y + (pos += mc.fontRendererObj.FONT_HEIGHT), 0xFFFFFF);
 		
 		pos = map.size() * mc.fontRendererObj.FONT_HEIGHT / 2;
@@ -152,6 +153,7 @@ public class HUD {
 	}
 	
 	private static String getEnch(int id, int level) {
+		if(id < 0 || id >= Enchantment.enchantmentsList.length) return "Unknown enchantment " + id + " " + Convert.toRoman(level + 1);
 		return Enchantment.enchantmentsList[id].getTranslatedName(level);
 	}
 	
@@ -163,11 +165,11 @@ public class HUD {
 			case 1:
 				s = "Small";
 				break;
-			
+				
 			case 2:
 				s = "Medium";
 				break;
-			
+				
 			case 4:
 				s = "Big";
 				break;

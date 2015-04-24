@@ -1,26 +1,32 @@
 package c98.core.impl.asm.render;
 
-import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Deque;
 import java.util.LinkedList;
-import jdk.internal.org.objectweb.asm.*;
+import jdk.internal.org.objectweb.asm.Opcodes;
+import jdk.internal.org.objectweb.asm.Type;
 import jdk.internal.org.objectweb.asm.tree.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.profiler.Profiler;
+import c98.core.C98Log;
 import c98.core.hooks.HudRenderHook.HudElement;
 import c98.core.launch.*;
 
 @ASMer("net/minecraftforge/client/GuiIngameForge") class C98GuiIngame extends GuiIngame implements CustomASMer {
 	
-	class FieldName {
-		Profiler p;
-		{
-			p.startSection(null);
-			p.endStartSection(null);
-			p.endSection();
-			String.valueOf(Minecraft.getMinecraft().gameSettings.showDebugInfo);
-		}
+	class ProfilerNames extends Profiler {
+		@Override public void startSection(String name) {}
+		
+		@Override public void endStartSection(String name) {}
+		
+		@Override public void endSection() {}
+	}
+	
+	class SettingsNames extends GameSettings {
+		@SuppressWarnings("hiding") public boolean showDebugInfo;
 	}
 	
 	public C98GuiIngame(Minecraft par1Minecraft) {
@@ -31,20 +37,26 @@ import c98.core.launch.*;
 		stack = new LinkedList();
 		MethodInsnNode start = null, endstart = null, end = null;
 		FieldInsnNode showDebug = null;
+		
+		Class gs, pr;
 		try {
-			ClassNode clz = new ClassNode();
-			new ClassReader(getClass().getName() + "$FieldName").accept(clz, 0);
-			for(AbstractInsnNode n : new Asm(clz.methods.get(0))) {
-				if(n instanceof MethodInsnNode) {
-					MethodInsnNode m = (MethodInsnNode)n;
-					if(m.name.equals("<init>")) continue;
-					if(start == null) start = m;
-					else if(endstart == null) endstart = m;
-					else if(end == null) end = m;
-				}
-				if(n instanceof FieldInsnNode) showDebug = (FieldInsnNode)n;
-			}
-		} catch(IOException e) {}
+			gs = Class.forName(getClass().getName() + "$SettingsNames", false, getClass().getClassLoader());
+			pr = Class.forName(getClass().getName() + "$ProfilerNames", false, getClass().getClassLoader());
+		} catch(ClassNotFoundException e) {
+			e.printStackTrace();
+			return;
+		}
+		Method m_start = pr.getMethods()[0]; //No idea why they are in this order.
+		Method m_endstart = pr.getMethods()[2];
+		Method m_end = pr.getMethods()[1];
+		start = new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(pr.getSuperclass()), m_start.getName(), Type.getMethodDescriptor(m_start), false);
+		endstart = new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(pr.getSuperclass()), m_endstart.getName(), Type.getMethodDescriptor(m_endstart), false);
+		end = new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(pr.getSuperclass()), m_end.getName(), Type.getMethodDescriptor(m_end), false);
+		
+		Field f = gs.getFields()[0];
+		showDebug = new FieldInsnNode(Opcodes.PUTFIELD, Type.getInternalName(gs.getSuperclass()), f.getName(), Type.getDescriptor(f.getType()));
+		System.out.println(showDebug.owner + "." + showDebug.name + ":" + showDebug.desc);
+		
 		for(MethodNode method : node.methods) {
 			for(AbstractInsnNode insn : new Asm(method)) {
 				if(insn instanceof MethodInsnNode) {
@@ -56,11 +68,10 @@ import c98.core.launch.*;
 					}
 					if(eq(n, end)) end(method, insn, popPrev());
 				}
-				if(insn instanceof FieldInsnNode && eq((FieldInsnNode)insn, showDebug)) end(method, insn, "$all");
+				if(method.desc.endsWith(")V") && insn instanceof FieldInsnNode && eq((FieldInsnNode)insn, showDebug)) end(method, insn, "$all");
 			}
 			if(method.desc.equals("(F)V")) start(method, method.instructions.getFirst(), "$all");
 		}
-		
 	}
 	
 	private Deque<String> stack;
@@ -79,10 +90,12 @@ import c98.core.launch.*;
 	
 	private static void start(MethodNode method, AbstractInsnNode insn, String name) {
 		add(method, insn, name, "pre");
+		C98Log.log(">" + name);
 	}
 	
 	private static void end(MethodNode method, AbstractInsnNode insn, String name) {
 		add(method, insn, name, "post");
+		C98Log.log("<" + name);
 	}
 	
 	public static void add(MethodNode method, AbstractInsnNode insn, String name, String toCall) {

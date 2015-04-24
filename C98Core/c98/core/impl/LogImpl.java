@@ -8,9 +8,9 @@ import c98.core.impl.C98Formatter.Target;
 import c98.core.impl.launch.C98Tweaker;
 
 public class LogImpl {
-	public static void init(File logFile) {
+	public static void init(File logFile) { //TODO update to log4j
 		C98Log.log.setLevel(Level.ALL);
-		if(C98Tweaker.forge) C98Log.log.setParent(Logger.getLogger("ForgeModLoader"));
+		if(C98Tweaker.forge && false) C98Log.log.setParent(Logger.getLogger("ForgeModLoader"));
 		else {
 			Handler h = new StreamHandler(System.err, new C98Formatter(Target.OUT)) {
 				@Override public synchronized void publish(LogRecord record) {

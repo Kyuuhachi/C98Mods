@@ -54,9 +54,9 @@ public class MapServer {
 		int xOnMap = round(m.pos.xCoord) - round(mc.func_175606_aa().posX);
 		int zOnMap = round(m.pos.zCoord) - round(mc.func_175606_aa().posZ);
 		
-		int alpha = 256 - (int)Math.abs((m.pos.yCoord == -1 ? 0 : m.pos.yCoord - getPosY()) * 8);
+		int alpha = 256 - (int)Math.abs(m.pos.yCoord == -1 ? 0 : m.pos.yCoord - getPosY()) * 8;
 		if(alpha < m.minOpacity) alpha = m.minOpacity;
-		if(Double.isNaN(m.pos.yCoord)) alpha = 256;
+		if(alpha > 255) alpha = 255;
 		if(m.shape < 0) return null;
 		int rotation = getRotation(m.rot);
 		double dist = Math.max(Math.abs(xOnMap), Math.abs(zOnMap));
@@ -68,7 +68,10 @@ public class MapServer {
 			xOnMap /= dist / maxdist;
 			zOnMap /= dist / maxdist;
 		}
-		return new MapMarkerInstance(m.shape, m.color, xOnMap, alpha, zOnMap, rotation, m.zLevel, m.size, size);
+		int c = m.color;
+		c &= 0xFFFFFF;
+		c |= alpha << 24;
+		return new MapMarkerInstance(m.shape, c, xOnMap, zOnMap, rotation, m.zLevel, m.size, size);
 	}
 	
 	private int round(double x) {
@@ -116,7 +119,7 @@ public class MapServer {
 	}
 	
 	public int getPosY() {
-		return MathHelper.floor_double(mc.func_175606_aa().posY);
+		return MathHelper.floor_double(mc.func_175606_aa().posY) + 1;
 	}
 	
 	public void render() {

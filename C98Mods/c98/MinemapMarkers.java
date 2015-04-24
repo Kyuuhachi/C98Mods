@@ -23,28 +23,20 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 	public static class Config {
 		
 		public static class MarkerConfig implements Cloneable {
+			public String selector = "";
 			public Color color;
 			public Integer shape;
 			public Integer zLevel;
 			public Float size;
 			public Integer minOpacity;
 			public Boolean rotate;
-			public String selector = "";
 			public Boolean teamColor;
 			private transient MarkerConfig norm;
 			public transient Selector compiledSelector;
 			
-			@Override protected MarkerConfig clone() {
-				try {
-					return (MarkerConfig)super.clone();
-				} catch(CloneNotSupportedException e) {
-					return null;
-				}
-			}
-			
 			public MarkerConfig normalize() {
 				if(norm != null) return norm;
-				MarkerConfig m = clone();
+				MarkerConfig m = new MarkerConfig();
 				m.color = color != null ? color : Color.WHITE;
 				m.shape = shape != null ? shape : 0;
 				m.zLevel = zLevel != null ? zLevel : 0;
@@ -97,7 +89,7 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 		try {
 			MarkerConfig mrkr = getMarker(te);
 			if(mrkr == null) return;
-			MapMarker marker = new MapMarker(new Vec3(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ()));
+			MapMarker marker = new MapMarker(new Vec3(te.getPos().getX() + 0.5, te.getPos().getY() + 0.5, te.getPos().getZ() + 0.5));
 			setAppearance(marker, mrkr);
 			l.add(marker);
 		} catch(Exception e) {

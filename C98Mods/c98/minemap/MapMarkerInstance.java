@@ -4,16 +4,15 @@ import c98.core.util.Matrix;
 import c98.core.util.Vector;
 
 public class MapMarkerInstance implements Comparable<MapMarkerInstance> {
-	public int img, color, x, y, z, rot;
+	public int img, color, x, z, rot;
 	private int zLevel;
 	public float size;
 	public Matrix m = new Matrix();
 	
-	public MapMarkerInstance(int icon, int color, int posX, int posY, int posZ, int r, int zLevel, float size, int mapsize) {
+	public MapMarkerInstance(int icon, int color, int posX, int posZ, int r, int zLevel, float size, int mapsize) {
 		img = icon & 7;
 		this.color = color;
 		x = posX;
-		y = posY;
 		z = posZ;
 		rot = r;
 		

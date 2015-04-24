@@ -111,12 +111,13 @@ public class MapClient implements IResourceManagerReloadListener {
 		if(Minemap.config.iconSmooth) {
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-			GL.enableBlend();
-			GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 		}
+		GL.enableBlend();
+		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 		
 		GL.begin();
 		for(MapMarkerInstance icon : map.markers) {
+			if(icon == null) continue; //Don't ask
 			float u0 = texCoords[icon.img][0];
 			float v0 = 00000000 / 8F;
 			float u1 = icon.img / 8F;
@@ -147,7 +148,7 @@ public class MapClient implements IResourceManagerReloadListener {
 		}
 		GL.end();
 		
-		if(Minemap.config.iconSmooth) GL.disableBlend();
+		GL.disableBlend();
 		
 		GL.popMatrix();
 	}

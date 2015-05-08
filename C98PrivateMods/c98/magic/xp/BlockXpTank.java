@@ -51,7 +51,6 @@ public class BlockXpTank extends BlockContainer {
 			else if(charge == MAX - 1) newVal = MAX_CHARGE;
 			else newVal = charge * MAX_CHARGE / (MAX - 2);
 			if(newVal > MAX_CHARGE) newVal = MAX_CHARGE;
-			System.out.println(charge + " " + newVal);
 			if(oldVal != newVal) worldObj.setBlockState(pos, s.withProperty(CHARGE, newVal));
 		}
 		

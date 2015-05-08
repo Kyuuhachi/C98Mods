@@ -11,7 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.profiler.Profiler;
-import c98.core.C98Log;
 import c98.core.hooks.HudRenderHook.HudElement;
 import c98.core.launch.*;
 
@@ -55,7 +54,6 @@ import c98.core.launch.*;
 		
 		Field f = gs.getFields()[0];
 		showDebug = new FieldInsnNode(Opcodes.PUTFIELD, Type.getInternalName(gs.getSuperclass()), f.getName(), Type.getDescriptor(f.getType()));
-		System.out.println(showDebug.owner + "." + showDebug.name + ":" + showDebug.desc);
 		
 		for(MethodNode method : node.methods) {
 			for(AbstractInsnNode insn : new Asm(method)) {
@@ -90,12 +88,10 @@ import c98.core.launch.*;
 	
 	private static void start(MethodNode method, AbstractInsnNode insn, String name) {
 		add(method, insn, name, "pre");
-		C98Log.log(">" + name);
 	}
 	
 	private static void end(MethodNode method, AbstractInsnNode insn, String name) {
 		add(method, insn, name, "post");
-		C98Log.log("<" + name);
 	}
 	
 	public static void add(MethodNode method, AbstractInsnNode insn, String name, String toCall) {

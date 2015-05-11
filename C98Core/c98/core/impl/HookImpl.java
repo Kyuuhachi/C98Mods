@@ -4,6 +4,7 @@ import java.util.*;
 import jdk.internal.org.objectweb.asm.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.resources.SimpleReloadableResourceManager;
 import net.minecraft.client.settings.KeyBinding;
@@ -224,14 +225,14 @@ public class HookImpl {
 		return (KeyBinding[])l.toArray(new KeyBinding[0]);
 	}
 	
-	public static void onConnect() {
+	public static void onConnect(NetHandlerPlayClient cli) {
 		for(ConnectHook mod : connectHooks)
-			mod.onConnect(C98Core.mc.getNetHandler());
+			mod.onConnect(cli);
 	}
 	
-	public static void onDisconnect() {
+	public static void onDisconnect(NetHandlerPlayClient cli) {
 		for(ConnectHook mod : connectHooks)
-			mod.onDisconnect(C98Core.mc.getNetHandler());
+			mod.onDisconnect(cli);
 	}
 	
 }

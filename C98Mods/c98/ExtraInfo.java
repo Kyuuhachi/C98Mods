@@ -1,7 +1,6 @@
 package c98;
 
 import java.awt.Color;
-import java.lang.reflect.Type;
 import java.util.*;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.inventory.*;
@@ -14,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import c98.core.*;
-import c98.core.Json.CustomConfig;
 import c98.core.hooks.*;
 import c98.core.util.NinePatch;
 import c98.extraInfo.gui.*;
@@ -22,33 +20,15 @@ import c98.extraInfo.hud.*;
 import c98.extraInfo.item.*;
 import c98.extraInfo.itemViewer.GuiSelectItem;
 import c98.targetLock.TargetEntity;
-import com.google.common.reflect.TypeToken;
-import com.google.gson.*;
 
 public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, KeyHook {
-	public static class EIConf implements CustomConfig {
+	public static class EIConf {
 		
 		public static class TBConf {
 			public boolean enable = true, rawTime = false;
 		}
 		
 		public static class SlotConf {
-			public static class Serializer implements JsonSerializer<SlotConf>, JsonDeserializer<SlotConf> {
-				@Override public JsonElement serialize(SlotConf arg0, Type arg1, JsonSerializationContext arg2) {
-					JsonObject o = new JsonObject();
-					o.addProperty("enable", arg0.enable);
-					o.add("colors", arg2.serialize(arg0.colors, new TypeToken<LinkedHashMap<String, Color>>() {}.getType()));
-					return o;
-				}
-				
-				@Override public SlotConf deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
-					SlotConf c = new SlotConf();
-					JsonObject o = arg0.getAsJsonObject();
-					c.enable = o.get("enable").getAsBoolean();
-					c.colors = arg2.deserialize(o.get("colors"), new TypeToken<LinkedHashMap<String, Color>>() {}.getType());
-					return c;
-				}
-			}
 			
 			public boolean enable = true;
 			public Map<String, Color> colors = new LinkedHashMap();
@@ -70,9 +50,6 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 		public SlotConf slotInfo = new SlotConf();
 		public boolean drawXpInCreative = true;
 		
-		@Override public void init(GsonBuilder bldr) {
-			bldr.registerTypeAdapter(SlotConf.class, new SlotConf.Serializer());
-		}
 	}
 	
 	public static final ResourceLocation hud = new ResourceLocation("c98/extrainfo", "hud.png");

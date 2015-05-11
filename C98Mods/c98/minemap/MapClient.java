@@ -116,7 +116,7 @@ public class MapClient implements IResourceManagerReloadListener {
 		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 		
 		GL.begin();
-		for(MapMarkerInstance icon : map.markers) {
+		for(MapIconInstance icon : map.markers) {
 			if(icon == null) continue; //Don't ask
 			float u0 = texCoords[icon.img][0];
 			float v0 = 00000000 / 8F;

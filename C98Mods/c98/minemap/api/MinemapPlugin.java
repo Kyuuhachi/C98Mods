@@ -16,10 +16,10 @@ public interface MinemapPlugin {
 		return plugins.stream().map(p -> p.getMapHandler(type_)).filter(h -> h != null).findAny().orElse(new SurfaceMap());
 	}
 	
-	public static void addAllMarkers(List<MapMarker> markers, World world, Entity player) {
-		plugins.forEach(p -> p.addMarkers(markers, world, player));
+	public static void addAllIcons(List<MapIcon> markers, World world, Entity player) {
+		plugins.forEach(p -> p.addIcons(markers, world));
 		if(!plugins.stream().anyMatch(p -> p.marksPlayer())) {
-			MapMarker m = new MapMarker(player.func_174824_e(1));
+			MapIcon m = new MapIcon(player.func_174824_e(1));
 			m.rot = player.getRotationYawHead();
 			markers.add(m);
 		}
@@ -39,5 +39,5 @@ public interface MinemapPlugin {
 		return false;
 	}
 	
-	public default void addMarkers(List<MapMarker> markers, World world, Entity player) {}
+	public default void addIcons(List<MapIcon> markers, World world) {}
 }

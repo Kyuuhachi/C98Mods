@@ -14,11 +14,11 @@ import c98.core.launch.ASMer;
 	
 	@Override public void setNetHandler(INetHandler p_150719_1_) {
 		super.setNetHandler(p_150719_1_);
-		if(p_150719_1_ instanceof NetHandlerPlayClient) HookImpl.onConnect();
+		if(p_150719_1_ instanceof NetHandlerPlayClient) HookImpl.onConnect((NetHandlerPlayClient)p_150719_1_);
 	}
 	
 	@Override public void closeChannel(IChatComponent p_150718_1_) {
 		super.closeChannel(p_150718_1_);
-		if(getNetHandler() instanceof NetHandlerPlayClient) HookImpl.onDisconnect();
+		if(getNetHandler() instanceof NetHandlerPlayClient) HookImpl.onDisconnect((NetHandlerPlayClient)getNetHandler());
 	}
 }

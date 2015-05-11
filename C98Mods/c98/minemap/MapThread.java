@@ -20,7 +20,12 @@ public class MapThread extends Thread {
 	
 	@Override public void run() {
 		while(running && !mapServer.crashed && Minecraft.getMinecraft().func_175606_aa() != null) {
-			mapServer.update();
+			try {
+				mapServer.update();
+			} catch(Exception e) {
+				mapServer.crashed = true;
+				C98Log.error(e);
+			}
 			try {
 				Thread.sleep(25);
 			} catch(InterruptedException e) {

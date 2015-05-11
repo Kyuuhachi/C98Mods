@@ -17,7 +17,7 @@ public class MapServer {
 	public MapClient renderer = new MapClient(this);
 	private Minecraft mc = Minecraft.getMinecraft();
 	public World world;
-	public List<MapMarkerInstance> markers = new ArrayList();
+	public List<MapIconInstance> markers = new ArrayList();
 	public int[] colors;
 	public boolean crashed;
 	public MapHandler impl;
@@ -32,32 +32,22 @@ public class MapServer {
 			crashed = true;
 			return;
 		}
-		try {
-			long time = -System.currentTimeMillis();
-			List<MapMarker> m = new LinkedList();
-			MinemapPlugin.addAllMarkers(m, world, mc.func_175606_aa());
-			int[] newColors = colors.clone();
-			updateMap(newColors);
-			colors = newColors;
-			markers = m.stream().map(this::convert).collect(Collectors.toList());
-			time += System.currentTimeMillis();
-			int framerate = mc.gameSettings.limitFramerate;
-			int msPerFrame = 1000 / framerate;
-			if(time < msPerFrame) Thread.sleep(msPerFrame - time);
-		} catch(NullPointerException | InterruptedException e) {
-			crashed = true;
-		}
+		List<MapIcon> m = new LinkedList();
+		MinemapPlugin.addAllIcons(m, world, mc.func_175606_aa());
+		int[] newColors = colors.clone();
+		updateMap(newColors);
+		colors = newColors;
+		markers = m.stream().map(this::convert).collect(Collectors.toList());
 	}
 	
-	public MapMarkerInstance convert(MapMarker m) {
-		
+	public MapIconInstance convert(MapIcon m) {
 		int xOnMap = round(m.pos.xCoord) - round(mc.func_175606_aa().posX);
 		int zOnMap = round(m.pos.zCoord) - round(mc.func_175606_aa().posZ);
 		
 		int alpha = 256 - (int)Math.abs(m.pos.yCoord == -1 ? 0 : m.pos.yCoord - getPosY()) * 8;
-		if(alpha < m.minOpacity) alpha = m.minOpacity;
+		if(alpha < m.style.minOpacity) alpha = m.style.minOpacity;
 		if(alpha > 255) alpha = 255;
-		if(m.shape < 0) return null;
+		if(m.style.shape < 0) return null;
 		int rotation = getRotation(m.rot);
 		double dist = Math.max(Math.abs(xOnMap), Math.abs(zOnMap));
 		double maxdist = size / 2;
@@ -68,10 +58,10 @@ public class MapServer {
 			xOnMap /= dist / maxdist;
 			zOnMap /= dist / maxdist;
 		}
-		int c = m.color;
+		int c = m.style.color.getRGB();
 		c &= 0xFFFFFF;
 		c |= alpha << 24;
-		return new MapMarkerInstance(m.shape, c, xOnMap, zOnMap, rotation, m.zLevel, m.size, size);
+		return new MapIconInstance(m.style.shape, c, xOnMap, zOnMap, rotation, m.style.zLevel, m.style.size, size);
 	}
 	
 	private int round(double x) {

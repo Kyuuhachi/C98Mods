@@ -2,12 +2,12 @@ package c98.resourcefulEntities;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class BoxPart extends Component {
-	public float x1, y1, z1;
-	public float x2, y2, z2;
-	public float u, v;
+	public double x1, y1, z1;
+	public double x2, y2, z2;
+	public double u, v;
 	
 	public BoxPart(ModelJSON owner) {
 		super(owner);
@@ -18,18 +18,18 @@ public class BoxPart extends Component {
 		WorldRenderer tess = Tessellator.getInstance().getWorldRenderer();
 		tess.startDrawingQuads();
 		
-		float X1 = x1;
-		float X2 = x2;
-		float Y1 = -y2;
-		float Y2 = -y1;
-		float Z1 = z1;
-		float Z2 = z2;
-		float U = u + params.u;
-		float V = v + params.v;
+		double X1 = x1;
+		double X2 = x2;
+		double Y1 = -y2;
+		double Y2 = -y1;
+		double Z1 = z1;
+		double Z2 = z2;
+		double U = u + params.u;
+		double V = v + params.v;
 		
-		float xw = X2 - X1;
-		float yw = Y2 - Y1;
-		float zw = Z2 - Z1;
+		double xw = X2 - X1;
+		double yw = Y2 - Y1;
+		double zw = Z2 - Z1;
 		
 		X1 -= params.expand;
 		Y1 -= params.expand;
@@ -38,19 +38,19 @@ public class BoxPart extends Component {
 		Y2 += params.expand;
 		Z2 += params.expand;
 		
-		float u0 = U;
-		float u1 = U + zw;
-		float u2 = U + zw + xw;
-		float u3 = U + zw + xw + zw;
-		float u4 = U + zw + xw + zw + xw;
+		double u0 = U;
+		double u1 = U + zw;
+		double u2 = U + zw + xw;
+		double u3 = U + zw + xw + zw;
+		double u4 = U + zw + xw + zw + xw;
 		
-		float h0 = U + zw;
-		float h1 = U + zw + xw;
-		float h2 = U + zw + xw + xw;
+		double h0 = U + zw;
+		double h1 = U + zw + xw;
+		double h2 = U + zw + xw + xw;
 		
-		float v0 = V;
-		float v1 = V + zw;
-		float v2 = V + zw + yw;
+		double v0 = V;
+		double v1 = V + zw;
+		double v2 = V + zw + yw;
 		
 		quad(tess, params, X2, Y1, Z2, h1, v0, X1, Y1, Z2, h0, v0, X1, Y1, Z1, h0, v1, X2, Y1, Z1, h1, v1);
 		quad(tess, params, X2, Y2, Z1, h2, v1, X1, Y2, Z1, h1, v1, X1, Y2, Z2, h1, v0, X2, Y2, Z2, h2, v0);
@@ -69,30 +69,30 @@ public class BoxPart extends Component {
 	}
 	
 	private static void quad(WorldRenderer tess, RenderParams params,//@off
-			float x1, float y1, float z1, float u1, float v1,
-			float x2, float y2, float z2, float u2, float v2,
-			float x3, float y3, float z3, float u3, float v3,
-			float x4, float y4, float z4, float u4, float v4) {//@on
+			double x1, double y1, double z1, double u1, double v1,
+			double x2, double y2, double z2, double u2, double v2,
+			double x3, double y3, double z3, double u3, double v3,
+			double x4, double y4, double z4, double u4, double v4) {//@on
+	
+		double dx1 = x1 - x2;
+		double dy1 = y1 - y2;
+		double dz1 = z1 - z2;
+		double dx2 = x3 - x2;
+		double dy2 = y3 - y2;
+		double dz2 = z3 - z2;
 		
-		float dx1 = x1 - x2;
-		float dy1 = y1 - y2;
-		float dz1 = z1 - z2;
-		float dx2 = x3 - x2;
-		float dy2 = y3 - y2;
-		float dz2 = z3 - z2;
-		
-		float nx = dy2 * dz1 - dz2 * dy1;
-		float ny = dz2 * dx1 - dx2 * dz1;
-		float nz = dx2 * dy1 - dy2 * dx1;
+		double nx = dy2 * dz1 - dz2 * dy1;
+		double ny = dz2 * dx1 - dx2 * dz1;
+		double nz = dx2 * dy1 - dy2 * dx1;
 		double size = Math.sqrt(nx * nx + ny * ny + nz * nz);
 		nx /= size;
 		ny /= size;
 		nz /= size;
 		
-		tess.func_178980_d(nx, ny, nz);
+		tess.func_178980_d((float)nx, (float)ny, (float)nz);
 		
 		if(params.mirroruv) {
-			float tmp = u1;
+			double tmp = u1;
 			u1 = u2;
 			u2 = tmp;
 			tmp = u3;
@@ -113,5 +113,5 @@ public class BoxPart extends Component {
 		}
 	}
 	
-	@Override protected void parse(JsonObject o) {}
+	@Override protected void parse(JsonNode o) {}
 }

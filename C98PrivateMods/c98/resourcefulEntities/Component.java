@@ -2,15 +2,14 @@ package c98.resourcefulEntities;
 
 import java.io.IOException;
 import c98.core.GL;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public abstract class Component {
 	public static final float RAD = 180 / (float)Math.PI;
 	
-	private float[] origin = {0, 0, 0};
-	private float[] rotation = {0, 0, 0};
-	private float[] scale = {1, 1, 1};
+	private double[] origin = {0, 0, 0};
+	private double[] rotation = {0, 0, 0};
+	private double[] scale = {1, 1, 1};
 	public String name;
 	protected final ModelJSON owner;
 	public boolean mirror;
@@ -43,7 +42,7 @@ public abstract class Component {
 		GL.popMatrix();
 	}
 	
-	public static Component parsePart(ModelJSON model, JsonObject o) throws IOException {
+	public static Component parsePart(ModelJSON model, JsonNode o) throws IOException {
 		String type = getString(o, "type", "part");
 		Component comp;
 		if(type.equals("part")) comp = new Part(model);
@@ -51,30 +50,27 @@ public abstract class Component {
 		else if(type.equals("block")) comp = null;
 		else throw new IllegalArgumentException("Unknown part type " + type);
 		comp.name = getString(o, "name", null);
-		comp.hide = o.has("hide") && o.get("hide").getAsBoolean();
-		comp.mirror = o.has("mirror") && o.get("mirror").getAsBoolean();
+		comp.hide = o.has("hide") && o.get("hide").asBoolean();
+		comp.mirror = o.has("mirror") && o.get("mirror").asBoolean();
 		parseTransforms(o, comp);
 		comp.parse(o);
 		return comp;
 	}
 	
-	protected abstract void parse(JsonObject o) throws IOException;
+	protected abstract void parse(JsonNode o) throws IOException;
 	
-	protected static void parseTransforms(JsonObject o, Component comp) {
-		comp.rotation = getFloatArray(o, "rotation", new float[] {0, 0, 0});
-		comp.origin = getFloatArray(o, "origin", new float[] {0, 0, 0});
-		comp.scale = getFloatArray(o, "scale", new float[] {1, 1, 1});
+	protected static void parseTransforms(JsonNode o, Component comp) {
+		comp.rotation = getDoubleArray(o, "rotation", new double[] {0, 0, 0});
+		comp.origin = getDoubleArray(o, "origin", new double[] {0, 0, 0});
+		comp.scale = getDoubleArray(o, "scale", new double[] {1, 1, 1});
 	}
 	
-	protected static String getString(JsonObject o, String name, String def) {
-		return o.has(name) ? o.get(name).getAsString() : def;
+	protected static String getString(JsonNode o, String name, String def) {
+		return o.has(name) ? o.get(name).asText() : def;
 	}
 	
-	private static float[] getFloatArray(JsonObject o, String name, float[] def) {
-		return o.has(name) ? toFloat3(o.get(name).getAsJsonArray()) : def;
+	private static double[] getDoubleArray(JsonNode o, String name, double[] def) {
+		return o.has(name) ? new double[] {o.get(0).asDouble(), o.get(1).asDouble(), o.get(2).asDouble()} : def;
 	}
 	
-	private static float[] toFloat3(JsonArray a) {
-		return new float[] {a.get(0).getAsFloat(), a.get(1).getAsFloat(), a.get(2).getAsFloat()};
-	}
 }

@@ -4,7 +4,7 @@ public class RenderParams implements Cloneable {
 	public float expand;
 	public boolean noTex;
 	public String name;
-	public float u, v;
+	public double u, v;
 	public int texw, texh;
 	public boolean mirroruv;
 	public boolean flipFaces;
@@ -33,7 +33,7 @@ public class RenderParams implements Cloneable {
 		return this;
 	}
 	
-	public RenderParams uvOffset(float u_, float v_) {
+	public RenderParams uvOffset(double u_, double v_) {
 		u += u_;
 		v += v_;
 		return this;

@@ -184,6 +184,8 @@ public class GL {
 	public static void multMatrix(FloatBuffer matrix) {GlStateManager.multMatrix(matrix);}
 	public static void rotate(float ang, float x, float y, float z) {GlStateManager.rotate(ang,x,y,z);}
 	public static void rotateRad(float ang, float x, float y, float z) {GlStateManager.rotate((float)Math.toDegrees(ang),x,y,z);}
+	public static void rotate(double ang, double x, double y, double z) {rotate((float)ang,(float)x,(float)y,(float)z);}
+	public static void rotateRad(double ang, double x, double y, double z) {rotateRad((float)ang,(float)x,(float)y,(float)z);}
 	public static void scale(float x, float y, float z) {GlStateManager.scale(x,y,z);}
 	public static void scale(double x, double y, double z) {GlStateManager.scale(x,y,z);}
 	public static void scale(float s) {scale(s,s,s);}

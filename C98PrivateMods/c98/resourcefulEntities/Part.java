@@ -8,8 +8,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 import c98.core.GL;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
-import com.google.gson.*;
 
 public class Part extends Component {
 	public Part(ModelJSON o) {
@@ -20,7 +21,7 @@ public class Part extends Component {
 	private ResourceLocation texture;
 	private int[] texSize;
 	private int expand;
-	private float[] uvOffset;
+	private double[] uvOffset;
 	private boolean mirroruv;
 	
 	@Override public void doRender(RenderParams params) {
@@ -39,51 +40,50 @@ public class Part extends Component {
 		if(!params.hide && texture != null && !params.noTex) GL.popAttrib();
 	}
 	
-	@Override protected void parse(JsonObject o) throws IOException {
+	@Override protected void parse(JsonNode o) throws IOException {
 		if(o.has("children")) {
-			JsonArray a = o.get("children").getAsJsonArray();
+			JsonNode a = o.get("children");
 			for(int i = 0; i < a.size(); i++)
-				children.add(parsePart(owner, a.get(i).getAsJsonObject()));
+				children.add(parsePart(owner, a.get(i)));
 		}
 		if(o.has("source")) {
-			ResourceLocation resloc = new ResourceLocation(o.get("source").getAsString());
+			ResourceLocation resloc = new ResourceLocation(o.get("source").asText());
 			ResourceLocation l = new ResourceLocation(resloc.getResourceDomain(), "models/components/" + resloc.getResourcePath() + ".json");
 			IResource r = Minecraft.getMinecraft().getResourceManager().getResource(l);
-			JsonObject part = new JsonParser().parse(new InputStreamReader(r.getInputStream(), Charsets.UTF_8)).getAsJsonObject();
-			JsonArray elements = part.get("elements").getAsJsonArray();
-			for(JsonElement e : elements) {
-				JsonObject box = e.getAsJsonObject();
+			JsonNode part = new ObjectMapper().readTree(new InputStreamReader(r.getInputStream(), Charsets.UTF_8));
+			JsonNode elements = part.get("elements");
+			for(JsonNode box : elements) {
 				BoxPart mbox = new BoxPart(owner);
 				parseTransforms(box, mbox);
 				if(!box.has("from")) throw new IllegalArgumentException("from can't be null");
 				if(!box.has("to")) throw new IllegalArgumentException("to can't be null");
 				if(!box.has("uv")) throw new IllegalArgumentException("uv can't be null");
-				JsonArray from = box.get("from").getAsJsonArray();
-				JsonArray to = box.get("to").getAsJsonArray();
-				JsonArray uv = box.get("uv").getAsJsonArray();
-				mbox.x1 = from.get(0).getAsFloat();
-				mbox.y1 = from.get(1).getAsFloat();
-				mbox.z1 = from.get(2).getAsFloat();
-				mbox.x2 = to.get(0).getAsFloat();
-				mbox.y2 = to.get(1).getAsFloat();
-				mbox.z2 = to.get(2).getAsFloat();
-				mbox.u = uv.get(0).getAsFloat();
-				mbox.v = uv.get(1).getAsFloat();
+				JsonNode from = box.get("from");
+				JsonNode to = box.get("to");
+				JsonNode uv = box.get("uv");
+				mbox.x1 = from.get(0).asDouble();
+				mbox.y1 = from.get(1).asDouble();
+				mbox.z1 = from.get(2).asDouble();
+				mbox.x2 = to.get(0).asDouble();
+				mbox.y2 = to.get(1).asDouble();
+				mbox.z2 = to.get(2).asDouble();
+				mbox.u = uv.get(0).asDouble();
+				mbox.v = uv.get(1).asDouble();
 				children.add(mbox);
 			}
 		}
 		if(o.has("texture")) {
-			texture = new ResourceLocation(o.get("texture").getAsString());
+			texture = new ResourceLocation(o.get("texture").asText());
 			if(!o.has("texsize")) throw new IllegalArgumentException("texsize can't be null if texture exists");
-			JsonArray ts = o.get("texsize").getAsJsonArray();
-			texSize = new int[] {ts.get(0).getAsInt(), ts.get(1).getAsInt()};
+			JsonNode ts = o.get("texsize");
+			texSize = new int[] {ts.get(0).asInt(), ts.get(1).asInt()};
 		}
 		if(o.has("uvoffset")) {
-			JsonArray uv = o.get("uvoffset").getAsJsonArray();
-			uvOffset = new float[] {uv.get(0).getAsFloat(), uv.get(1).getAsFloat()};
+			JsonNode uv = o.get("uvoffset");
+			uvOffset = new double[] {uv.get(0).asDouble(), uv.get(1).asDouble()};
 		}
-		if(o.has("expand")) expand = o.get("expand").getAsInt();
+		if(o.has("expand")) expand = o.get("expand").asInt();
 		mirroruv = mirror;
-		if(o.has("mirroruv")) mirroruv ^= o.get("mirroruv").getAsBoolean();
+		if(o.has("mirroruv")) mirroruv ^= o.get("mirroruv").asBoolean();
 	}
 }

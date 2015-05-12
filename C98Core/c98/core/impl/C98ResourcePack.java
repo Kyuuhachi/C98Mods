@@ -11,7 +11,6 @@ import net.minecraft.client.resources.data.IMetadataSerializer;
 import net.minecraft.util.ResourceLocation;
 import c98.core.C98Core;
 import com.google.common.collect.ImmutableSet;
-import com.google.gson.JsonObject;
 
 public class C98ResourcePack implements IResourcePack { //TODO sounds.json
 	@Override public InputStream getInputStream(ResourceLocation l) {
@@ -44,7 +43,7 @@ public class C98ResourcePack implements IResourcePack { //TODO sounds.json
 	}
 	
 	@Override public IMetadataSection getPackMetadata(IMetadataSerializer var1, String var2) throws IOException {
-		return var1.parseMetadataSection(var2, new JsonObject());
+		return null;
 	}
 	
 	@Override public BufferedImage getPackImage() throws IOException {

@@ -5,10 +5,10 @@ import java.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.google.gson.JsonParser;
 
 public class ModelJSON {
 	private ResourceLocation path;
@@ -30,7 +30,7 @@ public class ModelJSON {
 		try {
 			ResourceLocation l = new ResourceLocation(path.getResourceDomain(), "models/entities/" + path.getResourcePath() + ".json");
 			IResource r = Minecraft.getMinecraft().getResourceManager().getResource(l);
-			root = Component.parsePart(this, new JsonParser().parse(new InputStreamReader(r.getInputStream(), Charsets.UTF_8)).getAsJsonObject());
+			root = Component.parsePart(this, new ObjectMapper().readTree(new InputStreamReader(r.getInputStream(), Charsets.UTF_8)));
 			names.clear();
 			addNames(root);
 		} catch(Exception e) {

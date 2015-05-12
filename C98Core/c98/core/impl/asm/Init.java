@@ -13,7 +13,6 @@ import c98.core.impl.HookImpl;
 import c98.core.launch.ASMer;
 
 @ASMer class ClientInit extends Minecraft {
-	
 	public ClientInit(GameConfiguration p_i45547_1_) {
 		super(p_i45547_1_);
 	}
@@ -40,7 +39,6 @@ import c98.core.launch.ASMer;
 }
 
 @ASMer abstract class ServerInit extends MinecraftServer { //TODO this might be wrong.
-	
 	public ServerInit(Proxy p_i46053_1_, File p_i46053_2_) {
 		super(p_i46053_1_, p_i46053_2_);
 	}

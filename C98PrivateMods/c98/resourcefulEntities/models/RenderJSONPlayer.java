@@ -11,7 +11,6 @@ import c98.core.IRenderPlayer;
 import c98.resourcefulEntities.ModelJSON;
 
 public class RenderJSONPlayer extends RenderJSONBiped<AbstractClientPlayer> implements IRenderPlayer {
-	
 	public RenderJSONPlayer(RenderManager mgr, ModelJSON model) {
 		super(mgr, model);
 	}
@@ -40,10 +39,8 @@ public class RenderJSONPlayer extends RenderJSONBiped<AbstractClientPlayer> impl
 					if(animation == EnumAction.BLOCK) rightHand = 3;
 					else if(animation == EnumAction.BOW) bow = true;
 				}
-				
 			}
 		}
-		
 	}
 	
 	public void showPart(EnumPlayerModelParts part) {

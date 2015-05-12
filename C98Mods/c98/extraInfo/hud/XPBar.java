@@ -6,7 +6,6 @@ import c98.ExtraInfo;
 import c98.core.GL;
 
 public class XPBar {
-	
 	public static void draw(int height, int width, FontRenderer fr, EntityPlayer p) {
 		ExtraInfo.bindTexture(ExtraInfo.icons);
 		GL.color(1, 1, 1);
@@ -41,5 +40,4 @@ public class XPBar {
 		fr.drawString(str, x * 1, y - 1, 0);
 		fr.drawString(str, x * 1, y * 1, i);
 	}
-	
 }

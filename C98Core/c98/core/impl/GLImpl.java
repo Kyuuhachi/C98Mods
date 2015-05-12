@@ -299,5 +299,4 @@ public class GLImpl {
 		GLImpl state = stack.pop();
 		state.load();
 	}
-	
 }

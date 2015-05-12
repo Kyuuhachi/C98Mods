@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.item.Item;
 
 public class ModelImpl {
-	
 	public static Map<Item, ItemMeshDefinition> itemModels = new HashMap();
 	public static Map<Block, IStateMapper> blockModels = new HashMap();
 	

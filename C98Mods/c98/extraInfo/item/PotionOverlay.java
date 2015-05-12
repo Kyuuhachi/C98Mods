@@ -14,7 +14,6 @@ import c98.core.ItemOverlay;
 import c98.core.util.Convert;
 
 public class PotionOverlay implements ItemOverlay {
-	
 	@Override public void renderOverlay(FontRenderer font, ItemStack is, int x, int y, String customText) {
 		if(!(is.getItem() instanceof ItemPotion)) return;
 		List<PotionEffect> effects = Items.potionitem.getEffects(is);

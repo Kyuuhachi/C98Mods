@@ -9,7 +9,6 @@ import c98.ExtraInfo;
 import c98.core.GL;
 
 public class HorseInfo {
-	
 	public static void draw(int height, int width, FontRenderer fr, EntityPlayerSP pl, EntityHorse horse) {
 		ExtraInfo.bindTexture(ExtraInfo.icons);
 		GL.color(1, 1, 1);
@@ -59,5 +58,4 @@ public class HorseInfo {
 		fr.drawString(str, x * 1, y - 1, 0);
 		fr.drawString(str, x * 1, y * 1, i);
 	}
-	
 }

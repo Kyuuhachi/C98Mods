@@ -48,5 +48,4 @@ public class SelectorProperties {
 		props.get(key).put(name, prop);
 		types.get(key).put(name, type);
 	}
-	
 }

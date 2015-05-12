@@ -116,5 +116,4 @@ public class Recipes {
 	public static void addSmelting(Block in, ItemStack out, float xp) {
 		FurnaceRecipes.instance().addSmeltingRecipeForBlock(in, out, xp);
 	}
-	
 }

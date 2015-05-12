@@ -7,7 +7,6 @@ import c98.core.impl.HookImpl;
 import c98.core.launch.ASMer;
 
 @ASMer class C98NetHandler extends NetworkManager {
-	
 	public C98NetHandler(EnumPacketDirection direction) {
 		super(direction);
 	}

@@ -92,5 +92,4 @@ public class Inv implements IInventory {
 	}
 	
 	@Override public void clearInventory() {}
-	
 }

@@ -9,7 +9,6 @@ import net.minecraft.client.main.GameConfiguration;
 import c98.core.launch.*;
 
 @ASMer class MinecraftHook extends Minecraft implements CustomASMer {
-	
 	public MinecraftHook(GameConfiguration p_i45547_1_) {
 		super(p_i45547_1_);
 	}
@@ -47,11 +46,9 @@ import c98.core.launch.*;
 }
 
 class StartupMethodName extends Minecraft {
-	
 	public StartupMethodName(GameConfiguration p_i45547_1_) {
 		super(p_i45547_1_);
 	}
 	
 	@Override public void startGame() {}
-	
 }

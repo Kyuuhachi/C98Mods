@@ -10,7 +10,6 @@ import c98.core.impl.HookImpl;
 import c98.core.launch.ASMer;
 
 @ASMer class Packets extends NetworkManager {
-	
 	private EnumPacketDirection dir;
 	
 	public Packets(EnumPacketDirection packetDirection) {

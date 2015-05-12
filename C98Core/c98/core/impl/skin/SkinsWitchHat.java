@@ -69,5 +69,4 @@ public class SkinsWitchHat implements LayerRenderer {
 	@Override public boolean shouldCombineTextures() {
 		return false;
 	}
-	
 }

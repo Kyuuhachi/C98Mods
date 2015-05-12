@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderSpinner extends Render {
-	
 	public RenderSpinner(RenderManager p_i46179_1_) {
 		super(p_i46179_1_);
 		shadowSize = 0.5F;
@@ -36,5 +35,4 @@ public class RenderSpinner extends Render {
 	@Override protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
 		return boatTextures;
 	}
-	
 }

@@ -13,7 +13,6 @@ import c98.Magic;
 import c98.magic.BlockPipe;
 
 public class BlockXpPipe extends BlockPipe {
-	
 	public static class TE extends TileEntity implements IUpdatePlayerListBox, IXpPipe, IXpConnection {
 		@Override public void getSources(Set<IXpSource> sources, Set<IXpPipe> visited, EnumFacing side) {
 			if(worldObj == null) return;

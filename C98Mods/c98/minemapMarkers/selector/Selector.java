@@ -21,7 +21,7 @@ public class Selector {
 	public boolean matches(TileEntity e) {
 		if(name != null && !name.isEmpty()) for(Class c = e.getClass(); c != null; c = c.getSuperclass())
 			if(name.equals(EntitySelector.classToId.get(c))) {
-				for(PropertyInstance a:props)
+				for(PropertyInstance a : props)
 					if(!a.matches(e)) return false;
 				return true;
 			}
@@ -31,11 +31,10 @@ public class Selector {
 	public boolean matches(Entity e) {
 		if(name != null && !name.isEmpty()) for(Class c = e.getClass(); c != null; c = c.getSuperclass())
 			if(name.equals(EntitySelector.classToId.get(c))) {
-				for(PropertyInstance a:props)
+				for(PropertyInstance a : props)
 					if(!a.matches(e)) return false;
 				return true;
 			}
 		return false;
 	}
-	
 }

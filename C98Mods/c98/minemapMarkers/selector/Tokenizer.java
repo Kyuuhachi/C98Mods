@@ -14,7 +14,6 @@ public class Tokenizer {
 		@Override public String toString() {
 			return ch;
 		}
-		
 	}
 	
 	private static List<Token> TOKEN_TYPES = new ArrayList();

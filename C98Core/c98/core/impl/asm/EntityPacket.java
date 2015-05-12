@@ -13,7 +13,6 @@ import c98.core.launch.ASMer;
 import com.mojang.authlib.GameProfile;
 
 @ASMer class Server extends EntityTrackerEntry {
-	
 	public Server(Entity p_i1525_1_, int p_i1525_2_, int p_i1525_3_, boolean p_i1525_4_) {
 		super(p_i1525_1_, p_i1525_2_, p_i1525_3_, p_i1525_4_);
 	}
@@ -28,7 +27,6 @@ import com.mojang.authlib.GameProfile;
 }
 
 @ASMer class Client extends NetHandlerPlayClient {
-	
 	public Client(Minecraft p_i45061_1_, GuiScreen p_i45061_2_, NetworkManager p_i45061_3_, GameProfile profile) {
 		super(p_i45061_1_, p_i45061_2_, p_i45061_3_, profile);
 	}
@@ -62,7 +60,6 @@ import com.mojang.authlib.GameProfile;
 }
 
 @ASMer class Tracker extends EntityTracker {
-	
 	public Tracker(WorldServer p_i1516_1_) {
 		super(p_i1516_1_);
 	}

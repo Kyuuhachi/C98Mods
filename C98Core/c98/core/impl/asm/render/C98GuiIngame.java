@@ -15,7 +15,6 @@ import c98.core.hooks.HudRenderHook.HudElement;
 import c98.core.launch.*;
 
 @ASMer("net/minecraftforge/client/GuiIngameForge") class C98GuiIngame extends GuiIngame implements CustomASMer {
-	
 	class ProfilerNames extends Profiler {
 		@Override public void startSection(String name) {}
 		

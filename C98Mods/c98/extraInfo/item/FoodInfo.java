@@ -46,5 +46,4 @@ import c98.core.util.Convert;
 		if(amp == 0) ampS = "";
 		return String.format("%s%s %s%s (%d%%)", color, effectS, timeS, ampS, chance);
 	}
-	
 }

@@ -23,7 +23,6 @@ public abstract class Component {
 	protected abstract void doRender(RenderParams params);
 	
 	public final void render(RenderParams params) {
-		
 		GL.pushMatrix();
 		GL.translate(origin[0], -origin[1], origin[2]);
 		if(mirror) {

@@ -11,7 +11,6 @@ import com.google.common.collect.Multimap;
 import com.google.gson.JsonParser;
 
 public class ModelJSON {
-	
 	private ResourceLocation path;
 	private Component root;
 	private Multimap<String, Component> names = HashMultimap.create();
@@ -93,5 +92,4 @@ public class ModelJSON {
 	public Collection<Component> get(String name) {
 		return names.get(name);
 	}
-	
 }

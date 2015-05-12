@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 
 public class Skins {
-	
 	public static List<LayerRenderer> getLayers(RenderPlayer rdr) {
 		ArrayList r = new ArrayList();
 		r.add(new SkinsWings(rdr));

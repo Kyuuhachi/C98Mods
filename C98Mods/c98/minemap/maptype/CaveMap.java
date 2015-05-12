@@ -31,7 +31,6 @@ public class CaveMap extends MapHandler {
 		IBlockState block = chunk.getBlockState(new BlockPos(x, plY, z));
 		int color = block.getBlock().getMapColor(block).colorIndex;
 		return getColor((byte)(color * 4 + brightness), x + z & 1);
-		
 	}
 	
 	private static boolean isAir(Chunk chunk, int x, int plY, int z) {

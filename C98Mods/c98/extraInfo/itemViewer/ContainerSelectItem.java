@@ -8,7 +8,6 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
 public class ContainerSelectItem extends Container {
-	
 	class SlotArmor extends Slot {
 		final int armorType;
 		
@@ -43,7 +42,6 @@ public class ContainerSelectItem extends Container {
 		for(int i = 0; i < 3; ++i)
 			for(int j = 0; j < 9; ++j)
 				addSlotToContainer(new Slot(inv, j + i * 9 + 18, 8 + j * 18, 84 + i * 18));
-		
 	}
 	
 	@Override public boolean canInteractWith(EntityPlayer var1) {

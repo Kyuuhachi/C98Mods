@@ -41,7 +41,6 @@ class MultipleItem {
 }
 
 @ASMer class MultipleRenderItem extends RenderItem {
-	
 	public MultipleRenderItem(TextureManager p_i46165_1_, ModelManager p_i46165_2_) {
 		super(p_i46165_1_, p_i46165_2_);
 	}

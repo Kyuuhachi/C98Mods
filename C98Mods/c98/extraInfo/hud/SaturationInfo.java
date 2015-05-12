@@ -8,7 +8,6 @@ import c98.ExtraInfo;
 import c98.core.GL;
 
 public class SaturationInfo {
-	
 	public static void draw(Minecraft mc, int width, int height) {
 		FoodStats foodStats = mc.thePlayer.getFoodStats();
 		float food = foodStats.getSaturationLevel() / 2; // The division is to fit in the hunger bar

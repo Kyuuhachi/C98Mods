@@ -33,5 +33,4 @@ public class C98Log {
 	public static void error(Throwable e) {
 		error("Misc error", e);
 	}
-	
 }

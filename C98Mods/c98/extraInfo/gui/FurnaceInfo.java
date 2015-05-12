@@ -10,11 +10,10 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.EnumChatFormatting;
 
 public class FurnaceInfo {
-	
 	public static void draw(Minecraft mc) {
 		GuiScreen gui = mc.currentScreen;
 		FontRenderer fr = mc.fontRendererObj;
-		for(Slot slot:(Iterable<Slot>)((GuiContainer)gui).inventorySlots.inventorySlots)
+		for(Slot slot : (Iterable<Slot>)((GuiContainer)gui).inventorySlots.inventorySlots)
 			if(slot instanceof SlotFurnaceOutput) {
 				if(!slot.getHasStack()) break;
 				int x = slot.xDisplayPosition + 8;
@@ -32,5 +31,4 @@ public class FurnaceInfo {
 				break;
 			}
 	}
-	
 }

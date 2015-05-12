@@ -9,7 +9,6 @@ import c98.core.*;
 import c98.core.launch.ASMer;
 
 @ASMer class C98RenderItem extends RenderItem {
-	
 	public C98RenderItem(TextureManager p_i46165_1_, ModelManager p_i46165_2_) {
 		super(p_i46165_1_, p_i46165_2_);
 	}
@@ -19,7 +18,7 @@ import c98.core.launch.ASMer;
 			GL.disableLighting();
 			GL.disableDepth();
 			GL.disableBlend();
-			for(ItemOverlay hook:Rendering.overlays) {
+			for(ItemOverlay hook : Rendering.overlays) {
 				GL.color(1, 1, 1);
 				hook.renderOverlay(fr, is, x, y, customText);
 			}

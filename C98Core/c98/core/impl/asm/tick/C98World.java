@@ -9,7 +9,6 @@ import c98.core.impl.HookImpl;
 import c98.core.launch.ASMer;
 
 @ASMer abstract class C98World extends World {
-	
 	protected C98World(ISaveHandler saveHandlerIn, WorldInfo info, WorldProvider providerIn, Profiler profilerIn, boolean client) {
 		super(saveHandlerIn, info, providerIn, profilerIn, client);
 	}

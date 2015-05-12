@@ -52,5 +52,4 @@ public class C98PrettyPrinter implements PrettyPrinter {
 	@Override public void writeEndArray(JsonGenerator gen, int nrOfValues) throws IOException {
 		gen.writeRaw(']');
 	}
-	
 }

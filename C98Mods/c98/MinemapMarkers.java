@@ -20,7 +20,6 @@ import c98.minemapMarkers.selector.Selector;
 
 public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 	public static class Config {
-		
 		public static class MarkerConfig {
 			public static class MarkerStyle extends IconStyle {
 				public Boolean teamColor;

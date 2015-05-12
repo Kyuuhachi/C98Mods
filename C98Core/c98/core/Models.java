@@ -39,5 +39,4 @@ public class Models {
 		registerBlockModel(b);
 		registerItemModel(Item.getItemFromBlock(b));
 	}
-	
 }

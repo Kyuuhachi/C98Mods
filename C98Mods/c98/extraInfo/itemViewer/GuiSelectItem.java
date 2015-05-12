@@ -28,5 +28,4 @@ public class GuiSelectItem extends GuiContainer {
 		drawEntity(51, 75, 30, 70, mouseX, mouseY, mc.thePlayer);
 		if(entity != null) drawEntity(123, 51, 20, 43, mouseX, mouseY, entity);
 	}
-	
 }

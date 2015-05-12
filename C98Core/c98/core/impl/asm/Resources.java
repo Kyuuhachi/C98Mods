@@ -9,7 +9,6 @@ import c98.core.impl.C98ResourcePack;
 import c98.core.launch.ASMer;
 
 @ASMer class SubNamespaceManager extends SimpleReloadableResourceManager {
-	
 	public SubNamespaceManager(IMetadataSerializer p_i1299_1_) {
 		super(p_i1299_1_);
 	}
@@ -30,7 +29,6 @@ import c98.core.launch.ASMer;
 }
 
 @ASMer abstract class SubNamespaceResourcePack extends AbstractResourcePack {
-	
 	public SubNamespaceResourcePack(File p_i1287_1_) {
 		super(p_i1287_1_);
 	}

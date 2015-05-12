@@ -6,7 +6,6 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class XPInfo {
-	
 	private static int posX, posY;
 	
 	public static void drawXPStats(Minecraft mc) {
@@ -79,7 +78,7 @@ public class XPInfo {
 		int xp = 0;
 		for(int i = 0; i < thePlayer.experienceLevel; i++)
 			xp += i >= 30 ? 62 + (i - 30) * 7 : i >= 15 ? 17 + (i - 15) * 3 : 17;
-		xp += thePlayer.experience * thePlayer.xpBarCap();
-		return xp;
+			xp += thePlayer.experience * thePlayer.xpBarCap();
+			return xp;
 	}
 }

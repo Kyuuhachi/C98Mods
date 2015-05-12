@@ -54,5 +54,4 @@ public class C98ResourcePack implements IResourcePack { //TODO sounds.json
 	@Override public String getPackName() {
 		return "C98Mods";
 	}
-	
 }

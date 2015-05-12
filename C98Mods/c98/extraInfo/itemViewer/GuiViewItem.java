@@ -19,7 +19,6 @@ import com.google.common.base.Splitter;
 import com.google.gson.*;
 
 public class GuiViewItem extends GuiScreen {
-	
 	private static final int WIDTH = 256, HEIGHT = 202;
 	private static final int FIELD_X = 16, FIELD_Y = 17;
 	private static final int FIELD_W = 214, FIELD_H = 153;
@@ -195,7 +194,6 @@ public class GuiViewItem extends GuiScreen {
 		GL.popMatrix();
 		
 		super.drawScreen(mouseX + guiLeft, mouseY + guiTop, par3);
-		
 	}
 	
 	private void scrollbar(int x, int y) {

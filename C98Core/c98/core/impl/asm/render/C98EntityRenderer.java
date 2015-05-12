@@ -9,7 +9,6 @@ import c98.core.impl.HookImpl;
 import c98.core.launch.ASMer;
 
 @ASMer class C98EntityRenderer extends EntityRenderer {
-	
 	public C98EntityRenderer(Minecraft par1Minecraft, IResourceManager resman) {
 		super(par1Minecraft, resman);
 	}

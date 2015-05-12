@@ -11,5 +11,4 @@ public class Hax extends C98Mod {
 			return Item.getItemFromBlock(Blocks.command_block);
 		}
 	};
-	
 }

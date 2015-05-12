@@ -12,7 +12,6 @@ import c98.GraphicalUpgrade;
 import c98.core.C98Core;
 
 public class ModelSquigglySlime extends ModelBase {
-	
 	public static long time = System.currentTimeMillis();
 	private static Random rand = new Random(time);
 	private Map<Entity, float[][]> map = new WeakHashMap();
@@ -41,7 +40,6 @@ public class ModelSquigglySlime extends ModelBase {
 			rightEye.setRotationPoint(-2.25F, 19, -2.5F);
 			leftEye.setRotationPoint(2.25F, 19, -2.5F);
 			mouth.setRotationPoint(0.5F, 21.5F, -3);
-			
 		}
 	}
 	
@@ -56,7 +54,6 @@ public class ModelSquigglySlime extends ModelBase {
 		
 		if(sliminess < 0) flatness += -sliminess * 0.5F;
 		if(rightEye != null) {
-			
 			for(int i = 0; i < 3; i++) {
 				velocity[0][i] += getRandFloat(-((float)Math.PI / 800), (float)Math.PI / 800);
 				velocity[1][i] += getRandFloat(-((float)Math.PI / 800), (float)Math.PI / 800);
@@ -93,7 +90,6 @@ public class ModelSquigglySlime extends ModelBase {
 			mouth.rotationPointX = MathHelper.sin(progress * 0.55F + 3.75F) * flatness + 0.5F;
 			mouth.rotationPointY = MathHelper.sin(progress * 0.625F + 1.75F) * flatness + 21.5F;
 			mouth.rotationPointZ = MathHelper.sin(progress * 0.6F + 2.75F) * flatness * 0.25F - 3;
-			
 		}
 		body.rotationPointX = MathHelper.sin(progress * 0.3F) * flatness * 0.5F;
 		body.rotationPointY = MathHelper.sin(progress * 0.33F) * flatness * 0.5F + 12;

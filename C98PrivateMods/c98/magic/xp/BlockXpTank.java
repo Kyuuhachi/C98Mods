@@ -95,5 +95,4 @@ public class BlockXpTank extends BlockContainer {
 	@Override public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(CHARGE, meta);
 	}
-	
 }

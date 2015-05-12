@@ -33,5 +33,4 @@ public class TargetEntity implements Target {
 	@Override public double getZ(float ptt) {
 		return (getEntity().getEntityBoundingBox().minZ + getEntity().getEntityBoundingBox().maxZ) / 2 + (e.posZ - e.prevPosZ) * ptt;
 	}
-	
 }

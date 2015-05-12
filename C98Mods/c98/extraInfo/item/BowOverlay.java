@@ -11,7 +11,6 @@ import c98.core.GL;
 import c98.core.ItemOverlay;
 
 public class BowOverlay implements ItemOverlay {
-	
 	@Override public void renderOverlay(FontRenderer fr, ItemStack is, int x, int y, String customText) {
 		InventoryPlayer pl = Minecraft.getMinecraft().thePlayer.inventory;
 		if(is.getItem() == Items.bow && EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, is) == 0 && isInPlayerInventory(is, pl)) {
@@ -44,5 +43,4 @@ public class BowOverlay implements ItemOverlay {
 			if(pl.getStackInSlot(i) == is) return true;
 		return false;
 	}
-	
 }

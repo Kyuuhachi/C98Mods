@@ -19,7 +19,6 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 public class C98Transformer implements IClassTransformer {
-	
 	private static String annotExtend = "L" + ASMer.class.getName().replace('.', '/') + ";";
 	private static String casm = CustomASMer.class.getName().replace('.', '/');
 	

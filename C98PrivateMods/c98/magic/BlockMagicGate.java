@@ -31,7 +31,6 @@ public class BlockMagicGate extends BlockContainer {
 		public EnumFacing getDirection() {
 			return (EnumFacing)worldObj.getBlockState(pos).getValue(FACING);
 		}
-		
 	}
 	
 	public BlockMagicGate() {

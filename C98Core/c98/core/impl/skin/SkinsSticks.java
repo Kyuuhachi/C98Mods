@@ -12,7 +12,6 @@ import net.minecraft.util.ResourceLocation;
 import c98.core.GL;
 
 public class SkinsSticks implements LayerRenderer {
-	
 	private ModelRenderer[] sticks = new ModelRenderer[12];
 	
 	public SkinsSticks(RenderPlayer rdr) {
@@ -65,5 +64,4 @@ public class SkinsSticks implements LayerRenderer {
 	@Override public boolean shouldCombineTextures() {
 		return false;
 	}
-	
 }

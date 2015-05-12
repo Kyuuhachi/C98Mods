@@ -251,6 +251,5 @@ public class XCube {
 		GL.color(r1, g1, b1, a1);
 		GL.vertex(x0, y1, 0);
 		GL.vertex(x1, y1, 0);
-		
 	}
 }

@@ -7,7 +7,6 @@ import c98.ExtraInfo;
 import c98.core.launch.ASMer;
 
 @ASMer class DrawXpInCreative extends PlayerControllerMP {
-	
 	public DrawXpInCreative(Minecraft mcIn, NetHandlerPlayClient p_i45062_2_) {
 		super(mcIn, p_i45062_2_);
 	}

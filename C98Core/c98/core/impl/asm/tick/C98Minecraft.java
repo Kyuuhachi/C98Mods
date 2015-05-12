@@ -7,7 +7,6 @@ import c98.core.impl.HookImpl;
 import c98.core.launch.ASMer;
 
 @ASMer class C98Minecraft extends Minecraft {
-	
 	public C98Minecraft(GameConfiguration p_i45547_1_) {
 		super(p_i45547_1_);
 	}
@@ -16,5 +15,4 @@ import c98.core.launch.ASMer;
 		if(par1GuiScreen == null && Minecraft.getMinecraft().theWorld != null) HookImpl.setGui(null);
 		super.displayGuiScreen(par1GuiScreen);
 	}
-	
 }

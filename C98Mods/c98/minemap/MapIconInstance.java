@@ -34,5 +34,4 @@ public class MapIconInstance implements Comparable<MapIconInstance> {
 	@Override public int compareTo(MapIconInstance arg0) {
 		return Integer.compare(zLevel, arg0.zLevel);
 	}
-	
 }

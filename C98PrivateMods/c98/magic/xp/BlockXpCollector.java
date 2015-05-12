@@ -82,5 +82,4 @@ public class BlockXpCollector extends BlockContainer {
 	@Override public TileEntity createNewTileEntity(World w, int meta) {
 		return new TE();
 	}
-	
 }

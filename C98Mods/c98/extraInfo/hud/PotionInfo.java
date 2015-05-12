@@ -12,7 +12,6 @@ import c98.core.util.Convert;
 import c98.core.util.NinePatch;
 
 public class PotionInfo {
-	
 	public static void drawPotions(int height, int width, FontRenderer fr, Minecraft mc) {
 		Collection<PotionEffect> potions = mc.thePlayer.getActivePotionEffects();
 		int xPotOffset = 0;
@@ -20,7 +19,7 @@ public class PotionInfo {
 		int itr = 0;
 		int xMult = 26;
 		int yMult = 26;
-		for(PotionEffect effect:potions) {
+		for(PotionEffect effect : potions) {
 			Potion pot = Potion.potionTypes[effect.getPotionID()];
 			if(itr % 8 == 0 && itr != 0) {
 				xPotOffset += 1;
@@ -59,5 +58,4 @@ public class PotionInfo {
 		NinePatch.setTexCoords(0, 24, 24, 24);
 		NinePatch.draw(x, y, w, h);
 	}
-	
 }

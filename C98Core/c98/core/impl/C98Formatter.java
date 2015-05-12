@@ -99,5 +99,4 @@ public class C98Formatter extends Formatter {
 		string.append(target.after(record, this));
 		return string.toString();
 	}
-	
 }

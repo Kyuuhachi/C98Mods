@@ -149,7 +149,6 @@ public class MinecraftProgressListener extends ProgressListener {
 		GL.loadIdentity();
 		GL.translate(0, 0, -2000);
 		GL.viewport(0, 0, mc.displayWidth, mc.displayHeight);
-		
 	}
 	
 	private static void drawRect(int x, int y, int u, int v, int w, int h) {

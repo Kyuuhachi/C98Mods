@@ -7,7 +7,6 @@ import net.minecraft.world.chunk.Chunk;
 import c98.minemap.api.MapHandler;
 
 public class SurfaceMap extends MapHandler {
-	
 	private int prevHeight;
 	
 	@Override public int calc(Chunk chunk, int x, int z, int plY) {
@@ -61,7 +60,6 @@ public class SurfaceMap extends MapHandler {
 		}
 		
 		return getColor((byte)(color * 4 + brightness), x + z & 1);
-		
 	}
 	
 	@Override public void line(int x) {

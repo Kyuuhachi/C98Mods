@@ -30,7 +30,6 @@ public class BlockItemExtractor extends BlockContainer {
 		@Override public boolean isItemOutput(EnumFacing f) {
 			return f.getOpposite() == worldObj.getBlockState(getPos()).getValue(FACING);
 		}
-		
 	}
 	
 	public BlockItemExtractor() {

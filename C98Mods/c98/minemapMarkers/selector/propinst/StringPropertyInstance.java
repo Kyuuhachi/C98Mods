@@ -22,5 +22,4 @@ public class StringPropertyInstance implements PropertyInstance {
 	@Override public boolean matches(TileEntity e) {
 		return ((TileEntityProperty<String>)prop).getValue(e).equals(val) != invert;
 	}
-	
 }

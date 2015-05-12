@@ -13,7 +13,6 @@ import c98.core.impl.*;
 import c98.core.impl.C98Formatter.Target;
 
 public class C98Tweaker implements ITweaker {
-	
 	public static final List<String> transformers = new ArrayList();
 	public static boolean forge = Arrays.toString(Launch.classLoader.getURLs()).contains("forge");
 	public static boolean client;

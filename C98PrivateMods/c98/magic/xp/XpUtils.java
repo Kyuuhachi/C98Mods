@@ -7,7 +7,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
 public class XpUtils {
-	
 	public static boolean canTake(TileEntity te) {
 		Set<IXpPipe> visited = new HashSet();
 		

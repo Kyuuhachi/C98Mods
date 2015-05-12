@@ -19,7 +19,6 @@ public class MinemapWaypoints extends C98Mod implements MinemapPlugin {
 		}
 		
 		public TreeMap<String, TreeMap<String, List<Waypoint>>> waypoints = new TreeMap();
-		
 	}
 	
 	public static Config config;
@@ -63,5 +62,4 @@ public class MinemapWaypoints extends C98Mod implements MinemapPlugin {
 		SocketAddress address = mc.getNetHandler().getNetworkManager().getRemoteAddress();
 		return address instanceof LocalAddress ? MinecraftServer.getServer().getFolderName() : address.toString();
 	}
-	
 }

@@ -126,5 +126,4 @@ public class MapServer {
 			renderer = new MapClient(this);
 		}
 	}
-	
 }

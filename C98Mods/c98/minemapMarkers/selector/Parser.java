@@ -6,7 +6,6 @@ import c98.minemapMarkers.selector.prop.SelectorProperty;
 import c98.minemapMarkers.selector.propinst.*;
 
 public class Parser {
-	
 	private static LinkedList tokens;
 	private static int pos;
 	

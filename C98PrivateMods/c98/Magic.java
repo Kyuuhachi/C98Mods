@@ -88,5 +88,4 @@ public class Magic extends C98Mod implements EntitySpawnHook, DisplayGuiHook {
 		if(name.equals(furnace.unlocalizedName)) return new GuiMagicFurnace(playerInv, inv);
 		return null;
 	}
-	
 }

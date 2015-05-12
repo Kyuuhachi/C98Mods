@@ -10,7 +10,6 @@ import c98.core.C98Core;
 import c98.core.GL;
 
 public class TopBar {
-	
 	private static ResourceLocation moon = new ResourceLocation("textures/environment/moon_phases.png");
 	private static ResourceLocation sun = new ResourceLocation("textures/environment/sun.png");
 	

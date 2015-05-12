@@ -9,7 +9,6 @@ import org.lwjgl.opengl.GL11;
 import c98.core.launch.ASMer;
 
 @ASMer class C98StencilFramebuffer extends Framebuffer {
-	
 	public C98StencilFramebuffer(int p_i45078_1_, int p_i45078_2_, boolean p_i45078_3_) {
 		super(p_i45078_1_, p_i45078_2_, p_i45078_3_);
 	}

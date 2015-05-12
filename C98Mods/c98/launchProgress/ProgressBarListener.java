@@ -30,5 +30,4 @@ public class ProgressBarListener extends ProgressListener {
 	@Override public void close() {
 		frame.dispose();
 	}
-	
 }

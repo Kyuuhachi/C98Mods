@@ -36,5 +36,4 @@ public class GuiMagicFurnace extends GuiContainer {
 		int max = inventory.getField(FIELD_TOTAL_TIME);
 		return max != 0 && now != 0 ? now * barWidth / max : 0;
 	}
-	
 }

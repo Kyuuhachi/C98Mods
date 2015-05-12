@@ -10,7 +10,6 @@ import net.minecraft.world.World;
 import c98.ZeldaItems;
 
 public class EntitySpinner extends Entity {
-	
 	public EntitySpinner(World worldIn) {
 		super(worldIn);
 		setSize(0.875F, 0.875F);
@@ -109,7 +108,6 @@ public class EntitySpinner extends Entity {
 			if(!worldObj.isRemote) playerIn.mountEntity(this);
 			return true;
 		}
-		
 	}
 	
 	@Override public void onUpdate() {

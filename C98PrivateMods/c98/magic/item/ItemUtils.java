@@ -10,7 +10,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
 public class ItemUtils {
-	
 	public static List<ItemSlot> getItems(IItemConnection te) {
 		assert te instanceof IItemConnection;
 		Set<IItemConnection> visited = new HashSet();

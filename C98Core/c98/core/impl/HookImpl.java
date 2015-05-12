@@ -100,7 +100,6 @@ public class HookImpl {
 									C98Core.modList.add(modInstance);
 									C98Log.log("[C98Core] C98Mod found: " + modInstance.toString());
 								}
-								
 							}
 						}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 					} catch(Throwable e) {
@@ -234,5 +233,4 @@ public class HookImpl {
 		for(ConnectHook mod : connectHooks)
 			mod.onDisconnect(cli);
 	}
-	
 }

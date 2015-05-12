@@ -165,11 +165,11 @@ public class HUD {
 			case 1:
 				s = "Small";
 				break;
-				
+			
 			case 2:
 				s = "Medium";
 				break;
-				
+			
 			case 4:
 				s = "Big";
 				break;
@@ -231,5 +231,4 @@ public class HUD {
 		if(targetEntity instanceof EntityPlayer) s = ((EntityPlayer)targetEntity).getName();
 		return s;
 	}
-	
 }

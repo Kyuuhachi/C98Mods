@@ -11,7 +11,6 @@ import c98.core.launch.ASMer;
 
 public class AssetHelper extends C98Mod {
 	@ASMer static class Blah extends SimpleReloadableResourceManager {
-		
 		public Blah(IMetadataSerializer p_i1289_1_) {
 			super(p_i1289_1_);
 		}

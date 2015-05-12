@@ -107,7 +107,6 @@ public class RenderMagicGate extends TileEntitySpecialRenderer {
 	}
 	
 	private void drawGate(BlockMagicGate.TE te, double x, double y, double z, float ptt) {
-		
 		x += 0.5;
 		y += 0.5;
 		z += 0.5;
@@ -252,5 +251,4 @@ public class RenderMagicGate extends TileEntitySpecialRenderer {
 	private static double dot(double[] v1, double[] v2) {
 		return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2] + v1[3] * v2[3];
 	}
-	
 }

@@ -11,7 +11,6 @@ import c98.GlitchyChunks;
 import c98.core.C98Log;
 
 public class Gen extends ChunkProviderGenerate {
-	
 	private ChunkProviderGenerate normal;
 	private ChunkProviderHell nether;
 	private ChunkProviderEnd end;
@@ -53,7 +52,7 @@ public class Gen extends ChunkProviderGenerate {
 			
 			long chunkSeed = rand.nextLong();
 			
-			for(Field field:p.getClass().getDeclaredFields())
+			for(Field field : p.getClass().getDeclaredFields())
 				if(field.getType() == NoiseGeneratorOctaves.class) {
 					field.setAccessible(true);
 					NoiseGeneratorOctaves g = (NoiseGeneratorOctaves)field.get(p);

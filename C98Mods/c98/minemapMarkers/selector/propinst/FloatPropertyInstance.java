@@ -31,5 +31,4 @@ public class FloatPropertyInstance implements PropertyInstance {
 		if(op == 1) return a > b;
 		return false;
 	}
-	
 }

@@ -4,7 +4,6 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.world.chunk.Chunk;
 
 public abstract class MapHandler {
-	
 	public abstract int calc(Chunk chunk, int x, int z, int plY);
 	
 	public void line(int x) {}
@@ -26,5 +25,4 @@ public abstract class MapHandler {
 			return 0xFF000000 | r << 16 | g << 8 | b;
 		}
 	}
-	
 }

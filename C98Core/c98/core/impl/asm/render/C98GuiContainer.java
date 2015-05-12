@@ -7,7 +7,6 @@ import net.minecraft.inventory.Container;
 import c98.core.launch.*;
 
 @ASMer abstract class C98GuiContainer extends GuiContainer implements CustomASMer {
-	
 	public C98GuiContainer(Container par1Container) {
 		super(par1Container);
 	}
@@ -23,5 +22,4 @@ import c98.core.launch.*;
 					}
 				}
 	}
-	
 }

@@ -20,5 +20,4 @@ public class BooleanPropertyInstance implements PropertyInstance {
 	@Override public boolean matches(TileEntity e) {
 		return ((TileEntityProperty<Boolean>)prop).getValue(e) == Boolean.TRUE != invert;
 	}
-	
 }

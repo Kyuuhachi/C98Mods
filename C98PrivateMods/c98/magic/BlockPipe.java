@@ -12,7 +12,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public abstract class BlockPipe extends BlockContainer {
-	
 	private static final float inset = 0.25F;
 	public static final PropertyBool DOWN = PropertyBool.create("down");
 	public static final PropertyBool UP = PropertyBool.create("up");
@@ -100,5 +99,4 @@ public abstract class BlockPipe extends BlockContainer {
 		}
 		setBlockBoundsForItemRender();
 	}
-	
 }

@@ -29,7 +29,6 @@ import c98.magic.xp.IXpConnection;
 import c98.magic.xp.XpUtils;
 
 public class BlockMagicFurnace extends BlockContainer {
-	
 	public static class TE extends TileEntityLockable implements IUpdatePlayerListBox, IXpConnection, IInventory, IItemConnection, IItemSource {
 		public static final int IN = 0, OUT = 1;
 		public static final int FIELD_TIME = 0, FIELD_TOTAL_TIME = 1;

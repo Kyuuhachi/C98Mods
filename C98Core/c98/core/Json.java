@@ -14,6 +14,10 @@ public class Json {
 	private static Module colorModule = new ColorModule();
 	
 	public static <T> T get(C98Mod mod, Class<T> clz) {
+		return get(mod.getName(), clz);
+	}
+	
+	public static <T> T get(String mod, Class<T> clz) {
 		try {
 			return read(getFile(mod), clz, getJson(clz));
 		} catch(InstantiationException | IllegalAccessException | IOException e) {
@@ -23,6 +27,10 @@ public class Json {
 	}
 	
 	public static void write(C98Mod mod, Object obj) {
+		write(mod.getName(), obj);
+	}
+	
+	public static void write(String mod, Object obj) {
 		try {
 			write(getFile(mod), obj, getJson(obj.getClass()));
 		} catch(IOException e) {
@@ -30,8 +38,8 @@ public class Json {
 		}
 	}
 	
-	private static File getFile(C98Mod mod) {
-		return new File(IO.getMinecraftDir(), "config/C98/" + mod.getName() + ".json");
+	private static File getFile(String mod) {
+		return new File(IO.getMinecraftDir(), "config/C98/" + mod + ".json");
 	}
 	
 	private static ObjectMapper getJson(Class clz) {

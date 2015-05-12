@@ -8,7 +8,6 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
 public class IO {
-	private static IResourceManager man = Minecraft.getMinecraft().getResourceManager();
 	
 	public static File getMinecraftDir() {
 		return new File(".");
@@ -31,11 +30,6 @@ public class IO {
 		}
 	}
 	
-	private static IResourceManager man() {
-		if(man == null) man = Minecraft.getMinecraft().getResourceManager();
-		return man;
-	}
-	
 	public static InputStream getInputStream(ResourceLocation loc) {
 		try {
 			return man().getResource(loc).getInputStream();
@@ -43,5 +37,9 @@ public class IO {
 			C98Log.error("Failed to open stream to " + loc, e);
 			return null;
 		}
+	}
+	
+	private static IResourceManager man() {
+		return Minecraft.getMinecraft().getResourceManager();
 	}
 }

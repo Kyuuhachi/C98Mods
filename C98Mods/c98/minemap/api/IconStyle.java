@@ -1,29 +1,10 @@
 package c98.minemap.api;
 
 import java.awt.Color;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import c98.core.C98Log;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-@JsonSerialize(using = IconStyle.Serializer.class) public class IconStyle implements Cloneable {
-	static class Serializer extends JsonSerializer<IconStyle> {
-		@Override public void serialize(IconStyle val, JsonGenerator gen, SerializerProvider ser) throws IOException, JsonProcessingException {
-			gen.writeStartObject();
-			try {
-				for(Field f : val.getClass().getFields())
-					if(f.getType().isPrimitive() || f.get(val) != null) gen.writeObjectField(f.getName(), f.get(val));
-			} catch(IllegalArgumentException | IllegalAccessException e) {
-				C98Log.error(e);
-			}
-			gen.writeEndObject();
-		}
-	}
-	
+@JsonInclude(Include.NON_NULL) public class IconStyle implements Cloneable {
 	public Color color;
 	public Integer shape;
 	public Integer zLevel;

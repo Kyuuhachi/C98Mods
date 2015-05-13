@@ -12,6 +12,7 @@ import jdk.internal.org.objectweb.asm.Type;
 import jdk.internal.org.objectweb.asm.tree.*;
 import net.minecraft.client.main.Main;
 import org.apache.commons.io.IOUtils;
+import c98.core.C98Core;
 import c98.core.Json;
 import c98.core.launch.ASMer;
 import c98.core.launch.CustomASMer;
@@ -60,7 +61,7 @@ public class Progress {
 		frame.setLocationRelativeTo(null); //Center window
 		frame.addWindowListener(new WindowAdapter() {
 			@Override public void windowClosing(WindowEvent e) {
-				System.exit(0); //Forge is a moron and makes JFrame.EXIT_ON_CLOSE crash
+				C98Core.exit(0);
 			}
 		});
 		frame.setVisible(true);

@@ -12,6 +12,7 @@ import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import c98.core.C98Core;
 import c98.core.C98Log;
 import c98.core.launch.ASMer;
 import c98.core.launch.CustomASMer;
@@ -67,7 +68,7 @@ public class C98Transformer implements IClassTransformer {
 			b = transform(IOUtils.toByteArray(Launch.classLoader.findResource(className).openStream()));
 		} catch(NullPointerException e) {
 			C98Log.error("Couldn't find file " + className, e);
-			System.exit(1);
+			C98Core.exit(1);
 			return null;
 		}
 		

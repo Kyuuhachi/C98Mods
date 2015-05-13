@@ -1,5 +1,6 @@
 package c98.core;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.*;
@@ -82,5 +83,16 @@ public class C98Core {
 	
 	public static void registerEntity(Class<? extends Entity> class1, String string, int id) {
 		EntityList.addMapping(class1, string, id);
+	}
+	
+	public static void exit(int status) { //Forge is a moron and makes System.exit() crash for some retarded reason. Oh well, that's to be expected from Forge, isn't it?
+		try {
+			Class Shutdown = Class.forName("java.lang.Shutdown");
+			Method exit = Shutdown.getDeclaredMethod("exit", int.class);
+			exit.setAccessible(true);
+			exit.invoke(null, status);
+		} catch(ReflectiveOperationException e1) {
+			throw new ThreadDeath();
+		}
 	}
 }

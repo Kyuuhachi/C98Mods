@@ -3,18 +3,17 @@ package c98.core.impl.launch;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.logging.Handler;
 import jdk.internal.org.objectweb.asm.*;
 import joptsimple.*;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.launchwrapper.*;
 import c98.core.C98Log;
-import c98.core.impl.*;
-import c98.core.impl.C98Formatter.Target;
+import c98.core.impl.C98Loader;
+import c98.core.impl.LogImpl;
 
 public class C98Tweaker implements ITweaker {
-	public static final List<String> transformers = new ArrayList();
-	public static boolean forge = Arrays.toString(Launch.classLoader.getURLs()).contains("forge");
+	public static final List<String> asmers = new ArrayList();
+	public static boolean forge = Arrays.toString(Launch.classLoader.getURLs()).contains("forge"); //TODO better way to do this
 	public static boolean client;
 	static {
 		try {
@@ -47,9 +46,20 @@ public class C98Tweaker implements ITweaker {
 	}
 	
 	@Override public String[] getLaunchArguments() {
+		List<IClassTransformer> transformers = getTransformers();
 		loadReplacers(); //Load this after all transformers have been created
-		if(Launch.classLoader.getTransformers().get(0).getClass().getName().startsWith("c98.core.")) return args.toArray(new String[args.size()]);
+		if(transformers.get(0).getClass().getName().startsWith("c98.core.")) return args.toArray(new String[args.size()]);
 		return new String[0];
+	}
+	
+	private static List<IClassTransformer> getTransformers() {
+		try {
+			Field f = LaunchClassLoader.class.getDeclaredField("transformers");
+			f.setAccessible(true);
+			return (List<IClassTransformer>)f.get(Launch.classLoader);
+		} catch(ReflectiveOperationException e) {
+			return null;
+		}
 	}
 	
 	@Override public String getLaunchTarget() {
@@ -57,24 +67,8 @@ public class C98Tweaker implements ITweaker {
 	}
 	
 	@Override public void injectIntoClassLoader(LaunchClassLoader l) {
-		l.addClassLoaderExclusion("c98.core.impl.launch.C98Tweaker");
-		l.addClassLoaderExclusion("org.objectweb.asm.");
-		l.addClassLoaderExclusion("com.google.common.");
+		l.addClassLoaderExclusion("c98.core.impl.launch.");
 		l.addTransformerExclusion("c98.core.launch.");
-		for(IClassTransformer t : l.getTransformers())
-			if(t.getClass().getName().contains("fml")) {
-				try {
-					Class FMLRelaunchLog = Class.forName("cpw.mods.fml.relauncher.FMLRelaunchLog$ConsoleLogThread");
-					Field f = FMLRelaunchLog.getDeclaredField("wrappedHandler");
-					f.setAccessible(true);
-					Handler h = (Handler)f.get(null);
-					h.setFormatter(new C98Formatter(Target.OUT));
-				} catch(Exception e) {
-					C98Log.error(e);
-				}
-				C98Log.fine("Repairing output");
-				break;
-			}
 	}
 	
 	private static void loadReplacers() {
@@ -86,7 +80,7 @@ public class C98Tweaker implements ITweaker {
 						final String clName = name.replace(".class", "").replace("/", ".");
 						rdr.accept(new ClassVisitor(Opcodes.ASM4) {
 							@Override public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-								if(desc.equals("Lc98/core/launch/ASMer;")) transformers.add(clName);
+								if(desc.equals("Lc98/core/launch/ASMer;")) asmers.add(clName);
 								return null;
 							}
 						}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
@@ -99,12 +93,9 @@ public class C98Tweaker implements ITweaker {
 			C98Log.error(e);
 		}
 		try {
-			Field f = LaunchClassLoader.class.getDeclaredField("transformers");
-			f.setAccessible(true);
-			List<IClassTransformer> l = (List)f.get(Launch.classLoader);
-			l.add((IClassTransformer)Launch.classLoader.loadClass("c98.core.impl.launch.C98Transformer").newInstance());
-		} catch(InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchFieldException | SecurityException e) {
-			C98Log.error(e);
+			getTransformers().add((IClassTransformer)Launch.classLoader.loadClass("c98.core.impl.launch.C98Transformer").newInstance());
+		} catch(InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 }

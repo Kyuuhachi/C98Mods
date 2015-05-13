@@ -34,7 +34,7 @@ public class C98Transformer implements IClassTransformer {
 	public C98Transformer() {
 		TreeSet<String> output = new TreeSet();
 		int maxLen = 0;
-		for(String s : C98Tweaker.transformers)
+		for(String s : C98Tweaker.asmers)
 			try {
 				String name = s.replace('.', '/') + ".class";
 				ClassInfo st = getNames(name);

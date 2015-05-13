@@ -1,5 +1,7 @@
 package c98.core.hooks;
 
+import java.util.HashMap;
+import java.util.Map;
 import c98.core.GL;
 import c98.core.impl.HookImpl;
 
@@ -21,6 +23,13 @@ public interface HudRenderHook {
 		FOOD("food"),
 		MOUNT_HEALTH("mountHealth"),
 		AIR("air");
+		
+		public static Map<String, HudElement> bySection = new HashMap();
+		static {
+			for(HudElement e : values())
+				bySection.put(e.section, e);
+		}
+		
 		public final String section;
 		
 		private HudElement(String sec) {

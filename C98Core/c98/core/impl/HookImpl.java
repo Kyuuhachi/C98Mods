@@ -1,5 +1,6 @@
 package c98.core.impl;
 
+import java.io.IOException;
 import java.util.*;
 import jdk.internal.org.objectweb.asm.*;
 import net.minecraft.client.Minecraft;
@@ -102,7 +103,7 @@ public class HookImpl {
 								}
 							}
 						}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-					} catch(Throwable e) {
+					} catch(IOException e) {} catch(Throwable e) {
 						C98Log.error(e);
 					}
 				}
@@ -126,7 +127,6 @@ public class HookImpl {
 			C98Log.fine("Mod list: " + C98Core.modList);
 			if(C98Core.client) {
 				addHook(new C98Core());
-				if(C98Core.forge) new ForgeMenuHack(C98Core.mc);
 				BiomeGenBase.hell.biomeName = "Nether";
 				BiomeGenBase.sky.biomeName = "End";
 				C98Core.mc.gameSettings.keyBindings = getAllKeys(C98Core.mc.gameSettings.keyBindings);

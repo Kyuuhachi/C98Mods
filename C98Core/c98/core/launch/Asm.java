@@ -3,9 +3,13 @@ package c98.core.launch;
 import java.io.*;
 import java.util.Collections;
 import java.util.Iterator;
+import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.ClassWriter;
 import jdk.internal.org.objectweb.asm.tree.*;
 import jdk.internal.org.objectweb.asm.util.*;
+import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraft.launchwrapper.Launch;
+import org.apache.commons.io.IOUtils;
 import c98.core.C98Log;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
@@ -65,5 +69,19 @@ public class Asm implements Iterable<AbstractInsnNode> {
 	
 	private static void p(Printer p) {
 		C98Log.log(("\n" + j.join(p.text)).replace("\n", "\n\t"));
+	}
+	
+	public static ClassNode getClass(String string) {
+		byte[] b = null;
+		try {
+			b = IOUtils.toByteArray(Asm.class.getResource("/" + string.replace('.', '/') + ".class"));
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		for(IClassTransformer tr : Launch.classLoader.getTransformers())
+			b = tr.transform("foo", "bar", b);
+		ClassNode n = new ClassNode();
+		new ClassReader(b).accept(n, 0);
+		return n;
 	}
 }

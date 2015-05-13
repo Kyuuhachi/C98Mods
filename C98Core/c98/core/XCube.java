@@ -3,23 +3,22 @@ package c98.core;
 import java.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
 public class XCube {
-	private static final ResourceLocation achievement_background = new ResourceLocation("textures/gui/achievement/achievement_background.png");
-	private static int ttx = -1, tty = -1;
+	private final ResourceLocation achievement_background = new ResourceLocation("textures/gui/achievement/achievement_background.png");
+	private int ttx = -1, tty = -1;
 	
-	public static void drawImage(int x, int y) {
+	public void drawImage(int x, int y) {
 		GL.color(1, 1, 1);
 		y += 4;
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.getTextureManager().bindTexture(achievement_background);
 		drawTexturedModalRect(x - 5, y - 5, 26, 202, 26, 26);
 		
-		ScaledResolution sr = drawIt(x, y, mc);
+		drawIt(x, y, mc);
+		ScaledResolution sr = createScale(mc);
 		int mx = Mouse.getX() / sr.getScaleFactor();
 		int my = Mouse.getY() / sr.getScaleFactor();
 		my = sr.getScaledHeight() - my;
@@ -32,9 +31,8 @@ public class XCube {
 		}
 	}
 	
-	private static ScaledResolution drawIt(int x, int y, Minecraft mc) {
+	private static void drawIt(int x, int y, Minecraft mc) {
 		GL.pushMatrix();
-		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		GL.disableTexture();
 		GL.disableDepth();
 		GL.lineWidth(1);
@@ -48,7 +46,6 @@ public class XCube {
 		GL.enableTexture();
 		
 		GL.popMatrix();
-		return sr;
 	}
 	
 	private static void drawFace() {
@@ -108,7 +105,7 @@ public class XCube {
 			if(i == 1) GL.polygonMode(GL.LINE);
 			GL.begin();
 			if(i == 1) {
-				ScaledResolution r = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+				ScaledResolution r = createScale(mc);
 				float G = F - 2F / (16 * r.getScaleFactor());
 				GL.vertex(F, f, G);
 				GL.vertex(F, f, f);
@@ -141,18 +138,22 @@ public class XCube {
 		}
 	}
 	
-	private static void drawTexturedModalRect(int x, int y, int u, int v, int w, int h) {
-		float px = 1 / 256F;
-		WorldRenderer t = Tessellator.getInstance().getWorldRenderer();
-		t.startDrawingQuads();
-		t.addVertexWithUV(x + 0, y + h, 0, (u + 0) * px, (v + h) * px);
-		t.addVertexWithUV(x + w, y + h, 0, (u + w) * px, (v + h) * px);
-		t.addVertexWithUV(x + w, y + 0, 0, (u + w) * px, (v + 0) * px);
-		t.addVertexWithUV(x + 0, y + 0, 0, (u + 0) * px, (v + 0) * px);
-		t.draw();
+	public static ScaledResolution createScale(Minecraft mc) {
+		ScaledResolution r = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		return r;
 	}
 	
-	public static void tooltip() {
+	private static void drawTexturedModalRect(int x, int y, int u, int v, int w, int h) {
+		float px = 1 / 256F;
+		GL.begin();
+		GL.vertex(x + 0, y + h, 0, (u + 0) * px, (v + h) * px);
+		GL.vertex(x + w, y + h, 0, (u + w) * px, (v + h) * px);
+		GL.vertex(x + w, y + 0, 0, (u + w) * px, (v + 0) * px);
+		GL.vertex(x + 0, y + 0, 0, (u + 0) * px, (v + 0) * px);
+		GL.end();
+	}
+	
+	public void tooltip() {
 		if(ttx != -1 && tty != -1) drawTooltip(ttx, tty);
 	}
 	
@@ -184,9 +185,9 @@ public class XCube {
 		int drawx = x + 12;
 		int drawY = y + 12;
 		int h = 8;
-		if(list.size() > 1) h += 1 + (list.size() - 1) * 10;
+		if(list.size() > 1) h += 1 + (list.size() - 1) * 9;
 		
-		ScaledResolution dim = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution dim = createScale(mc);
 		int width = dim.getScaledWidth();
 		int height = dim.getScaledHeight();
 		

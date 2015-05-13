@@ -18,6 +18,7 @@ public class StandardAsm {
 					break;
 				}
 			remap(transformerMethod, transformer.name, dst.name);
+			
 			if(transformerMethod.name.equals("<clinit>")) addClinit(transformerMethod, dstMethod, dst);
 			else if(transformerMethod.name.equals("<init>")) addInit(transformerMethod, dstMethod);
 			else addMthd(transformerMethod, dstMethod, dst, className);

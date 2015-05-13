@@ -1,7 +1,7 @@
 package c98.launchProgress;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,11 @@ public class Progress {
 		frame.setTitle("Launching Minecraft...");
 		frame.setAlwaysOnTop(true);
 		frame.setLocationRelativeTo(null); //Center window
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.addWindowListener(new WindowAdapter() {
+			@Override public void windowClosing(WindowEvent e) {
+				System.exit(0); //Forge is a moron and makes JFrame.EXIT_ON_CLOSE crash
+			}
+		});
 		frame.setVisible(true);
 		
 		timer = new Timer(100, Progress::update);

@@ -43,7 +43,7 @@ public class C98Transformer implements IClassTransformer {
 				for(String sup : st.superClasses) {
 					if(sup.contains(".")) throw new IllegalArgumentException(st.thisClass + " contains a source-format @ASMer tag!");
 					
-					output.add("[C98Core] " + sup + " -> " + st.thisClass);
+					output.add(sup + " -> " + st.thisClass);
 					
 					ClassNode transformer = new ClassNode();
 					new ClassReader(transform(getAsByteArray(Launch.classLoader.findResource(st.thisClass + ".class")))).accept(transformer, ClassReader.EXPAND_FRAMES);
@@ -58,7 +58,7 @@ public class C98Transformer implements IClassTransformer {
 			if(s.indexOf('-') - 1 > maxLen) maxLen = s.indexOf('-') - 1;
 		String fmt = "%-" + maxLen + "s -> %s";
 		for(String s : output)
-			C98Log.fine(String.format(fmt, (Object[])s.split(" -> ", 2)));
+			C98Log.debug(String.format(fmt, (Object[])s.split(" -> ", 2)));
 	}
 	
 	private ClassInfo getNames(final String className) throws IOException {

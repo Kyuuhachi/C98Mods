@@ -23,7 +23,6 @@ public class HookImpl {
 	static {
 		C98Core.client = C98Tweaker.client;
 		C98Core.mc = C98Core.client ? Minecraft.getMinecraft() : null;
-		C98Formatter.Target.OUT = C98Core.client ? C98Formatter.Target.LAUNCHER : C98Formatter.Target.CONSOLE;
 	}
 	
 	public static List<TickHook> tickHooks = new ArrayList();
@@ -99,7 +98,7 @@ public class HookImpl {
 								
 								if(modInstance != null) {
 									C98Core.modList.add(modInstance);
-									C98Log.log("[C98Core] C98Mod found: " + modInstance.toString());
+									C98Log.log("C98Mod found: " + modInstance.toString());
 								}
 							}
 						}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
@@ -124,7 +123,7 @@ public class HookImpl {
 			for(C98Mod mod : C98Core.modList)
 				mod.load();
 			C98Log.log("Loaded C98Mods");
-			C98Log.fine("Mod list: " + C98Core.modList);
+			C98Log.debug("Mod list: " + C98Core.modList);
 			if(C98Core.client) {
 				addHook(new C98Core());
 				BiomeGenBase.hell.biomeName = "Nether";

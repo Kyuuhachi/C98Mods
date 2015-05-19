@@ -5,13 +5,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import jdk.internal.org.objectweb.asm.*;
-import joptsimple.*;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.launchwrapper.*;
 import net.minecraftforge.fml.common.ModContainer;
 import c98.core.C98Log;
 import c98.core.impl.C98Loader;
-import c98.core.impl.LogImpl;
 
 public class C98Tweaker implements ITweaker {
 	public static final List<String> asmers = new ArrayList();
@@ -31,13 +29,6 @@ public class C98Tweaker implements ITweaker {
 	private List<String> args = new ArrayList();
 	
 	@Override public void acceptOptions(List<String> args1, File gameDir, File assetsDir, String profile) {
-		OptionParser op = new OptionParser();
-		op.allowsUnrecognizedOptions();
-		ArgumentAcceptingOptionSpec<File> gameDirOpt = op.accepts("gameDir").withRequiredArg().ofType(File.class).defaultsTo(new File("."), new File[0]);
-		OptionSet opts = op.parse(args1.toArray(new String[0]));
-		File file = new File(opts.valueOf(gameDirOpt), "logs/c98mods.log");
-		LogImpl.init(file);
-		
 		args.addAll(args1);
 		add(profile, "--version");
 		if(gameDir != null) add(gameDir.getAbsolutePath(), "--gameDir");

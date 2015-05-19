@@ -15,17 +15,17 @@ public class GuiSelectItem extends GuiContainer {
 		entity = selected;
 	}
 	
-	private void drawEntity(int x, int y, int sc, int h, int mouseX, int mouseY, EntityLivingBase e) {
-		x += guiTop;
-		y += guiLeft;
+	private static void drawEntity(int x, int y, int sc, int h, int mouseX, int mouseY, EntityLivingBase e) {
 		GuiInventory.drawEntityOnScreen(x, y, sc, (float)x - mouseX, (float)(y - sc / 3 * 5) - mouseY, e);
 	}
 	
 	@Override protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		mc.getTextureManager().bindTexture(new ResourceLocation("c98/extrainfo", "item_select.png"));
-		drawTexturedModalRect(guiTop, guiLeft, 0, 0, xSize, ySize);
+		int x = (width - xSize) / 2;
+		int y = (height - ySize) / 2;
+		drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 		
-		drawEntity(51, 75, 30, 70, mouseX, mouseY, mc.thePlayer);
-		if(entity != null) drawEntity(123, 51, 20, 43, mouseX, mouseY, entity);
+		drawEntity(x + 51, y + 75, 30, 70, mouseX, mouseY, mc.thePlayer);
+		if(entity != null) drawEntity(x + 123, y + 51, 20, 43, mouseX, mouseY, entity);
 	}
 }

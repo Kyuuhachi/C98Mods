@@ -4,10 +4,9 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
@@ -29,16 +28,8 @@ public class GuiViewItem extends GuiScreen {
 	
 	private static final int LINES = FIELD_H / 9;
 	
-	private static final ChatStyle bracket = new ChatStyle().setColor(EnumChatFormatting.AQUA);
-	private static final ChatStyle squarebracket = new ChatStyle().setColor(EnumChatFormatting.BLUE);
-	private static final ChatStyle key = new ChatStyle().setColor(EnumChatFormatting.RED);
-	private static final ChatStyle string = new ChatStyle().setColor(EnumChatFormatting.YELLOW);
-	private static final ChatStyle number = new ChatStyle().setColor(EnumChatFormatting.GREEN);
-	private static final ChatStyle keyword = new ChatStyle().setColor(EnumChatFormatting.LIGHT_PURPLE);
-	private static final ChatStyle punctuation = new ChatStyle().setColor(EnumChatFormatting.GRAY);
-	
-	List<IChatComponent> components = new ArrayList<>();
-	IChatComponent[] text;
+	private ObjectNode json;
+	List<IChatComponent> text;
 	int scroll = 0;
 	private int guiLeft;
 	private int guiTop;
@@ -49,73 +40,11 @@ public class GuiViewItem extends GuiScreen {
 	public GuiViewItem(ItemStack is) {
 		NBTTagCompound nbt = new NBTTagCompound();
 		is.writeToNBT(nbt);
+		json = (ObjectNode)toJson(nbt);
+		text = new JsonHighlighter(JsonHighlighter.COLOR).write(json);
 		
-		writeJsonElement(toJson(nbt), 0, newline(0), "");
-		
-		text = components.toArray(new IChatComponent[0]);
-		maxScroll = text.length - LINES;
+		maxScroll = text.size() - LINES;
 		if(maxScroll < 0) maxScroll = 0;
-	}
-	
-	private IChatComponent writeJsonElement(JsonNode j, int indent, IChatComponent comp, String path) {
-		if(j instanceof ObjectNode) return writeJsonObject((ObjectNode)j, indent, comp, path);
-		if(j instanceof ArrayNode) return writeJsonArray((ArrayNode)j, indent, comp, path);
-		return writeJsonPrimitive((ValueNode)j, indent, comp, path);
-	}
-	
-	private IChatComponent writeJsonObject(ObjectNode j, int indent, IChatComponent comp, String path) {
-		comp.appendSibling(comp("{", bracket));
-		Iterator<Map.Entry<String, JsonNode>> entries = j.fields();
-		while(entries.hasNext()) {
-			Map.Entry<String, JsonNode> e = entries.next();
-			comp = newline(indent + 1);
-			IChatComponent val = comp(e.getKey(), key).appendSibling(comp(": ", punctuation));
-			comp.appendSibling(val);
-			comp = writeJsonElement(e.getValue(), indent + 1, val, path + e.getKey() + "/");
-			if(entries.hasNext()) comp.appendSibling(comp(",", punctuation));
-		}
-		return newline(indent).appendSibling(comp("}", bracket));
-	}
-	
-	private IChatComponent writeJsonArray(ArrayNode j, int indent, IChatComponent comp, String path) {
-		comp.appendSibling(comp("[", squarebracket));
-		Iterator<JsonNode> entries = j.iterator();
-		while(entries.hasNext()) {
-			JsonNode e = entries.next();
-			comp = newline(indent + 1);
-			comp = writeJsonElement(e, indent + 1, comp, path + "[]/");
-			if(entries.hasNext()) comp.appendSibling(comp(",", punctuation));
-		}
-		return newline(indent).appendSibling(comp("]", squarebracket));
-	}
-	
-	private static IChatComponent writeJsonPrimitive(ValueNode j, int indent, IChatComponent comp, String path) {
-		IChatComponent val = null;
-		if(j.isNull()) val = comp("null", keyword);
-		else {
-			if(j.isTextual()) val = comp(j.asText(), string);
-			if(j.isBoolean()) val = comp(j.asText(), keyword);
-			if(j.isNumber()) val = comp(j.asText(), number);
-		}
-		comp.appendSibling(val);
-		if(path.endsWith("tag/ench/[]/id/") && j.isNumber()) {
-			IChatComponent tooltip = comp(StatCollector.translateToLocal(Enchantment.enchantmentsList[j.asInt()].getName()), new ChatStyle());
-			comp.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, tooltip));
-		}
-		return comp;
-	}
-	
-	private static IChatComponent comp(String s, ChatStyle style) {
-		return new ChatComponentText(s).setChatStyle(style.createShallowCopy());
-	}
-	
-	private IChatComponent newline(int i) {
-		StringBuilder sb = new StringBuilder();
-		for(int j = 0; j < i; j++)
-			sb.append("  ");
-		IChatComponent c = new ChatComponentText(sb.toString());
-		components.add(c);
-		return c;
 	}
 	
 	private JsonNode toJson(NBTBase nbt) {
@@ -179,16 +108,19 @@ public class GuiViewItem extends GuiScreen {
 		
 		int x = FIELD_X;
 		int y = FIELD_Y;
-		for(int i = scroll; i < scroll + LINES && i < text.length; i++, y += mc.fontRendererObj.FONT_HEIGHT) {
+		for(int i = scroll; i < scroll + LINES && i < text.size(); i++, y += mc.fontRendererObj.FONT_HEIGHT) {
 			GL.color(1, 1, 1);
-			mc.fontRendererObj.drawString(mc.fontRendererObj.trimStringToWidth(text[i].getFormattedText(), FIELD_W), x, y, 0xAFAFAF);
+			mc.fontRendererObj.drawString(mc.fontRendererObj.trimStringToWidth(text.get(i).getFormattedText(), FIELD_W), x, y, 0xAFAFAF);
 			if(mouseY >= y && mouseY < y + mc.fontRendererObj.FONT_HEIGHT) {
 				int compX = x;
-				for(IChatComponent c : (Iterable<IChatComponent>)text[i]) {
+				for(IChatComponent c : (Iterable<IChatComponent>)text.get(i)) {
 					compX += mc.fontRendererObj.getStringWidth(c.getChatStyle().getFormattingCode() + ((ChatComponentText)c).getUnformattedTextForChat());
 					if(compX > mouseX) {
 						HoverEvent e = c.getChatStyle().getChatHoverEvent();
-						if(e != null) drawHoveringText(Splitter.on("\n").splitToList(e.getValue().getFormattedText()), mouseX, mouseY);
+						if(e != null) {
+							drawHoveringText(Splitter.on("\n").splitToList(e.getValue().getFormattedText()), mouseX, mouseY);
+							GL.disableLighting();
+						}
 						break;
 					}
 				}
@@ -242,10 +174,11 @@ public class GuiViewItem extends GuiScreen {
 		guiLeft = (width - WIDTH) / 2;
 		guiTop = (height - HEIGHT) / 2;
 		buttonList.clear();
-		int w = 102;
+		int w = 80;
 		int dist = 2;
-		buttonList.add(new GuiButton(1, guiLeft + WIDTH / 2 - dist - w, guiTop + 175, w, 20, "Copy raw"));
-		buttonList.add(new GuiButton(2, guiLeft + WIDTH / 2 + dist, guiTop + 175, w, 20, "Copy pretty"));
+		buttonList.add(new GuiButton(JsonHighlighter.RAW, guiLeft + WIDTH / 2 - dist - w - w / 2, guiTop + 175, w, 20, "Copy raw"));
+		buttonList.add(new GuiButton(JsonHighlighter.GIVE, guiLeft + WIDTH / 2 - w / 2, guiTop + 175, w, 20, "Copy /give"));
+		buttonList.add(new GuiButton(JsonHighlighter.PRETTY, guiLeft + WIDTH / 2 + dist + w / 2, guiTop + 175, w, 20, "Copy pretty"));
 	}
 	
 	@Override public void onGuiClosed() {
@@ -253,10 +186,9 @@ public class GuiViewItem extends GuiScreen {
 	}
 	
 	@Override protected void actionPerformed(GuiButton par1GuiButton) {
-//		boolean pretty = par1GuiButton.id == 2;
 		StringBuilder sb = new StringBuilder();
-		for(IChatComponent c : components)
-			sb.append(c.getUnformattedText()).append("\n"); //TODO copy raw json
+		for(IChatComponent c : new JsonHighlighter(par1GuiButton.id).write(json))
+			sb.append(c.getUnformattedText()).append("\n");
 		String s = sb.toString();
 		Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
 		StringSelection cl = new StringSelection(s);

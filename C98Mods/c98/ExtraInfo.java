@@ -17,7 +17,6 @@ import c98.core.hooks.*;
 import c98.core.util.NinePatch;
 import c98.extraInfo.gui.*;
 import c98.extraInfo.hud.*;
-import c98.extraInfo.item.*;
 import c98.extraInfo.itemViewer.GuiSelectItem;
 import c98.targetLock.TargetEntity;
 
@@ -60,9 +59,6 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 	private KeyBinding viewKey = new KeyBinding("View Item JSON", Keyboard.KEY_J, C98Core.KEYBIND_CAT);
 	
 	@Override public void load() {
-		Rendering.addOverlayHook(new Overlay());
-		Rendering.addOverlayHook(new BowOverlay());
-		Rendering.addOverlayHook(new PotionOverlay());
 		C98Core.registerKey(viewKey, false);
 		config = Json.get(this, EIConf.class);
 	}

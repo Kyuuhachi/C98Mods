@@ -1,6 +1,5 @@
 package c98.core;
 
-import java.util.LinkedList;
 import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.*;
@@ -40,11 +39,5 @@ public class Rendering {
 	
 	public static TileEntitySpecialRenderer getTERenderer(Class<? extends TileEntity> clazz) {
 		return temap.get(clazz);
-	}
-	
-	public static LinkedList<ItemOverlay> overlays = new LinkedList();
-	
-	public static void addOverlayHook(ItemOverlay ri) {
-		overlays.add(ri);
 	}
 }

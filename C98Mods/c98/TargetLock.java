@@ -16,8 +16,6 @@ import c98.core.*;
 import c98.core.hooks.*;
 import c98.targetLock.*;
 
-//TODO repair this
-
 public class TargetLock extends C98Mod implements WorldRenderHook, GuiHook, HudRenderHook, KeyHook {
 	public static class TLConf {
 		public boolean drawArmor = true;

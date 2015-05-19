@@ -29,6 +29,7 @@ public class Progress {
 	
 	public static class Config {
 		public List<Long> launchTime = new ArrayList();
+		public boolean alwaysOnTop = true;
 	}
 	
 	private static Config config;
@@ -41,6 +42,7 @@ public class Progress {
 	private static Timer timer;
 	
 	public static void init() {
+		config = Json.get("LaunchProgress", Config.class);
 		try {
 			strings = IOUtils.readLines(Progress.class.getResourceAsStream("/assets/c98/launchprogress/launch.txt"));
 		} catch(IOException e) {
@@ -57,7 +59,7 @@ public class Progress {
 		frame.getContentPane().setPreferredSize(new Dimension(400, 40));
 		frame.pack();
 		frame.setTitle("Launching Minecraft...");
-		frame.setAlwaysOnTop(true);
+		frame.setAlwaysOnTop(config.alwaysOnTop);
 		frame.setLocationRelativeTo(null); //Center window
 		frame.addWindowListener(new WindowAdapter() {
 			@Override public void windowClosing(WindowEvent e) {
@@ -93,7 +95,6 @@ public class Progress {
 	}
 	
 	public static double getAverageTime() {
-		if(config == null) config = Json.get("LaunchProgress", Config.class);
 		return config.launchTime.stream().collect(Collectors.averagingLong((Long a) -> a.longValue()));
 	}
 	

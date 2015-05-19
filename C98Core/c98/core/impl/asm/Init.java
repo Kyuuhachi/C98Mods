@@ -38,7 +38,7 @@ import c98.core.launch.ASMer;
 	}
 }
 
-@ASMer abstract class ServerInit extends MinecraftServer { //TODO this might be wrong.
+@ASMer abstract class ServerInit extends MinecraftServer { //FIXME this doesn't work.
 	public ServerInit(Proxy p_i46053_1_, File p_i46053_2_) {
 		super(p_i46053_1_, p_i46053_2_);
 	}

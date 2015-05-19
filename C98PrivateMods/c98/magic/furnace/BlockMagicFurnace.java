@@ -207,7 +207,7 @@ public class BlockMagicFurnace extends BlockContainer {
 			return getBlockType().unlocalizedName;
 		}
 		
-		@Override public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) { //TODO
+		@Override public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
 			return new ContainerMagicFurnace(playerInventory, this);
 		}
 		

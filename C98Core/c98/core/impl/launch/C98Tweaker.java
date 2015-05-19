@@ -2,23 +2,29 @@ package c98.core.impl.launch;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import jdk.internal.org.objectweb.asm.*;
 import joptsimple.*;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.launchwrapper.*;
+import net.minecraftforge.fml.common.ModContainer;
 import c98.core.C98Log;
 import c98.core.impl.C98Loader;
 import c98.core.impl.LogImpl;
 
 public class C98Tweaker implements ITweaker {
 	public static final List<String> asmers = new ArrayList();
-	public static boolean forge = Arrays.toString(Launch.classLoader.getURLs()).contains("forge"); //TODO better way to do this
+	public static boolean forge;
 	public static boolean client;
 	static {
 		try {
-			ClientBrandRetriever.getClientModName();
+			ClientBrandRetriever.class.toString();
 			client = true;
+		} catch(Throwable e) {}
+		try {
+			ModContainer.class.toString();
+			forge = true;
 		} catch(Throwable e) {}
 	}
 	

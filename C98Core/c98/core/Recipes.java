@@ -12,6 +12,11 @@ import c98.core.impl.recipes.*;
 public class Recipes {
 	@FunctionalInterface public static interface RecipeSlot {
 		public boolean valid(ItemStack is, InventoryCrafting inv, BlockPos coords, int x, int y, int gridX, int gridY, boolean mirrored);
+		
+		public default ItemStack getLeftovers(ItemStack is) {
+			if(is != null && is.getItem().hasContainerItem()) return new ItemStack(is.getItem().getContainerItem());
+			return null;
+		}
 	}
 	
 	@FunctionalInterface public static interface RecipeResult {

@@ -37,7 +37,7 @@ public class StandardAsm {
 		for(LocalVariableNode local : m.localVariables)
 			local.desc = map(local.desc, from, to);
 		for(AbstractInsnNode n : new Asm(m)) {
-			if(n instanceof InvokeDynamicInsnNode) {} //TODO might need to remap these
+			if(n instanceof InvokeDynamicInsnNode) {} //MAYBE might need to remap these
 			if(n instanceof TypeInsnNode) ((TypeInsnNode)n).desc = map(((TypeInsnNode)n).desc, from, to);
 			if(n instanceof FrameNode) {
 				map(((FrameNode)n).local, from, to);

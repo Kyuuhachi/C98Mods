@@ -12,7 +12,7 @@ import c98.core.launch.*;
 		super(par1Minecraft, p_i45076_2_);
 	}
 	
-	@Override public void asm(ClassNode node) { //TODO look for 7424 (GL_FLAT) instead of "hand"
+	@Override public void asm(ClassNode node) {
 		for(MethodNode n : node.methods)
 			for(AbstractInsnNode insn : new Asm(n))
 				if(insn instanceof LdcInsnNode) if(((LdcInsnNode)insn).cst.equals("hand")) {

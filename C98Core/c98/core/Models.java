@@ -11,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import c98.core.impl.ModelImpl;
 
 public class Models {
-//	public static final ItemMeshDefinition DEFAULT_ITEM = is -> new ModelResourceLocation((ResourceLocation)Item.itemRegistry.getNameForObject(is.getItem()), "inventory"); //TODO figure out why no lambdas
 	public static final ItemMeshDefinition DEFAULT_ITEM = new ItemMeshDefinition() {
 		@Override public ModelResourceLocation getModelLocation(ItemStack is) {
 			return new ModelResourceLocation((ResourceLocation)Item.itemRegistry.getNameForObject(is.getItem()), "inventory");

@@ -135,7 +135,7 @@ public class TargetLock extends C98Mod implements WorldRenderHook, GuiHook, HudR
 		if(e instanceof EntityPlayer) {
 			ItemStack item = ((EntityPlayer)e).getItemInUse();
 			if(item != null && item.getItem() == Items.bow) {
-				float f = (float)-(calcBow(dist, y, 0.05, 2) * DEG);
+				float f = (float)-(calcBow(dist, y, 0.05, 3, 0.98) * DEG);
 				if(!Double.isNaN(f)) {
 					float charge = mc.thePlayer.getItemInUseDuration() / 20F;
 					charge = Math.min((charge * charge + charge * 2) / 3, 1);
@@ -147,7 +147,7 @@ public class TargetLock extends C98Mod implements WorldRenderHook, GuiHook, HudR
 		e.rotationYaw = yaw;
 	}
 	
-	private static double calcBow(double x, double y, double g, double v) { //horizontal dist, vertical dist, gravity, velocity
+	private static double calcBow(double x, double y, double g, double v, double r) { //horizontal dist, vertical dist, gravity, velocity
 		double v2 = v * v;
 		double v4 = v2 * v2;
 		double x2 = x * x;

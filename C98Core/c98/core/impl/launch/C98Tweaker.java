@@ -7,7 +7,7 @@ import java.util.List;
 import jdk.internal.org.objectweb.asm.*;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.launchwrapper.*;
-import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.common.ForgeVersion;
 import c98.core.C98Log;
 import c98.core.impl.C98Loader;
 
@@ -17,11 +17,11 @@ public class C98Tweaker implements ITweaker {
 	public static boolean client;
 	static {
 		try {
-			ClientBrandRetriever.class.toString();
+			ClientBrandRetriever.getClientModName();
 			client = true;
 		} catch(Throwable e) {}
 		try {
-			ModContainer.class.toString();
+			ForgeVersion.getVersion();
 			forge = true;
 		} catch(Throwable e) {}
 	}

@@ -58,7 +58,6 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 			thread.setName("C98MinimapThread");
 			thread.start();
 			C98Core.addHook(mapServer.renderer);
-			mapServer.renderer.onResourceManagerReload(mc.getResourceManager());
 			if(!reloadMap) lastStartTime = -System.currentTimeMillis();
 		}
 	}

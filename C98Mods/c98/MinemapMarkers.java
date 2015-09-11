@@ -98,7 +98,9 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 		try {
 			MarkerConfig mrkr = getMarker(e);
 			if(mrkr == null) return;
-			float rotation = e instanceof EntityDragon ? e.getRotationYawHead() + 180 : e.getRotationYawHead();
+			float rotation = e.rotationYaw;
+			if(e instanceof EntityDragon) rotation += 180;
+			if(e instanceof EntityPlayer) rotation = e.getRotationYawHead();
 			MapIcon marker = new MapIcon(e.func_174824_e(1));
 			marker.style = mrkr.style.clone();
 			if(mrkr.style.teamColor) {

@@ -1,9 +1,0 @@
-{
-	"parent": "block/orientable",
-	"textures": {
-		"particle": "c98/magic:blocks/furnace_front_on",
-		"top":   "blocks/enchanting_table_bottom",
-		"front": "c98/magic:blocks/furnace_front_on",
-		"side":  "c98/magic:blocks/machine_side"
-	}
-}

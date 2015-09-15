@@ -1,7 +1,0 @@
-{
-	"parent": "c98/magic:block/pipe/dnse",
-	"textures": {
-		"particle": "blocks/iron_block",
-		"side": "blocks/iron_block"
-	}
-}

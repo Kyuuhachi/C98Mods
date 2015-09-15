@@ -1,9 +1,0 @@
-{
-	"parent": "block/cube_bottom_top",
-	"textures": {
-		"particle": "blocks/enchanting_table_bottom",
-		"bottom": "c98/magic:blocks/machine_top",
-		"top": "c98/magic:blocks/magic_still",
-		"side": "c98/magic:blocks/machine_side"
-	}
-}

@@ -1,7 +1,0 @@
-{
-	"parent": "c98/magic:block/pipe/n",
-	"textures": {
-		"particle": "blocks/iron_block",
-		"side": "blocks/iron_block"
-	}
-}

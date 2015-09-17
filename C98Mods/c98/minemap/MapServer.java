@@ -37,6 +37,10 @@ public class MapServer {
 		int[] newColors = colors.clone();
 		updateMap(newColors);
 		colors = newColors;
+		if(mc.func_175606_aa() == null) {
+			crashed = true;
+			return;
+		}
 		markers = m.stream().map(this::convert).collect(Collectors.toList());
 	}
 	

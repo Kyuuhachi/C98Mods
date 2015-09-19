@@ -47,6 +47,11 @@ import c98.core.launch.ASMer;
 		mods.add(0, ForgeStatic.c98ModContainer);
 	}
 	
+	@Override public void reloadMods() {
+		super.reloadMods();
+		mods.add(0, ForgeStatic.c98ModContainer);
+	}
+	
 	@Override public void initGui() {
 		listWidth = Math.max(listWidth, fontRendererObj.getStringWidth(ForgeStatic.c98ModContainer.getName()) + 28);
 		super.initGui();

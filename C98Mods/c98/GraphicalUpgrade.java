@@ -1,16 +1,15 @@
 package c98;
 
-import net.minecraft.client.Minecraft;
+import java.awt.Color;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.ModelVillager;
 import net.minecraft.client.renderer.entity.*;
-import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.tileentity.TileEntitySign;
 import c98.core.*;
-import c98.graphicalUpgrade.*;
+import c98.graphicalUpgrade.LayerColoredSheep;
+import c98.graphicalUpgrade.ModelSquigglySlime;
 
 public class GraphicalUpgrade extends C98Mod {
 	
@@ -20,7 +19,7 @@ public class GraphicalUpgrade extends C98Mod {
 			public boolean useBW = false;
 		}
 		
-		public RXPConf rainbowXP = new RXPConf();
+		public Color[] xpColors = {Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA};
 		public boolean roadSigns = true;
 		public boolean testificateHats = true;
 		public boolean squigglySlimes = true;
@@ -32,8 +31,6 @@ public class GraphicalUpgrade extends C98Mod {
 	private ModelRenderer testificateHat;
 	
 	@Override public void load() {
-		Rendering.setTERenderer(TileEntitySign.class, new TileEntityRoadSignRenderer());
-		Rendering.setRenderer(EntityXPOrb.class, new RenderRainbowXP(Minecraft.getMinecraft().getRenderManager()));
 		((RendererLivingEntity)Rendering.getRenderer(EntitySheep.class)).addLayer(new LayerColoredSheep((RenderSheep)Rendering.getRenderer(EntitySheep.class)));
 		((RendererLivingEntity)Rendering.getRenderer(EntitySlime.class)).mainModel = new ModelSquigglySlime(16);
 		
@@ -43,7 +40,6 @@ public class GraphicalUpgrade extends C98Mod {
 		testificateHat.setTextureOffset(32, 0);
 		testificateHat.addBox(-4, -10, -4, 8, 12, 8, 1);
 		base.villagerHead.addChild(testificateHat);
-		
 		reloadConfig();
 	}
 	

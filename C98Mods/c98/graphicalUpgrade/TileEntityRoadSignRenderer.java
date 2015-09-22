@@ -5,20 +5,33 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiEditSign;
-import net.minecraft.client.model.ModelSign;
+import net.minecraft.client.model.*;
 import net.minecraft.client.renderer.tileentity.TileEntitySignRenderer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import c98.GraphicalUpgrade;
 import c98.core.GL;
+import c98.core.launch.ASMer;
 
-public class TileEntityRoadSignRenderer extends TileEntitySignRenderer {
+@ASMer public class TileEntityRoadSignRenderer extends TileEntitySignRenderer {
+	public final ModelSign modelSign = new ModelSign();
 	
-	private static final ResourceLocation signImg = new ResourceLocation("textures/entity/sign.png");
-	private ModelSign modelSign = new ModelSign();
+	public TileEntityRoadSignRenderer() {
+		super();
+		modelSign.signStick.showModel = false;
+		ModelBox box = (ModelBox)modelSign.signBoard.cubeList.get(0);
+		TexturedQuad front = box.quadList[4];
+		TexturedQuad back = box.quadList[5];
+		
+		for(int i = 0; i < 4; i++) {
+			PositionTextureVertex vFront = front.vertexPositions[i];
+			PositionTextureVertex vBack = back.vertexPositions[i];
+			vBack.texturePositionX = vFront.texturePositionX;
+			vBack.texturePositionY = vFront.texturePositionY;
+		}
+	}
 	
 	@Override public void renderTileEntityAt(TileEntity te, double x, double y, double z, float delta, int breakage) {
 		TileEntitySign sign = (TileEntitySign)te;
@@ -31,7 +44,6 @@ public class TileEntityRoadSignRenderer extends TileEntitySignRenderer {
 			EnumFacing facing = EnumFacing.getFront(sign.getBlockMetadata());
 			IBlockState state = sign.getWorld().getBlockState(sign.getPos().offset(facing.getOpposite()));
 			if(state != null && state.getBlock() instanceof BlockFence) {
-				modelSign.signStick.showModel = false;
 				
 				float rot = 0;
 				if(facing == EnumFacing.NORTH) rot = 180;
@@ -46,7 +58,7 @@ public class TileEntityRoadSignRenderer extends TileEntitySignRenderer {
 				GL.rotate(-rot, 0, 1, 0);
 				GL.translate(0, -0.3125F, -0.4375F);
 				
-				bindTexture(signImg);
+				bindTexture(field_147513_b);
 				GL.scale(scale, -scale, -scale);
 				float f = 1 / 16F;
 				GL.translate(f * -9, f * 0, f * -10.5F);

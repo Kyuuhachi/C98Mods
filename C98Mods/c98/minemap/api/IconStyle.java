@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 	public Integer zLevel;
 	public Float size;
 	public Integer minOpacity;
+	public Boolean rotate;
 	
 	@Override public IconStyle clone() {
 		try {
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 			if(st.zLevel == null) st.zLevel = 0;
 			if(st.size == null) st.size = 1F;
 			if(st.minOpacity == null) st.minOpacity = 63;
+			if(st.rotate == null) st.rotate = true;
 			return st;
 		} catch(CloneNotSupportedException e) {}
 		return null;

@@ -62,7 +62,7 @@ public class Tokenizer {
 	
 	private static String getWord() {
 		StringBuilder sb = new StringBuilder();
-		for(; pos < s.length() && Character.isLetterOrDigit(s.charAt(pos)); pos++)
+		for(; pos < s.length() && (Character.isLetterOrDigit(s.charAt(pos)) || s.charAt(pos) == '.'); pos++)
 			sb.append(s.charAt(pos));
 		return sb.toString();
 	}
@@ -87,7 +87,7 @@ public class Tokenizer {
 	}
 	
 	private static boolean isString() {
-		return s.charAt(pos) == '"';
+		return s.charAt(pos) == '\'';
 	}
 	
 	private static String getString() {
@@ -95,7 +95,7 @@ public class Tokenizer {
 		pos++;
 		boolean escape = false;
 		for(; pos < s.length(); pos++)
-			if(s.charAt(pos) == '"' && !escape) break;
+			if(s.charAt(pos) == '\'' && !escape) break;
 			else if(s.charAt(pos) == '\\' && !escape) escape = true;
 			else {
 				sb.append(s.charAt(pos));

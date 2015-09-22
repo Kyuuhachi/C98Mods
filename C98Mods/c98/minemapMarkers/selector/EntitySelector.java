@@ -39,6 +39,7 @@ public class EntitySelector {
 		classToId.put(EntityWaterMob.class, "WaterMob");
 		classToId.put(EntityFlying.class, "Flying");
 		classToId.put(EntityThrowable.class, "Throwable");
+		classToId.put(EntityAnimal.class, "Animal");
 	}
 	
 	public static void initProperties() {

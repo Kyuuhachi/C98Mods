@@ -41,7 +41,7 @@ public class MapServer {
 			crashed = true;
 			return;
 		}
-		markers = m.stream().map(this::convert).collect(Collectors.toList());
+		markers = m.stream().map(this::convert).filter(a -> a != null).sorted().collect(Collectors.toList());
 	}
 	
 	public MapIconInstance convert(MapIcon m) {
@@ -53,6 +53,7 @@ public class MapServer {
 		if(alpha > 255) alpha = 255;
 		if(m.style.shape < 0) return null;
 		int rotation = getRotation(m.rot);
+		if(!m.style.rotate) rotation = 0;
 		double dist = Math.max(Math.abs(xOnMap), Math.abs(zOnMap));
 		double maxdist = size / 2;
 		if(dist > maxdist) {

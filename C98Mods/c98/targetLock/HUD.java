@@ -17,12 +17,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.scoreboard.*;
 import net.minecraft.util.EnumChatFormatting;
-import c98.ExtraInfo;
+import net.minecraft.util.ResourceLocation;
 import c98.TargetLock;
 import c98.core.GL;
 import c98.core.util.Convert;
 
 public class HUD {
+	public static final ResourceLocation iconsTexture = new ResourceLocation("textures/gui/icons.png");
 	private RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 	private int y;
 	private Minecraft mc;
@@ -106,7 +107,7 @@ public class HUD {
 	private void drawDamageIcons() {
 		if(!(targetEntity instanceof EntityLivingBase)) return;
 		EntityLivingBase tgt = (EntityLivingBase)targetEntity;
-		ExtraInfo.bindTexture(ExtraInfo.icons);
+		mc.getTextureManager().bindTexture(iconsTexture);
 		GL.color(1, 1, 1, 1);
 		int i = tgt.getTotalArmorValue();
 		if(i != 0) for(int var25 = 0; var25 < 10; ++var25) {
@@ -165,11 +166,11 @@ public class HUD {
 			case 1:
 				s = "Small";
 				break;
-			
+				
 			case 2:
 				s = "Medium";
 				break;
-			
+				
 			case 4:
 				s = "Big";
 				break;
@@ -228,7 +229,7 @@ public class HUD {
 	
 	private String getTargetName() {
 		String s = EntityList.getEntityString(targetEntity);
-		if(targetEntity instanceof EntityPlayer) s = ((EntityPlayer)targetEntity).getName();
+		s = targetEntity.getName() + " (" + s + ")";
 		return s;
 	}
 }

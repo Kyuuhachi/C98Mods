@@ -43,7 +43,7 @@ public class XPInfo {
 		posY += 24;
 	}
 	
-	private static void xpToNextLevel(Minecraft mc, int xpToNextLevel) {
+	private static void xpToNextLevel(Minecraft mc, int xpToNextLevel) { //TODO update formulas
 		int level = mc.thePlayer.experienceLevel;
 		int lvlFormula = level < 30 ? level < 15 ? 0 : 1 : 2;
 		String xpFormula2 = "lvl >= 30: " + "\247" + (lvlFormula == 2 ? "7" : "8") + "62 + (lvl - 30) * 7";
@@ -78,7 +78,7 @@ public class XPInfo {
 		int xp = 0;
 		for(int i = 0; i < thePlayer.experienceLevel; i++)
 			xp += i >= 30 ? 62 + (i - 30) * 7 : i >= 15 ? 17 + (i - 15) * 3 : 17;
-			xp += thePlayer.experience * thePlayer.xpBarCap();
-			return xp;
+		xp += thePlayer.experience * thePlayer.xpBarCap();
+		return xp;
 	}
 }

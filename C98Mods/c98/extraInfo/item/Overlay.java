@@ -89,7 +89,7 @@ import c98.core.util.Convert;
 			
 			int color = (int)Math.round(255.0D - currentDmg * 255.0D / maxDmg);
 			int shiftedColor = 255 - color << 16 | color << 8;
-			String dmgStr = Convert.intToSI(maxDmg - currentDmg, 5);
+			String dmgStr = Convert.intToSI(maxDmg - currentDmg + 1, 5);
 			int dx = (x + 16) * 2 - font.getStringWidth(dmgStr) - 1;
 			int dy = (y + 9) * 2;
 			drawOutline(font, dmgStr, dx, dy);
@@ -120,7 +120,7 @@ import c98.core.util.Convert;
 			drawOutline(font, str, dx, dy);
 			font.drawString(str, dx, dy, 0xFFFFFF);
 			
-			ExtraInfo.bindTexture(ExtraInfo.inventory);
+			ExtraInfo.bindTexture(ExtraInfo.inventoryTexture);
 			int idx = p.getStatusIconIndex();
 			ExtraInfo.drawTexturedRect(x * 2, y * 2, 0 + idx % 8 * 18, 198 + idx / 8 * 18, 18, 18);
 		}

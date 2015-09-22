@@ -10,7 +10,7 @@ import c98.core.GL;
 
 public class HorseInfo {
 	public static void draw(int height, int width, FontRenderer fr, EntityPlayerSP pl, EntityHorse horse) {
-		ExtraInfo.bindTexture(ExtraInfo.icons);
+		ExtraInfo.bindTexture(ExtraInfo.iconsTexture);
 		GL.color(1, 1, 1);
 		
 		float jumpCharge = pl.getHorseJumpPower();

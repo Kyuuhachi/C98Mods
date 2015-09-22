@@ -16,7 +16,7 @@ public class SaturationInfo {
 		GL.color(1, 1, 1);
 		GL.enableBlend();
 		GL.blendFunc(GL.SRC_ALPHA, GL.ONE);
-		ExtraInfo.bindTexture(ExtraInfo.icons);
+		ExtraInfo.bindTexture(ExtraInfo.iconsTexture);
 		if(mc.thePlayer.ridingEntity == null) {
 			int fud = Math.min(10, MathHelper.ceiling_float_int(food));
 			for(int i = 0; i < fud; ++i) {

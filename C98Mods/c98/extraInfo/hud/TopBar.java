@@ -40,11 +40,11 @@ public class TopBar {
 		time %= 1000;
 		double min = time / (1000D / 60D);
 		String timeString = String.format("%02d:%02d", hour, (int)min);
-		if(ExtraInfo.config.topBar.rawTime) timeString = String.format("%05d", mc.theWorld.getWorldTime() % 24000);
+		if(ExtraInfo.config.hud.topBar.rawTime) timeString = String.format("%05d", mc.theWorld.getWorldTime() % 24000);
 		
 		int size = fr.getStringWidth(timeString);
 		
-		ExtraInfo.bindTexture(ExtraInfo.hud);
+		ExtraInfo.bindTexture(ExtraInfo.hudTexture);
 		GL.color(1, 1, 1);
 		ExtraInfo.drawTexturedRect(x, -10, 24, -10, 40, 60);
 		fr.drawString(timeString, x + 21 - size / 2, 4, 0xFFFFFF);

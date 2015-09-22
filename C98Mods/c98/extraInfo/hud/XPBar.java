@@ -7,7 +7,7 @@ import c98.core.GL;
 
 public class XPBar {
 	public static void draw(int height, int width, FontRenderer fr, EntityPlayer p) {
-		ExtraInfo.bindTexture(ExtraInfo.icons);
+		ExtraInfo.bindTexture(ExtraInfo.iconsTexture);
 		GL.color(1, 1, 1);
 		int beginX = width / 2 - 91;
 		int maxXP = p.xpBarCap();

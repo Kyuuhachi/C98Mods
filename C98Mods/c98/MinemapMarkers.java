@@ -90,7 +90,7 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 			marker.style = mrkr.style.clone();
 			l.add(marker);
 		} catch(Exception e) {
-			C98Log.error(String.format("TileEntity at %d", te.getPos().toString()), e);
+			C98Log.error(String.format("TileEntity at %s", te.getPos().toString()), e);
 		}
 	}
 	

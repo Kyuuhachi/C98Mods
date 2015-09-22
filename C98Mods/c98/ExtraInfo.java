@@ -23,12 +23,7 @@ import c98.targetLock.TargetEntity;
 public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, KeyHook {
 	public static class EIConf {
 		
-		public static class TBConf {
-			public boolean enable = true, rawTime = false;
-		}
-		
-		public static class SlotConf {
-			
+		public static class _SlotConf {
 			public boolean enable = true;
 			public Map<String, Color> colors = new LinkedHashMap();
 			{
@@ -40,20 +35,48 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 			}
 		}
 		
-		public boolean horseStats = true, xpStats = true, furnaceInfo = true; // GUI
-		public boolean durability = true, bowInfo = true, anvilInfo = true, potionOverlay = true; // Item overlay
-		public boolean foodInfo = true, armorInfo = true; // Tooltip
-		public boolean potionInfo = true, horseInfo = true, xpInfo = true, saturationInfo = true;// HUD
-		public Color silverfish = new Color(0xFF7F7F);
-		public TBConf topBar = new TBConf();
-		public SlotConf slotInfo = new SlotConf();
-		public boolean drawXpInCreative = true;
+		public static class _GuiConf {
+			public boolean horseStats = true;
+			public boolean xpStats = true;
+			public boolean furnaceXp = true;
+		}
 		
+		public static class _OverlayConf {
+			public boolean durability = true;
+			public boolean anvilDurability = true;
+			public boolean arrows = true;
+			public boolean potion = true;
+		}
+		
+		public static class _TooltipConf {
+			public boolean food = true;
+			public boolean armor = true;
+		}
+		
+		public static class _HudConf {
+			public static class _TBConf {
+				public boolean enable = true, rawTime = false;
+			}
+			
+			public _TBConf topBar = new _TBConf();
+			public boolean effects = true;
+			public boolean horseStats = true;
+			public boolean xpStats = true;
+			public boolean saturation = true;
+		}
+		
+		public _SlotConf slotInfo = new _SlotConf();
+		public _GuiConf gui = new _GuiConf();
+		public _HudConf hud = new _HudConf();
+		public _TooltipConf tooltips = new _TooltipConf();
+		public _OverlayConf items = new _OverlayConf();
+		public boolean drawXpInCreative = true;
+		public Color silverfish = new Color(0xFF7F7F);
 	}
 	
-	public static final ResourceLocation hud = new ResourceLocation("c98/extrainfo", "hud.png");
-	public static final ResourceLocation icons = new ResourceLocation("textures/gui/icons.png");
-	public static final ResourceLocation inventory = new ResourceLocation("textures/gui/container/inventory.png");
+	public static final ResourceLocation hudTexture = new ResourceLocation("c98/extrainfo", "hud.png");
+	public static final ResourceLocation iconsTexture = new ResourceLocation("textures/gui/icons.png");
+	public static final ResourceLocation inventoryTexture = new ResourceLocation("textures/gui/container/inventory.png");
 	public static String format = "%.2f / %.2f", format2 = "%.2f";
 	public static EIConf config;
 	private KeyBinding viewKey = new KeyBinding("View Item JSON", Keyboard.KEY_J, C98Core.KEYBIND_CAT);
@@ -66,9 +89,9 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 	@Override public void renderGui(GuiScreen gui) {
 		if(gui instanceof GuiContainer) {
 			if(gui instanceof GuiScreenHorseInventory) {
-				if(config.horseStats) HorseStats.drawHorseStats(mc);
-			} else if(config.xpStats) XPInfo.drawXPStats(mc);
-			if(gui instanceof GuiFurnace) if(config.furnaceInfo) FurnaceInfo.draw(mc);
+				if(config.gui.horseStats) HorseStats.drawHorseStats(mc);
+			} else if(config.gui.xpStats) XPInfo.drawXPStats(mc);
+			if(gui instanceof GuiFurnace) if(config.gui.furnaceXp) FurnaceInfo.draw(mc);
 		}
 	}
 	
@@ -77,11 +100,11 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 		int height = res.getScaledHeight();
 		int width = res.getScaledWidth();
 		FontRenderer fr = mc.fontRendererObj;
-		if(e == HudElement.FOOD && config.saturationInfo) SaturationInfo.draw(mc, width, height);
-		if(e == HudElement.EXP_BAR && config.xpInfo) XPBar.draw(height, width, fr, mc.thePlayer);
-		if(e == HudElement.JUMP_BAR && config.horseInfo) HorseInfo.draw(height, width, fr, mc.thePlayer, (EntityHorse)mc.thePlayer.ridingEntity);
-		if(e == HudElement.ALL && config.topBar.enable) TopBar.drawTopBar(mc, width, fr);
-		if(e == HudElement.ALL && config.potionInfo) PotionInfo.drawPotions(height, width, fr, mc);
+		if(e == HudElement.FOOD && config.hud.saturation) SaturationInfo.draw(mc, width, height);
+		if(e == HudElement.EXP_BAR && config.hud.xpStats) XPBar.draw(height, width, fr, mc.thePlayer);
+		if(e == HudElement.JUMP_BAR && config.hud.horseStats) HorseInfo.draw(height, width, fr, mc.thePlayer, (EntityHorse)mc.thePlayer.ridingEntity);
+		if(e == HudElement.ALL && config.hud.effects) PotionInfo.drawPotions(height, width, fr, mc);
+		if(e == HudElement.ALL && config.hud.topBar.enable) TopBar.drawTopBar(mc, width, fr);
 	}
 	
 	public static void drawSunMoon(int x, int y, int u, int v, int w, int h, boolean moon) {
@@ -102,7 +125,7 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 	
 	public static void drawRect(int x, int y, int w, int h) {
 		GL.color(1, 1, 1);
-		bindTexture(hud);
+		bindTexture(hudTexture);
 		NinePatch.setMargins(8);
 		NinePatch.setTexCoords(0, 0, 24, 24);
 		NinePatch.draw(x, y, w, h);

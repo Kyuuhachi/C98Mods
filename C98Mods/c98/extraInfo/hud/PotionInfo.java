@@ -32,7 +32,7 @@ public class PotionInfo {
 			GL.color(1, 1, 1, 1);
 			GL.disableLighting();
 			GL.disableDepth();
-			ExtraInfo.bindTexture(ExtraInfo.inventory);
+			ExtraInfo.bindTexture(ExtraInfo.inventoryTexture);
 			int index = pot.getStatusIconIndex();
 			if(pot.hasStatusIcon()) ExtraInfo.drawTexturedRect(x + 4, y + 4, 0 + index % 8 * 18, 198 + index / 8 * 18, 18, 18);
 			GL.enableDepth();
@@ -53,7 +53,7 @@ public class PotionInfo {
 	
 	private static void drawRect2(int x, int y, int w, int h) {
 		GL.color(1, 1, 1);
-		ExtraInfo.bindTexture(ExtraInfo.hud);
+		ExtraInfo.bindTexture(ExtraInfo.hudTexture);
 		NinePatch.setMargins(4);
 		NinePatch.setTexCoords(0, 24, 24, 24);
 		NinePatch.draw(x, y, w, h);

@@ -107,6 +107,7 @@ public class JsonHighlighter {
 	
 	private IChatComponent comp(String s, ChatStyle style) {
 		if(mode != GIVE && style == key || style == string) {
+			s = s.replace("\\", "\\\\");
 			s = s.replace("\"", "\\\"");
 			s = '"' + s + '"';
 		}

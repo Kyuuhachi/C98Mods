@@ -1,0 +1,153 @@
+{
+	"achievement": [["give","take"], [[["*"]], ["stat"]], "?", "sel"],
+	"ban": ["text", "?", "text*"],
+	"ban-ip": ["text", "?", "text*"],
+	"banlist": [["ips", "players"]],
+	"blockdata": ["coords", "json"],
+	"clear": ["?", "sel", "item", "i", "i", "json"],
+	"clone": ["coords", "coords", "coords", "?", [
+		[["filtered"], ["force", "move", "normal"], "block"],
+		[["masked", "replace"], ["force", "move", "normal"]]
+	]],
+	"debug": [["start", "stop"]],
+	"defaultgamemode": [[
+		[["?o", "survival", "creative", "adventure", "spectator"]],
+		[["?o", "s", "c", "a", "sp"]],
+		[["?v", "0", "1", "2", "3"]]
+	]],
+	"gamemode": [[
+		[["?o", "survival", "creative", "adventure", "spectator"]],
+		[["?o", "s", "c", "a", "sp"]],
+		[["?v", "0", "1", "2", "3"]]
+	]],
+	"gamerule": ["gamerule", "?", "text"],
+	"give": ["sel", "item", "?", "i", "i", "json"],
+	"help": [[["i"],["text"]]], //I'd prefer to have "command" here, but the command list is serverside.
+	"?": [[["i"],["text"]]],
+	"kill": ["sel"],
+	"list": [],
+	"me": ["text*"],
+	"op": ["text"],
+	"pardon": ["text"],
+	"pardon-ip": ["text"],
+	"particle": ["particle", "coords", "coords", "f", "?", "i", "f"],
+	"playsound": ["text", "sel", "?", "coords", "f", "f", "f"], //Same as /help
+	"publish": [],
+	"replaceitem": [[[["block"], "coords"], [["entity"], "sel"]], "slot", "item", "?", "i", "i", "json"],
+	"save-all": [],
+	"save-off": [],
+	"save-on": [],
+	"say": ["text*"],
+	"scoreboard": [[
+		[["objectives"], [
+			[["list"]],
+			[["add"], "text", "text", "?", "text*"],
+			[["remove"], "text"],
+			[["setdisplay"], ["?o",
+				"list", "sidebar", "belowName",
+				"sidebar.team.black",
+				"sidebar.team.dark_blue",
+				"sidebar.team.dark_green",
+				"sidebar.team.dark_aqua",
+				"sidebar.team.dark_red",
+				"sidebar.team.dark_purple",
+				"sidebar.team.gold",
+				"sidebar.team.gray",
+				"sidebar.team.dark_gray",
+				"sidebar.team.blue",
+				"sidebar.team.green",
+				"sidebar.team.aqua",
+				"sidebar.team.red",
+				"sidebar.team.light_purple",
+				"sidebar.team.yellow",
+				"sidebar.team.white"
+			], "?", "text"]
+		]],
+		[["players"], [
+			[["list"], "?", "sel"],
+			[["set", "add", "remove"], "sel", "text", "i", "?", "json"],
+			[["reset"], "sel", "?", "text"],
+			[["enable"], "sel", "text"],
+			[["test"], "sel", "text", "i", "?", "i"],
+			[["operation"], "sel", "text", ["+=", "-=", "*=", "/=", "%=", "=", "<", ">", "><"], "sel", "text"]
+		]],
+		[["teams"], [
+			[["list"], "?", "text"],
+			[["add"], "text", "?", "text*"],
+			[["remove", "empty"]],
+			[["join"], "text", "sel"],
+			[["leave"], [["text", "sel"], ["sel"]]], //TODO
+			[["option"], "text", [
+				[["color"], ["?o",
+					"black", "dark_blue", "dark_green", "dark_aqua",
+					"dark_red", "dark_purple", "gold", "gray",
+					"dark_gray", "blue", "green", "aqua",
+					"red", "light_purple", "yellow", "white",
+					"reset"
+				]],
+				[["friendlyfire"], "bool"],
+				[["seeFriendlyInvisibles"], "bool"],
+				[["nametagVisibility", "deathMessageVisibility"], ["never", "hideForOtherTeams", "hideForOwnTeam", "always"]],
+				[["collisionRule"], ["always", "never", "pushOwnTeam", "pushOtherTeams"]]
+			]]
+		]]
+	]],
+	"seed": [],
+	"setblock": ["coords", "block", "?", "i", ["destroy", "keep", "replace"], "json"],
+	"setidletimeout": ["i"],
+	"setworldspawn": ["?", "i"],
+	"spawnpoint": ["?", "sel", "coords"],
+	"spreadplayers": ["coords2", "f", "f", "bool", "sel"],
+	"stats": [[
+		[["block"], "coords"],
+		[["entity"], "sel"]
+	], [
+		[["clear"], "stat"],
+		[["set"], ["AffectedBlocks", "AffectedEntites", "AffectedItems", "QueryResult", "SuccessCount"], "sel", "text"]
+	]],
+	"stop": [],
+	"summon": ["entity", "?", "coords", "json"],
+	"tell": ["sel", "text*"],
+	"msg": ["sel", "text*"],
+	"w": ["sel", "text*"],
+	"tellraw": ["sel", "json"],
+	"testfor": ["sel", "json"],
+	"testforblock": ["coords", "block", "?", "i", "json"],
+	"testforblocks": ["coords", "coords", "coords", "?", ["all", "masked"]],
+	"time": [[[["query"], ["daytime", "gametime"]], [["add", "set"], "i"]]],
+	"title": ["sel", [
+		[["clear"]],
+		[["reset"]],
+		[["subtitle"], "json"],
+		[["times"], "i", "i", "i"],
+		[["title"], "json"]
+	]],
+	"toggledownfall": [],
+	"tp": [[
+		["coords", "?", "f", "f"],
+		["sel", "?", [
+			["sel"],
+			["coords", "?", "f", "f"]
+		]]
+	]],
+	"trigger": ["text", ["add", "set"], "i"],
+	"weather": [["clear", "rain", "thunder"], "?", "i"],
+	"whitelist": [[
+		[["add", "remove"], "text"],
+		[["list", "off", "on", "reload"]]
+	]],
+	"worldborder": [[
+		[["add", "set"], "i", "?", "i"],
+		[["center"], "coords2"],
+		[["damage"], [
+			[["amount"], "f"],
+			[["buffer"], "f"]
+		]],
+		[["get"]],
+		[["warning"], [
+			[["distance"], "i"],
+			[["time"], "i"]
+		]]
+	]],
+	"xp": ["xp", "sel"]
+}

@@ -142,7 +142,7 @@ public class C98Transformer implements IClassTransformer {
 					C98Log.error("Failed to transform " + name + " with transformer " + transformer.name, e);
 				}
 			
-			IntFunction<Integer> func = (int i) -> (i | Opcodes.ACC_PUBLIC) & ~Opcodes.ACC_PROTECTED & ~Opcodes.ACC_PRIVATE;
+			IntFunction<Integer> func = (int i) -> (i | Opcodes.ACC_PUBLIC) & ~(Opcodes.ACC_PROTECTED | Opcodes.ACC_PRIVATE);
 			dst.access = func.apply(dst.access);
 			dst.methods.forEach(a -> a.access = func.apply(a.access));
 			dst.fields.forEach(a -> a.access = func.apply(a.access));

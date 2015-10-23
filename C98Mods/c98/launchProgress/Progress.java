@@ -68,7 +68,7 @@ public class Progress {
 		});
 		frame.setVisible(true);
 		
-		timer = new Timer(100, Progress::update);
+		timer = new Timer(10, Progress::update);
 		timer.start();
 		
 		updateString();

@@ -1,6 +1,7 @@
 package c98.core;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
@@ -174,10 +175,7 @@ public class XCube {
 		if(sb.length() != 0) list.add(sb.toString());
 		
 		int w = 0;
-		Iterator iter = list.iterator();
-		
-		while(iter.hasNext()) {
-			String s = (String)iter.next();
+		for(String s : list) {
 			int stringWidth = mc.fontRendererObj.getStringWidth(s);
 			if(stringWidth > w) w = stringWidth;
 		}

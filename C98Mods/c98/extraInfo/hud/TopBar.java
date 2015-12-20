@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.*;
+import net.minecraft.world.chunk.Chunk;
 import c98.ExtraInfo;
 import c98.Minemap;
 import c98.core.C98Core;
@@ -21,10 +22,9 @@ public class TopBar {
 	}
 	
 	private static void drawBiome(Minecraft mc, int x, FontRenderer fr) {
-		int posX = MathHelper.floor_double(mc.thePlayer.posX);
-		int posZ = MathHelper.floor_double(mc.thePlayer.posZ);
-		
-		String biomeName = mc.theWorld.getBiomeGenForCoords(new BlockPos(posX & 15, 0, posZ & 15)).biomeName;
+		BlockPos pos = new BlockPos(mc.func_175606_aa().posX, mc.func_175606_aa().getEntityBoundingBox().minY, mc.func_175606_aa().posZ);
+		Chunk chunk = mc.theWorld.getChunkFromBlockCoords(pos);
+		String biomeName = chunk.getBiome(pos, mc.theWorld.getWorldChunkManager()).biomeName;
 		
 		int size = fr.getStringWidth(biomeName);
 		ExtraInfo.drawRect(x - size - 8, -10, size + 7, 24);

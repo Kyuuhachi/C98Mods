@@ -6,53 +6,24 @@ import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import net.minecraft.block.Block;
-import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiCommandBlock;
 import net.minecraft.client.resources.*;
 import net.minecraft.command.common.CommandReplaceItem;
-import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
-import c98.commander.*;
+import c98.commander.CommandHighlighter;
+import c98.commander.HighlightNode;
 import c98.commander.node.*;
 import c98.core.C98Log;
 import c98.core.C98Mod;
-import c98.core.launch.ASMer;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Commander extends C98Mod implements IResourceManagerReloadListener {
-	@ASMer static class Chat extends GuiChat {
-		@Override public void initGui() {
-			super.initGui();
-			inputField = new GuiCommandTextField(0, fontRendererObj, 4, height - 12, width - 4, 12, true);
-			inputField.setMaxStringLength(100);
-			inputField.setEnableBackgroundDrawing(false);
-			inputField.setFocused(true);
-			inputField.setText(defaultInputFieldText);
-			inputField.setCanLoseFocus(false);
-		}
-	}
-	
-	@ASMer static class CmdBlock extends GuiCommandBlock {
-		public CmdBlock(CommandBlockLogic p_i45032_1_) {
-			super(p_i45032_1_);
-		}
-		
-		@Override public void initGui() {
-			super.initGui();
-			commandTextField = new GuiCommandTextField(2, fontRendererObj, width / 2 - 150, 50, 300, 20, false);
-			commandTextField.setMaxStringLength(32767);
-			commandTextField.setFocused(true);
-			commandTextField.setText(localCommandBlock.getCustomName());
-		}
-	}
-	
 	private static final ResourceLocation LOC = new ResourceLocation("c98/commander", "commands.json");
 	
 	@Override public void onResourceManagerReload(IResourceManager p_110549_1_) {
@@ -133,9 +104,9 @@ public class Commander extends C98Mod implements IResourceManagerReloadListener 
 			Collection<String> ids = new HashSet();
 			reg.getKeys().forEach(r -> {
 				ResourceLocation loc = (ResourceLocation)r;
-				if(loc.getResourceDomain().equals("minecraft")) ids.add(loc.getResourcePath());
-				ids.add(loc.toString());
-			});
+				if(loc.getResourceDomain().equals("minecraft")) ids.add(loc.getResourcePath()); //Allow unprefixed stuff
+					ids.add(loc.toString());
+				});
 			return ids;
 		};
 	}

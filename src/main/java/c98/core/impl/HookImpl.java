@@ -1,6 +1,5 @@
 package c98.core.impl;
 
-import java.io.IOException;
 import java.util.*;
 import org.objectweb.asm.*;
 import net.minecraft.client.Minecraft;
@@ -24,7 +23,7 @@ public class HookImpl {
 		C98Core.client = C98Tweaker.client;
 		C98Core.mc = C98Core.client ? Minecraft.getMinecraft() : null;
 	}
-	
+
 	public static List<TickHook> tickHooks = new ArrayList();
 	public static List<GuiHook> guiHooks = new ArrayList();
 	public static List<HudRenderHook> hudRenderHooks = new ArrayList();
@@ -37,7 +36,7 @@ public class HookImpl {
 	public static List<PacketHook> packetHooks = new ArrayList();
 	public static List<DisplayGuiHook> displayGuiHooks = new ArrayList();
 	public static HashMap<KeyBinding, boolean[]> keyBindings = new LinkedHashMap(); //the boolean[] contains [continuous, wasPressed]
-	
+
 	public static void addHook(Object hook) {
 		if(hook instanceof TickHook) tickHooks.add((TickHook)hook);
 		if(!C98Core.client) return;
@@ -53,7 +52,7 @@ public class HookImpl {
 		if(hook instanceof DisplayGuiHook) displayGuiHooks.add((DisplayGuiHook)hook);
 		if(hook instanceof IResourceManagerReloadListener) ((SimpleReloadableResourceManager)C98Core.mc.getResourceManager()).reloadListeners.add(hook);
 	}
-	
+
 	public static void removeHook(Object hook) {
 		if(hook instanceof TickHook) tickHooks.remove(hook);
 		if(!C98Core.client) return;
@@ -69,55 +68,36 @@ public class HookImpl {
 		if(hook instanceof DisplayGuiHook) packetHooks.remove(hook);
 		if(hook instanceof IResourceManagerReloadListener) ((SimpleReloadableResourceManager)C98Core.mc.getResourceManager()).reloadListeners.remove(hook);
 	}
-	
+
 	public static void findMods() {
 		try {
-			C98Loader.loadMods(new C98Loader.ModHandler() {
-				@Override public void load(String name) {
-					try {
-						ClassReader rdr = new ClassReader(C98Tweaker.class.getClassLoader().getResourceAsStream(name));
-						final String clName = name.replace(".class", "").replace("/", ".");
-						rdr.accept(new ClassVisitor(Opcodes.ASM4) {
-							@Override public void visit(int version, int access, String classname, String signature, String superName, String[] interfaces) {
-								if(!superName.equals("c98/core/C98Mod")) return;
-								Class modClass = null;
-								try {
-									modClass = Launch.classLoader.loadClass(clName);
-								} catch(Throwable e) {
-									C98Log.error("Failed to load class " + clName, e);
-									return;
-								}
-								
-								C98Mod modInstance;
-								try {
-									modInstance = (C98Mod)modClass.newInstance();
-								} catch(InstantiationException | IllegalAccessException e) {
-									C98Log.error("Failed to create instance of " + clName, e);
-									return;
-								}
-								
-								if(modInstance != null) {
-									C98Core.modList.add(modInstance);
-									C98Log.log("C98Mod found: " + modInstance.toString());
-								}
-							}
-						}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-					} catch(IOException e) {} catch(Throwable e) {
-						C98Log.error(e);
+			C98Loader.loadMods((rdr, name) -> {
+				rdr.accept(new ClassVisitor(Opcodes.ASM4) {
+					@Override public void visit(int version, int access, String classname, String signature, String superName, String[] interfaces) {
+						if(!superName.equals("c98/core/C98Mod")) return;
+						try {
+							Class modClass = Launch.classLoader.loadClass(name);
+							C98Mod modInstance = (C98Mod)modClass.newInstance();
+							C98Core.modList.add(modInstance);
+							C98Log.log("C98Mod found: " + modInstance.toString());
+						} catch(Exception e) {
+							C98Log.error("Failed to load mod class " + name, e);
+							return;
+						}
 					}
-				}
+				}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 			});
 		} catch(Exception e) {
 			C98Log.error(e);
 		}
 		Collections.sort(C98Core.modList);
-		if(C98Core.modList.isEmpty()) C98Log.log("[C98Core] Didn't find any C98Mods :(");
+		if(C98Core.modList.isEmpty()) C98Log.log("Didn't find any C98Mods :(");
 		for(C98Mod mod : C98Core.modList) {
 			addHook(mod);
 			mod.preinit();
 		}
 	}
-	
+
 	public static void loadMods() {
 		try {
 			for(C98Mod mod : C98Core.modList)
@@ -135,7 +115,7 @@ public class HookImpl {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public static void tickGui() {
 		C98Core.mc.mcProfiler.startSection("c98tickGui");
 		GuiScreen g = C98Core.mc.currentScreen;
@@ -146,7 +126,7 @@ public class HookImpl {
 		}
 		C98Core.mc.mcProfiler.endSection();
 	}
-	
+
 	public static void tick(World w) {
 		if(!w.isRemote) return;
 		C98Core.mc.mcProfiler.startSection("c98tick");
@@ -159,7 +139,7 @@ public class HookImpl {
 		C98Core.mc.mcProfiler.endSection();
 		C98Core.mc.mcProfiler.endSection();
 	}
-	
+
 	public static void renderGui() {
 		C98Core.mc.mcProfiler.startSection("c98renderGui");
 		GuiScreen g = C98Core.mc.currentScreen;
@@ -170,10 +150,10 @@ public class HookImpl {
 		}
 		C98Core.mc.mcProfiler.endSection();
 	}
-	
+
 	public static void renderWorld() {
 		C98Core.mc.mcProfiler.startSection("c98renderWorld");
-		
+
 		float f = C98Core.getPartialTicks();
 		Entity ent = C98Core.mc.func_175606_aa();
 		double x = (ent.posX - ent.prevPosX) * f + ent.prevPosX;
@@ -182,52 +162,52 @@ public class HookImpl {
 		GL.disableTexture();
 		GL.pushMatrix();
 		GL.translate(-x, -y, -z);
-		
+
 		for(WorldRenderHook mod : worldRenderHooks) {
 			C98Core.mc.mcProfiler.startSection(mod.toString());
 			mod.renderWorld(C98Core.mc.theWorld, C98Core.getPartialTicks());
 			C98Core.mc.mcProfiler.endSection();
 		}
 		GL.popMatrix();
-		
+
 		GL.enableTexture();
-		
+
 		C98Core.mc.mcProfiler.endSection();
 	}
-	
+
 	public static void setGui(GuiScreen par1GuiScreen) {
 		for(GuiSetHook mod : guiSetHooks)
 			mod.setGui(par1GuiScreen);
 	}
-	
+
 	private static void doKeys() {
 		if(Keyboard.isCreated()) for(Map.Entry<KeyBinding, boolean[]> entry : keyBindings.entrySet()) {
 			int key = entry.getKey().getKeyCode();
 			boolean down;
-			
+
 			if(key < 0) down = Mouse.isButtonDown(key + 100);
 			else down = Keyboard.isKeyDown(key);
-			
+
 			boolean[] flags = entry.getValue();
 			boolean prevDown = flags[1];
 			flags[1] = down;
-			
+
 			if(down && (!prevDown || flags[0])) for(KeyHook mod : keyHooks)
 				mod.keyboardEvent(entry.getKey());
 		}
 	}
-	
+
 	private static KeyBinding[] getAllKeys(KeyBinding[] keyBindings2) {
 		ArrayList l = new ArrayList(Arrays.asList(keyBindings2));
 		l.addAll(keyBindings.keySet());
 		return (KeyBinding[])l.toArray(new KeyBinding[0]);
 	}
-	
+
 	public static void onConnect(NetHandlerPlayClient cli) {
 		for(ConnectHook mod : connectHooks)
 			mod.onConnect(cli);
 	}
-	
+
 	public static void onDisconnect(NetHandlerPlayClient cli) {
 		for(ConnectHook mod : connectHooks)
 			mod.onDisconnect(cli);

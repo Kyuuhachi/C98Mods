@@ -1,65 +1,47 @@
 package c98.core.impl;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.jar.JarInputStream;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import net.minecraft.launchwrapper.Launch;
-import c98.core.C98Log;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 
-//TODO this class needs some serious rewriting
+import org.objectweb.asm.ClassReader;
+
+import net.minecraft.launchwrapper.Launch;
+
 public class C98Loader {
-	public interface ModHandler {
-		void load(String name);
+	@FunctionalInterface public interface ModHandler {
+		void load(ClassReader rdr, String name) throws Exception;
 	}
-	
-	private static File modDir = new File("libraries/c98");
-	
-	public static void setModDir(File f) {
-		modDir = f;
-	}
-	
-	public static void loadMods(ModHandler h) throws IOException {
-		final List<File> files;
-		if(modDir.exists()) {
-			files = new LinkedList();
-			Files.walkFileTree(modDir.toPath(), new SimpleFileVisitor<Path>() {
-				@Override public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-					if(file.toString().endsWith(".jar")) files.add(file.toFile());
-					return super.visitFile(file, attrs);
-				}
-			});
-		} else files = Lists.transform(Arrays.asList(Launch.classLoader.getURLs()), new Function<URL, File>() {
-			@Override public File apply(URL arg0) {
-				try {
-					return new File(arg0.toURI());
-				} catch(URISyntaxException e) {
-					C98Log.error(e);
-					return null;
-				}
+
+	public static void loadMods(ModHandler h) throws Exception {
+		List<File> files = Arrays.stream(Launch.classLoader.getURLs()).map(url -> {
+			try {
+				return new File(url.toURI());
+			} catch(URISyntaxException e) {
+				return null;
 			}
-		});
-		for(File f:files)
+		}).collect(Collectors.toList());
+
+		for(File f : files)
 			if(f.isDirectory()) readDir(f, "", h);
 			else readZip(f, h);
 	}
-	
-	private static void readDir(File file, String n, ModHandler handler) throws IOException {
-		File[] files = file.listFiles();
+
+	private static void readDir(File dir, String n, ModHandler handler) throws Exception {
+		File[] files = dir.listFiles();
 		Arrays.sort(files);
-		for(File file2:files)
-			if(file2.isFile()) load(handler, n + file2.getName());
-			else readDir(file2, n + file2.getName() + "/", handler);
+		for(File file : files)
+			if(file.isFile()) load(handler, n + file.getName());
+			else readDir(file, n + file.getName() + "/", handler);
 	}
-	
-	private static void readZip(File zipFile, ModHandler handler) throws IOException {
+
+	private static void readZip(File zipFile, ModHandler handler) throws Exception {
 		ZipInputStream zis = new JarInputStream(new FileInputStream(zipFile));
 		while(true) {
 			ZipEntry entry = zis.getNextEntry();
@@ -71,8 +53,12 @@ public class C98Loader {
 			if(!entry.isDirectory()) load(handler, name);
 		}
 	}
-	
-	private static void load(ModHandler handler, String name) {
-		if(name.startsWith("c98/") && name.endsWith(".class")) handler.load(name);
+
+	private static void load(ModHandler handler, String name) throws Exception {
+		if(name.startsWith("c98/") && name.endsWith(".class")) { //TODO maybe refine this check
+			ClassReader rdr = new ClassReader(C98Loader.class.getClassLoader().getResourceAsStream(name));
+			final String clName = name.replace(".class", "").replace("/", ".");
+			handler.load(rdr, clName);
+		}
 	}
 }

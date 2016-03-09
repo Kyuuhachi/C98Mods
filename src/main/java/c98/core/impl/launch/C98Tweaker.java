@@ -8,7 +8,6 @@ import org.objectweb.asm.*;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.launchwrapper.*;
 import net.minecraftforge.common.ForgeVersion;
-import c98.core.C98Log;
 import c98.core.impl.C98Loader;
 
 public class C98Tweaker implements ITweaker {
@@ -73,28 +72,16 @@ public class C98Tweaker implements ITweaker {
 	
 	private static void loadReplacers() {
 		try {
-			C98Loader.loadMods(new C98Loader.ModHandler() {
-				@Override public void load(String name) {
-					try {
-						ClassReader rdr = new ClassReader(C98Tweaker.class.getClassLoader().getResourceAsStream(name));
-						final String clName = name.replace(".class", "").replace("/", ".");
-						rdr.accept(new ClassVisitor(Opcodes.ASM4) {
-							@Override public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-								if(desc.equals("Lc98/core/launch/ASMer;")) asmers.add(clName);
-								return null;
-							}
-						}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-					} catch(Throwable e) {
-						C98Log.error("Loading class " + name, e);
+			C98Loader.loadMods((rdr, name) -> {
+				rdr.accept(new ClassVisitor(Opcodes.ASM4) {
+					@Override public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+						if(desc.equals("Lc98/core/launch/ASMer;")) asmers.add(name);
+						return null;
 					}
-				}
+				}, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 			});
-		} catch(Exception e) {
-			C98Log.error(e);
-		}
-		try {
 			getTransformers().add((IClassTransformer)Launch.classLoader.loadClass("c98.core.impl.launch.C98Transformer").newInstance());
-		} catch(InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -101,7 +101,7 @@ public class GuiViewItem extends GuiScreen {
 		GL.pushMatrix();
 		GL.translate(guiLeft, guiTop);
 		
-		mc.getTextureManager().bindTexture(new ResourceLocation("c98/ExtraInfo", "item_view.png"));
+		mc.getTextureManager().bindTexture(new ResourceLocation("c98/extrainfo", "item_view.png"));
 		drawTexturedModalRect(0, 0, 0, 0, WIDTH, HEIGHT);
 		int scrollY = (int)((float)scroll / maxScroll * (SCROLL_H - SCROLL_KNOB_H));
 		drawTexturedModalRect(SCROLL_X, SCROLL_Y + scrollY, maxScroll != 0 ? 0 : SCROLL_W, HEIGHT, SCROLL_W, SCROLL_KNOB_H);

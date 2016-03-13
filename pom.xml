@@ -36,8 +36,9 @@
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<version>2.10</version>
 				<configuration>
-					<downloadSources>true</downloadSources>
+					<useProjectReferences>false</useProjectReferences>
 					<downloadJavadocs>true</downloadJavadocs>
+					<downloadSources>true</downloadSources>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -46,7 +47,6 @@
 				<version>0.0.5</version>
 				<executions>
 					<execution>
-						<id>unpacknatives</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>copy</goal>
@@ -95,33 +95,27 @@
 							</arguments>
 						</configuration>
 					</execution>
-					<execution>
-						<id>run</id>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<workingDirectory>mc</workingDirectory>
-							<executable>java</executable>
-							<arguments>
-								<argument>-classpath</argument>
-								<classpath />
-								<argument>-Djava.library.path=../target/natives</argument>
-								<argument>net.minecraft.launchwrapper.Launch</argument>
-								<argument>--username</argument>
-								<argument>Caagr98</argument>
-								<argument>--version</argument>
-								<argument>1.8</argument>
-								<argument>--tweakClass</argument>
-								<argument>c98.core.main.Main</argument>
-								<argument>--accessToken</argument>
-								<argument>0</argument>
-								<argument>--userProperties</argument>
-								<argument>{}</argument>
-							</arguments>
-						</configuration>
-					</execution>
 				</executions>
+				<configuration>
+					<workingDirectory>mc</workingDirectory>
+					<executable>java</executable>
+					<arguments>
+						<argument>-classpath</argument>
+						<classpath />
+						<argument>-Djava.library.path=../target/natives</argument>
+						<argument>net.minecraft.launchwrapper.Launch</argument>
+						<argument>--username</argument>
+						<argument>Caagr98</argument>
+						<argument>--version</argument>
+						<argument>1.8</argument>
+						<argument>--tweakClass</argument>
+						<argument>c98.core.main.Main</argument>
+						<argument>--accessToken</argument>
+						<argument>0</argument>
+						<argument>--userProperties</argument>
+						<argument>{}</argument>
+					</arguments>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

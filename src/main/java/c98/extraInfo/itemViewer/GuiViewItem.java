@@ -145,7 +145,7 @@ public class GuiViewItem extends GuiScreen {
 		scroll();
 	}
 	
-	@Override protected void keyTyped(char par1, int par2) throws IOException {
+	@Override public void keyTyped(char par1, int par2) throws IOException {
 		super.keyTyped(par1, par2);
 		if(par2 == Keyboard.KEY_UP) scroll--;
 		if(par2 == Keyboard.KEY_DOWN) scroll++;
@@ -185,7 +185,7 @@ public class GuiViewItem extends GuiScreen {
 		Keyboard.enableRepeatEvents(false);
 	}
 	
-	@Override protected void actionPerformed(GuiButton par1GuiButton) {
+	@Override public void actionPerformed(GuiButton par1GuiButton) {
 		StringBuilder sb = new StringBuilder();
 		for(IChatComponent c : new JsonHighlighter(par1GuiButton.id).write(json))
 			sb.append(c.getUnformattedText()).append("\n");

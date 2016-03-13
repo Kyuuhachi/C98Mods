@@ -30,11 +30,11 @@ public class RenderPlayerWrapper extends RenderPlayer {
 		doRender((Entity)e, x, y, z, yaw, pitch);
 	}
 	
-	@Override protected ResourceLocation getEntityTexture(Entity e) {
+	@Override public ResourceLocation getEntityTexture(Entity e) {
 		return obj.getEntityTexture(e);
 	}
 	
-	@Override protected void func_177069_a(Entity p_177069_1_, double p_177069_2_, double p_177069_4_, double p_177069_6_, String p_177069_8_, float p_177069_9_, double p_177069_10_) {
+	@Override public void func_177069_a(Entity p_177069_1_, double p_177069_2_, double p_177069_4_, double p_177069_6_, String p_177069_8_, float p_177069_9_, double p_177069_10_) {
 		renderOffsetLivingLabel((AbstractClientPlayer)p_177069_1_, p_177069_2_, p_177069_4_, p_177069_6_, p_177069_8_, p_177069_9_, p_177069_10_);
 	}
 	

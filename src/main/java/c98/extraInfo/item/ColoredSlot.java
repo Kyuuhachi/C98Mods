@@ -58,7 +58,7 @@ import c98.core.launch.ASMer;
 	
 	private CreativeTabs drawnTab;
 	
-	@Override protected void func_147051_a(CreativeTabs p_147051_1_) {
+	@Override public void func_147051_a(CreativeTabs p_147051_1_) {
 		drawnTab = p_147051_1_;
 		super.func_147051_a(p_147051_1_);
 		drawnTab = null;

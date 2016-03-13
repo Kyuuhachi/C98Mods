@@ -116,7 +116,7 @@ public class GuiEditWaypoint extends GuiScreen {
 		f.setEnableBackgroundDrawing(false);
 	}
 	
-	@Override protected void actionPerformed(GuiButton button) throws IOException {
+	@Override public void actionPerformed(GuiButton button) throws IOException {
 		if(button.id < 16) point.style.color = new Color(fontRendererObj.colorCode[button.id]);
 		else point.style.shape = button.id - 16;
 	}
@@ -168,7 +168,7 @@ public class GuiEditWaypoint extends GuiScreen {
 			f.drawTextBox();
 	}
 	
-	@Override protected void keyTyped(char typedChar, int keyCode) throws IOException {
+	@Override public void keyTyped(char typedChar, int keyCode) throws IOException {
 		if(keyCode == 1) mc.displayGuiScreen(parent);
 		if(keyCode == Keyboard.KEY_TAB) {
 			int cur = -1;
@@ -194,7 +194,7 @@ public class GuiEditWaypoint extends GuiScreen {
 			f.textboxKeyTyped(typedChar, keyCode);
 	}
 	
-	@Override protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	@Override public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		for(GuiTextField f : textFields)
 			f.mouseClicked(mouseX, mouseY, mouseButton);

@@ -76,7 +76,7 @@ public class GuiWaypoints extends GuiScreen {
 		buttonList.add(new GuiButton(0, GUI_X() + BUTTON_X, GUI_Y() + BUTTON_Y, BUTTON_W, BUTTON_H, "Add"));
 	}
 	
-	@Override protected void actionPerformed(GuiButton button) throws IOException {
+	@Override public void actionPerformed(GuiButton button) throws IOException {
 		if(button.id == 0) mc.displayGuiScreen(new GuiEditWaypoint(w, new Waypoint(mc.thePlayer.getPosition())));
 	}
 	
@@ -94,7 +94,7 @@ public class GuiWaypoints extends GuiScreen {
 		}
 	}
 	
-	@Override protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	@Override public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		if(mouseButton == 0) for(int i = 0; isIndex(i); i++) {
 			int x = ITEM_X;
@@ -104,7 +104,7 @@ public class GuiWaypoints extends GuiScreen {
 		}
 	}
 	
-	@Override protected void keyTyped(char typedChar, int keyCode) throws IOException {
+	@Override public void keyTyped(char typedChar, int keyCode) throws IOException {
 		if(keyCode == 1 || keyCode == mc.gameSettings.keyBindInventory.getKeyCode()) mc.thePlayer.closeScreen();
 	}
 	

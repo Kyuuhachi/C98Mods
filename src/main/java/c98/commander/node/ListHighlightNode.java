@@ -9,7 +9,7 @@ import c98.commander.HighlightResult;
 public class ListHighlightNode extends HighlightNode {
 	private Supplier<Collection<String>> supplier;
 	
-	public ListHighlightNode(Supplier<? extends Collection> func) {
+	public ListHighlightNode(Supplier<? extends Collection<String>> func) {
 		supplier = (Supplier<Collection<String>>)func;
 	}
 	

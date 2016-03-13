@@ -15,6 +15,26 @@
 		[["?o", "s", "c", "a", "sp"]],
 		[["?v", "0", "1", "2", "3"]]
 	]],
+	"deop": ["text"],
+	"difficulty": [[
+		[["?o", "peaceful", "easy", "medium", "hard"]],
+		[["?o", "p", "e", "m", "h"]],
+		[["?v", "0", "1", "2", "3"]]
+	]],
+	"effect": ["sel", [
+		[["clear"]],
+		["effect", "?", "i", "i", "bool"]
+	]],
+	"enchant": ["sel", [["i"], ["ench"]], "?", "i"],
+	"entitydata": ["sel", "json"],
+	"execute": ["sel", "coords", [
+		[["detect"], "coords", "block", "i", "fullcommand"],
+		["fullcommand"]
+	]],
+	"fill": ["coords", "coords", "block", "?", "i", [
+		[["replace"], "?", "block", "i"],
+		[["destroy", "hollow", "keep", "outline"]]
+	]],
 	"gamemode": [[
 		[["?o", "survival", "creative", "adventure", "spectator"]],
 		[["?o", "s", "c", "a", "sp"]],
@@ -22,8 +42,8 @@
 	]],
 	"gamerule": ["gamerule", "?", "text"],
 	"give": ["sel", "item", "?", "i", "i", "json"],
-	"help": [[["i"],["text"]]], //I'd prefer to have "command" here, but the command list is serverside.
-	"?": [[["i"],["text"]]],
+	"help": [[["i"],["command"]]],
+	"?": [[["i"],["command"]]],
 	"kill": ["sel"],
 	"list": [],
 	"me": ["text*"],
@@ -31,7 +51,7 @@
 	"pardon": ["text"],
 	"pardon-ip": ["text"],
 	"particle": ["particle", "coords", "coords", "f", "?", "i", "f"],
-	"playsound": ["text", "sel", "?", "coords", "f", "f", "f"], //Same as /help
+	"playsound": ["text", "sel", "?", "coords", "f", "f", "f"],
 	"publish": [],
 	"replaceitem": [[[["block"], "coords"], [["entity"], "sel"]], "slot", "item", "?", "i", "i", "json"],
 	"save-all": [],

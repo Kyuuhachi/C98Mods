@@ -14,7 +14,7 @@ import c98.core.launch.ASMer;
 	public Models_ModelBakery(IResourceManager p_i46085_1_, TextureMap p_i46085_2_, BlockModelShapes p_i46085_3_) {
 		super(p_i46085_1_, p_i46085_2_, p_i46085_3_);
 	}
-	
+
 	@Override public void registerVariantNames() {
 		super.registerVariantNames();
 		ModelImpl.registerVariantList(variantNames);
@@ -25,7 +25,7 @@ import c98.core.launch.ASMer;
 	public Models_RenderItem(TextureManager p_i46165_1_, ModelManager p_i46165_2_) {
 		super(p_i46165_1_, p_i46165_2_);
 	}
-	
+
 	@Override public void registerItems() {
 		super.registerItems();
 		ModelImpl.registerItemModels(itemModelMesher);
@@ -36,7 +36,7 @@ import c98.core.launch.ASMer;
 	public Models_BlockModelShapes(ModelManager p_i46245_1_) {
 		super(p_i46245_1_);
 	}
-	
+
 	@Override public void func_178119_d() {
 		super.func_178119_d();
 		ModelImpl.registerBlockModels(blockStateMapper);

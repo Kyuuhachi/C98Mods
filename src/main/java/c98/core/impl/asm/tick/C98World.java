@@ -12,7 +12,7 @@ import c98.core.launch.ASMer;
 	protected C98World(ISaveHandler saveHandlerIn, WorldInfo info, WorldProvider providerIn, Profiler profilerIn, boolean client) {
 		super(saveHandlerIn, info, providerIn, profilerIn, client);
 	}
-	
+
 	@Override public void updateEntities() {
 		HookImpl.tick(this);
 		super.updateEntities();

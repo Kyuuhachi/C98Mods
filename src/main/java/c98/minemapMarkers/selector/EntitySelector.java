@@ -19,7 +19,7 @@ public class EntitySelector {
 		initClasses();
 		initProperties();
 	}
-	
+
 	public static void initClasses() {
 		classToId.putAll(EntityList.classToStringMapping);
 		classToId.putAll(TileEntity.classToNameMap);
@@ -41,7 +41,7 @@ public class EntitySelector {
 		classToId.put(EntityThrowable.class, "Throwable");
 		classToId.put(EntityAnimal.class, "Animal");
 	}
-	
+
 	public static void initProperties() {
 		final String[] horseTypes = {"normal", "donkey", "mule", "zombie", "skeleton"};
 		//@off
@@ -86,7 +86,7 @@ public class EntitySelector {
 		SelectorProperties.addEntity("name",         Entity.class,                SelectorProperties.STRING, e -> e.getName());
 		//@on
 	}
-	
+
 	public static Selector parse(String selector) {
 		return Parser.parse(Tokenizer.getTokens(selector));
 	}

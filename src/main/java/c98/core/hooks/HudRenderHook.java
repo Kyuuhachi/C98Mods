@@ -23,33 +23,33 @@ public interface HudRenderHook {
 		FOOD("food"),
 		MOUNT_HEALTH("mountHealth"),
 		AIR("air");
-		
+
 		public static Map<String, HudElement> bySection = new HashMap();
 		static {
 			for(HudElement e : values())
 				bySection.put(e.section, e);
 		}
-		
+
 		public final String section;
-		
+
 		private HudElement(String sec) {
 			section = sec;
 		}
-		
+
 		public void pre() {
 			GL.pushAttrib();
 			HookImpl.hudRenderHooks.forEach(a -> a.preRenderHud(this));
 			GL.popAttrib();
 		}
-		
+
 		public void post() {
 			GL.pushAttrib();
 			HookImpl.hudRenderHooks.forEach(a -> a.postRenderHud(this));
 			GL.popAttrib();
 		}
 	}
-	
+
 	default void preRenderHud(HudElement e) {}
-	
+
 	default void postRenderHud(HudElement e) {}
 }

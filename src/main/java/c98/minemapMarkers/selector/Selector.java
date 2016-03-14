@@ -9,15 +9,15 @@ import c98.minemapMarkers.selector.propinst.PropertyInstance;
 public class Selector {
 	public String name;
 	private List<PropertyInstance> props = new LinkedList();
-	
+
 	public void setEntityName(String s) {
 		name = s;
 	}
-	
+
 	public void addProp(PropertyInstance prop) {
 		props.add(prop);
 	}
-	
+
 	public boolean matches(TileEntity e) {
 		if(name != null && !name.isEmpty()) for(Class c = e.getClass(); c != null; c = c.getSuperclass())
 			if(name.equals(EntitySelector.classToId.get(c))) {
@@ -27,7 +27,7 @@ public class Selector {
 			}
 		return false;
 	}
-	
+
 	public boolean matches(Entity e) {
 		if(name != null && !name.isEmpty()) for(Class c = e.getClass(); c != null; c = c.getSuperclass())
 			if(name.equals(EntitySelector.classToId.get(c))) {

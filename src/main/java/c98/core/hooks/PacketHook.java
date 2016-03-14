@@ -6,10 +6,10 @@ import net.minecraft.network.Packet;
 
 public interface PacketHook {
 	public boolean packetFromClient(Packet p, EntityPlayerMP player);
-	
+
 	public boolean packetToClient(Packet p, EntityPlayerMP player);
-	
+
 	public boolean packetFromServer(Packet p, EntityPlayerSP player); //Clientside
-	
+
 	public boolean packetToServer(Packet p, EntityPlayerSP player); //Clientside
 }

@@ -22,7 +22,7 @@ import c98.targetLock.TargetEntity;
 
 public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, KeyHook {
 	public static class EIConf {
-		
+
 		public static class _SlotConf {
 			public boolean enable = true;
 			public Map<String, Color> colors = new LinkedHashMap();
@@ -34,37 +34,37 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 					}
 			}
 		}
-		
+
 		public static class _GuiConf {
 			public boolean horseStats = true;
 			public boolean xpStats = true;
 			public boolean furnaceXp = true;
 		}
-		
+
 		public static class _OverlayConf {
 			public boolean durability = true;
 			public boolean anvilDurability = true;
 			public boolean arrows = true;
 			public boolean potion = true;
 		}
-		
+
 		public static class _TooltipConf {
 			public boolean food = true;
 			public boolean armor = true;
 		}
-		
+
 		public static class _HudConf {
 			public static class _TBConf {
 				public boolean enable = true, rawTime = false;
 			}
-			
+
 			public _TBConf topBar = new _TBConf();
 			public boolean effects = true;
 			public boolean horseStats = true;
 			public boolean xpStats = true;
 			public boolean saturation = true;
 		}
-		
+
 		public _SlotConf slotInfo = new _SlotConf();
 		public _GuiConf gui = new _GuiConf();
 		public _HudConf hud = new _HudConf();
@@ -73,19 +73,19 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 		public boolean drawXpInCreative = true;
 		public Color silverfish = new Color(0xFF7F7F);
 	}
-	
+
 	public static final ResourceLocation hudTexture = new ResourceLocation("c98/extrainfo", "hud.png");
 	public static final ResourceLocation iconsTexture = new ResourceLocation("textures/gui/icons.png");
 	public static final ResourceLocation inventoryTexture = new ResourceLocation("textures/gui/container/inventory.png");
 	public static String format = "%.2f / %.2f", format2 = "%.2f";
 	public static EIConf config;
 	private KeyBinding viewKey = new KeyBinding("View Item JSON", Keyboard.KEY_J, C98Core.KEYBIND_CAT);
-	
+
 	@Override public void load() {
 		C98Core.registerKey(viewKey, false);
 		config = Json.get(this, EIConf.class);
 	}
-	
+
 	@Override public void renderGui(GuiScreen gui) {
 		if(gui instanceof GuiContainer) {
 			if(gui instanceof GuiScreenHorseInventory) {
@@ -94,7 +94,7 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 			if(gui instanceof GuiFurnace) if(config.gui.furnaceXp) FurnaceInfo.draw(mc);
 		}
 	}
-	
+
 	@Override public void postRenderHud(HudElement e) {
 		ScaledResolution res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int height = res.getScaledHeight();
@@ -106,7 +106,7 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 		if(e == HudElement.ALL && config.hud.effects) PotionInfo.drawPotions(height, width, fr, mc);
 		if(e == HudElement.ALL && config.hud.topBar.enable) TopBar.drawTopBar(mc, width, fr);
 	}
-	
+
 	public static void drawSunMoon(int x, int y, int u, int v, int w, int h, boolean moon) {
 		float var7 = 1 / 32F;
 		float var8 = 1 / 32F;
@@ -120,9 +120,9 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 		GL.vertex(x + w, y + 0, (u + w) * var7, (v + 0) * var8);
 		GL.vertex(x + 0, y + 0, (u + 0) * var7, (v + 0) * var8);
 		GL.end();
-		
+
 	}
-	
+
 	public static void drawRect(int x, int y, int w, int h) {
 		GL.color(1, 1, 1);
 		bindTexture(hudTexture);
@@ -130,9 +130,9 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 		NinePatch.setTexCoords(0, 0, 24, 24);
 		NinePatch.draw(x, y, w, h);
 	}
-	
+
 	public static void drawTexturedRect(int x, int y, int u, int v, int w, int h) {
-		
+
 		GL.begin();
 		GL.vertex(x + 0, y + h, (u + 0) / 256F, (v + h) / 256F);
 		GL.vertex(x + w, y + h, (u + w) / 256F, (v + h) / 256F);
@@ -140,11 +140,11 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 		GL.vertex(x + 0, y + 0, (u + 0) / 256F, (v + 0) / 256F);
 		GL.end();
 	}
-	
+
 	public static void bindTexture(ResourceLocation img) {
 		mc.getTextureManager().bindTexture(img);
 	}
-	
+
 	@Override public void keyboardEvent(KeyBinding key) {
 		if(key == viewKey && mc.currentScreen == null) {
 			List<ItemStack> viableStacks = new LinkedList();
@@ -156,14 +156,14 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 				add(viableStacks, stacks);
 			} else add(viableStacks, new ItemStack[5]);
 			add(viableStacks, mc.thePlayer.inventory.mainInventory);
-			
+
 			mc.displayGuiScreen(new GuiSelectItem(viableStacks, entity instanceof EntityLivingBase ? (EntityLivingBase)entity : null));
 		}
 	}
-	
+
 	private static void add(List<ItemStack> viableStacks, ItemStack[] stacks) {
 		if(stacks != null) for(ItemStack is : stacks)
 			viableStacks.add(is);
 	}
-	
+
 }

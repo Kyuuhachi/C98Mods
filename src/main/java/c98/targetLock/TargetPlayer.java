@@ -10,10 +10,10 @@ public class TargetPlayer extends TargetEntity {
 	public TargetPlayer(EntityPlayer e) {
 		uuid = e.getUniqueID();
 	}
-	
+
 	private UUID uuid;
 	private int noTargetFrames;
-	
+
 	@Override public Entity getEntity() {
 		for(Object o:Minecraft.getMinecraft().theWorld.playerEntities) {
 			EntityPlayer p = (EntityPlayer)o;

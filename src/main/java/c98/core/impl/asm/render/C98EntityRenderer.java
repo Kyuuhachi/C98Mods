@@ -12,7 +12,7 @@ import c98.core.launch.ASMer;
 	public C98EntityRenderer(Minecraft par1Minecraft, IResourceManager resman) {
 		super(par1Minecraft, resman);
 	}
-	
+
 	@Override public void updateCameraAndRender(float par1) {
 		super.updateCameraAndRender(par1);
 		GuiScreen g = Minecraft.getMinecraft().currentScreen;

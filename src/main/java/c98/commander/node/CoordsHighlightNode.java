@@ -7,11 +7,11 @@ import c98.commander.HighlightResult;
 
 public class CoordsHighlightNode extends HighlightNode {
 	private int count;
-	
+
 	public CoordsHighlightNode(int c) {
 		count = c;
 	}
-	
+
 	@Override public HighlightResult highlight(String args, int i) {
 		IChatComponent c = new ChatComponentText("");
 		for(int j = 0; j < count; j++) {

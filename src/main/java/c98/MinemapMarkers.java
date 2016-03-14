@@ -23,19 +23,19 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 		public static class MarkerConfig {
 			public static class MarkerStyle extends IconStyle {
 				public Boolean teamColor;
-				
+
 				@Override public MarkerStyle clone() {
 					MarkerStyle st = (MarkerStyle)super.clone();
 					if(st.teamColor == null) st.teamColor = false;
 					return st;
 				}
 			}
-			
+
 			public String selector = "";
 			public MarkerStyle style = new MarkerStyle();
 			private transient MarkerConfig norm;
 			public transient Selector compiledSelector;
-			
+
 			public MarkerConfig normalize() {
 				if(norm != null) return norm;
 				MarkerConfig m = new MarkerConfig();
@@ -46,9 +46,9 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 				return norm;
 			}
 		}
-		
+
 		public MarkerConfig[] markers = null; //generate in ctor
-		
+
 		public Config() {
 			MarkerConfig player = new MarkerConfig();
 			MarkerConfig self = new MarkerConfig();
@@ -60,28 +60,28 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 			markers = new MarkerConfig[] {self, player};
 		}
 	}
-	
+
 	public static Config config;
-	
+
 	@Override public void load() {
 		MinemapPlugin.register(this);
 	}
-	
+
 	@Override public void reloadConfig() {
 		config = Json.get(this, Config.class);
 	}
-	
+
 	@Override public boolean marksPlayer() {
 		return true;
 	}
-	
+
 	@Override public void addIcons(List<MapIcon> markers, World world) {
 		for(Entity e : new ArrayList<Entity>(mc.theWorld.loadedEntityList))
 			markEntity(markers, e);
 		for(TileEntity e : new ArrayList<TileEntity>(mc.theWorld.loadedTileEntityList))
 			markTileEntity(markers, e);
 	}
-	
+
 	private void markTileEntity(List<MapIcon> l, TileEntity te) {
 		try {
 			MarkerConfig mrkr = getMarker(te);
@@ -93,7 +93,7 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 			C98Log.error(String.format("TileEntity at %s", te.getPos().toString()), e);
 		}
 	}
-	
+
 	private void markEntity(List<MapIcon> l, Entity e) {
 		try {
 			MarkerConfig mrkr = getMarker(e);
@@ -113,7 +113,7 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 			C98Log.error("Entity " + e, ex);
 		}
 	}
-	
+
 	private static Color getTeamColor(Scoreboard score, Entity e) {
 		String name = e.getName();
 		String s = name.toUpperCase();
@@ -152,7 +152,7 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 		}
 		return color;
 	}
-	
+
 	public MarkerConfig getMarker(Entity e) {
 		for(MarkerConfig type : config.markers) {
 			MarkerConfig norm = type.normalize();
@@ -160,7 +160,7 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 		}
 		return null;
 	}
-	
+
 	public MarkerConfig getMarker(TileEntity e) {
 		for(MarkerConfig type : config.markers) {
 			MarkerConfig norm = type.normalize();

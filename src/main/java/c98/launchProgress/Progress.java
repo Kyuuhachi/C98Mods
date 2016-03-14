@@ -26,21 +26,21 @@ public class Progress {
 			mthd.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(Progress.class), "init", "()V", false));
 		}
 	}
-	
+
 	public static class Config {
 		public List<Long> launchTime = new ArrayList();
 		public boolean alwaysOnTop = true;
 	}
-	
+
 	private static Config config;
-	
+
 	private static long start;
 	private static List<String> strings;
-	
+
 	private static JProgressBar bar;
 	private static JFrame frame;
 	private static Timer timer;
-	
+
 	public static void init() {
 		config = Json.get("LaunchProgress", Config.class);
 		try {
@@ -48,12 +48,12 @@ public class Progress {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		start = System.currentTimeMillis();
-		
+
 		bar = new JProgressBar(0, 100);
 		bar.setStringPainted(true);
-		
+
 		frame = new JFrame();
 		frame.add(bar);
 		frame.getContentPane().setPreferredSize(new Dimension(400, 40));
@@ -67,37 +67,37 @@ public class Progress {
 			}
 		});
 		frame.setVisible(true);
-		
+
 		timer = new Timer(10, Progress::update);
 		timer.start();
-		
+
 		updateString();
 	}
-	
+
 	public static void done() {
 		frame.dispose();
 		timer.stop();
 		addTime(System.currentTimeMillis() - start);
 	}
-	
+
 	public static void update(ActionEvent e) {
 		long time = e.getWhen() - start;
 		double progress = time / getAverageTime();
 		bar.setValue((int)(progress * 100));
 		if(Math.random() < 0.25) updateString();
 	}
-	
+
 	private static void updateString() {
 		if(!strings.isEmpty()) {
 			String s = strings.get((int)(Math.random() * strings.size()));
 			bar.setString(s);
 		}
 	}
-	
+
 	public static double getAverageTime() {
 		return config.launchTime.stream().collect(Collectors.averagingLong((Long a) -> a.longValue()));
 	}
-	
+
 	public static void addTime(long time) {
 		config.launchTime.add(time);
 		if(config.launchTime.size() > 5) config.launchTime.remove(0);

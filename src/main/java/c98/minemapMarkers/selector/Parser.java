@@ -8,13 +8,13 @@ import c98.minemapMarkers.selector.propinst.*;
 public class Parser {
 	private static LinkedList tokens;
 	private static int pos;
-	
+
 	public static Selector parse(LinkedList t) {
 		tokens = new LinkedList(t);
 		pos = 0;
 		return parseSelector();
 	}
-	
+
 	private static Selector parseSelector() {
 		if(isEmpty()) throw error("Empty selector");
 		Selector s = new Selector();
@@ -29,7 +29,7 @@ public class Parser {
 		}
 		return s;
 	}
-	
+
 	private static PropertyInstance parseProp(String owner) {
 		boolean invert = false;
 		if(removeIf(Tokenizer.NOT)) invert = true;
@@ -56,12 +56,12 @@ public class Parser {
 		}
 		throw expected(SelectorProperties.getType(owner, name) + " comparision");
 	}
-	
+
 	private static RuntimeException expected(String string) {
 		String s = toString(get());
 		return error("Expected " + string + ", found " + s);
 	}
-	
+
 	private static RuntimeException error(String string) {
 		StringBuilder sb = new StringBuilder(string);
 		sb.append(". (");
@@ -74,28 +74,28 @@ public class Parser {
 		sb.append(")");
 		return new IllegalArgumentException(sb.toString());
 	}
-	
+
 	private static String toString(Object token) {
 		if(token instanceof String) return "\"" + token + "\"";
 		if(token instanceof Float) return token.toString();
 		if(token instanceof Token) return "'" + token + "'";
 		return String.valueOf(token);
 	}
-	
+
 	private static boolean isEmpty() {
 		return pos >= tokens.size();
 	}
-	
+
 	private static Object get() {
 		return isEmpty() ? null : tokens.get(pos);
 	}
-	
+
 	private static Object remove() {
 		Object o = get();
 		pos++;
 		return o;
 	}
-	
+
 	private static boolean removeIf(Token t) {
 		boolean b = get() == t;
 		if(b) remove();

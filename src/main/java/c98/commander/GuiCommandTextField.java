@@ -11,20 +11,20 @@ import c98.core.launch.*;
 		public Names(int p_i45542_1_, FontRenderer p_i45542_2_, int p_i45542_3_, int p_i45542_4_, int p_i45542_5_, int p_i45542_6_) {
 			super(p_i45542_1_, p_i45542_2_, p_i45542_3_, p_i45542_4_, p_i45542_5_, p_i45542_6_);
 		}
-		
+
 		public String text;
-		
+
 		@Override public void drawTextBox() {}
 	}
-	
+
 	public GuiCommandTextField(int p_i45542_1_, FontRenderer p_i45542_2_, int p_i45542_3_, int p_i45542_4_, int p_i45542_5_, int p_i45542_6_) {
 		super(p_i45542_1_, p_i45542_2_, p_i45542_3_, p_i45542_4_, p_i45542_5_, p_i45542_6_);
 	}
-	
+
 	@Override public void asm(ClassNode node) {
 		String methodName = Names.class.getDeclaredMethods()[0].getName();
 		String fieldName = Names.class.getDeclaredFields()[0].getName();
-		
+
 		for(MethodNode m : node.methods)
 			if(m.name.equals(methodName)) {
 				for(AbstractInsnNode insn : new Asm(m))

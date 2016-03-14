@@ -12,13 +12,13 @@ import c98.graphicalUpgrade.LayerColoredSheep;
 import c98.graphicalUpgrade.ModelSquigglySlime;
 
 public class GraphicalUpgrade extends C98Mod {
-	
+
 	public static class GUConf {
 		public static class RXPConf {
 			public boolean enabled = true;
 			public boolean useBW = false;
 		}
-		
+
 		public Color[] xpColors = {Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA};
 		public boolean roadSigns = true;
 		public boolean testificateHats = true;
@@ -26,14 +26,14 @@ public class GraphicalUpgrade extends C98Mod {
 		public boolean coloredShearedSheep = true;
 		public boolean holdMultiple = true;
 	}
-	
+
 	public static GUConf config;
 	private ModelRenderer testificateHat;
-	
+
 	@Override public void load() {
 		((RendererLivingEntity)Rendering.getRenderer(EntitySheep.class)).addLayer(new LayerColoredSheep((RenderSheep)Rendering.getRenderer(EntitySheep.class)));
 		((RendererLivingEntity)Rendering.getRenderer(EntitySlime.class)).mainModel = new ModelSquigglySlime(16);
-		
+
 		ModelVillager base = (ModelVillager)((RenderVillager)Rendering.getRenderer(EntityVillager.class)).mainModel;
 		testificateHat = new ModelRenderer(base).setTextureSize(64, 64);
 		testificateHat.setRotationPoint(0, 0, 0);
@@ -42,7 +42,7 @@ public class GraphicalUpgrade extends C98Mod {
 		base.villagerHead.addChild(testificateHat);
 		reloadConfig();
 	}
-	
+
 	private void reloadConfig() {
 		config = Json.get(this, GUConf.class);
 		testificateHat.isHidden = !config.testificateHats;

@@ -12,7 +12,7 @@ import c98.core.launch.ASMer;
 	public _SaveFormatOld(File p_i2147_1_) {
 		super(p_i2147_1_);
 	}
-	
+
 	@Override public boolean deleteWorldDirectory(String p_75802_1_) {
 		MinemapWaypoints.delete(p_75802_1_);
 		return super.deleteWorldDirectory(p_75802_1_);
@@ -23,7 +23,7 @@ import c98.core.launch.ASMer;
 	public _ServerList(Minecraft mcIn) {
 		super(mcIn);
 	}
-	
+
 	@Override public void removeServerData(int p_78851_1_) {
 		ServerData d = getServerData(p_78851_1_);
 		MinemapWaypoints.delete(d.serverIP);

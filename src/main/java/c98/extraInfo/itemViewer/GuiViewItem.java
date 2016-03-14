@@ -25,9 +25,9 @@ public class GuiViewItem extends GuiScreen {
 	private static final int SCROLL_X = 236, SCROLL_Y = 17;
 	private static final int SCROLL_W = 12, SCROLL_H = 153;
 	private static final int SCROLL_KNOB_H = 15;
-	
+
 	private static final int LINES = FIELD_H / 9;
-	
+
 	private ObjectNode json;
 	List<IChatComponent> text;
 	int scroll = 0;
@@ -36,17 +36,17 @@ public class GuiViewItem extends GuiScreen {
 	private boolean wasScrolling;
 	private boolean isScrolling;
 	private int maxScroll;
-	
+
 	public GuiViewItem(ItemStack is) {
 		NBTTagCompound nbt = new NBTTagCompound();
 		is.writeToNBT(nbt);
 		json = (ObjectNode)toJson(nbt);
 		text = new JsonHighlighter(JsonHighlighter.COLOR).write(json);
-		
+
 		maxScroll = text.size() - LINES;
 		if(maxScroll < 0) maxScroll = 0;
 	}
-	
+
 	private JsonNode toJson(NBTBase nbt) {
 		switch(NBTBase.NBT_TYPES[nbt.getId()]) {
 			case "BYTE":
@@ -91,21 +91,21 @@ public class GuiViewItem extends GuiScreen {
 				return null;
 		}
 	}
-	
+
 	@Override public void drawScreen(int mouseX, int mouseY, float par3) {
 		mouseX -= guiLeft;
 		mouseY -= guiTop;
 		scrollbar(mouseX, mouseY);
-		
+
 		drawDefaultBackground();
 		GL.pushMatrix();
 		GL.translate(guiLeft, guiTop);
-		
+
 		mc.getTextureManager().bindTexture(new ResourceLocation("c98/extrainfo", "item_view.png"));
 		drawTexturedModalRect(0, 0, 0, 0, WIDTH, HEIGHT);
 		int scrollY = (int)((float)scroll / maxScroll * (SCROLL_H - SCROLL_KNOB_H));
 		drawTexturedModalRect(SCROLL_X, SCROLL_Y + scrollY, maxScroll != 0 ? 0 : SCROLL_W, HEIGHT, SCROLL_W, SCROLL_KNOB_H);
-		
+
 		int x = FIELD_X;
 		int y = FIELD_Y;
 		for(int i = scroll; i < scroll + LINES && i < text.size(); i++, y += mc.fontRendererObj.FONT_HEIGHT) {
@@ -127,48 +127,48 @@ public class GuiViewItem extends GuiScreen {
 			}
 		}
 		GL.popMatrix();
-		
+
 		super.drawScreen(mouseX + guiLeft, mouseY + guiTop, par3);
 	}
-	
+
 	private void scrollbar(int x, int y) {
 		boolean click = Mouse.isButtonDown(0);
 		int left = SCROLL_X;
 		int top = SCROLL_Y;
 		int right = left + SCROLL_W;
 		int bottom = top + SCROLL_H;
-		
+
 		if(!wasScrolling && click && x >= left && y >= top && x < right && y < bottom) isScrolling = true;
 		if(!click) isScrolling = false;
 		wasScrolling = click;
 		if(isScrolling) scroll = (int)((float)(y - SCROLL_Y) / SCROLL_H * (maxScroll + 1));
 		scroll();
 	}
-	
+
 	@Override public void keyTyped(char par1, int par2) throws IOException {
 		super.keyTyped(par1, par2);
 		if(par2 == Keyboard.KEY_UP) scroll--;
 		if(par2 == Keyboard.KEY_DOWN) scroll++;
 		if(par2 == Keyboard.KEY_PRIOR) scroll -= LINES - 3;
 		if(par2 == Keyboard.KEY_NEXT) scroll += LINES - 3;
-		
+
 		scroll();
 	}
-	
+
 	@Override public void handleMouseInput() throws IOException {
 		super.handleMouseInput();
 		int dist = Mouse.getEventDWheel();
 		if(dist > 0) scroll--;
 		if(dist < 0) scroll++;
-		
+
 		scroll();
 	}
-	
+
 	private void scroll() {
 		if(scroll >= maxScroll) scroll = maxScroll;
 		if(scroll < 0) scroll = 0;
 	}
-	
+
 	@Override public void initGui() {
 		Keyboard.enableRepeatEvents(true);
 		guiLeft = (width - WIDTH) / 2;
@@ -180,11 +180,11 @@ public class GuiViewItem extends GuiScreen {
 		buttonList.add(new GuiButton(JsonHighlighter.GIVE, guiLeft + WIDTH / 2 - w / 2, guiTop + 175, w, 20, "Copy /give"));
 		buttonList.add(new GuiButton(JsonHighlighter.PRETTY, guiLeft + WIDTH / 2 + dist + w / 2, guiTop + 175, w, 20, "Copy pretty"));
 	}
-	
+
 	@Override public void onGuiClosed() {
 		Keyboard.enableRepeatEvents(false);
 	}
-	
+
 	@Override public void actionPerformed(GuiButton par1GuiButton) {
 		StringBuilder sb = new StringBuilder();
 		for(IChatComponent c : new JsonHighlighter(par1GuiButton.id).write(json))

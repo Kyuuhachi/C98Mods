@@ -12,7 +12,7 @@ public class JsonHighlighter {
 	public static final int PRETTY = 1;
 	public static final int RAW = 2;
 	public static final int GIVE = 3;
-	
+
 	private static final ChatStyle bracket = new ChatStyle().setColor(EnumChatFormatting.AQUA);
 	private static final ChatStyle squarebracket = new ChatStyle().setColor(EnumChatFormatting.BLUE);
 	private static final ChatStyle key = new ChatStyle().setColor(EnumChatFormatting.RED);
@@ -20,14 +20,14 @@ public class JsonHighlighter {
 	private static final ChatStyle number = new ChatStyle().setColor(EnumChatFormatting.GREEN);
 	private static final ChatStyle keyword = new ChatStyle().setColor(EnumChatFormatting.LIGHT_PURPLE);
 	private static final ChatStyle punctuation = new ChatStyle().setColor(EnumChatFormatting.GRAY);
-	
+
 	private List<IChatComponent> components = new ArrayList();
 	private int mode;
-	
+
 	public JsonHighlighter(int mode) {
 		this.mode = mode;
 	}
-	
+
 	public List<IChatComponent> write(JsonNode node) {
 		if(mode == GIVE) {
 			IChatComponent comp = newline(0);
@@ -50,13 +50,13 @@ public class JsonHighlighter {
 		} else writeJsonElement(node, 0, newline(0), "");
 		return components;
 	}
-	
+
 	private IChatComponent writeJsonElement(JsonNode j, int indent, IChatComponent comp, String path) {
 		if(j instanceof ObjectNode) return writeJsonObject((ObjectNode)j, indent, comp, path);
 		if(j instanceof ArrayNode) return writeJsonArray((ArrayNode)j, indent, comp, path);
 		return writeJsonPrimitive((ValueNode)j, indent, comp, path);
 	}
-	
+
 	private IChatComponent writeJsonObject(ObjectNode j, int indent, IChatComponent comp, String path) {
 		comp.appendSibling(comp("{", bracket));
 		Iterator<Map.Entry<String, JsonNode>> entries = j.fields();
@@ -70,7 +70,7 @@ public class JsonHighlighter {
 		}
 		return newline(indent).appendSibling(comp("}", bracket));
 	}
-	
+
 	private IChatComponent writeJsonArray(ArrayNode j, int indent, IChatComponent comp, String path) {
 		comp.appendSibling(comp("[", squarebracket));
 		Iterator<JsonNode> entries = j.iterator();
@@ -82,7 +82,7 @@ public class JsonHighlighter {
 		}
 		return newline(indent).appendSibling(comp("]", squarebracket));
 	}
-	
+
 	private IChatComponent writeJsonPrimitive(ValueNode j, int indent, IChatComponent comp, String path) {
 		IChatComponent val = null;
 		if(j.isNull()) val = comp("null", keyword);
@@ -104,7 +104,7 @@ public class JsonHighlighter {
 		}
 		return comp;
 	}
-	
+
 	private IChatComponent comp(String s, ChatStyle style) {
 		if(mode != GIVE && style == key || style == string) {
 			s = s.replace("\\", "\\\\");
@@ -114,7 +114,7 @@ public class JsonHighlighter {
 		if(mode == COLOR) return new ChatComponentText(s).setChatStyle(style.createShallowCopy());
 		return new ChatComponentText(s);
 	}
-	
+
 	private IChatComponent newline(int i) {
 		if(mode >= RAW) {
 			if(i == 0) {

@@ -17,14 +17,14 @@ import c98.core.launch.ASMer;
 
 @ASMer public class TileEntityRoadSignRenderer extends TileEntitySignRenderer {
 	public final ModelSign modelSign = new ModelSign();
-	
+
 	public TileEntityRoadSignRenderer() {
 		super();
 		modelSign.signStick.showModel = false;
 		ModelBox box = (ModelBox)modelSign.signBoard.cubeList.get(0);
 		TexturedQuad front = box.quadList[4];
 		TexturedQuad back = box.quadList[5];
-		
+
 		for(int i = 0; i < 4; i++) {
 			PositionTextureVertex vFront = front.vertexPositions[i];
 			PositionTextureVertex vBack = back.vertexPositions[i];
@@ -32,7 +32,7 @@ import c98.core.launch.ASMer;
 			vBack.texturePositionY = vFront.texturePositionY;
 		}
 	}
-	
+
 	@Override public void renderTileEntityAt(TileEntity te, double x, double y, double z, float delta, int breakage) {
 		TileEntitySign sign = (TileEntitySign)te;
 		boolean b = false;
@@ -44,26 +44,26 @@ import c98.core.launch.ASMer;
 			EnumFacing facing = EnumFacing.getFront(sign.getBlockMetadata());
 			IBlockState state = sign.getWorld().getBlockState(sign.getPos().offset(facing.getOpposite()));
 			if(state != null && state.getBlock() instanceof BlockFence) {
-				
+
 				float rot = 0;
 				if(facing == EnumFacing.NORTH) rot = 180;
 				if(facing == EnumFacing.SOUTH) rot = 0;
 				if(facing == EnumFacing.WEST) rot = 90;
 				if(facing == EnumFacing.EAST) rot = -90;
 				rot += 90;
-				
+
 				float scale = 2F / 3;
 				GL.pushMatrix();
 				GL.translate((float)x + 0.5F, (float)y + 0.75F * scale, (float)z + 0.5F);
 				GL.rotate(-rot, 0, 1, 0);
 				GL.translate(0, -0.3125F, -0.4375F);
-				
+
 				bindTexture(field_147513_b);
 				GL.scale(scale, -scale, -scale);
 				float f = 1 / 16F;
 				GL.translate(f * -9, f * 0, f * -10.5F);
 				modelSign.renderSign();
-				
+
 				FontRenderer fontRenderer = getFontRenderer();
 				float scale2 = 0.025F * scale;
 				GL.translate(0, f * -8, 0);
@@ -75,7 +75,7 @@ import c98.core.launch.ASMer;
 			} else super.renderTileEntityAt(sign, x, y, z, delta, breakage);
 		}
 	}
-	
+
 	private static void drawText(TileEntitySign sign, float f, FontRenderer fontRenderer, float scale) {
 		GL.pushMatrix();
 		GL.translate(0, 0, -f);
@@ -83,12 +83,12 @@ import c98.core.launch.ASMer;
 		GL.normal(0, 0, -1);
 		GL.depthMask(false);
 		byte var13 = 0;
-		
+
 		for(int var14 = 0; var14 < sign.signText.length; ++var14) {
 			String var15 = sign.signText[var14].getFormattedText();
 			fontRenderer.drawString(var15, -fontRenderer.getStringWidth(var15) / 2, var14 * 10 - sign.signText.length * 5, var13);
 		}
-		
+
 		GL.depthMask(true);
 		GL.color(1, 1, 1, 1);
 		GL.popMatrix();

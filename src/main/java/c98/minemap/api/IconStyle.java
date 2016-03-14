@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 	public Float size;
 	public Integer minOpacity;
 	public Boolean rotate;
-	
+
 	@Override public IconStyle clone() {
 		try {
 			IconStyle st = (IconStyle)super.clone();

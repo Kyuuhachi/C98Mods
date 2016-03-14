@@ -28,18 +28,18 @@ public class HUD {
 	private int y;
 	private Minecraft mc;
 	private Entity targetEntity;
-	
+
 	public HUD(Minecraft m) {
 		mc = m;
 	}
-	
+
 	public void render(Target t) {
 		if(t instanceof TargetEntity) {
 			targetEntity = ((TargetEntity)t).getEntity();
 			if(targetEntity != null) drawData();
 		}
 	}
-	
+
 	private void drawData() {
 		y = 8;
 		mc.fontRendererObj.func_175063_a(getTargetName(), 8, y, 0xFFFFFF);
@@ -50,7 +50,7 @@ public class HUD {
 			Scoreboard board = p.getWorldScoreboard();
 			for(int i = 0; i < 3; i++) {
 				ScoreObjective obj = board.getObjectiveInDisplaySlot(i);
-				
+
 				if(obj != null) {
 					Score score = board.getValueFromObjective(p.getName(), obj);
 					String s = s0[i] + ": " + score.getScorePoints() + " " + obj.getDisplayName();
@@ -77,7 +77,7 @@ public class HUD {
 		y += 8;
 		if(targetEntity instanceof EntityLivingBase && TargetLock.cfg.drawArmor) drawArmor();
 	}
-	
+
 	private static double getHeight(double strength) {
 		final double gravity = 0.08;
 		final double airResistance = 0.98;
@@ -89,7 +89,7 @@ public class HUD {
 		}
 		return height;
 	}
-	
+
 	private void drawArmor() {
 		EntityLivingBase target = (EntityLivingBase)targetEntity;
 		float var6 = 240;
@@ -103,7 +103,7 @@ public class HUD {
 		y += 4;
 		drawDamageIcons();
 	}
-	
+
 	private void drawDamageIcons() {
 		if(!(targetEntity instanceof EntityLivingBase)) return;
 		EntityLivingBase tgt = (EntityLivingBase)targetEntity;
@@ -112,7 +112,7 @@ public class HUD {
 		int i = tgt.getTotalArmorValue();
 		if(i != 0) for(int var25 = 0; var25 < 10; ++var25) {
 			int x = 8 + var25 * 8;
-			
+
 			if(var25 * 2 + 1 < i) mc.ingameGUI.drawTexturedModalRect(x, y, 34, 9, 9, 9);
 			if(var25 * 2 + 1 == i) mc.ingameGUI.drawTexturedModalRect(x, y, 25, 9, 9, 9);
 			if(var25 * 2 + 1 > i) mc.ingameGUI.drawTexturedModalRect(x, y, 16, 9, 9, 9);
@@ -128,7 +128,7 @@ public class HUD {
 		}
 		y += (int)(health / 2 / 10) * 8;
 	}
-	
+
 	private void drawItem(ItemStack is) {
 		y += 8;
 		String name = is.getDisplayName();
@@ -139,7 +139,7 @@ public class HUD {
 		int pos = 0;
 		for(Entry<Integer, Integer> entry : map.entrySet())
 			mc.fontRendererObj.func_175063_a(getEnch(entry.getKey(), entry.getValue()), 25, y + (pos += mc.fontRendererObj.FONT_HEIGHT), 0xFFFFFF);
-		
+
 		pos = map.size() * mc.fontRendererObj.FONT_HEIGHT / 2;
 		if(pos < 8) pos = 8;
 		int x = 8;
@@ -149,15 +149,15 @@ public class HUD {
 		renderItem.func_175030_a(mc.fontRendererObj, is, x, y + pos);
 		renderItem.zLevel = 0;
 		GL.disableLighting();
-		
+
 		y += Math.max(16, map.size() * mc.fontRendererObj.FONT_HEIGHT) + 6;
 	}
-	
+
 	private static String getEnch(int id, int level) {
 		if(id < 0 || id >= Enchantment.enchantmentsList.length) return "Unknown enchantment " + id + " " + Convert.toRoman(level + 1);
 		return Enchantment.enchantmentsList[id].getTranslatedName(level);
 	}
-	
+
 	private String getExtraData() {
 		if(!(targetEntity instanceof EntityLivingBase)) return "";
 		EntityLivingBase target = (EntityLivingBase)targetEntity;
@@ -166,11 +166,11 @@ public class HUD {
 			case 1:
 				s = "Small";
 				break;
-				
+
 			case 2:
 				s = "Medium";
 				break;
-				
+
 			case 4:
 				s = "Big";
 				break;
@@ -226,7 +226,7 @@ public class HUD {
 		else s += "Age = " + ((EntityAgeable)target).getGrowingAge();
 		return s;
 	}
-	
+
 	private String getTargetName() {
 		String s = EntityList.getEntityString(targetEntity);
 		s = targetEntity.getName() + " (" + s + ")";

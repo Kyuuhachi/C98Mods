@@ -16,7 +16,7 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 	public static final String LIGHTMAP = "light";
 	public static final String LIGHTCAVEMAP = "lightcave";
 	public static final String BIOME = "biome";
-	
+
 	public static MapServer mapServer;
 	private MapThread thread;
 	private KeyBinding key = new KeyBinding("Minemap", Keyboard.KEY_M, C98Core.KEYBIND_CAT);
@@ -24,16 +24,16 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 	private boolean reloadMap;
 	public static MinemapConfig config;
 	private long lastStartTime;
-	
+
 	@Override public void load() {
 		C98Core.registerKey(key, false);
 		MinemapPlugin.register(this);
 	}
-	
+
 	@Override public void reloadConfig() {
 		config = Json.get(this, MinemapConfig.class);
 	}
-	
+
 	@Override public void keyboardEvent(KeyBinding keybinding) {
 		if(mc.currentScreen != null) return;
 		if(keybinding == key) {
@@ -48,7 +48,7 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 			}
 		}
 	}
-	
+
 	private void start() {
 		if(thread == null && lastStartTime + System.currentTimeMillis() > 1000) {
 			mapServer = new MapServer(mc.theWorld);
@@ -61,7 +61,7 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 			if(!reloadMap) lastStartTime = -System.currentTimeMillis();
 		}
 	}
-	
+
 	private void stop() {
 		if(thread != null) {
 			C98Core.removeHook(mapServer.renderer);
@@ -70,15 +70,15 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 			mapServer = null;
 		}
 	}
-	
+
 	@Override public void onConnect(NetHandlerPlayClient cli) {
 		reloadMap = true;
 	}
-	
+
 	@Override public void onDisconnect(NetHandlerPlayClient cli) {
 		stop();
 	}
-	
+
 	@Override public void postRenderHud(HudElement e) {
 		if(e == HudElement.ALL) {
 			if((mapServer == null || mc.theWorld != mapServer.world || reloadMap || !thread.isAlive()) && mc.currentScreen == null) {
@@ -90,7 +90,7 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 			if(mapServer != null) mapServer.render();
 		}
 	}
-	
+
 	@Override public MapHandler getMapHandler(String type) {
 		if(type.equals(CAVEMAP)) return new CaveMap();
 		if(type.equals(LIGHTMAP)) return new LightMap(false);

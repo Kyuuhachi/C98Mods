@@ -11,7 +11,7 @@ import c98.core.launch.ASMer;
 		super.handleInput();
 		HookImpl.tickGui();
 	}
-	
+
 	@Override public void setWorldAndResolution(Minecraft par1Minecraft, int par2, int par3) {
 		super.setWorldAndResolution(par1Minecraft, par2, par3);
 		HookImpl.setGui(this);

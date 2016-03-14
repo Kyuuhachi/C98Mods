@@ -14,13 +14,13 @@ import c98.core.util.Convert;
 	public FoodInfo(int par1, float par2, boolean par3) {
 		super(par1, par2, par3);
 	}
-	
+
 	@Override public void addInformation(ItemStack is, EntityPlayer ep, List l, boolean adv) {
 		//Huehuehue
 		l.add("Value: " + getHealAmount(is));
 		l.add("Saturation: " + (int)(getSaturationModifier(is) * getHealAmount(is) * 20) / 10F);
 		if(adv) l.add("Raw saturation: " + getHealAmount(is));
-		
+
 		//Potions
 		ItemFood t = this; // *I* decide what I can, or cannot, cast
 		boolean b = t instanceof ItemAppleGold;
@@ -37,7 +37,7 @@ import c98.core.util.Convert;
 		if(isWolfsFavoriteMeat()) l.add("Wolf food");
 		super.addInformation(is, ep, l, adv);
 	}
-	
+
 	private static String string(int effect, int time, int amp, int chance) {
 		String color = (Potion.potionTypes[effect].isBadEffect() ? EnumChatFormatting.RED : EnumChatFormatting.GREEN).toString();
 		String effectS = I18n.format(Potion.potionTypes[effect].getName());

@@ -11,19 +11,19 @@ public class StandardAsm {
 		dst.version = Math.max(dst.version, transformer.version);
 		for(MethodNode transformerMethod : transformer.methods) {
 			MethodNode dstMethod = null;
-			
+
 			for(MethodNode mthd : dst.methods)
 				if(transformerMethod.name.equals(mthd.name) && transformerMethod.desc.equals(mthd.desc)) {
 					dstMethod = mthd;
 					break;
 				}
 			remap(transformerMethod, transformer.name, dst.name);
-			
+
 			if(transformerMethod.name.equals("<clinit>")) addClinit(transformerMethod, dstMethod, dst);
 			else if(transformerMethod.name.equals("<init>")) addInit(transformerMethod, dstMethod);
 			else addMthd(transformerMethod, dstMethod, dst, className);
 		}
-		
+
 		l: for(FieldNode f : transformer.fields) {
 			for(FieldNode f2 : dst.fields)
 				if(f.name.equals(f2.name)) continue l;
@@ -31,7 +31,7 @@ public class StandardAsm {
 			dst.fields.add(f);
 		}
 	}
-	
+
 	private static void remap(MethodNode m, String from, String to) {
 		m.desc = mapMethodDesc(m.desc, from, to);
 		for(LocalVariableNode local : m.localVariables)
@@ -53,12 +53,12 @@ public class StandardAsm {
 			}
 		}
 	}
-	
+
 	private static void map(List<Object> l, String from, String to) {
 		if(l != null) for(int i = 0; i < l.size(); i++)
 			if(l.get(i) instanceof String) l.set(i, map((String)l.get(i), from, to));
 	}
-	
+
 	private static String mapMethodDesc(String desc, String from, String to) {
 		Type d = Type.getMethodType(desc);
 		Type ret = Type.getType(map(d.getReturnType().getDescriptor(), from, to));
@@ -67,13 +67,13 @@ public class StandardAsm {
 			args[i] = Type.getType(map(args[i].getDescriptor(), from, to));
 		return Type.getMethodDescriptor(ret, args);
 	}
-	
+
 	private static String map(String desc, String from, String to) {
 		if(desc.equals(from)) return to;
 		if(desc.equals("L" + from + ";")) return "L" + to + ";";
 		return desc;
 	}
-	
+
 	private static void genSuperCall(ClassNode dst, MethodNode dstMethod) {
 		String methodName = renameOriginal(dstMethod.name);
 		String[] exceptions = dstMethod.exceptions.toArray(new String[0]);
@@ -89,7 +89,7 @@ public class StandardAsm {
 		newMthd.visitInsn(mthdDsc.getReturnType().getOpcode(Opcodes.IRETURN));
 		dst.methods.add(newMthd);
 	}
-	
+
 	private static void addMthd(MethodNode transformerMethod, MethodNode dstMethod, ClassNode dst, String className) {
 		if(dstMethod != null) dstMethod.name = renameOriginal(dstMethod.name);
 		else {
@@ -111,7 +111,7 @@ public class StandardAsm {
 				if(mth.owner.equals(className) && mth.name.equals(transformerMethod.name) && !mth.name.equals("<init>")) mth.name = renameOriginal(mth.name); //For super.blah() calls
 			}
 	}
-	
+
 	private static void addInit(MethodNode transformerMethod, MethodNode dstMethod) {
 		for(AbstractInsnNode node : new Asm(transformerMethod)) {
 			transformerMethod.instructions.remove(node);
@@ -123,17 +123,17 @@ public class StandardAsm {
 		dstMethod.instructions.remove(ret); //Remove the RETURN
 		dstMethod.instructions.add(transformerMethod.instructions);
 	}
-	
+
 	private static void addClinit(MethodNode transformerMethod, MethodNode dstMethod, ClassNode clazz) {
 		if(dstMethod == null) {
 			clazz.methods.add(transformerMethod);
 			return;
 		}
-		
+
 		dstMethod.instructions.remove(dstMethod.instructions.getLast()); //RETURN
 		dstMethod.instructions.add(transformerMethod.instructions);
 	}
-	
+
 	private static String renameOriginal(String name) {
 		return name + "$C98_" + C98Transformer.num;
 	}

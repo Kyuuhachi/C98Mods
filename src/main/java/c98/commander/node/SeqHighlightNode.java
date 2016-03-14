@@ -9,11 +9,11 @@ import c98.commander.HighlightResult;
 
 public class SeqHighlightNode extends HighlightNode {
 	private List<HighlightNode> children = new ArrayList();
-	
+
 	public SeqHighlightNode(List<HighlightNode> c) {
 		children = c;
 	}
-	
+
 	@Override public HighlightResult highlight(String args, int i) {
 		IChatComponent c = new ChatComponentText("");
 		boolean opt = false;
@@ -32,12 +32,12 @@ public class SeqHighlightNode extends HighlightNode {
 				match = true;
 				i += r.length;
 				i = skipWhitespace(args, i, c);
-				
+
 			}
 		if(i != args.length()) error = true;
 		return new HighlightResult(c, error, match);
 	}
-	
+
 	@Override public String toString() {
 		return "Seq" + children;
 	}

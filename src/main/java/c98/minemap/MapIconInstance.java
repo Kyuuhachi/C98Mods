@@ -8,20 +8,20 @@ public class MapIconInstance implements Comparable<MapIconInstance> {
 	private int zLevel;
 	public float size;
 	public Matrix m = new Matrix();
-	
+
 	public MapIconInstance(int icon, int color, int posX, int posZ, int r, int zLevel, float size, int mapsize) {
 		img = icon & 7;
 		this.color = color;
 		x = posX;
 		z = posZ;
 		rot = r;
-		
+
 		this.zLevel = zLevel;
 		this.size = size;
-		
+
 		transform(mapsize);
 	}
-	
+
 	private void transform(int mapsize) {
 		int i = mapsize / 2;
 		m.translate(new Vector(x + i, z + i, 0));
@@ -30,7 +30,7 @@ public class MapIconInstance implements Comparable<MapIconInstance> {
 		m.scale(new Vector(size / 2, size / 2, 1));
 		m.translate(new Vector(-0.125, 0.125, 0));
 	}
-	
+
 	@Override public int compareTo(MapIconInstance arg0) {
 		return Integer.compare(zLevel, arg0.zLevel);
 	}

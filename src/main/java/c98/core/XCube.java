@@ -10,14 +10,14 @@ import org.lwjgl.input.Mouse;
 public class XCube {
 	private final ResourceLocation achievement_background = new ResourceLocation("textures/gui/achievement/achievement_background.png");
 	private int ttx = -1, tty = -1;
-	
+
 	public void drawImage(int x, int y) {
 		GL.color(1, 1, 1);
 		y += 4;
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.getTextureManager().bindTexture(achievement_background);
 		drawTexturedModalRect(x - 5, y - 5, 26, 202, 26, 26);
-		
+
 		drawIt(x, y, mc);
 		ScaledResolution sr = createScale(mc);
 		int mx = Mouse.getX() / sr.getScaleFactor();
@@ -31,30 +31,30 @@ public class XCube {
 			tty = -1;
 		}
 	}
-	
+
 	private static void drawIt(int x, int y, Minecraft mc) {
 		GL.pushMatrix();
 		GL.disableTexture();
 		GL.disableDepth();
 		GL.lineWidth(1);
-		
+
 		GL.translate(x - 2, y + 3, -3);
-		
+
 		drawCube();
 		drawFace();
-		
+
 		GL.enableDepth();
 		GL.enableTexture();
-		
+
 		GL.popMatrix();
 	}
-	
+
 	private static void drawFace() {
 		if(C98Core.modList.size() == 0 || C98Core.modList.size() >= 5 && C98Core.isModLoaded("GraphicalUpgrade")) {
 			GL.translate(3, 1);
 			GL.scale(0.5);
 			GL.translate(0, 1);
-			
+
 			GL.begin();
 			//Right eye
 			GL.vertex(5, 6);
@@ -66,9 +66,9 @@ public class XCube {
 			GL.vertex(7, 8);
 			GL.vertex(7, 10);
 			GL.vertex(9, 10);
-			
+
 			GL.end();
-			
+
 			GL.begin(GL.LINE_STRIP);
 			GL.vertex(1, 10);//Mouth
 			if(C98Core.modList.size() >= 5) { //Happy
@@ -79,29 +79,29 @@ public class XCube {
 			GL.end();
 		}
 	}
-	
+
 	private static void drawCube() {
 		Minecraft mc = Minecraft.getMinecraft();
 		for(int i = 0; i < 2; i++) {
 			GL.pushMatrix();
-			
+
 			GL.scale(10);
 			GL.translate(1, 0.5F, 1);
 			GL.scale(1, 1, -1);
-			
+
 			GL.rotate(210, 1, 0, 0);
 			GL.rotate(45, 0, 1, 0);
 			GL.rotate(-90, 0, 1, 0);
-			
+
 			GL.translate(-0.5F, -0.5F, -0.5F);
-			
+
 			float f = 0;
 			float F = 1;
 			if(i == 0) {
 				f = -1 / 16F;
 				F = 17 / 16F;
 			}
-			
+
 			GL.color(0, i, 0);
 			if(i == 1) GL.polygonMode(GL.LINE);
 			GL.begin();
@@ -112,7 +112,7 @@ public class XCube {
 				GL.vertex(F, f, f);
 				GL.vertex(F, G, f);
 				GL.vertex(F, G, G);
-				
+
 				GL.vertex(f, G, F);
 				GL.vertex(f, f, F);
 				GL.vertex(F, f, F);
@@ -122,28 +122,28 @@ public class XCube {
 			GL.vertex(F, f, f);
 			GL.vertex(F, F, f);
 			GL.vertex(F, F, F);
-			
+
 			GL.vertex(f, F, F);
 			GL.vertex(f, f, F);
 			GL.vertex(F, f, F);
 			GL.vertex(F, F, F);
-			
+
 			GL.vertex(F, F, F);
 			GL.vertex(F, F, f);
 			GL.vertex(f, F, f);
 			GL.vertex(f, F, F);
 			GL.end();
 			if(i == 1) GL.polygonMode(GL.FILL);
-			
+
 			GL.popMatrix();
 		}
 	}
-	
+
 	public static ScaledResolution createScale(Minecraft mc) {
 		ScaledResolution r = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		return r;
 	}
-	
+
 	private static void drawTexturedModalRect(int x, int y, int u, int v, int w, int h) {
 		float px = 1 / 256F;
 		GL.begin();
@@ -153,11 +153,11 @@ public class XCube {
 		GL.vertex(x + 0, y + 0, 0, (u + 0) * px, (v + 0) * px);
 		GL.end();
 	}
-	
+
 	public void tooltip() {
 		if(ttx != -1 && tty != -1) drawTooltip(ttx, tty);
 	}
-	
+
 	private static void drawTooltip(int x, int y) {
 		List<String> list = new LinkedList();
 		Minecraft mc = Minecraft.getMinecraft();
@@ -173,34 +173,34 @@ public class XCube {
 			}
 		}
 		if(sb.length() != 0) list.add(sb.toString());
-		
+
 		int w = 0;
 		for(String s : list) {
 			int stringWidth = mc.fontRendererObj.getStringWidth(s);
 			if(stringWidth > w) w = stringWidth;
 		}
-		
+
 		int drawx = x + 12;
 		int drawY = y + 12;
 		int h = 8;
 		if(list.size() > 1) h += 1 + (list.size() - 1) * 9;
-		
+
 		ScaledResolution dim = createScale(mc);
 		int width = dim.getScaledWidth();
 		int height = dim.getScaledHeight();
-		
+
 		if(drawx + w > width) drawx -= 28 + w;
 		if(drawY + h + 6 > height) drawY = height - h - 6;
-		
+
 		GL.disableRescaleNormal();
 		GL.disableDepth();
-		
+
 		GL.disableTexture();
 		GL.enableBlend();
 		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 		GL.disableAlpha();
 		GL.shadeMode(GL.SMOOTH);
-		
+
 		GL.begin();
 		int black = ~0xFEFFFEF;
 		int border1 = 0x505000FF;
@@ -217,36 +217,36 @@ public class XCube {
 		drawGradientRect(drawx - 3,     drawY + h + 2, drawx + w + 3, drawY + h + 3, border2, border2);
 		//@on
 		GL.end();
-		
+
 		GL.shadeMode(GL.FLAT);
 		GL.enableAlpha();
 		GL.disableBlend();
 		GL.enableTexture();
-		
+
 		for(String s : list) {
 			mc.fontRendererObj.func_175063_a(s, drawx, drawY, -1);
 			drawY += 10;
 		}
-		
+
 		GL.enableDepth();
 		GL.enableRescaleNormal();
 	}
-	
+
 	private static void drawGradientRect(int x0, int y0, int x1, int y1, int c0, int c1) {
 		float a0 = (c0 >> 030 & 0xFF) / 255F;
 		float r0 = (c0 >> 020 & 0xFF) / 255F;
 		float g0 = (c0 >> 010 & 0xFF) / 255F;
 		float b0 = (c0 >> 000 & 0xFF) / 255F;
-		
+
 		float a1 = (c1 >> 030 & 0xFF) / 255F;
 		float r1 = (c1 >> 020 & 0xFF) / 255F;
 		float g1 = (c1 >> 010 & 0xFF) / 255F;
 		float b1 = (c1 >> 000 & 0xFF) / 255F;
-		
+
 		GL.color(r0, g0, b0, a0);
 		GL.vertex(x1, y0, 0);
 		GL.vertex(x0, y0, 0);
-		
+
 		GL.color(r1, g1, b1, a1);
 		GL.vertex(x0, y1, 0);
 		GL.vertex(x1, y1, 0);

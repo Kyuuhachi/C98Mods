@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Commander extends C98Mod implements IResourceManagerReloadListener {
 	private static final ResourceLocation LOC = new ResourceLocation("c98/commander", "commands.json");
-	
+
 	@Override public void onResourceManagerReload(IResourceManager p_110549_1_) {
 		try {
 			ObjectMapper m = new ObjectMapper();
@@ -44,7 +44,7 @@ public class Commander extends C98Mod implements IResourceManagerReloadListener 
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static HighlightNode getSeqNode(JsonNode j) {
 		return new SeqHighlightNode(map(j, n -> {
 			if(n.isTextual()) return getSpecial(n.asText());
@@ -53,22 +53,22 @@ public class Commander extends C98Mod implements IResourceManagerReloadListener 
 			return null;
 		}));
 	}
-	
+
 	private static boolean isKeywords(JsonNode j) {
 		if(!j.isArray()) return false;
 		for(JsonNode j2 : j)
 			if(!j2.isTextual()) return false;
 		return true;
 	}
-	
+
 	private static boolean isAny(JsonNode j) {
 		return j.isArray() && !isKeywords(j);
 	}
-	
+
 	private static <A extends Iterable<C>, B, C> List<B> map(A j, Function<C, B> func) {
 		return StreamSupport.stream(j.spliterator(), false).map(func).collect(Collectors.toList());
 	}
-	
+
 	private static HighlightNode getSpecial(String text) {
 		switch(text) {//@off
 			case "?": return new OptHighlightNode();
@@ -79,7 +79,7 @@ public class Commander extends C98Mod implements IResourceManagerReloadListener 
 			case "bool": return new ValHighlightNode(can(s -> Boolean.parseBoolean(s)));
 			case "coords": return new CoordsHighlightNode(3);
 			case "coords2": return new CoordsHighlightNode(2);
-			
+
 			case "block": return new ListHighlightNode(getIds(Block.blockRegistry.getKeys()));
 			case "item": return new ListHighlightNode(getIds(Item.itemRegistry.getKeys()));
 			case "entity": return new ListHighlightNode(() -> EntityList.func_180124_b());
@@ -92,16 +92,16 @@ public class Commander extends C98Mod implements IResourceManagerReloadListener 
 
 			case "command": return new ListHighlightNode(() -> CommandHighlighter.highlighters.keySet());
 			case "fullcommand": return CommandHighlighter.INSTANCE;
-			
+
 			case "xp": return new ValHighlightNode(can(s->Integer.parseInt(s.replaceFirst("[lL]$", ""))));
-			
+
 			case "sel": case "sel*": return new SelHighlightNode();
 			case "json": return new JsonHighlightNode();
 		} //@on
 		C98Log.error("[Commander] Unknown parameter type: " + text);
 		return new EOLHighlightNode();
 	}
-	
+
 	private static Supplier<? extends Collection<String>> getIds(Set<ResourceLocation> reg) {
 		return () -> {
 			Collection<String> ids = new HashSet();
@@ -112,7 +112,7 @@ public class Commander extends C98Mod implements IResourceManagerReloadListener 
 			return ids;
 		};
 	}
-	
+
 	private static Predicate<String> can(Consumer<String> func) {
 		return s -> {
 			try {

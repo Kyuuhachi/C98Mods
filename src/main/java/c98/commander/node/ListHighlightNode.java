@@ -8,11 +8,11 @@ import c98.commander.HighlightResult;
 
 public class ListHighlightNode extends HighlightNode {
 	private Supplier<Collection<String>> supplier;
-	
+
 	public ListHighlightNode(Supplier<? extends Collection<String>> func) {
 		supplier = (Supplier<Collection<String>>)func;
 	}
-	
+
 	@Override public HighlightResult highlight(String args, int i) {
 		String word = getWord(args, i);
 		boolean err = !supplier.get().contains(word);

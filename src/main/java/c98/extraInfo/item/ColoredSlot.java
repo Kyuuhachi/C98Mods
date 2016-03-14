@@ -15,10 +15,10 @@ import c98.core.launch.ASMer;
 	public ColoredSlot(Container par1Container) {
 		super(par1Container);
 	}
-	
+
 	public static int alphaI = 0x7F;
 	public static float alpha = alphaI / 255F;
-	
+
 	@Override public void drawSlot(Slot s) {
 		if(ExtraInfo.config.slotInfo.enable && s.getHasStack()) {
 			CreativeTabs tab = s.getStack().getItem().getCreativeTab();
@@ -53,17 +53,17 @@ import c98.core.launch.ASMer;
 	public ColoredTab(EntityPlayer p_i1088_1_) {
 		super(p_i1088_1_);
 	}
-	
+
 	private static final int MASK = 1;
-	
+
 	private CreativeTabs drawnTab;
-	
+
 	@Override public void func_147051_a(CreativeTabs p_147051_1_) {
 		drawnTab = p_147051_1_;
 		super.func_147051_a(p_147051_1_);
 		drawnTab = null;
 	}
-	
+
 	@Override public void drawTexturedModalRect(int x, int y, int u, int v, int w, int h) {
 		GL.color(1, 1, 1);
 		if(drawnTab == null) {
@@ -75,7 +75,7 @@ import c98.core.launch.ASMer;
 			super.drawTexturedModalRect(x, y, u, v, w, h);
 			return;
 		}
-		
+
 		GL.stencil.begin(MASK);
 		{
 			GL.stencil.clear();
@@ -89,7 +89,7 @@ import c98.core.launch.ASMer;
 			GL.blendFunc(GL.DST_COLOR, GL.ONE_MINUS_SRC_ALPHA);
 			GL.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, ColoredSlot.alpha);
 			GL.disableTexture();
-			
+
 			GL.begin();
 			{
 				GL.vertex(x + 0, y + h);
@@ -98,7 +98,7 @@ import c98.core.launch.ASMer;
 				GL.vertex(x + 0, y + 0);
 			}
 			GL.end();
-			
+
 			GL.enableTexture();
 			GL.color(1, 1, 1);
 			GL.disableBlend();

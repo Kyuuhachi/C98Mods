@@ -17,21 +17,21 @@ import c98.core.launch.ASMer;
 	public DisplayGuiHookImpl_Player(Minecraft mcIn, World worldIn, NetHandlerPlayClient p_i46278_3_, StatFileWriter p_i46278_4_) {
 		super(mcIn, worldIn, p_i46278_3_, p_i46278_4_);
 	}
-	
+
 	@Override public void displayGUIChest(IInventory chestInventory) {
 		String name = chestInventory instanceof IInteractionObject ? ((IInteractionObject)chestInventory).getGuiID() : "minecraft:container";
 		Optional<GuiScreen> gui = getGui(name, chestInventory, inventory);
 		if(gui.isPresent()) mc.displayGuiScreen(gui.get());
 		else super.displayGUIChest(chestInventory);
 	}
-	
+
 	@Override public void displayGui(IInteractionObject guiOwner) {
 		String name = guiOwner.getGuiID();
 		Optional<GuiScreen> gui = getGui(name, null, inventory);
 		if(gui.isPresent()) mc.displayGuiScreen(gui.get());
 		else super.displayGui(guiOwner);
 	}
-	
+
 	public static Optional getGui(String name, IInventory chestInventory, InventoryPlayer inv) {
 		return HookImpl.displayGuiHooks.stream().map(m -> m.displayGui(name, chestInventory, inv)).filter(a -> a != null).findAny();
 	}

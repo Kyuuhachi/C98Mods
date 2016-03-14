@@ -17,23 +17,23 @@ public class Models {
 		}
 	};
 	public static final IStateMapper DEFAULT_BLOCK = new StateMap.Builder().build();
-	
+
 	public static void registerBlockModel(Block b, IStateMapper block) {
 		ModelImpl.blockModels.put(b, block);
 	}
-	
+
 	public static void registerBlockModel(Block b) {
 		registerBlockModel(b, DEFAULT_BLOCK);
 	}
-	
+
 	public static void registerItemModel(Item i, ItemMeshDefinition item) {
 		ModelImpl.itemModels.put(i, item);
 	}
-	
+
 	public static void registerItemModel(Item i) {
 		registerItemModel(i, DEFAULT_ITEM);
 	}
-	
+
 	public static void registerModel(Block b) {
 		registerBlockModel(b);
 		registerItemModel(Item.getItemFromBlock(b));

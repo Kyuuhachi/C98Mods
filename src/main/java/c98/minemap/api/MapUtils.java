@@ -11,7 +11,7 @@ import c98.core.util.Vector;
 
 public class MapUtils {
 	private static final ResourceLocation mapIcons = new ResourceLocation("c98/minemap", "map_icons.png");
-	
+
 	private static class MapIconRenderer implements IResourceManagerReloadListener {
 		private static MapIconRenderer instance = new MapIconRenderer();
 		static {
@@ -21,7 +21,7 @@ public class MapUtils {
 		private final float[][] texCoords = new float[16][2];
 		private final float[][] middle = new float[16][2];
 		private final int[] imgSize = new int[2];
-		
+
 		@Override public void onResourceManagerReload(IResourceManager var1) {
 			BufferedImage img = IO.getImage(mapIcons);
 			imgSize[0] = img.getWidth();
@@ -65,30 +65,30 @@ public class MapUtils {
 				middle[t][1] = (avgY - t) / imgSize[1];
 			}
 		}
-		
+
 		public void drawIcon(int img, int color, Matrix m) {
 			float u0 = texCoords[img][0];
 			float v0 = 00000000 / 8F;
 			float u1 = img / 8F;
 			float v1 = texCoords[img][1];
-			
+
 			float w = sizes[img][0] / 8F;
 			float h = sizes[img][1] / 8F;
 			float x0 = -w + middle[img][0];
 			float y0 = -h + middle[img][1] + img / imgSize[1];
 			float x1 = +w + middle[img][0];
 			float y1 = +h + middle[img][1] + img / imgSize[1];
-			
+
 			Vector c0 = new Vector(x0, y1, 0);
 			Vector c1 = new Vector(x1, y1, 0);
 			Vector c2 = new Vector(x1, y0, 0);
 			Vector c3 = new Vector(x0, y0, 0);
-			
+
 			m.transform(c0);
 			m.transform(c1);
 			m.transform(c2);
 			m.transform(c3);
-			
+
 			GL.color(color);
 			GL.vertex(c0.x, c0.y, u0, v0);
 			GL.vertex(c1.x, c1.y, u1, v0);
@@ -96,7 +96,7 @@ public class MapUtils {
 			GL.vertex(c3.x, c3.y, u0, v1);
 		}
 	}
-	
+
 	public static void drawIcon(int img, int color, int x, int y, int s) {
 		Matrix mat = new Matrix();
 		mat.translate(new Vector(x, y, 0));
@@ -106,7 +106,7 @@ public class MapUtils {
 		renderIcon(img, color, mat);
 		GL.end();
 	}
-	
+
 	public static void renderIcon(int img, int color, Matrix m) {
 		MapIconRenderer.instance.drawIcon(img, color, m);
 	}

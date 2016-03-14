@@ -22,19 +22,19 @@ public class MinemapConfig {
 			return p;
 		}
 	}
-	
+
 	public static class Preset {
 		public int size = 256;
 		public String type = Minemap.NORMAL;
 		public int scale = 1;
 		public Boolean hidden;
 	}
-	
+
 	public MapLocation location = MapLocation.NE;
 	public Preset[] presets = null; //generate in ctor
 	public int iconDirections = 16;
 	public boolean iconSmooth = false;
-	
+
 	public MinemapConfig() {
 		Preset normal = new Preset();
 		Preset cave = new Preset();

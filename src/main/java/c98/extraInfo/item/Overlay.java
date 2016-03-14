@@ -24,7 +24,7 @@ import c98.core.util.Convert;
 	public Overlay(TextureManager p_i46165_1_, ModelManager p_i46165_2_) {
 		super(p_i46165_1_, p_i46165_2_);
 	}
-	
+
 	@Override public void func_180453_a(FontRenderer font, ItemStack is, int x, int y, String customText) {
 		super.func_180453_a(font, is, x, y, customText);
 		if(is != null) {
@@ -43,7 +43,7 @@ import c98.core.util.Convert;
 			GL.enableLighting();
 		}
 	}
-	
+
 	private static void drawBow(FontRenderer font, ItemStack is, int x, int y) {
 		InventoryPlayer pl = Minecraft.getMinecraft().thePlayer.inventory;
 		if(is.getItem() == Items.bow && EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, is) == 0) {
@@ -55,7 +55,7 @@ import c98.core.util.Convert;
 				if(stack == is) isInInv = true;
 			}
 			if(!isInInv) return;
-			
+
 			int minArrows = 32;
 			int color = (int)Math.round(arrows * 255.0D / minArrows);
 			if(color > 255) color = 255;
@@ -70,7 +70,7 @@ import c98.core.util.Convert;
 			font.drawString(str, dx, dy, shiftedColor);
 		}
 	}
-	
+
 	private static void drawUnbreak(FontRenderer font, ItemStack is, int x, int y) {
 		int unbreakLvl = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, is);
 		if(unbreakLvl > 0) {
@@ -81,12 +81,12 @@ import c98.core.util.Convert;
 			font.drawString(EnumChatFormatting.LIGHT_PURPLE + unbreakStr, dx, dy, 0xFFFFFF);
 		}
 	}
-	
+
 	private static void drawDamage(FontRenderer font, ItemStack is, int x, int y) {
 		if(is.isItemDamaged()) {
 			int currentDmg = is.getItemDamage();
 			int maxDmg = is.getMaxDamage();
-			
+
 			int color = (int)Math.round(255.0D - currentDmg * 255.0D / maxDmg);
 			int shiftedColor = 255 - color << 16 | color << 8;
 			String dmgStr = Convert.intToSI(maxDmg - currentDmg + 1, 5);
@@ -96,13 +96,13 @@ import c98.core.util.Convert;
 			font.drawString(dmgStr, dx, dy, shiftedColor);
 		}
 	}
-	
+
 	private static void drawPotion(FontRenderer font, ItemStack is, int x, int y) {
 		if(!(is.getItem() instanceof ItemPotion)) return;
 		List<PotionEffect> effects = Items.potionitem.getEffects(is);
 		if(effects == null) return;
 		if(effects.size() != 1) return;
-		
+
 		PotionEffect e = effects.get(0);
 		Potion p = Potion.potionTypes[e.getPotionID()];
 		{
@@ -119,13 +119,13 @@ import c98.core.util.Convert;
 			int dy = (y + 12) * 2;
 			drawOutline(font, str, dx, dy);
 			font.drawString(str, dx, dy, 0xFFFFFF);
-			
+
 			ExtraInfo.bindTexture(ExtraInfo.inventoryTexture);
 			int idx = p.getStatusIconIndex();
 			ExtraInfo.drawTexturedRect(x * 2, y * 2, 0 + idx % 8 * 18, 198 + idx / 8 * 18, 18, 18);
 		}
 	}
-	
+
 	private static void drawOutline(FontRenderer font, String text, int x, int y) {
 		font.drawString(text, x + 1, y * 1, 0);
 		font.drawString(text, x - 1, y / 1, 0);

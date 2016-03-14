@@ -4,20 +4,20 @@ import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 
 public class Matrix {
-	
+
 	public double[][] m;
-	
+
 	public Matrix() {
 		setIdentity();
 	}
-	
+
 	public Matrix(Matrix mat) {
 		setZero();
 		for(int i = 0; i < 4; i++)
 			for(int j = 0; j < 4; j++)
 				m[i][j] = mat.m[i][j];
 	}
-	
+
 	@Override public String toString() {
 		StringBuilder buf = new StringBuilder();
 		buf.append(m[0][0]).append(' ').append(m[1][0]).append(' ').append(m[2][0]).append(' ').append(m[3][0]).append('\n');
@@ -26,59 +26,59 @@ public class Matrix {
 		buf.append(m[0][3]).append(' ').append(m[1][3]).append(' ').append(m[2][3]).append(' ').append(m[3][3]).append('\n');
 		return buf.toString();
 	}
-	
+
 	public Matrix setIdentity() {
 		m = new double[][] { {1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
 		return this;
 	}
-	
+
 	public Matrix setZero() {
 		m = new double[][] { {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
 		return this;
 	}
-	
+
 	public Matrix load(DoubleBuffer buf) {
 		for(int i = 0; i < 4; i++)
 			for(int j = 0; j < 4; j++)
 				m[i][j] = buf.get();
 		return this;
 	}
-	
+
 	public Matrix store(DoubleBuffer buf) {
 		for(int i = 0; i < 4; i++)
 			for(int j = 0; j < 4; j++)
 				buf.put(m[i][j]);
 		return this;
 	}
-	
+
 	public Matrix load(FloatBuffer buf) {
 		for(int i = 0; i < 4; i++)
 			for(int j = 0; j < 4; j++)
 				m[i][j] = buf.get();
 		return this;
 	}
-	
+
 	public Matrix store(FloatBuffer buf) {
 		for(int i = 0; i < 4; i++)
 			for(int j = 0; j < 4; j++)
 				buf.put((float)m[i][j]);
 		return this;
 	}
-	
+
 	public Matrix add(Matrix right) {
 		for(int i = 0; i < 4; i++)
 			for(int j = 0; j < 4; j++)
 				m[i][j] = m[i][j] + right.m[i][j];
 		return this;
 	}
-	
+
 	public Matrix sub(Matrix right) {
 		for(int i = 0; i < 4; i++)
 			for(int j = 0; j < 4; j++)
 				m[i][j] = m[i][j] - right.m[i][j];
 		return this;
 	}
-	
+
 	public Matrix mul(Matrix right) {
 		double m00 = m[0][0] * right.m[0][0] + m[1][0] * right.m[0][1] + m[2][0] * right.m[0][2] + m[3][0] * right.m[0][3];
 		double m01 = m[0][1] * right.m[0][0] + m[1][1] * right.m[0][1] + m[2][1] * right.m[0][2] + m[3][1] * right.m[0][3];
@@ -96,7 +96,7 @@ public class Matrix {
 		double m31 = m[0][1] * right.m[3][0] + m[1][1] * right.m[3][1] + m[2][1] * right.m[3][2] + m[3][1] * right.m[3][3];
 		double m32 = m[0][2] * right.m[3][0] + m[1][2] * right.m[3][1] + m[2][2] * right.m[3][2] + m[3][2] * right.m[3][3];
 		double m33 = m[0][3] * right.m[3][0] + m[1][3] * right.m[3][1] + m[2][3] * right.m[3][2] + m[3][3] * right.m[3][3];
-		
+
 		m[0][0] = m00;
 		m[0][1] = m01;
 		m[0][2] = m02;
@@ -113,29 +113,29 @@ public class Matrix {
 		m[3][1] = m31;
 		m[3][2] = m32;
 		m[3][3] = m33;
-		
+
 		return this;
 	}
-	
+
 	public Vector transform(Vector target) {
 		double x = m[0][0] * target.x + m[1][0] * target.y + m[2][0] * target.z + m[3][0];
 		double y = m[0][1] * target.x + m[1][1] * target.y + m[2][1] * target.z + m[3][1];
 		double z = m[0][2] * target.x + m[1][2] * target.y + m[2][2] * target.z + m[3][2];
-		
+
 		target.x = x;
 		target.y = y;
 		target.z = z;
-		
+
 		return target;
 	}
-	
+
 	public double[] transform(double[] target) {
 		if(target.length == 4) {
 			double x = m[0][0] * target[0] + m[1][0] * target[1] + m[2][0] * target[2] + m[3][0] * target[3];
 			double y = m[0][1] * target[0] + m[1][1] * target[1] + m[2][1] * target[2] + m[3][1] * target[3];
 			double z = m[0][2] * target[0] + m[1][2] * target[1] + m[2][2] * target[2] + m[3][2] * target[3];
 			double w = m[0][3] * target[0] + m[1][3] * target[1] + m[2][3] * target[2] + m[3][3] * target[3];
-			
+
 			target[0] = x;
 			target[1] = y;
 			target[2] = z;
@@ -145,7 +145,7 @@ public class Matrix {
 			double x = m[0][0] * target[0] + m[1][0] * target[1] + m[2][0] * target[2] + m[3][0];
 			double y = m[0][1] * target[0] + m[1][1] * target[1] + m[2][1] * target[2] + m[3][1];
 			double z = m[0][2] * target[0] + m[1][2] * target[1] + m[2][2] * target[2] + m[3][2];
-			
+
 			target[0] = x;
 			target[1] = y;
 			target[2] = z;
@@ -153,15 +153,15 @@ public class Matrix {
 		if(target.length == 2) {
 			double x = m[0][0] * target[0] + m[1][0] * target[1] + m[3][0];
 			double y = m[0][1] * target[0] + m[1][1] * target[1] + m[3][1];
-			
+
 			target[0] = x;
 			target[1] = y;
 		}
 		if(target.length <= 1 || target.length > 4) throw new IllegalArgumentException();
-		
+
 		return target;
 	}
-	
+
 	public Matrix scale(Vector vec) {
 		m[0][0] = m[0][0] * vec.x;
 		m[0][1] = m[0][1] * vec.x;
@@ -177,11 +177,11 @@ public class Matrix {
 		m[2][3] = m[2][3] * vec.z;
 		return this;
 	}
-	
+
 	public Matrix rotateDeg(double deg, Vector axis) {
 		return rotate(Math.toRadians(deg), axis);
 	}
-	
+
 	public Matrix rotate(double angle, Vector axis) {
 		axis = new Vector(axis).normalise();
 		double c = Math.cos(angle);
@@ -193,7 +193,7 @@ public class Matrix {
 		double xs = axis.x * s;
 		double ys = axis.y * s;
 		double zs = axis.z * s;
-		
+
 		double f00 = axis.x * axis.x * oneminusc + c;
 		double f01 = xy * oneminusc + zs;
 		double f02 = xz * oneminusc - ys;
@@ -205,7 +205,7 @@ public class Matrix {
 		double f20 = xz * oneminusc + ys;
 		double f21 = yz * oneminusc - xs;
 		double f22 = axis.z * axis.z * oneminusc + c;
-		
+
 		double t00 = m[0][0] * f00 + m[1][0] * f01 + m[2][0] * f02;
 		double t01 = m[0][1] * f00 + m[1][1] * f01 + m[2][1] * f02;
 		double t02 = m[0][2] * f00 + m[1][2] * f01 + m[2][2] * f02;
@@ -228,16 +228,16 @@ public class Matrix {
 		m[1][3] = t13;
 		return this;
 	}
-	
+
 	public Matrix translate(Vector vec) {
 		m[3][0] += m[0][0] * vec.x + m[1][0] * vec.y + m[2][0] * vec.z;
 		m[3][1] += m[0][1] * vec.x + m[1][1] * vec.y + m[2][1] * vec.z;
 		m[3][2] += m[0][2] * vec.x + m[1][2] * vec.y + m[2][2] * vec.z;
 		m[3][3] += m[0][3] * vec.x + m[1][3] * vec.y + m[2][3] * vec.z;
-		
+
 		return this;
 	}
-	
+
 	public Matrix transpose() {
 		double m00 = m[0][0];
 		double m01 = m[1][0];
@@ -255,7 +255,7 @@ public class Matrix {
 		double m31 = m[1][3];
 		double m32 = m[2][3];
 		double m33 = m[3][3];
-		
+
 		m[0][0] = m00;
 		m[0][1] = m01;
 		m[0][2] = m02;
@@ -272,10 +272,10 @@ public class Matrix {
 		m[3][1] = m31;
 		m[3][2] = m32;
 		m[3][3] = m33;
-		
+
 		return this;
 	}
-	
+
 	/**
 	 * @return the determinant of the matrix
 	 */
@@ -286,14 +286,14 @@ public class Matrix {
 		f -= m[0][3] * (m[1][0] * m[2][1] * m[3][2] + m[1][1] * m[2][2] * m[3][0] + m[1][2] * m[2][0] * m[3][1] - m[1][2] * m[2][1] * m[3][0] - m[1][0] * m[2][2] * m[3][1] - m[1][1] * m[2][0] * m[3][2]);
 		return f;
 	}
-	
+
 	private static double determinant3x3(double t00, double t01, double t02, double t10, double t11, double t12, double t20, double t21, double t22) {
 		return t00 * (t11 * t22 - t12 * t21) + t01 * (t12 * t20 - t10 * t22) + t02 * (t10 * t21 - t11 * t20);
 	}
-	
+
 	public Matrix invert() {
 		double determinant = determinant();
-		
+
 		if(determinant == 0) return null;
 		/*
 		 * m[0][0] m[0][1] m[0][2] m[0][3]
@@ -343,7 +343,7 @@ public class Matrix {
 		m[2][3] = t32 * determinant_inv;
 		return this;
 	}
-	
+
 	public Matrix negate() {
 		m[0][0] = -m[0][0];
 		m[0][1] = -m[0][1];
@@ -361,7 +361,7 @@ public class Matrix {
 		m[3][1] = -m[3][1];
 		m[3][2] = -m[3][2];
 		m[3][3] = -m[3][3];
-		
+
 		return this;
 	}
 }

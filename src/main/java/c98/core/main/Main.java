@@ -10,7 +10,7 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 
 public class Main implements ITweaker {
 	C98Tweaker tw = new C98Tweaker();
-	
+
 	@Override public void acceptOptions(List<String> args1, File gameDir, File assetsDir, String profile) {
 		tw.acceptOptions(args1, gameDir, assetsDir, profile);
 	}
@@ -22,7 +22,7 @@ public class Main implements ITweaker {
 	@Override public String getLaunchTarget() {
 		return tw.getLaunchTarget();
 	}
-	
+
 	@Override public void injectIntoClassLoader(LaunchClassLoader l) {
 		tw.injectIntoClassLoader(l);
 	}

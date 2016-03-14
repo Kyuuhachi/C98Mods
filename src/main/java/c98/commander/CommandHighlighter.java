@@ -10,7 +10,7 @@ import net.minecraft.util.IChatComponent;
 public class CommandHighlighter extends HighlightNode {
 	public static final Map<String, HighlightNode> highlighters = new HashMap();
 	public static final CommandHighlighter INSTANCE = new CommandHighlighter();
-	
+
 	public static String highlight(String text, GuiTextField f) {
 		GuiScreen gui = Minecraft.getMinecraft().currentScreen;
 		int mode = -1;
@@ -19,7 +19,7 @@ public class CommandHighlighter extends HighlightNode {
 		if(mode == -1) return text;
 		if(mode == 0 && !text.startsWith("/")) return text;
 		if(text.length() > 10000) return text; //Too long commands would likely lag a bit
-		
+
 		HighlightResult res = INSTANCE.highlight(text, 0);
 		return res.text.getFormattedText().replaceAll("(\247.)+\247", "\247");
 	}
@@ -41,7 +41,7 @@ public class CommandHighlighter extends HighlightNode {
 		}
 		return new HighlightResult(c);
 	}
-	
+
 	public static String substring(String s, int start, int end) {
 		int startPos = -1, endPos = -1;
 		int pos = 0;
@@ -66,15 +66,15 @@ public class CommandHighlighter extends HighlightNode {
 		if(endPos == -1) endPos = s.length();
 		return (color == 0 ? "" : "\247" + color) + s.substring(startPos, endPos);
 	}
-	
+
 	public static String substring(String s, int start) {
 		return substring(s, start, s.replaceAll("\247.", "").length());
 	}
-	
+
 	public static void reset() {
 		highlighters.clear();
 	}
-	
+
 	public static void register(String key, HighlightNode highlighter) {
 		highlighters.put(key, highlighter);
 	}

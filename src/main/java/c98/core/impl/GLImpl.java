@@ -96,7 +96,7 @@ public class GLImpl {
 	int viewport_b;
 	int viewport_c;
 	int viewport_d;
-	
+
 	private void store() {
 		alpha_enabled = alphaState.field_179208_a.currentState;
 		alpha_b = alphaState.field_179206_b;
@@ -191,7 +191,7 @@ public class GLImpl {
 		viewport_c = field_179169_u.field_179057_c;
 		viewport_d = field_179169_u.field_179055_d;
 	}
-	
+
 	private void load() {
 		alphaState.field_179208_a.currentState = alpha_enabled;
 		alphaState.field_179206_b = alpha_b;
@@ -286,15 +286,15 @@ public class GLImpl {
 		field_179169_u.field_179057_c = viewport_c;
 		field_179169_u.field_179055_d = viewport_d;
 	}
-	
+
 	private static LinkedList<GLImpl> stack = new LinkedList();
-	
+
 	public static void pushAttrib() {
 		GLImpl state = new GLImpl();
 		state.store();
 		stack.push(state);
 	}
-	
+
 	public static void popAttrib() {
 		GLImpl state = stack.pop();
 		state.load();

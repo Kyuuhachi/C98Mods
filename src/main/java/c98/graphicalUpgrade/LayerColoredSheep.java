@@ -14,15 +14,15 @@ public class LayerColoredSheep implements LayerRenderer {
 	private static final ResourceLocation TEXTURE = new ResourceLocation("c98/graphicalupgrade", "entity/sheep_wool.png");
 	private final RenderSheep sheepRenderer;
 	private final ModelBase sheepModel = new ModelSheep2();
-	
+
 	public LayerColoredSheep(RenderSheep rdr) {
 		sheepRenderer = rdr;
 	}
-	
+
 	@Override public boolean shouldCombineTextures() {
 		return true;
 	}
-	
+
 	public void doRenderLayer(EntitySheep e, float p_177162_2_, float p_177162_3_, float p_177162_4_, float p_177162_5_, float p_177162_6_, float p_177162_7_, float p_177162_8_) {
 		if(!e.isInvisible()) {
 			sheepRenderer.bindTexture(TEXTURE);
@@ -39,13 +39,13 @@ public class LayerColoredSheep implements LayerRenderer {
 				float[] rgb = EntitySheep.func_175513_a(e.func_175509_cj());
 				GL.color(rgb[0], rgb[1], rgb[2]);
 			}
-			
+
 			sheepModel.setModelAttributes(sheepRenderer.getMainModel());
 			sheepModel.setLivingAnimations(e, p_177162_2_, p_177162_3_, p_177162_4_);
 			sheepModel.render(e, p_177162_2_, p_177162_3_, p_177162_5_, p_177162_6_, p_177162_7_, p_177162_8_);
 		}
 	}
-	
+
 	@Override public void doRenderLayer(EntityLivingBase e, float p_177141_2_, float p_177141_3_, float p_177141_4_, float p_177141_5_, float p_177141_6_, float p_177141_7_, float p_177141_8_) {
 		this.doRenderLayer((EntitySheep)e, p_177141_2_, p_177141_3_, p_177141_4_, p_177141_5_, p_177141_6_, p_177141_7_, p_177141_8_);
 	}

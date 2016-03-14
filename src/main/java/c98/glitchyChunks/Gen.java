@@ -19,7 +19,7 @@ public class Gen extends ChunkProviderGenerate {
 	private long seed;
 	private boolean struct;
 	private Random rand;
-	
+
 	public Gen(World wld, long seed, boolean structs, String settings) {
 		super(wld, seed, structs, settings);
 		world = wld;
@@ -31,11 +31,11 @@ public class Gen extends ChunkProviderGenerate {
 		end = new ChunkProviderEnd(wld, seed);
 		flat = new HashMap();
 	}
-	
+
 	@Override public Chunk provideChunk(int par1, int par2) {
 		return get(par1 << 4, par2 << 4).provideChunk(par1, par2);
 	}
-	
+
 	private IChunkProvider get(int par1, int par2) {
 		try {
 			rand.setSeed(seed ^ par1 * 71 ^ par2 * 37);
@@ -49,9 +49,9 @@ public class Gen extends ChunkProviderGenerate {
 				if(!flat.containsKey(s)) flat.put(s, new ChunkProviderFlat(world, seed, struct, s));
 				p = flat.get(s);
 			} else p = normal;
-			
+
 			long chunkSeed = rand.nextLong();
-			
+
 			for(Field field : p.getClass().getDeclaredFields())
 				if(field.getType() == NoiseGeneratorOctaves.class) {
 					field.setAccessible(true);

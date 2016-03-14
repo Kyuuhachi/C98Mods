@@ -23,10 +23,10 @@ public class SaturationInfo {
 				int foodX = x - i * 8 - 9;
 				int foodY = y;
 				int foodWidth = MathHelper.clamp_int(Math.round((food - i) * 9), 0, 9);
-				
+
 				int u = 70;
 				if(mc.thePlayer.isPotionActive(Potion.hunger)) u += 36;
-				
+
 				u += 9 - foodWidth;
 				foodX += 9 - foodWidth;
 				ExtraInfo.drawTexturedRect(foodX, foodY, u, 27, foodWidth, 9);

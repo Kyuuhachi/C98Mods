@@ -14,23 +14,23 @@ import c98.core.launch.ASMer;
 public class JS extends C98Mod {
 	public static ScriptEngine engine = new NashornScriptEngineFactory().getScriptEngine();
 	public static ICommandSender sender;
-	
+
 	public static class JSCommand extends CommandBase {
 		private static final ChatStyle ERROR_STYLE = new ChatStyle().setColor(EnumChatFormatting.RED);
 		private static final ChatStyle ERROR_LOC_STYLE = new ChatStyle().setUnderlined(true);
-		
+
 		@Override public String getCommandName() {
 			return "js";
 		}
-		
+
 		@Override public String getCommandUsage(ICommandSender sender_) {
 			return "/js <script>";
 		}
-		
+
 		@Override public int getRequiredPermissionLevel() {
 			return 2;
 		}
-		
+
 		@Override public void processCommand(ICommandSender sender_, String[] args) throws CommandException {
 			sender = sender_;
 			if(args.length == 0) throw new WrongUsageException(getCommandUsage(sender));
@@ -45,7 +45,7 @@ public class JS extends C98Mod {
 					sender.addChatMessage(c);
 			}
 		}
-		
+
 		private static List<IChatComponent> error(Exception e) {
 			if(!(e instanceof ScriptException)) return Arrays.asList(new ChatComponentText(e.toString()).setChatStyle(ERROR_STYLE));
 			String err = e.getCause().getMessage();
@@ -63,25 +63,25 @@ public class JS extends C98Mod {
 			}
 			return msg;
 		}
-		
+
 		static private void reset() {
 			try {
 				engine.put("sender", sender);
 				engine.put("world", sender.getEntityWorld());
 				engine.put("pos", sender.getPosition());
-				
+
 				importJS(Blocks.class);
 				importJS(Items.class);
 			} catch(ScriptException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		static private void importJS(Class clazz) throws ScriptException {
 			engine.eval(clazz.getSimpleName() + "=Java.type(\"" + clazz.getName() + "\")");
 		}
 	}
-	
+
 	@ASMer static class JSCommandManager extends ServerCommandManager {
 		public JSCommandManager() {
 			registerCommand(new JSCommand());

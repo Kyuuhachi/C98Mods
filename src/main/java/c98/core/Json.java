@@ -10,13 +10,13 @@ public class Json {
 	public static interface CustomConfig {
 		public void init(ObjectMapper json);
 	}
-	
+
 	private static Module colorModule = new ColorModule();
-	
+
 	public static <T> T get(C98Mod mod, Class<T> clz) {
 		return get(mod.getName(), clz);
 	}
-	
+
 	public static <T> T get(String mod, Class<T> clz) {
 		try {
 			return read(getFile(mod), clz, getJson(clz));
@@ -25,11 +25,11 @@ public class Json {
 			return null;
 		}
 	}
-	
+
 	public static void write(C98Mod mod, Object obj) {
 		write(mod.getName(), obj);
 	}
-	
+
 	public static void write(String mod, Object obj) {
 		try {
 			write(getFile(mod), obj, getJson(obj.getClass()));
@@ -37,11 +37,11 @@ public class Json {
 			C98Log.error("Failed to save config " + obj, e);
 		}
 	}
-	
+
 	private static File getFile(String mod) {
 		return new File(IO.getMinecraftDir(), "config/C98/" + mod + ".json");
 	}
-	
+
 	private static ObjectMapper getJson(Class clz) {
 		ObjectMapper json = new ObjectMapper();
 		json.enable(SerializationFeature.INDENT_OUTPUT);
@@ -54,7 +54,7 @@ public class Json {
 		}
 		return json;
 	}
-	
+
 	private static <T> T read(File f, Class<T> clazz, ObjectMapper json) throws IOException, InstantiationException, IllegalAccessException {
 		if(f.isFile()) {
 			String s = IOUtils.toString(new FileReader(f));
@@ -67,7 +67,7 @@ public class Json {
 		write(f, obj, json);
 		return obj;
 	}
-	
+
 	private static <T> void write(File f, T obj, ObjectMapper json) throws IOException {
 		f.getParentFile().mkdirs();
 		json.writer(new C98PrettyPrinter()).writeValue(f, obj);

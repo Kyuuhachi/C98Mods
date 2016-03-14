@@ -11,7 +11,7 @@ public class SelHighlightNode extends HighlightNode {
 	private static final Pattern tokenPattern = Pattern.compile("^@[pare](?:\\[[\\w=,!-]*\\]?)?$");
 	private static final Pattern usernamePattern = Pattern.compile("^[A-Za-z0-9\\-_]+"); //Not sure if this is correct, but it probably works
 	private static final Collection<String> keys = Arrays.asList("x", "y", "z", "r", "rm", "m", "c", "l", "lm", "team", "name", "dx", "dy", "dz", "rx", "rxm", "ry", "rym", "type");
-	
+
 	@Override public HighlightResult highlight(String args, int i) {
 		String word = getWord(args, i);
 		ChatComponentText c = new ChatComponentText("");

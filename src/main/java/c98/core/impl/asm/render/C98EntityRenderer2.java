@@ -11,7 +11,7 @@ import c98.core.launch.*;
 	public C98EntityRenderer2(Minecraft par1Minecraft, IResourceManager p_i45076_2_) {
 		super(par1Minecraft, p_i45076_2_);
 	}
-	
+
 	@Override public void asm(ClassNode node) {
 		for(MethodNode n : node.methods)
 			for(AbstractInsnNode insn : new Asm(n))

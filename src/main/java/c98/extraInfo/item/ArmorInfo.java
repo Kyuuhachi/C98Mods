@@ -10,7 +10,7 @@ import c98.core.launch.ASMer;
 	public ArmorInfo(ArmorMaterial par2EnumArmorMaterial, int par3, int par4) {
 		super(par2EnumArmorMaterial, par3, par4);
 	}
-	
+
 	@Override public void addInformation(ItemStack is, EntityPlayer ep, List l, boolean adv) {
 		l.add("Protection: " + damageReduceAmount);
 		int i = getColor(is);

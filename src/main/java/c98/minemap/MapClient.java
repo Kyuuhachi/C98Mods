@@ -13,13 +13,13 @@ import c98.minemap.api.MapUtils;
 public class MapClient {
 	private static final ResourceLocation mapIcons = new ResourceLocation("c98/minemap", "map_icons.png");
 	private static final ResourceLocation mapBG = new ResourceLocation("textures/map/map_background.png");
-	
+
 	private final DynamicTexture image;
 	private final int[] data;
 	private final ResourceLocation texture;
 	private MapServer map;
 	private Minecraft mc = Minecraft.getMinecraft();
-	
+
 	public MapClient(MapServer mapServer) {
 		map = mapServer;
 		image = new DynamicTexture(mapServer.size, mapServer.size);
@@ -27,7 +27,7 @@ public class MapClient {
 		data = image.getTextureData();
 		Arrays.fill(data, 0);
 	}
-	
+
 	public void render() {
 		synchronized(map) {
 			System.arraycopy(map.colors, 0, data, 0, data.length);
@@ -40,7 +40,7 @@ public class MapClient {
 		GL.scale(scale, scale, scale);
 		Point p = Minemap.config.location.getPosition(map.size);
 		GL.translate(p.x, p.y, -1);
-		
+
 		float color = map.crashed ? 0.5F : 1F;
 		GL.color(1, color, color);
 		for(int i = 0; i < 2; i++) {
@@ -54,10 +54,10 @@ public class MapClient {
 			GL.end();
 		}
 		GL.color(1, 1, 1);
-		
+
 		GL.enableBlend();
 		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
-		
+
 		GL.bindTexture(mapIcons);
 		GL.begin();
 		for(MapIconInstance icon : map.markers) {
@@ -65,9 +65,9 @@ public class MapClient {
 			MapUtils.renderIcon(icon.img, icon.color, icon.m);
 		}
 		GL.end();
-		
+
 		GL.disableBlend();
-		
+
 		GL.popMatrix();
 	}
 }

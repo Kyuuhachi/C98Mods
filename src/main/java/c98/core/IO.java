@@ -8,11 +8,11 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
 public class IO {
-	
+
 	public static File getMinecraftDir() {
 		return new File(".");
 	}
-	
+
 	public static BufferedImage getImage(ResourceLocation loc) {
 		try {
 			return ImageIO.read(getInputStream(loc));
@@ -21,7 +21,7 @@ public class IO {
 			return null;
 		}
 	}
-	
+
 	public static boolean fileExists(ResourceLocation loc) {
 		try {
 			return man().getResource(loc) != null && man().getResource(loc).getInputStream() != null;
@@ -29,7 +29,7 @@ public class IO {
 			return false;
 		}
 	}
-	
+
 	public static InputStream getInputStream(ResourceLocation loc) {
 		try {
 			return man().getResource(loc).getInputStream();
@@ -38,7 +38,7 @@ public class IO {
 			return null;
 		}
 	}
-	
+
 	private static IResourceManager man() {
 		return Minecraft.getMinecraft().getResourceManager();
 	}

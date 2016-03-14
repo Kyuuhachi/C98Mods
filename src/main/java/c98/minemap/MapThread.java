@@ -6,7 +6,7 @@ import c98.core.C98Log;
 public class MapThread extends Thread {
 	private boolean running = true;
 	private MapServer mapServer;
-	
+
 	public MapThread(MapServer m) {
 		mapServer = m;
 		setDaemon(true);
@@ -17,7 +17,7 @@ public class MapThread extends Thread {
 			}
 		});
 	}
-	
+
 	@Override public void run() {
 		while(running && !mapServer.crashed && Minecraft.getMinecraft().func_175606_aa() != null) {
 			try {
@@ -33,7 +33,7 @@ public class MapThread extends Thread {
 			}
 		}
 	}
-	
+
 	public void exit() {
 		running = false;
 	}

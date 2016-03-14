@@ -22,11 +22,11 @@ public class MapServer {
 	public boolean crashed;
 	public MapHandler impl;
 	private int scale;
-	
+
 	public MapServer(World theWorld) {
 		world = theWorld;
 	}
-	
+
 	public void update() {
 		if(mc.func_175606_aa() == null) {
 			crashed = true;
@@ -43,11 +43,11 @@ public class MapServer {
 		}
 		markers = m.stream().map(this::convert).filter(a -> a != null).sorted().collect(Collectors.toList());
 	}
-	
+
 	public MapIconInstance convert(MapIcon m) {
 		int xOnMap = round(m.pos.xCoord) - round(mc.func_175606_aa().posX);
 		int zOnMap = round(m.pos.zCoord) - round(mc.func_175606_aa().posZ);
-		
+
 		int alpha = 256 - (int)Math.abs(m.pos.yCoord == -1 ? 0 : m.pos.yCoord - getPosY()) * 8;
 		if(alpha < m.style.minOpacity) alpha = m.style.minOpacity;
 		if(alpha > 255) alpha = 255;
@@ -68,27 +68,27 @@ public class MapServer {
 		c |= alpha << 24;
 		return new MapIconInstance(m.style.shape, c, xOnMap, zOnMap, rotation, m.style.zLevel, m.style.size, size);
 	}
-	
+
 	private int round(double x) {
 		return MathHelper.floor_double(x * scale);
 	}
-	
+
 	private static int getRotation(double rot) {
 		rot %= 360;
 		double step = 360D / Minemap.config.iconDirections;
 		int r = (int)(Math.round(rot / step) * step);
 		return r;
 	}
-	
+
 	private void updateMap(int[] newColors) {
 		int y = getPosY();
-		
+
 		int mapx = MathHelper.floor_double(mc.func_175606_aa().posX) - size / 2 / scale;
 		int mapz = MathHelper.floor_double(mc.func_175606_aa().posZ) - size / 2 / scale;
-		
+
 		int partialx = (int)(mod(mc.func_175606_aa().posX) * scale);
 		int partialz = (int)(mod(mc.func_175606_aa().posZ) * scale);
-		
+
 		for(int i = 0; i < size; i++) {
 			int x = mapx + (i + partialx) / scale;
 			impl.line(x);
@@ -108,25 +108,25 @@ public class MapServer {
 			}
 		}
 	}
-	
+
 	private static double mod(double x) {
 		return x - MathHelper.floor_double(x);
 	}
-	
+
 	public int getPosY() {
 		return MathHelper.floor_double(mc.func_175606_aa().posY) + 1;
 	}
-	
+
 	public void render() {
 		renderer.render();
 	}
-	
+
 	public void setPreset(Preset p) {
 		synchronized(this) {
 			size = p.size;
 			scale = p.scale;
 			impl = MinemapPlugin.getMapHandler_(p.type);
-			
+
 			colors = new int[size * size];
 			renderer = new MapClient(this);
 		}

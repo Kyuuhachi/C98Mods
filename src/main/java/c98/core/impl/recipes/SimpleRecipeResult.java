@@ -7,11 +7,11 @@ import c98.core.Recipes.RecipeResult;
 
 public class SimpleRecipeResult implements RecipeResult {
 	private ItemStack is;
-	
+
 	public SimpleRecipeResult(ItemStack itemStack) {
 		is = itemStack;
 	}
-	
+
 	@Override public ItemStack getResult(InventoryCrafting inv, BlockPos coords, int gridX, int gridY, boolean mirror) {
 		return is;
 	}

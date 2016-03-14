@@ -24,19 +24,19 @@ import c98.core.launch.ASMer;
 			c98ModContainer = new DummyModContainer(meta);
 		}
 	}
-	
+
 	@ASMer static class ClientHandler extends FMLClientHandler {
 		@Override public void addSpecialModEntries(ArrayList<ModContainer> mods) {
 			mods.add(ForgeStatic.c98ModContainer);
 			super.addSpecialModEntries(mods);
 		}
 	}
-	
+
 	@ASMer static class ForgeModMenuList extends GuiSlotModList {
 		public ForgeModMenuList(GuiModList parent, ArrayList<ModContainer> mods, int listWidth) {
 			super(parent, mods, listWidth);
 		}
-		
+
 		@Override protected void drawSlot(int listIndex, int var2, int var3, int var4, Tessellator var5) {
 			ModContainer mod = mods.get(listIndex);
 			if(mod == ForgeStatic.c98ModContainer) {
@@ -47,21 +47,21 @@ import c98.core.launch.ASMer;
 			} else super.drawSlot(listIndex, var2, var3, var4, var5);
 		}
 	}
-	
+
 	public ForgeModMenu(GuiScreen m) {
 		super(m);
 	}
-	
+
 	@Override public void initGui() {
 		listWidth = Math.max(listWidth, fontRendererObj.getStringWidth(ForgeStatic.c98ModContainer.getName()) + 28);
 		super.initGui();
 	}
-	
+
 	@Override public void selectModIndex(int index) {
 		if(mods.get(index) == ForgeStatic.c98ModContainer) Sys.openURL(C98Core.URL);
 		else super.selectModIndex(index);
 	}
-	
+
 	@Override public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		ForgeStatic.xCube.tooltip();

@@ -13,9 +13,9 @@ import c98.core.launch.CustomASMer;
 
 public class CustomAsm {
 	private static HashMap<String, CustomASMer> asmers = new HashMap();
-	
+
 	private static Unsafe unsafe;
-	
+
 	public static void handle(ClassNode dst, ClassNode transformer, String className) {
 		if(unsafe == null) try {
 			Field field = Unsafe.class.getDeclaredField("theUnsafe");
@@ -24,13 +24,13 @@ public class CustomAsm {
 		} catch(Exception e) {
 			throw new AssertionError(e);
 		}
-		
+
 		if(!asmers.containsKey(transformer.name)) {
 			transformer.superName = "java/lang/Object";
 			transformer.access = transformer.access & ~Opcodes.ACC_ABSTRACT | Opcodes.ACC_PUBLIC;
 			List<MethodNode> me = transformer.methods;
 			me.removeIf(m -> m.name.equals("<init>"));
-			
+
 			MethodNode ctor = new MethodNode(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);
 			ctor.visitCode();
 			ctor.visitVarInsn(Opcodes.ALOAD, 0);
@@ -39,7 +39,7 @@ public class CustomAsm {
 			ctor.visitMaxs(2, 1);
 			ctor.visitEnd();
 			transformer.methods.add(ctor);
-			
+
 			ClassWriter wr = new ClassWriter(0);
 			transformer.accept(wr);
 			byte[] clzB = wr.toByteArray();

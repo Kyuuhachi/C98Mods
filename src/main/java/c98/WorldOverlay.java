@@ -19,37 +19,37 @@ import c98.core.hooks.WorldRenderHook;
 import com.google.common.collect.Sets;
 
 public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
-	
+
 	private boolean display = false;
-	
+
 	//TODO add config for this
 	private int renderWidth = 8;
 	private int renderHeight = 8;
-	
+
 	private KeyBinding key = new KeyBinding("Toggle world overlay", Keyboard.KEY_F, C98Core.KEYBIND_CAT);
-	
+
 	@Override public void load() {
 		C98Core.registerKey(key, false);
 	}
-	
+
 	@Override public void keyboardEvent(KeyBinding var1) {
 		if(mc.currentScreen == null && var1 == key) display = !display;
 	}
-	
+
 	@Override public void renderWorld(World w, float ptt) {
 		if(!display) return;
 		int pX = MathHelper.floor_double(mc.func_175606_aa().posX);
 		int pY = MathHelper.floor_double(mc.func_175606_aa().posY);
 		int pZ = MathHelper.floor_double(mc.func_175606_aa().posZ);
-		
+
 		Set<BlockPos> blocks = new HashSet();
 		for(int x = pX - renderWidth + 1; x < pX + renderWidth; x++)
 			for(int y = pY - renderHeight + 1; y < pY + renderHeight; y++)
 				for(int z = pZ - renderWidth + 1; z < pZ + renderWidth; z++)
 					addBlocks(w, blocks, x, y, z);
-		
+
 		Set<BlockPos> spawners = getSpawners(w, pX, pY, pZ);
-		
+
 		GL.enableBlend();
 		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 		GL.depthMask(false);
@@ -59,10 +59,10 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 			int rgb = 0x7F000000;
 			if(blocks.contains(c)) rgb |= 0xFF0000;
 			if(spawners.contains(c)) rgb |= 0x00FF00;
-			
+
 			drawSide(w, c.offsetUp(), EnumFacing.DOWN, rgb);
 		}
-		
+
 		for(int x = pX - renderWidth + 1; x < pX + renderWidth; x++)
 			for(int z = pZ - renderWidth + 1; z < pZ + renderWidth; z++) {
 				BlockPos p = new BlockPos(x, 0, z);
@@ -85,11 +85,11 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 		GL.depthMask(true);
 		GL.disableBlend();
 	}
-	
+
 	private static void drawSide(World w, BlockPos p, EnumFacing f, int color) {
 		GL.color(multColor(color, w.getLightBrightness(p) * 0.9F + 0.1F));
 		GL.normal(-f.getFrontOffsetX(), -f.getFrontOffsetY(), -f.getFrontOffsetZ());
-		
+
 		if(f == EnumFacing.DOWN) {
 			float f0 = 1F / 16;
 			float f1 = 1F - f0;
@@ -100,14 +100,14 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 			GL.vertex(p.getX() + f1, p.getY() + y, p.getZ() + f0);
 			GL.vertex(p.getX() + f0, p.getY() + y, p.getZ() + f0);
 		}
-		
+
 		float F = 0.5F;
 		float X = p.getX() + 0.5F;
 		float Z = p.getZ() + 0.5F;
 		float y0 = p.getY();
 		float y1 = y0 + 0.5F;
 		int c = color & 0xFFFFFF;
-		
+
 		if(f == EnumFacing.NORTH) {
 			GL.vertex(X - F, y0, Z - F);
 			GL.vertex(X + F, y0, Z - F);
@@ -137,7 +137,7 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 			GL.vertex(X + F, y1, Z - F);
 		}
 	}
-	
+
 	private static int multColor(int color, float br) {
 		int a = color >> 24 & 0xFF;
 		int r = color >> 16 & 0xFF;
@@ -149,7 +149,7 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 		color = a << 24 | r << 16 | g << 8 | b << 0;
 		return color;
 	}
-	
+
 	private Set<BlockPos> getSpawners(World w, int pX, int pY, int pZ) {
 		Set<BlockPos> spawners = new HashSet();
 		try {
@@ -165,20 +165,20 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 		}
 		return spawners;
 	}
-	
+
 	private static void addSpawner(World w, Collection<BlockPos> spawners, MobSpawnerBaseLogic spawner) {
 		if(!spawner.isActivated()) return;
-		
+
 		int x = spawner.func_177221_b().getX();
 		int y = spawner.func_177221_b().getY();
 		int z = spawner.func_177221_b().getZ();
-		
+
 		String type = spawner.getEntityNameToSpawn();
 		Entity e = EntityList.createEntityByName(type, w);
 		if(e == null) return;
-		
+
 		int range = spawner.spawnRange;
-		
+
 		boolean doEntityCountCheck = false;
 		if(doEntityCountCheck) {
 			int height = 4;
@@ -186,34 +186,34 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 			int numEntities = w.getEntitiesWithinAABB(e.getClass(), spawnArea).size();
 			if(numEntities > spawner.maxNearbyEntities) return;
 		}
-		
+
 		for(int x1 = x - range; x1 <= x + range; x1++)
 			for(int y1 = y - 1; y1 <= y + 1; y1++)
 				for(int z1 = z - range; z1 <= z + range; z1++) {
 					EntityLiving living = e instanceof EntityLiving ? (EntityLiving)e : null;
 					e.setLocationAndAngles(x1 + 0.5, y1, z1 + 0.5, 0, 0);
-					
+
 					if(living == null || living.getCanSpawnHere() || living.getCanSpawnHere() || living.getCanSpawnHere()) spawners.add(new BlockPos(x1, y1 - 1, z1));
 				}
 	}
-	
+
 	private static void addBlocks(World w, Collection<BlockPos> blocks, int x, int y, int z) {
 		BlockPos p = new BlockPos(x, y, z);
 		Block blk = w.getBlockState(p).getBlock();
 		Block blk1 = w.getBlockState(p.offsetUp()).getBlock();
 		Block blk2 = w.getBlockState(p.offsetUp(2)).getBlock();
-		
+
 		if(isNonSolid(blk)) return;
 		if(isSolid(blk1)) return;
 		if(isSolid(blk2)) return;
 		if(w.getLightFor(EnumSkyBlock.BLOCK, p.offsetUp()) > 7) return;
 		blocks.add(p);
 	}
-	
+
 	private static boolean isNonSolid(Block blk) {
 		return blk == null || !blk.isOpaqueCube() || !blk.getMaterial().blocksMovement();
 	}
-	
+
 	private static boolean isSolid(Block blk) {
 		return blk != null && (blk.getMaterial().isSolid() || blk.getMaterial().isLiquid());
 	}

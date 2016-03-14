@@ -28,7 +28,7 @@ class MultipleItem {
 	public MultipleItemRenderer(Minecraft mcIn) {
 		super(mcIn);
 	}
-	
+
 	@Override public void renderItem(EntityLivingBase e, ItemStack is, ItemCameraTransforms.TransformType type) {
 		if(!GraphicalUpgrade.config.holdMultiple || type == TransformType.HEAD) {
 			super.renderItem(e, is, type);
@@ -44,16 +44,16 @@ class MultipleItem {
 	public MultipleRenderItem(TextureManager p_i46165_1_, ModelManager p_i46165_2_) {
 		super(p_i46165_1_, p_i46165_2_);
 	}
-	
+
 	@Override public void func_180454_a(ItemStack is, IBakedModel model) {
 		if(!mult) {
 			super.func_180454_a(is, model);
 			return;
 		}
 		Random r = new Random(187);
-		
+
 		int num = ri.func_177078_a(is);
-		
+
 		for(int i = 0; i < num; ++i) {
 			GL.pushMatrix();
 			if(model.isAmbientOcclusionEnabled() && i > 0) {

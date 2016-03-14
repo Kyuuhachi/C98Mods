@@ -13,11 +13,11 @@ public class GL {
 	public static class stencil {
 		private static int msk;
 		private static boolean creating;
-		
+
 		public static void clear() {
 			GL.clear(GL.STENCIL_BUFFER_BIT);
 		}
-		
+
 		public static void begin(int mask) {
 			msk = mask;
 			creating = true;
@@ -28,7 +28,7 @@ public class GL {
 			glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 			glStencilFunc(GL_ALWAYS, msk, msk);
 		}
-		
+
 		public static void end() {
 			creating = false;
 			glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
@@ -37,27 +37,27 @@ public class GL {
 			glStencilMask(0);
 			glDisable(GL_STENCIL_TEST);
 		}
-		
+
 		public static void enable() {
 			if(creating) end();
 			enable(msk);
 		}
-		
+
 		public static void enable(int mask) {
 			msk = mask;
 			glEnable(GL_STENCIL_TEST);
 			glStencilFunc(GL_EQUAL, msk, msk);
 		}
-		
+
 		public static void disable() {
 			glDisable(GL_STENCIL_TEST);
 		}
 	}
-	
+
 	public static class fbo {
 		public static class fullscreen {
 			private static Framebuffer b;
-			
+
 			public static void create() {
 				if(b == null || b.framebufferWidth != Display.getWidth() || b.framebufferHeight != Display.getHeight()) {
 					if(b != null) b.deleteFramebuffer();
@@ -66,7 +66,7 @@ public class GL {
 				b.bindFramebuffer(true);
 				clear(COLOR_BUFFER_BIT | DEPTH_BUFFER_BIT);
 			}
-			
+
 			public static void draw() {
 				b.bindFramebufferTexture();
 				matrixMode(PROJECTION);
@@ -76,7 +76,7 @@ public class GL {
 				matrixMode(MODELVIEW);
 				pushMatrix();
 				loadIdentity();
-				
+
 				color(1, 1, 1);
 				begin();
 				{
@@ -86,19 +86,19 @@ public class GL {
 					vertex(0, 1, 0, 1);
 				}
 				end();
-				
+
 				matrixMode(PROJECTION);
 				popMatrix();
 				matrixMode(MODELVIEW);
 				popMatrix();
 			}
-			
+
 			public static void finish() {
 				Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
 			}
 		}
 	}
-	
+
 	public static final int ZERO = GL_ZERO, ONE = GL_ONE;
 	public static final int SRC_COLOR = GL_SRC_COLOR, ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR, SRC_ALPHA = GL_SRC_ALPHA, ONE_MINUS_SRC_ALPHA = GL_ONE_MINUS_SRC_ALPHA, DST_ALPHA = GL_DST_ALPHA, ONE_MINUS_DST_ALPHA = GL_ONE_MINUS_DST_ALPHA;
 	public static final int DST_COLOR = GL_DST_COLOR, ONE_MINUS_DST_COLOR = GL_ONE_MINUS_DST_COLOR, SRC_ALPHA_SATURATE = GL_SRC_ALPHA_SATURATE, CONSTANT_COLOR = GL_CONSTANT_COLOR, ONE_MINUS_CONSTANT_COLOR = GL_ONE_MINUS_CONSTANT_COLOR, CONSTANT_ALPHA = GL_CONSTANT_ALPHA, ONE_MINUS_CONSTANT_ALPHA = GL_ONE_MINUS_CONSTANT_ALPHA;
@@ -112,72 +112,72 @@ public class GL {
 	public static final int POINT = GL_POINT, LINE = GL_LINE, FILL = GL_FILL;
 	public static final int FRONT = GL_FRONT, BACK = GL_BACK, FRONT_AND_BACK = GL_FRONT_AND_BACK;
 	public static final int EMISSION = GL_EMISSION, AMBIENT = GL_AMBIENT, DIFFUSE = GL_DIFFUSE, SPECULAR = GL_SPECULAR, AMBIENT_AND_DIFFUSE = GL_AMBIENT_AND_DIFFUSE;
-	
+
 	//@off
-	
+
 	public static void enableAlpha() {GlStateManager.enableAlpha();}
 	public static void disableAlpha() {GlStateManager.disableAlpha();}
 	public static void alphaFunc(int func, float val) {GlStateManager.alphaFunc(func,val);}
-	
+
 	public static void enableLighting() {GlStateManager.enableLighting();}
 	public static void disableLighting() {GlStateManager.disableLighting();}
 	public static void enableLight(int num) {GlStateManager.enableBooleanStateAt(num);}
 	public static void disableLight(int num) {GlStateManager.disableBooleanStateAt(num);}
-	
+
 	public static void enableColorMaterial() {GlStateManager.enableColorMaterial();}
 	public static void disableColorMaterial() {GlStateManager.disableColorMaterial();}
 	public static void colorMaterial(int face, int mode) {GlStateManager.colorMaterial(face,mode);}
-	
+
 	public static void enableDepth() {GlStateManager.enableDepth();}
 	public static void disableDepth() {GlStateManager.disableDepth();}
 	public static void depthFunc(int func) {GlStateManager.depthFunc(func);}
-	
+
 	public static void enableBlend() {GlStateManager.enableBlend();}
 	public static void disableBlend() {GlStateManager.disableBlend();}
 	public static void blendFunc(int src, int dst) {GlStateManager.blendFunc(src,dst);}
 	public static void blendFuncSeparate(int src1, int dst1, int src2, int dst2) {GlStateManager.tryBlendFuncSeparate(src1,dst1,src2,dst2);}
 	public static void blendColor(float r,float g,float b,float a) {GL14.glBlendColor(r, g, b, a);}
-	
+
 	public static void enableCull() {GlStateManager.enableCull();}
 	public static void disableCull() {GlStateManager.disableCull();}
 	public static void cullFace(int face) {GlStateManager.cullFace(face);}
-	
+
 	public static void enablePolygonOffset() {GlStateManager.enablePolygonOffset();}
 	public static void disablePolygonOffset() {GlStateManager.disablePolygonOffset();}
 	public static void polygonOffset(float x, float y) {GlStateManager.doPolygonOffset(x,y);}
-	
+
 	public static void enableColorLogic() {GlStateManager.enableColorLogic();}
 	public static void disableColorLogic() {GlStateManager.disableColorLogic();}
 	public static void colorLogicOp(int op) {GlStateManager.colorLogicOp(op);}
-	
+
 	public static void enableTexGen(GlStateManager.TexGen type) {GlStateManager.enableTexGenCoord(type);}
 	public static void disableTexGen(GlStateManager.TexGen type) {GlStateManager.disableTexGenCoord(type);}
 	public static void texGen(GlStateManager.TexGen type, int param) {GlStateManager.texGen(type,param);}
 	public static void texGen(GlStateManager.TexGen type, int name, FloatBuffer val) {GlStateManager.func_179105_a(type,name,val);}
-	
+
 	public static void setActiveTexture(int tex) {GlStateManager.setActiveTexture(tex);}
 	public static void enableTexture() {GlStateManager.func_179098_w();}
 	public static void disableTexture() {GlStateManager.func_179090_x();}
 	public static void bindTexture(ResourceLocation loc) {Minecraft.getMinecraft().getTextureManager().bindTexture(loc);}
 	public static void bindTexture(int tex) {GlStateManager.func_179144_i(tex);}
-	
+
 	public static void enableNormalize() {GlStateManager.enableNormalize();}
 	public static void disableNormalize() {GlStateManager.disableNormalize();}
-	
+
 	public static void enableRescaleNormal() {GlStateManager.enableRescaleNormal();}
 	public static void disableRescaleNormal() {GlStateManager.disableRescaleNormal();}
-	
+
 	public static void depthMask(boolean d) {GlStateManager.depthMask(d);}
 	public static void colorMask(boolean r, boolean g, boolean b, boolean a) {GlStateManager.colorMask(r,g,b,a);}
-	
+
 	public static void clearDepth(double d) {GlStateManager.clearDepth(d);}
 	public static void clearColor(float r, float g, float b, float a) {GlStateManager.clearColor(r,g,b,a);}
 	public static void clear(int bits) {GlStateManager.clear(bits);}
-	
+
 	public static void matrixMode(int mode) {GlStateManager.matrixMode(mode);}
 	public static void pushMatrix() {GlStateManager.pushMatrix();}
 	public static void popMatrix() {GlStateManager.popMatrix();}
-	
+
 	public static void ortho(double xmin, double xmax, double ymin, double ymax, double zmin, double zmax) {GlStateManager.ortho(xmin,xmax,ymin,ymax,zmin,zmax);}
 	public static void loadIdentity() {GlStateManager.loadIdentity();}
 	public static void loadMatrix(FloatBuffer matrix) {glLoadMatrix(matrix);}
@@ -194,12 +194,12 @@ public class GL {
 	public static void translate(double x, double y, double z) {GlStateManager.translate(x,y,z);}
 	public static void translate(float x, float y) {GlStateManager.translate(x,y,0);}
 	public static void translate(double x, double y) {GlStateManager.translate(x,y,0);}
-	
+
 	public static void color(float r, float g, float b, float a) {GlStateManager.color(r,g,b,a);}
 	public static void color(float r, float g, float b) {color(r,g,b, 1);}
 	public static void color(int rgba) {color((rgba>>16&255)/255F,(rgba>>8&255)/255F,(rgba>>0&255)/255F,(rgba>>24&255)/255F);}
 	public static void resetColor() {GlStateManager.func_179117_G();}
-	
+
 	private static boolean drawing;
 	public static void begin() {glBegin(QUADS);drawing=true;}
 	public static void begin(int type) {glBegin(type);drawing=true;}
@@ -210,7 +210,7 @@ public class GL {
 	public static void vertex(double x, double y, double z) {glVertex3d(x,y,z);}
 	public static void vertex(double x, double y, float u, float v) {glTexCoord2f(u, v);glVertex2d(x,y);}
 	public static void vertex(double x, double y, double z, float u, float v) {glTexCoord2f(u, v);glVertex3d(x,y,z);}
-	
+
 	public static void callList(int list) {GlStateManager.callList(list);}
 	public static void lineWidth(float f) {glLineWidth(f);}
 	public static void getFloat(int name, FloatBuffer buf) {GlStateManager.getFloat(name,buf);}
@@ -218,17 +218,17 @@ public class GL {
 	public static void shadeMode(int mode) {GlStateManager.shadeModel(mode);}
 	public static void polygonMode(int mode) {glPolygonMode(GL_FRONT_AND_BACK, mode);}
 	//@on
-	
+
 	public static void pushAttrib() {
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 		GLImpl.pushAttrib();
 	}
-	
+
 	public static void popAttrib() {
 		GLImpl.popAttrib();
 		glPopAttrib();
 	}
-	
+
 	public static void checkError(String s) {
 		Minecraft.getMinecraft().checkGLError(s);
 	}

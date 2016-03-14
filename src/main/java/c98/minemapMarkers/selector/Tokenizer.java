@@ -5,17 +5,17 @@ import java.util.*;
 public class Tokenizer {
 	static class Token {
 		public String ch;
-		
+
 		public Token(String string) {
 			ch = string;
 			TOKEN_TYPES.add(this);
 		}
-		
+
 		@Override public String toString() {
 			return ch;
 		}
 	}
-	
+
 	private static List<Token> TOKEN_TYPES = new ArrayList();
 	public static final Token BEGIN = new Token("[");
 	public static final Token END = new Token("]");
@@ -24,10 +24,10 @@ public class Tokenizer {
 	public static final Token EQUAL = new Token("=");
 	public static final Token LESS = new Token("<");
 	public static final Token NOT = new Token("!");
-	
+
 	private static int pos;
 	private static String s;
-	
+
 	public static LinkedList getTokens(String str) {
 		LinkedList tokens = new LinkedList();
 		pos = 0;
@@ -55,22 +55,22 @@ public class Tokenizer {
 		}
 		return tokens;
 	}
-	
+
 	private static boolean isWord() {
 		return Character.isLetter(s.charAt(pos));
 	}
-	
+
 	private static String getWord() {
 		StringBuilder sb = new StringBuilder();
 		for(; pos < s.length() && (Character.isLetterOrDigit(s.charAt(pos)) || s.charAt(pos) == '.'); pos++)
 			sb.append(s.charAt(pos));
 		return sb.toString();
 	}
-	
+
 	private static boolean isNumber() {
 		return Character.isDigit(s.charAt(pos)) || s.charAt(pos) == '-' || s.charAt(pos) == '.';
 	}
-	
+
 	private static float getNumber() {
 		StringBuilder sb = new StringBuilder();
 		boolean hasDot = false;
@@ -85,11 +85,11 @@ public class Tokenizer {
 		if(sb.toString().endsWith(".")) sb.append("0");
 		return Float.parseFloat(sb.toString());
 	}
-	
+
 	private static boolean isString() {
 		return s.charAt(pos) == '\'';
 	}
-	
+
 	private static String getString() {
 		StringBuilder sb = new StringBuilder();
 		pos++;

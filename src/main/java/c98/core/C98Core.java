@@ -23,35 +23,35 @@ public class C98Core {
 	public static boolean forge = C98Tweaker.forge;
 	public static Minecraft mc;
 	public static List<C98Mod> modList = new ArrayList();
-	
+
 	public static void addHook(Object hook) {
 		HookImpl.addHook(hook);
 	}
-	
+
 	public static void removeHook(Object hook) {
 		HookImpl.removeHook(hook);
 	}
-	
+
 	public static boolean isModLoaded(String string) {
 		return modList.stream().anyMatch((mod) -> mod.getName().equals(string));
 	}
-	
+
 	public static void registerKey(KeyBinding key, boolean continous) {
 		HookImpl.keyBindings.put(key, new boolean[] {continous, false});
 	}
-	
+
 	public static float getPartialTicks() {
 		return mc.timer.renderPartialTicks;
 	}
-	
+
 	@Override public String toString() {
 		return "C98Core";
 	}
-	
+
 	public static void registerBlock(Block b, int id, String string) {
 		registerBlock(b, id, string, new ItemBlock(b));
 	}
-	
+
 	public static void registerBlock(Block b, int id, String string, Item i) {
 		Block.blockRegistry.register(id, new ResourceLocation(string), b);
 		if(i != null) {
@@ -59,32 +59,32 @@ public class C98Core {
 			Item.BLOCK_TO_ITEM.put(b, i);
 		}
 		b.setUnlocalizedName(string.replace(':', '.'));
-		
+
 		if(b.getMaterial() == Material.air) b.useNeighborBrightness = false;
 		else {
 			boolean isStairs = b instanceof BlockStairs;
 			boolean isSlab = b instanceof BlockSlab;
 			boolean translucent = b.isTranslucent();
 			boolean transparent = b.getLightOpacity() == 0;
-			
+
 			if(isStairs || isSlab || translucent || transparent) b.useNeighborBrightness = true;
 		}
-		
+
 		for(IBlockState state : (Iterable<IBlockState>)b.getBlockState().getValidStates()) {
 			int value = Block.blockRegistry.getIDForObject(b) << 4 | b.getMetaFromState(state);
 			Block.BLOCK_STATE_IDS.put(state, value);
 		}
 	}
-	
+
 	public static void registerItem(Item i, int id, String string) {
 		Item.itemRegistry.register(id, new ResourceLocation(string), i);
 		i.setUnlocalizedName(string.replace(':', '.'));
 	}
-	
+
 	public static void registerEntity(Class<? extends Entity> class1, String string, int id) {
 		EntityList.addMapping(class1, string, id);
 	}
-	
+
 	public static void exit(int status) { //Forge is a moron and makes System.exit() crash for some retarded reason. Oh well, that's to be expected from Forge, isn't it?
 		try {
 			Class Shutdown = Class.forName("java.lang.Shutdown");

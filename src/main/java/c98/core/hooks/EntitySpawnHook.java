@@ -8,8 +8,8 @@ import net.minecraft.world.World;
 
 public interface EntitySpawnHook {
 	public Packet getPacket(Entity e);
-	
+
 	public Entity getEntity(World w, S0EPacketSpawnObject p);
-	
+
 	public boolean addEntityToTracker(EntityTracker tr, Entity e);
 }

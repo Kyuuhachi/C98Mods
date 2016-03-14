@@ -7,7 +7,7 @@ public class MapIcon {
 	public float rot;
 	public boolean always;
 	public IconStyle style;
-	
+
 	public MapIcon(Vec3 pos) {
 		this.pos = pos;
 	}

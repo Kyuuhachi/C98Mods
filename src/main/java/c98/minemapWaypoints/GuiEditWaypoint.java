@@ -17,7 +17,7 @@ public class GuiEditWaypoint extends GuiScreen {
 		public MapButton(int id) {
 			super(id, SLOT_X(id), SLOT_Y(id), SLOT_W, SLOT_H, "");
 		}
-		
+
 		@Override public void drawButton(Minecraft mc_, int mouseX, int mouseY) {
 			boolean selected = false;
 			IconStyle style = point.style.clone();
@@ -43,42 +43,42 @@ public class GuiEditWaypoint extends GuiScreen {
 			}
 		}
 	}
-	
+
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("c98/minemapwaypoints", "edit_waypoint.png");
 	private static final int GUI_W = 159, GUI_H = 110;
 	private static final int NAME_X = 7 + 3, NAME_Y = 17 + 4, NAME_W = GUI_W - NAME_X * 2, NAME_H = 12;
 	private static final int COORDS_X = NAME_X, COORDS_Y = NAME_Y + 18, COORDS_W = 41, COORDS_H = NAME_H, COORDS_D = COORDS_W + 8;
 	private static final int SLOT_Y = 54, SLOT_W = 16, SLOT_H = SLOT_W, SLOT_X = (GUI_W - SLOT_W * 8) / 2;
-	
+
 	private int GUI_X() {
 		return (width - GUI_W) / 2;
 	}
-	
+
 	private int GUI_Y() {
 		return (height - GUI_H) / 2;
 	}
-	
+
 	private int SLOT_X(int i) {
 		return GUI_X() + SLOT_X + SLOT_W * (i % 8);
 	}
-	
+
 	private int SLOT_Y(int i) {
 		return GUI_Y() + SLOT_Y + SLOT_H * (i / 8);
 	}
-	
+
 	private Waypoint point;
 	private GuiScreen parent;
-	
+
 	private GuiTextField nameField;
 	private GuiTextField xField, yField, zField;
 	private GuiTextField[] textFields;
-	
+
 	public GuiEditWaypoint(World world, Waypoint waypoint) {
 		point = waypoint;
 		MinemapWaypoints.add(world, point);
 		parent = Minecraft.getMinecraft().currentScreen;
 	}
-	
+
 	@Override public void initGui() {
 		Keyboard.enableRepeatEvents(true);
 		nameField = new GuiTextField(0, fontRendererObj, GUI_X() + NAME_X, GUI_Y() + NAME_Y, NAME_W, NAME_H);
@@ -94,7 +94,7 @@ public class GuiEditWaypoint extends GuiScreen {
 			initField(f);
 			f.setMaxStringLength(6);
 		}
-		
+
 		if(point.position.length == 2) {
 			xField.setText("" + point.position[0]);
 			zField.setText("" + point.position[1]);
@@ -103,37 +103,37 @@ public class GuiEditWaypoint extends GuiScreen {
 			yField.setText("" + point.position[1]);
 			zField.setText("" + point.position[2]);
 		}
-		
+
 		textFields = new GuiTextField[] {nameField, xField, yField, zField};
-		
+
 		for(int i = 0; i < 16 + 8; i++)
 			buttonList.add(new MapButton(i));
 	}
-	
+
 	private static void initField(GuiTextField f) {
 		f.setTextColor(-1);
 		f.setDisabledTextColour(-1);
 		f.setEnableBackgroundDrawing(false);
 	}
-	
+
 	@Override public void actionPerformed(GuiButton button) throws IOException {
 		if(button.id < 16) point.style.color = new Color(fontRendererObj.colorCode[button.id]);
 		else point.style.shape = button.id - 16;
 	}
-	
+
 	@Override public void onGuiClosed() {
 		Keyboard.enableRepeatEvents(false);
 		MinemapWaypoints.save();
 	}
-	
+
 	@Override public boolean doesGuiPauseGame() {
 		return false;
 	}
-	
+
 	@Override public void updateScreen() {
 		super.updateScreen();
 		if(!mc.thePlayer.isEntityAlive() || mc.thePlayer.isDead) mc.displayGuiScreen(parent);
-		
+
 		point.name = nameField.getText();
 		if(validate(xField, false) & validate(yField, true) & validate(zField, false)) {
 			boolean y = validate(yField, false);
@@ -143,11 +143,11 @@ public class GuiEditWaypoint extends GuiScreen {
 			point.position = pos;
 		}
 	}
-	
+
 	private static int val(GuiTextField f) {
 		return Integer.parseInt(f.getText());
 	}
-	
+
 	private static boolean validate(GuiTextField f, boolean allowEmpty) {
 		boolean v = false;
 		try {
@@ -158,7 +158,7 @@ public class GuiEditWaypoint extends GuiScreen {
 		}
 		return v;
 	}
-	
+
 	@Override public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		mc.getTextureManager().bindTexture(BACKGROUND);
 		drawTexturedModalRect(GUI_X(), GUI_Y(), 0, 0, GUI_W, GUI_H);
@@ -167,7 +167,7 @@ public class GuiEditWaypoint extends GuiScreen {
 		for(GuiTextField f : textFields)
 			f.drawTextBox();
 	}
-	
+
 	@Override public void keyTyped(char typedChar, int keyCode) throws IOException {
 		if(keyCode == 1) mc.displayGuiScreen(parent);
 		if(keyCode == Keyboard.KEY_TAB) {
@@ -178,7 +178,7 @@ public class GuiEditWaypoint extends GuiScreen {
 					cur = i;
 					next = (i + 1) % textFields.length;
 				}
-			
+
 			if(cur != -1) {
 				textFields[cur].setFocused(false);
 				textFields[cur].setCursorPositionZero();
@@ -193,7 +193,7 @@ public class GuiEditWaypoint extends GuiScreen {
 		for(GuiTextField f : textFields)
 			f.textboxKeyTyped(typedChar, keyCode);
 	}
-	
+
 	@Override public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		for(GuiTextField f : textFields)

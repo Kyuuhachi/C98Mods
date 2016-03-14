@@ -16,7 +16,7 @@ import com.mojang.authlib.GameProfile;
 	public Server(Entity p_i1525_1_, int p_i1525_2_, int p_i1525_3_, boolean p_i1525_4_) {
 		super(p_i1525_1_, p_i1525_2_, p_i1525_3_, p_i1525_4_);
 	}
-	
+
 	@Override public Packet func_151260_c() {
 		for(EntitySpawnHook mod : HookImpl.entitySpawnHooks) {
 			Packet p = mod.getPacket(trackedEntity);
@@ -30,7 +30,7 @@ import com.mojang.authlib.GameProfile;
 	public Client(Minecraft p_i45061_1_, GuiScreen p_i45061_2_, NetworkManager p_i45061_3_, GameProfile profile) {
 		super(p_i45061_1_, p_i45061_2_, p_i45061_3_, profile);
 	}
-	
+
 	@Override public void handleSpawnObject(S0EPacketSpawnObject p) {
 		PacketThreadUtil.func_180031_a(p, this, gameController);
 		for(EntitySpawnHook mod : HookImpl.entitySpawnHooks) {
@@ -44,11 +44,11 @@ import com.mojang.authlib.GameProfile;
 				Entity[] parts = e.getParts();
 				if(parts != null) {
 					int partIndex = p.func_149001_c() - e.getEntityId();
-					
+
 					for(int var11 = 0; var11 < parts.length; ++var11)
 						parts[var11].setEntityId(parts[var11].getEntityId() + partIndex);
 				}
-				
+
 				e.setEntityId(p.func_149001_c());
 				clientWorldController.addEntityToWorld(p.func_149001_c(), e);
 				if(p.func_149009_m() > 0) e.setVelocity(p.func_149010_g() / 8000.0D, p.func_149004_h() / 8000.0D, p.func_148999_i() / 8000.0D);
@@ -63,7 +63,7 @@ import com.mojang.authlib.GameProfile;
 	public Tracker(WorldServer p_i1516_1_) {
 		super(p_i1516_1_);
 	}
-	
+
 	@Override public void trackEntity(Entity p_72785_1_) {
 		for(EntitySpawnHook mod : HookImpl.entitySpawnHooks)
 			if(mod.addEntityToTracker(this, p_72785_1_)) return;

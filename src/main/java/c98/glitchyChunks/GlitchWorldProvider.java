@@ -10,7 +10,7 @@ import c98.core.launch.ASMer;
 		if(worldObj.getWorldInfo().getTerrainType() == GlitchyChunks.TYPE) worldChunkMgr = new Mgr(worldObj);
 		else super.registerWorldChunkManager();
 	}
-	
+
 	@Override public IChunkProvider createChunkGenerator() {
 		if(worldObj.getWorldInfo().getTerrainType() != GlitchyChunks.TYPE) return super.createChunkGenerator();
 		return new Gen(worldObj, worldObj.getSeed(), worldObj.getWorldInfo().isMapFeaturesEnabled(), generatorSettings);

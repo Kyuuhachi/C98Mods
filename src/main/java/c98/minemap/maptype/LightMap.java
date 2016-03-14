@@ -7,11 +7,11 @@ import c98.minemap.api.MapHandler;
 
 public class LightMap extends MapHandler {
 	private boolean cave;
-	
+
 	public LightMap(boolean b) {
 		cave = b;
 	}
-	
+
 	@Override public int calc(Chunk chunk, int x, int z, int plY) {
 		int y;
 		if(cave) {

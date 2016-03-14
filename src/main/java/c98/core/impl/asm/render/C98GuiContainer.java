@@ -10,7 +10,7 @@ import c98.core.launch.*;
 	public C98GuiContainer(Container par1Container) {
 		super(par1Container);
 	}
-	
+
 	@Override public void asm(ClassNode node) {
 		l: for(MethodNode n : node.methods)
 			for(AbstractInsnNode insn : new Asm(n))

@@ -10,11 +10,11 @@ import c98.core.impl.HookImpl;
 import c98.core.launch.ASMer;
 
 @ASMer class Packets extends NetworkManager {
-	
+
 	public Packets(EnumPacketDirection packetDirection) {
 		super(packetDirection);
 	}
-	
+
 	@Override public void channelRead0(ChannelHandlerContext p_channelRead0_1_, Packet p_channelRead0_2_) {
 		if(!(getNetHandler() instanceof NetHandlerPlayClient) && !(getNetHandler() instanceof NetHandlerPlayServer)) super.channelRead0(p_channelRead0_1_, p_channelRead0_2_);
 		else if(isChannelOpen()) {
@@ -26,7 +26,7 @@ import c98.core.launch.ASMer;
 			if(!block) super.channelRead0(p_channelRead0_1_, p_channelRead0_2_);
 		}
 	}
-	
+
 	@Override public void dispatchPacket(Packet inPacket, GenericFutureListener[] futureListeners) {
 		if(!(getNetHandler() instanceof NetHandlerPlayClient) && !(getNetHandler() instanceof NetHandlerPlayServer)) super.dispatchPacket(inPacket, futureListeners);
 		else {

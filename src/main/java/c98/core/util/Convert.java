@@ -3,10 +3,10 @@ package c98.core.util;
 import net.minecraft.util.EnumChatFormatting;
 
 public class Convert {
-	
+
 	private static String[] letters = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
 	private static int[] numbers = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
-	
+
 	public static String toRoman(int n) {
 		String roman = "";
 		if(n < 0) {
@@ -20,7 +20,7 @@ public class Convert {
 			}
 		return roman;
 	}
-	
+
 	public static String intToSI(long n, int places) {
 		int iter = 0;
 		while((int)Math.log10(n) + 1 + (iter == 0 ? 0 : 1) > places) {
@@ -30,7 +30,7 @@ public class Convert {
 		if(iter != 0) return "" + n + " KMGTPE".charAt(iter);
 		return "" + n;
 	}
-	
+
 	public static String abbreviate(String string, int len) {
 		StringBuilder b = new StringBuilder(string);
 		for(int i = b.length() - 1; i >= 0 && b.length() > len; i--)
@@ -43,7 +43,7 @@ public class Convert {
 			if(Character.isDigit(b.charAt(i))) b.deleteCharAt(i); //Delete digits
 		return b.toString();
 	}
-	
+
 	public static String padLeft(String s, int i) {
 		StringBuilder sb = new StringBuilder();
 		while(sb.length() + s.length() < i)

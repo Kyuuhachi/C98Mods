@@ -13,36 +13,36 @@ public final class NinePatch {
 	private static int texWidth;
 	private static int texHeight;
 	private static boolean wasDrawing;
-	
+
 	public static void setMargins(int m) {
 		setMargins(m, m);
 	}
-	
+
 	private static void setMargins(int x, int y) {
 		setMargins(x, x, y, y);
 	}
-	
+
 	public static void setMargins(int l, int r, int u, int d) {
 		left = l;
 		right = r;
 		top = u;
 		bottom = d;
 	}
-	
+
 	public static void setTexCoords(int tx, int ty, int tw, int th) {
 		texX = tx;
 		texY = ty;
 		texWidth = tw;
 		texHeight = th;
 	}
-	
+
 	public static void draw(final int x, final int y, int w, int h) {
 		wasDrawing = GL.isDrawing();
 		if(!wasDrawing) GL.begin();
 		Rectangle[][] patches = new Rectangle[3][3];
 		int middleWidth = w - left - right;
 		int middleHeight = h - top - bottom;
-		
+
 		if(top > 0) {
 			if(left > 0) patches[0][0] = new Rectangle(0, 0, left, top);
 			if(middleWidth > 0) patches[1][0] = new Rectangle(left, 0, middleWidth, top);
@@ -79,7 +79,7 @@ public final class NinePatch {
 		draw(patches, x, y, w, h);
 		if(!wasDrawing) GL.end();
 	}
-	
+
 	private static void draw(Rectangle[][] patches, int x, int y, int w, int h) {
 		int[] widths = {-1, -1, -1};
 		int[] heights = {-1, -1, -1};
@@ -93,39 +93,39 @@ public final class NinePatch {
 		int th = texHeight - top - bottom;
 		for(int px = 0; px < 3; px++)
 			for(int py = 0; py < 3; py++) {
-				
+
 				int patchX = 0;
 				for(int i = 0; i < px; i++)
 					if(widths[i] != -1) patchX += widths[i];
-				
+
 				int patchY = 0;
 				for(int i = 0; i < py; i++)
 					if(heights[i] != -1) patchY += heights[i];
-				
+
 				if(patches[px][py] != null) draw(widths, heights, tw, th, px, py, patchX + x, patchY + y);
 			}
 	}
-	
+
 	private static void draw(int[] widths, int[] heights, int tw, int th, int px, int py, int patchX, int patchY) {
 		int width = widths[px];
 		int height = heights[py];
-		
+
 		for(int i = 0; i < width; i += tw)
 			for(int j = 0; j < height; j += th) {
-				
+
 				int cw = i + tw;
 				int ch = j + th;
 				if(cw > width) cw = width;
 				if(ch > height) ch = height;
-				
+
 				float u = texX;
 				if(px == 1) u = texX + left;
 				if(px == 2) u = texX + texWidth - right;
-				
+
 				float v = texY;
 				if(py == 1) v = texY + top;
 				if(py == 2) v = texY + texHeight - bottom;
-				
+
 				int x = patchX + i;
 				int y = patchY + j;
 				int w = cw - i;
@@ -134,7 +134,7 @@ public final class NinePatch {
 				/**/v = v / 256F;
 				float U = u + w / 256F;
 				float V = v + h / 256F;
-				
+
 				GL.vertex(x + 0, y + 0, u, v);
 				GL.vertex(x + 0, y + h, u, V);
 				GL.vertex(x + w, y + h, U, V);

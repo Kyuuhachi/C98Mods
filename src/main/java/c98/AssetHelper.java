@@ -14,7 +14,7 @@ public class AssetHelper extends C98Mod {
 		public Blah(IMetadataSerializer p_i1289_1_) {
 			super(p_i1289_1_);
 		}
-		
+
 		@Override public IResource getResource(ResourceLocation l) throws IOException {
 			try {
 				return super.getResource(l);
@@ -23,7 +23,7 @@ public class AssetHelper extends C98Mod {
 				throw e;
 			}
 		}
-		
+
 		@Override public List getAllResources(ResourceLocation l) throws IOException {
 			try {
 				return super.getAllResources(l);
@@ -32,7 +32,7 @@ public class AssetHelper extends C98Mod {
 				throw e;
 			}
 		}
-		
+
 		private static void create(ResourceLocation l, Exception e) throws IOException {
 			File f = new File("missingAssets/" + l.getResourceDomain() + "/" + l.getResourcePath());
 			f.getParentFile().mkdirs();

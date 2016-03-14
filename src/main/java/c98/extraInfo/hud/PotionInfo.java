@@ -36,11 +36,11 @@ public class PotionInfo {
 			int index = pot.getStatusIconIndex();
 			if(pot.hasStatusIcon()) ExtraInfo.drawTexturedRect(x + 4, y + 4, 0 + index % 8 * 18, 198 + index / 8 * 18, 18, 18);
 			GL.enableDepth();
-			
+
 			String level = Convert.toRoman(effect.getAmplifier() + 1);
-			
+
 			fr.func_175063_a(level, x + 3, y + 3, 0xFFFFFF);
-			
+
 			GL.pushMatrix();
 			GL.scale(0.5, 0.5, 0.5);
 			String s = (Potion.potionTypes[effect.getPotionID()].isBadEffect() ? EnumChatFormatting.RED : "") + effectStr;
@@ -50,7 +50,7 @@ public class PotionInfo {
 			--yPotOffset;
 		}
 	}
-	
+
 	private static void drawRect2(int x, int y, int w, int h) {
 		GL.color(1, 1, 1);
 		ExtraInfo.bindTexture(ExtraInfo.hudTexture);

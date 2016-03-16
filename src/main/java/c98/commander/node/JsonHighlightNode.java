@@ -1,8 +1,11 @@
 package c98.commander.node;
 
-import net.minecraft.util.*;
 import c98.commander.HighlightNode;
 import c98.commander.HighlightResult;
+
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 public class JsonHighlightNode extends HighlightNode {
 	@Override public HighlightResult highlight(String args, int i) {
@@ -14,7 +17,7 @@ public class JsonHighlightNode extends HighlightNode {
 	private HighlightResult hlObj(String args, int i, boolean isObj) {
 		char start = isObj ? '{' : '[';
 		char end = isObj ? '}' : ']';
-		IChatComponent c = new ChatComponentText("").setChatStyle(isObj ? JSON_OBJECT : JSON_ARRAY);
+		ITextComponent c = new TextComponentString("").setChatStyle(isObj ? JSON_OBJECT : JSON_ARRAY);
 		boolean err = false;
 
 		try {
@@ -42,7 +45,7 @@ public class JsonHighlightNode extends HighlightNode {
 				HighlightResult r = null;
 				if(next == '{') r = hlObj(args, i, true);
 				else if(next == '[') r = hlObj(args, i, false);
-				else r = new HighlightResult(new ChatComponentText(args.substring(i, getJsonWord(args, i))).setChatStyle(JSON_VALUE));
+				else r = new HighlightResult(new TextComponentString(args.substring(i, getJsonWord(args, i))).setChatStyle(JSON_VALUE));
 				c.appendSibling(r.text);
 				i += r.length;
 				if(r.error) return new HighlightResult(c, true, true);
@@ -79,13 +82,13 @@ public class JsonHighlightNode extends HighlightNode {
 		return j;
 	}
 
-	private static void a(IChatComponent c, String s, ChatStyle style) {
-		ChatComponentText t = new ChatComponentText(s);
+	private static void a(ITextComponent c, String s, Style style) {
+		ITextComponent t = new TextComponentString(s);
 		if(style != null) t.setChatStyle(style);
 		c.appendSibling(t);
 	}
 
-	private static HighlightResult error(IChatComponent c, String s) {
-		return new HighlightResult(c.appendSibling(new ChatComponentText(s).setChatStyle(ERROR)), true, true);
+	private static HighlightResult error(ITextComponent c, String s) {
+		return new HighlightResult(c.appendSibling(new TextComponentString(s).setChatStyle(ERROR)), true, true);
 	}
 }

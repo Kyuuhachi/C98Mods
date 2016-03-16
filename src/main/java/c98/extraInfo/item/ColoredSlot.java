@@ -71,7 +71,7 @@ import c98.core.launch.ASMer;
 			return;
 		}
 		Color c = ExtraInfo.config.slotInfo.colors.get(drawnTab.getTabLabel());
-		if(c == null || func_147056_g() == drawnTab.getTabIndex()) { //Coloring the active tab looks... Strange.
+		if(c == null || selectedTabIndex == drawnTab.getTabIndex()) { //Coloring the active tab looks... Strange.
 			super.drawTexturedModalRect(x, y, u, v, w, h);
 			return;
 		}

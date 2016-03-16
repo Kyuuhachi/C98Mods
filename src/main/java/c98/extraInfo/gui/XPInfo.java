@@ -71,7 +71,7 @@ public class XPInfo {
 	}
 
 	private static void str(String string, int x, int y) {
-		Minecraft.getMinecraft().fontRendererObj.func_175063_a(string, x + posX, y + posY, 0xFFFFFF);
+		Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(string, x + posX, y + posY, 0xFFFFFF);
 	}
 
 	private static int totalXP(EntityPlayer thePlayer) {

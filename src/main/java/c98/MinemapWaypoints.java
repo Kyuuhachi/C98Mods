@@ -1,20 +1,31 @@
 package c98;
 
-import io.netty.channel.local.LocalAddress;
 import java.net.SocketAddress;
-import java.util.*;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import org.lwjgl.input.Keyboard;
+
 import c98.MinemapWaypoints.Config.Waypoint;
-import c98.core.*;
+import c98.core.C98Core;
+import c98.core.C98Mod;
+import c98.core.Json;
 import c98.core.hooks.KeyHook;
-import c98.minemap.api.*;
+import c98.minemap.api.IconStyle;
+import c98.minemap.api.MapIcon;
+import c98.minemap.api.MinemapPlugin;
 import c98.minemapWaypoints.GuiEditWaypoint;
 import c98.minemapWaypoints.GuiWaypoints;
+
+import io.netty.channel.local.LocalAddress;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public class MinemapWaypoints extends C98Mod implements MinemapPlugin, KeyHook {
 	public static class Config {
@@ -59,8 +70,8 @@ public class MinemapWaypoints extends C98Mod implements MinemapPlugin, KeyHook {
 		ensureHas(world);
 		for(Config.Waypoint wp : getPoints(world)) {
 			MapIcon m;
-			if(wp.position.length == 3) m = new MapIcon(new Vec3(wp.position[0], wp.position[1], wp.position[2]));
-			else m = new MapIcon(new Vec3(wp.position[0], 0, wp.position[1]));
+			if(wp.position.length == 3) m = new MapIcon(new Vec3d(wp.position[0], wp.position[1], wp.position[2]));
+			else m = new MapIcon(new Vec3d(wp.position[0], 0, wp.position[1]));
 			m.always = true;
 			m.style = wp.style.clone();
 			if(wp.position.length == 2) m.style.minOpacity = 255;
@@ -70,7 +81,7 @@ public class MinemapWaypoints extends C98Mod implements MinemapPlugin, KeyHook {
 
 	public static List<Waypoint> getPoints(World world) {
 		ensureHas(world);
-		return config.waypoints.get(getWorldName()).get(world.provider.getDimensionName());
+		return config.waypoints.get(getWorldName()).get(world.provider.getDimensionType().name);
 	}
 
 	public static void add(World world, Waypoint point) {
@@ -95,8 +106,8 @@ public class MinemapWaypoints extends C98Mod implements MinemapPlugin, KeyHook {
 			changed = true;
 		}
 		Map m = config.waypoints.get(getWorldName());
-		if(!m.containsKey(world.provider.getDimensionName())) {
-			m.put(world.provider.getDimensionName(), new ArrayList());
+		if(!m.containsKey(world.provider.getDimensionType().name)) {
+			m.put(world.provider.getDimensionType().name, new ArrayList());
 			changed = true;
 		}
 		if(changed) save();
@@ -104,7 +115,7 @@ public class MinemapWaypoints extends C98Mod implements MinemapPlugin, KeyHook {
 
 	public static String getWorldName() {
 		SocketAddress address = mc.getNetHandler().getNetworkManager().getRemoteAddress();
-		return address instanceof LocalAddress ? MinecraftServer.getServer().getFolderName() : address.toString();
+		return address instanceof LocalAddress ? Minecraft.getMinecraft().getIntegratedServer().getFolderName() : address.toString();
 	}
 
 	public static void save() {

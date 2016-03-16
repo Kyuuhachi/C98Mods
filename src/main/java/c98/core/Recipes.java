@@ -6,7 +6,8 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
+
 import c98.core.impl.recipes.*;
 
 public class Recipes {
@@ -77,7 +78,7 @@ public class Recipes {
 		return new ShapedRecipes(width, height, array, result);
 	}
 
-	private static Object compileReqRecipe(Object[] recipe, RecipeResult req) {
+	private static IRecipe compileReqRecipe(Object[] recipe, RecipeResult req) {
 		String s = "";
 		int width = 0;
 		int height = 0;

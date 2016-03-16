@@ -15,7 +15,6 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 	public static final String CAVEMAP = "cave";
 	public static final String LIGHTMAP = "light";
 	public static final String LIGHTCAVEMAP = "lightcave";
-	public static final String BIOME = "biome";
 
 	public static MapServer mapServer;
 	private MapThread thread;
@@ -95,7 +94,6 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 		if(type.equals(CAVEMAP)) return new CaveMap();
 		if(type.equals(LIGHTMAP)) return new LightMap(false);
 		if(type.equals(LIGHTCAVEMAP)) return new LightMap(true);
-		if(type.equals(BIOME)) return new BiomeMap();
 		return null;
 	}
 }

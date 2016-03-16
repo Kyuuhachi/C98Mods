@@ -1,6 +1,22 @@
 package c98;
 
 import java.util.List;
+
+import org.lwjgl.input.Keyboard;
+
+import c98.core.C98Core;
+import c98.core.C98Mod;
+import c98.core.Json;
+import c98.core.hooks.GuiHook;
+import c98.core.hooks.HudRenderHook;
+import c98.core.hooks.KeyHook;
+import c98.core.hooks.WorldRenderHook;
+import c98.targetLock.HUD;
+import c98.targetLock.MouseHelperProxy;
+import c98.targetLock.Target;
+import c98.targetLock.TargetEntity;
+import c98.targetLock.TargetPlayer;
+
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
@@ -8,13 +24,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.lwjgl.input.Keyboard;
-import c98.core.*;
-import c98.core.hooks.*;
-import c98.targetLock.*;
 
 public class TargetLock extends C98Mod implements WorldRenderHook, GuiHook, HudRenderHook, KeyHook {
 	public static class TLConf {
@@ -78,27 +92,27 @@ public class TargetLock extends C98Mod implements WorldRenderHook, GuiHook, HudR
 			pitch = mc.thePlayer.rotationPitch;
 			removedTarget = true;
 		} else {
-			MovingObjectPosition mop = getMouseOver(C98Core.getPartialTicks());
-
-			if(mop != null && mop.typeOfHit == MovingObjectType.ENTITY && mop.entityHit instanceof EntityPlayer) setTarget(new TargetPlayer((EntityPlayer)mop.entityHit));
-			else if(mop != null && mop.typeOfHit == MovingObjectType.ENTITY && mop.entityHit instanceof EntityLivingBase) setTarget(new TargetEntity(mop.entityHit));
+			RayTraceResult mop = getMouseOver(C98Core.getPartialTicks());
+			if(mop != null && mop.typeOfHit == RayTraceResult.Type.ENTITY)
+				if(mop.entityHit instanceof EntityPlayer) setTarget(new TargetPlayer((EntityPlayer)mop.entityHit));
+				else if(mop.entityHit instanceof EntityLivingBase) setTarget(new TargetEntity(mop.entityHit));
 		}
 	}
 
-	private static MovingObjectPosition getMouseOver(float ptt) {
-		Entity entity = mc.func_175606_aa();
+	private static RayTraceResult getMouseOver(float ptt) {
+		Entity entity = mc.renderViewEntity;
 
 		if(entity == null || mc.theWorld == null) return null;
 		double reach = 64;
-		MovingObjectPosition objectMouseOver = entity.func_174822_a(reach, ptt);
-		Vec3 headPos = entity.func_174824_e(ptt);
+		RayTraceResult objectMouseOver = entity.rayTrace(reach, ptt);
+		Vec3d headPos = entity.getPositionEyes(ptt);
 		double closestBlock = reach;
 		if(objectMouseOver != null) closestBlock = objectMouseOver.hitVec.distanceTo(headPos);
 
-		Vec3 look = entity.getLook(ptt);
-		Vec3 endDist = headPos.addVector(look.xCoord * reach, look.yCoord * reach, look.zCoord * reach);
+		Vec3d look = entity.getLook(ptt);
+		Vec3d endDist = headPos.addVector(look.xCoord * reach, look.yCoord * reach, look.zCoord * reach);
 		Entity pointedEntity = null;
-		Vec3 closestHit = null;
+		Vec3d closestHit = null;
 		AxisAlignedBB bb = entity.getEntityBoundingBox().addCoord(look.xCoord * reach, look.yCoord * reach, look.zCoord * reach).expand(1, 1, 1);
 		List<Entity> entities = mc.theWorld.getEntitiesWithinAABBExcludingEntity(entity, bb);
 		double closestEntity = closestBlock;
@@ -107,7 +121,7 @@ public class TargetLock extends C98Mod implements WorldRenderHook, GuiHook, HudR
 			if(e.canBeCollidedWith()) {
 				float collisionSize = e.getCollisionBorderSize();
 				AxisAlignedBB hitbox = e.getEntityBoundingBox().expand(collisionSize, collisionSize, collisionSize);
-				MovingObjectPosition hit = hitbox.calculateIntercept(headPos, endDist);
+				RayTraceResult hit = hitbox.calculateIntercept(headPos, endDist);
 				if(hit != null) {
 					double dist = headPos.distanceTo(hit.hitVec);
 
@@ -119,13 +133,13 @@ public class TargetLock extends C98Mod implements WorldRenderHook, GuiHook, HudR
 				}
 			}
 
-		if(pointedEntity != null && (closestEntity < closestBlock || objectMouseOver == null)) objectMouseOver = new MovingObjectPosition(pointedEntity, closestHit);
+		if(pointedEntity != null && (closestEntity < closestBlock || objectMouseOver == null)) objectMouseOver = new RayTraceResult(pointedEntity, closestHit);
 
 		return objectMouseOver;
 	}
 
 	private static void updateLook(EntityLivingBase e, float ptt) {
-		Vec3 pos = e.func_174824_e(ptt);
+		Vec3d pos = e.getPositionEyes(ptt);
 		double x = target().getX(ptt) - pos.xCoord;
 		double y = target().getY(ptt) - pos.yCoord;
 		double z = target().getZ(ptt) - pos.zCoord;
@@ -133,11 +147,11 @@ public class TargetLock extends C98Mod implements WorldRenderHook, GuiHook, HudR
 		float yaw = (float)(Math.atan2(z, x) * DEG) - 90;
 		float pitch = (float)-(Math.atan2(y, dist) * DEG);
 		if(e instanceof EntityPlayer) {
-			ItemStack item = ((EntityPlayer)e).getItemInUse();
+			ItemStack item = ((EntityPlayer)e).func_184607_cu();
 			if(item != null && item.getItem() == Items.bow) {
 				float f = (float)-(calcBow(dist, y, 0.05, 3, 0.98) * DEG);
 				if(!Double.isNaN(f)) {
-					float charge = mc.thePlayer.getItemInUseDuration() / 20F;
+					float charge = mc.thePlayer.func_184612_cw() / 20F;
 					charge = Math.min((charge * charge + charge * 2) / 3, 1);
 					pitch += (f - pitch) * charge / 2;
 				}

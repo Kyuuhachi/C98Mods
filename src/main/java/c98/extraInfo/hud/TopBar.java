@@ -1,14 +1,17 @@
 package c98.extraInfo.hud;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.*;
-import net.minecraft.world.chunk.Chunk;
 import c98.ExtraInfo;
 import c98.Minemap;
 import c98.core.C98Core;
 import c98.core.GL;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.chunk.Chunk;
 
 public class TopBar {
 	private static ResourceLocation moon = new ResourceLocation("textures/environment/moon_phases.png");
@@ -16,13 +19,13 @@ public class TopBar {
 
 	public static void drawTopBar(Minecraft mc, int width, FontRenderer fr) {
 		int right = width - 40;
-		if(C98Core.isModLoaded("Minemap") && Minemap.mapServer != null) right -= 4 + Minemap.mapServer.size / new ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaleFactor();
+		if(C98Core.isModLoaded("Minemap") && Minemap.mapServer != null) right -= 4 + Minemap.mapServer.size / new ScaledResolution(mc).getScaleFactor();
 		drawBiome(mc, right, fr);
 		drawTime(mc, right, fr);
 	}
 
 	private static void drawBiome(Minecraft mc, int x, FontRenderer fr) {
-		BlockPos pos = new BlockPos(mc.func_175606_aa().posX, mc.func_175606_aa().getEntityBoundingBox().minY, mc.func_175606_aa().posZ);
+		BlockPos pos = new BlockPos(mc.renderViewEntity.posX, mc.renderViewEntity.getEntityBoundingBox().minY, mc.renderViewEntity.posZ);
 		Chunk chunk = mc.theWorld.getChunkFromBlockCoords(pos);
 		String biomeName = chunk.getBiome(pos, mc.theWorld.getWorldChunkManager()).biomeName;
 

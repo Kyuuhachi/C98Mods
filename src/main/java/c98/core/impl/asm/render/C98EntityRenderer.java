@@ -13,8 +13,8 @@ import c98.core.launch.ASMer;
 		super(par1Minecraft, resman);
 	}
 
-	@Override public void updateCameraAndRender(float par1) {
-		super.updateCameraAndRender(par1);
+	@Override public void updateCameraAndRender(float par1, long nano) {
+		super.updateCameraAndRender(par1, nano);
 		GuiScreen g = Minecraft.getMinecraft().currentScreen;
 		if(g != null && !(g instanceof GuiContainer)) HookImpl.renderGui();
 	}

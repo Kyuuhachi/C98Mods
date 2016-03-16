@@ -27,7 +27,7 @@ public class HorseInfo {
 		int y = height - 31 - 4;
 		drawOutlinedString(level, x, y, 0x2080FF, fr);
 
-		String s = String.format("S " + ExtraInfo.format2, attr(horse, SharedMonsterAttributes.movementSpeed));
+		String s = String.format("S " + ExtraInfo.format2, attr(horse, SharedMonsterAttributes.MOVEMENT_SPEED));
 		String S = String.format("J " + ExtraInfo.format2, horse.getHorseJumpStrength());
 		int w = fr.getStringWidth(s) / 2;
 		int W = fr.getStringWidth(S) / 2;

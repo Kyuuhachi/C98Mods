@@ -2,10 +2,14 @@ package c98.commander;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiCommandBlock;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 public class CommandHighlighter extends HighlightNode {
 	public static final Map<String, HighlightNode> highlighters = new HashMap();
@@ -24,20 +28,20 @@ public class CommandHighlighter extends HighlightNode {
 		return res.text.getFormattedText().replaceAll("(\247.)+\247", "\247");
 	}
 
-	@Override public HighlightResult highlight(String args, int i) {
+	@Override public HighlightResult highlight(String args, int i) { //TODO rewrite this method
 		String[] parts = args.substring(i).split(" ", 2);
 		String cmd = parts[0];
 		String cmdName = cmd.startsWith("/") ? cmd.substring(1) : cmd;
 		HighlightNode h = highlighters.get(cmdName);
-		IChatComponent c = new ChatComponentText("");
-		c.appendSibling(new ChatComponentText(cmd).setChatStyle(HighlightNode.error(h == null, HighlightNode.COMMAND)));
+		ITextComponent c = new TextComponentString("");
+		c.appendSibling(new TextComponentString(cmd).setChatStyle(HighlightNode.error(h == null, HighlightNode.COMMAND)));
 		if(parts.length == 2) {
-			c.appendSibling(new ChatComponentText(" "));
+			c.appendSibling(new TextComponentString(" "));
 			if(h != null) {
 				HighlightResult r = h.highlight(parts[1], 0);
 				c.appendSibling(r.text);
-				c.appendSibling(new ChatComponentText(parts[1].substring(r.length)).setChatStyle(HighlightNode.ERROR));
-			} else c.appendSibling(new ChatComponentText(parts[1]));
+				c.appendSibling(new TextComponentString(parts[1].substring(r.length)).setChatStyle(HighlightNode.ERROR));
+			} else c.appendSibling(new TextComponentString(parts[1]));
 		}
 		return new HighlightResult(c);
 	}

@@ -1,9 +1,38 @@
 package c98;
 
 import java.awt.Color;
-import java.util.*;
-import net.minecraft.client.gui.*;
-import net.minecraft.client.gui.inventory.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.lwjgl.input.Keyboard;
+
+import c98.core.C98Core;
+import c98.core.C98Mod;
+import c98.core.GL;
+import c98.core.Json;
+import c98.core.hooks.GuiRenderHook;
+import c98.core.hooks.HudRenderHook;
+import c98.core.hooks.KeyHook;
+import c98.core.util.NinePatch;
+import c98.extraInfo.gui.FurnaceInfo;
+import c98.extraInfo.gui.HorseStats;
+import c98.extraInfo.gui.XPInfo;
+import c98.extraInfo.hud.HorseInfo;
+import c98.extraInfo.hud.PotionInfo;
+import c98.extraInfo.hud.SaturationInfo;
+import c98.extraInfo.hud.TopBar;
+import c98.extraInfo.hud.XPBar;
+import c98.extraInfo.itemViewer.GuiSelectItem;
+import c98.targetLock.TargetEntity;
+
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiFurnace;
+import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -11,14 +40,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Keyboard;
-import c98.core.*;
-import c98.core.hooks.*;
-import c98.core.util.NinePatch;
-import c98.extraInfo.gui.*;
-import c98.extraInfo.hud.*;
-import c98.extraInfo.itemViewer.GuiSelectItem;
-import c98.targetLock.TargetEntity;
 
 public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, KeyHook {
 	public static class EIConf {
@@ -96,7 +117,7 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 	}
 
 	@Override public void postRenderHud(HudElement e) {
-		ScaledResolution res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution res = new ScaledResolution(mc);
 		int height = res.getScaledHeight();
 		int width = res.getScaledWidth();
 		FontRenderer fr = mc.fontRendererObj;
@@ -107,7 +128,7 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 		if(e == HudElement.ALL && config.hud.topBar.enable) TopBar.drawTopBar(mc, width, fr);
 	}
 
-	public static void drawSunMoon(int x, int y, int u, int v, int w, int h, boolean moon) {
+	public static void drawSunMoon(int x, int y, int u, int v, int w, int h, boolean moon) { //TODO move to TopBar
 		float var7 = 1 / 32F;
 		float var8 = 1 / 32F;
 		if(!moon) {
@@ -132,7 +153,6 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 	}
 
 	public static void drawTexturedRect(int x, int y, int u, int v, int w, int h) {
-
 		GL.begin();
 		GL.vertex(x + 0, y + h, (u + 0) / 256F, (v + h) / 256F);
 		GL.vertex(x + w, y + h, (u + w) / 256F, (v + h) / 256F);
@@ -152,8 +172,10 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 			add(viableStacks, mc.thePlayer.inventory.armorInventory);
 			if(C98Core.isModLoaded("TargetLock") && TargetLock.target() instanceof TargetEntity) {
 				entity = ((TargetEntity)TargetLock.target()).getEntity();
-				ItemStack[] stacks = entity.getInventory();
-				add(viableStacks, stacks);
+				if(entity instanceof EntityLivingBase) {
+					add(viableStacks, ((EntityLivingBase)entity).armorArray);
+					add(viableStacks, ((EntityLivingBase)entity).field_184630_bs); //items in hands
+				}
 			} else add(viableStacks, new ItemStack[5]);
 			add(viableStacks, mc.thePlayer.inventory.mainInventory);
 
@@ -165,5 +187,4 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 		if(stacks != null) for(ItemStack is : stacks)
 			viableStacks.add(is);
 	}
-
 }

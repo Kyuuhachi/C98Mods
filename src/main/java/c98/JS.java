@@ -1,23 +1,37 @@
 package c98;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
-import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
-import net.minecraft.command.*;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.util.*;
+
 import c98.core.C98Mod;
 import c98.core.launch.ASMer;
+
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.ServerCommandManager;
+import net.minecraft.command.WrongUsageException;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 
 public class JS extends C98Mod {
 	public static ScriptEngine engine = new NashornScriptEngineFactory().getScriptEngine();
 	public static ICommandSender sender;
 
 	public static class JSCommand extends CommandBase {
-		private static final ChatStyle ERROR_STYLE = new ChatStyle().setColor(EnumChatFormatting.RED);
-		private static final ChatStyle ERROR_LOC_STYLE = new ChatStyle().setUnderlined(true);
+		private static final Style ERROR_STYLE = new Style().setColor(TextFormatting.RED);
+		private static final Style ERROR_LOC_STYLE = new Style().setUnderlined(true);
 
 		@Override public String getCommandName() {
 			return "js";
@@ -31,33 +45,33 @@ public class JS extends C98Mod {
 			return 2;
 		}
 
-		@Override public void processCommand(ICommandSender sender_, String[] args) throws CommandException {
+		@Override public void execute(MinecraftServer s, ICommandSender sender_, String[] args) throws CommandException {
 			sender = sender_;
 			if(args.length == 0) throw new WrongUsageException(getCommandUsage(sender));
 			try {
 				reset();
-				Object o = engine.eval(func_180529_a(args, 0));
-				sender.addChatMessage(new ChatComponentText(String.valueOf(o)));
+				Object o = engine.eval(buildString(args, 0));
+				sender.addChatMessage(new TextComponentString(String.valueOf(o)));
 			} catch(Exception e) {
 				e.printStackTrace();
-				List<IChatComponent> msg = error(e);
-				for(IChatComponent c : msg)
+				List<ITextComponent> msg = error(e);
+				for(ITextComponent c : msg)
 					sender.addChatMessage(c);
 			}
 		}
 
-		private static List<IChatComponent> error(Exception e) {
-			if(!(e instanceof ScriptException)) return Arrays.asList(new ChatComponentText(e.toString()).setChatStyle(ERROR_STYLE));
+		private static List<ITextComponent> error(Exception e) {
+			if(!(e instanceof ScriptException)) return Arrays.asList(new TextComponentString(e.toString()).setChatStyle(ERROR_STYLE));
 			String err = e.getCause().getMessage();
 			String[] lines = err.split("\r?\n");
-			List<IChatComponent> msg = new ArrayList();
-			msg.add(new ChatComponentText(lines[0]).setChatStyle(ERROR_STYLE));
+			List<ITextComponent> msg = new ArrayList();
+			msg.add(new TextComponentString(lines[0]).setChatStyle(ERROR_STYLE));
 			if(lines.length == 3) {
 				int idx = lines[2].indexOf('^');
 				String text = lines[1] + " ";
-				IChatComponent loc = new ChatComponentText("").setChatStyle(ERROR_STYLE);
+				ITextComponent loc = new TextComponentString("").setChatStyle(ERROR_STYLE);
 				loc.appendText(text.substring(0, idx));
-				loc.appendSibling(new ChatComponentText(text.substring(idx, idx + 1)).setChatStyle(ERROR_LOC_STYLE));
+				loc.appendSibling(new TextComponentString(text.substring(idx, idx + 1)).setChatStyle(ERROR_LOC_STYLE));
 				loc.appendText(text.substring(idx + 1));
 				msg.add(loc);
 			}
@@ -83,7 +97,8 @@ public class JS extends C98Mod {
 	}
 
 	@ASMer static class JSCommandManager extends ServerCommandManager {
-		public JSCommandManager() {
+		public JSCommandManager(MinecraftServer serv) {
+			super(serv);
 			registerCommand(new JSCommand());
 		}
 	}

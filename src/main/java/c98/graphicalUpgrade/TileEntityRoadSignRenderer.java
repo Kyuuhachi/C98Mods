@@ -8,7 +8,6 @@ import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraft.client.model.*;
 import net.minecraft.client.renderer.tileentity.TileEntitySignRenderer;
 import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.EnumFacing;
 import c98.GraphicalUpgrade;
@@ -21,7 +20,7 @@ import c98.core.launch.ASMer;
 	public TileEntityRoadSignRenderer() {
 		super();
 		modelSign.signStick.showModel = false;
-		ModelBox box = (ModelBox)modelSign.signBoard.cubeList.get(0);
+		ModelBox box = modelSign.signBoard.cubeList.get(0);
 		TexturedQuad front = box.quadList[4];
 		TexturedQuad back = box.quadList[5];
 
@@ -33,10 +32,10 @@ import c98.core.launch.ASMer;
 		}
 	}
 
-	@Override public void renderTileEntityAt(TileEntity te, double x, double y, double z, float delta, int breakage) {
-		TileEntitySign sign = (TileEntitySign)te;
+	@Override public void renderTileEntityAt(TileEntitySign sign, double x, double y, double z, float delta, int breakage) {
 		boolean b = false;
 		if(sign.getBlockType() != Blocks.wall_sign) b = true;
+		//TODO make the line below only happen for the sign that is rendered inside the gui
 		if(Minecraft.getMinecraft().currentScreen instanceof GuiEditSign && ((GuiEditSign)Minecraft.getMinecraft().currentScreen).tileSign == sign) b = true;
 		if(!GraphicalUpgrade.config.roadSigns) b = true;
 		if(b) super.renderTileEntityAt(sign, x, y, z, delta, breakage);
@@ -58,7 +57,7 @@ import c98.core.launch.ASMer;
 				GL.rotate(-rot, 0, 1, 0);
 				GL.translate(0, -0.3125F, -0.4375F);
 
-				bindTexture(field_147513_b);
+				bindTexture(SIGN_TEXTURE);
 				GL.scale(scale, -scale, -scale);
 				float f = 1 / 16F;
 				GL.translate(f * -9, f * 0, f * -10.5F);

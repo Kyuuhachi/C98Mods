@@ -1,11 +1,12 @@
 package c98.extraInfo.hud;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.FoodStats;
-import net.minecraft.util.MathHelper;
 import c98.ExtraInfo;
 import c98.core.GL;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.init.MobEffects;
+import net.minecraft.util.FoodStats;
+import net.minecraft.util.math.MathHelper;
 
 public class SaturationInfo {
 	public static void draw(Minecraft mc, int width, int height) {
@@ -25,7 +26,7 @@ public class SaturationInfo {
 				int foodWidth = MathHelper.clamp_int(Math.round((food - i) * 9), 0, 9);
 
 				int u = 70;
-				if(mc.thePlayer.isPotionActive(Potion.hunger)) u += 36;
+				if(mc.thePlayer.isPotionActive(MobEffects.saturation)) u += 36;
 
 				u += 9 - foodWidth;
 				foodX += 9 - foodWidth;

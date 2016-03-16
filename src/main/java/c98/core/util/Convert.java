@@ -1,6 +1,6 @@
 package c98.core.util;
 
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 public class Convert {
 
@@ -11,7 +11,7 @@ public class Convert {
 		String roman = "";
 		if(n < 0) {
 			n = -n;
-			roman += EnumChatFormatting.RED;
+			roman += TextFormatting.RED;
 		}
 		for(int i = 0; i < numbers.length; i++)
 			while(n >= numbers[i]) {

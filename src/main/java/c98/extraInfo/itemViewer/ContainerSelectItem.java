@@ -16,7 +16,7 @@ public class ContainerSelectItem extends Container {
 			armorType = par6;
 		}
 
-		@Override public String func_178171_c() {
+		@Override public String getSlotTexture() {
 			return ItemArmor.EMPTY_SLOT_NAMES[armorType];
 		}
 	}
@@ -48,8 +48,8 @@ public class ContainerSelectItem extends Container {
 		return true;
 	}
 
-	@Override public ItemStack slotClick(int slot, int dunno, int button, EntityPlayer p) {
-		if(button == 0 && getSlot(slot).getStack() != null) Minecraft.getMinecraft().displayGuiScreen(new GuiViewItem(getSlot(slot).getStack()));
+	@Override public ItemStack func_184996_a(int slot, int dunno, ClickType button, EntityPlayer p) {
+		if(button == ClickType.PICKUP && getSlot(slot).getStack() != null) Minecraft.getMinecraft().displayGuiScreen(new GuiViewItem(getSlot(slot).getStack()));
 		return null;
 	}
 }

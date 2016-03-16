@@ -121,8 +121,8 @@ public class GL {
 
 	public static void enableLighting() {GlStateManager.enableLighting();}
 	public static void disableLighting() {GlStateManager.disableLighting();}
-	public static void enableLight(int num) {GlStateManager.enableBooleanStateAt(num);}
-	public static void disableLight(int num) {GlStateManager.disableBooleanStateAt(num);}
+	public static void enableLight(int num) {GlStateManager.enableLight(num);}
+	public static void disableLight(int num) {GlStateManager.disableLight(num);}
 
 	public static void enableColorMaterial() {GlStateManager.enableColorMaterial();}
 	public static void disableColorMaterial() {GlStateManager.disableColorMaterial();}
@@ -153,13 +153,13 @@ public class GL {
 	public static void enableTexGen(GlStateManager.TexGen type) {GlStateManager.enableTexGenCoord(type);}
 	public static void disableTexGen(GlStateManager.TexGen type) {GlStateManager.disableTexGenCoord(type);}
 	public static void texGen(GlStateManager.TexGen type, int param) {GlStateManager.texGen(type,param);}
-	public static void texGen(GlStateManager.TexGen type, int name, FloatBuffer val) {GlStateManager.func_179105_a(type,name,val);}
+	public static void texGen(GlStateManager.TexGen type, int name, FloatBuffer val) {GlStateManager.texGen(type,name,val);}
 
 	public static void setActiveTexture(int tex) {GlStateManager.setActiveTexture(tex);}
-	public static void enableTexture() {GlStateManager.func_179098_w();}
-	public static void disableTexture() {GlStateManager.func_179090_x();}
+	public static void enableTexture() {GlStateManager.enableTexture2D();}
+	public static void disableTexture() {GlStateManager.disableTexture2D();}
 	public static void bindTexture(ResourceLocation loc) {Minecraft.getMinecraft().getTextureManager().bindTexture(loc);}
-	public static void bindTexture(int tex) {GlStateManager.func_179144_i(tex);}
+	public static void bindTexture(int tex) {GlStateManager.bindTexture(tex);}
 
 	public static void enableNormalize() {GlStateManager.enableNormalize();}
 	public static void disableNormalize() {GlStateManager.disableNormalize();}
@@ -198,7 +198,7 @@ public class GL {
 	public static void color(float r, float g, float b, float a) {GlStateManager.color(r,g,b,a);}
 	public static void color(float r, float g, float b) {color(r,g,b, 1);}
 	public static void color(int rgba) {color((rgba>>16&255)/255F,(rgba>>8&255)/255F,(rgba>>0&255)/255F,(rgba>>24&255)/255F);}
-	public static void resetColor() {GlStateManager.func_179117_G();}
+	public static void resetColor() {GlStateManager.resetColor();}
 
 	private static boolean drawing;
 	public static void begin() {glBegin(QUADS);drawing=true;}

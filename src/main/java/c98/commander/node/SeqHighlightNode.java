@@ -2,10 +2,12 @@ package c98.commander.node;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
+
 import c98.commander.HighlightNode;
 import c98.commander.HighlightResult;
+
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 public class SeqHighlightNode extends HighlightNode {
 	private List<HighlightNode> children = new ArrayList();
@@ -15,7 +17,7 @@ public class SeqHighlightNode extends HighlightNode {
 	}
 
 	@Override public HighlightResult highlight(String args, int i) {
-		IChatComponent c = new ChatComponentText("");
+		ITextComponent c = new TextComponentString("");
 		boolean opt = false;
 		boolean error = false;
 		boolean match = false;

@@ -1,14 +1,18 @@
 package c98.commander.node;
 
-import java.util.*;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import c98.commander.HighlightNode;
 import c98.commander.HighlightResult;
 
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+
 public class KeywordHighlightNode extends HighlightNode {
 	private Collection<String> keywords = new ArrayList();
-	private ChatStyle style = KEYWORD;
+	private Style style = KEYWORD;
 
 	public KeywordHighlightNode(List<String> kwd) {
 		if(kwd.isEmpty()) return;
@@ -21,7 +25,7 @@ public class KeywordHighlightNode extends HighlightNode {
 	@Override public HighlightResult highlight(String args, int i) {
 		String word = getWord(args, i);
 		boolean err = !keywords.contains(word);
-		return new HighlightResult(new ChatComponentText(word).setChatStyle(error(err, style)), err);
+		return new HighlightResult(new TextComponentString(word).setChatStyle(error(err, style)), err);
 	}
 
 	@Override public String toString() {

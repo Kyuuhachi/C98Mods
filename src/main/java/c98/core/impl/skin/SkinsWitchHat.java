@@ -1,15 +1,16 @@
 package c98.core.impl.skin;
 
-import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.*;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
+
 import c98.core.GL;
 
-public class SkinsWitchHat implements LayerRenderer {
+public class SkinsWitchHat implements LayerRenderer<EntityPlayer> {
 	private static final ResourceLocation witch = new ResourceLocation("textures/entity/witch.png");
 
 	private RenderPlayer rdr;
@@ -51,14 +52,14 @@ public class SkinsWitchHat implements LayerRenderer {
 		hat3.addChild(hat4);
 	}
 
-	@Override public void doRenderLayer(EntityLivingBase ent, float p_177141_2_, float p_177141_3_, float p_177141_4_, float p_177141_5_, float p_177141_6_, float p_177141_7_, float p_177141_8_) {
-		if(ent.getName().equals("deadmau5") && !ent.isInvisible() && ((AbstractClientPlayer)ent).func_175148_a(EnumPlayerModelParts.CAPE)) { //TODO change name
+	@Override public void doRenderLayer(EntityPlayer ent, float p_177141_2_, float p_177141_3_, float p_177141_4_, float p_177141_5_, float p_177141_6_, float p_177141_7_, float p_177141_8_) {
+		if(ent.getName().equals("deadmau5") && !ent.isInvisible() && ent.isWearing(EnumPlayerModelParts.CAPE)) { //TODO change name
 			rdr.bindTexture(witch);
 
 			GL.pushMatrix();
 			if(ent.isSneaking()) GL.translate(0, 0.25F, 0);
-			hat.offsetY = ent.getEquipmentInSlot(4) != null ? -0.0625F : 0;
-			ModelBase.func_178685_a(((ModelBiped)rdr.mainModel).bipedHead, hat);
+			hat.offsetY = ent.getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null ? -0.0625F : 0;
+			ModelBase.copyModelAngles(((ModelBiped)rdr.mainModel).bipedHead, hat);
 			hat.rotationPointX = 0;
 			hat.rotationPointY = 0;
 			hat.render(0.0625F);

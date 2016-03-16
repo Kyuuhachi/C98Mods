@@ -1,16 +1,19 @@
 package c98.minemapWaypoints;
 
 import java.io.File;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.client.multiplayer.ServerList;
-import net.minecraft.world.storage.SaveFormatOld;
+
 import c98.MinemapWaypoints;
 import c98.core.launch.ASMer;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.multiplayer.ServerList;
+import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.world.storage.SaveFormatOld;
+
 @ASMer class _SaveFormatOld extends SaveFormatOld {
-	public _SaveFormatOld(File p_i2147_1_) {
-		super(p_i2147_1_);
+	public _SaveFormatOld(File p_i2147_1_, DataFixer fix) {
+		super(p_i2147_1_, fix);
 	}
 
 	@Override public boolean deleteWorldDirectory(String p_75802_1_) {

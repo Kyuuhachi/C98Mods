@@ -1,9 +1,10 @@
 package c98.core.impl.recipes;
 
+import c98.core.Recipes.RecipeSlot;
+
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import c98.core.Recipes.RecipeSlot;
+import net.minecraft.util.math.BlockPos;
 
 public class SimpleRecipeSlot implements RecipeSlot {
 	private ItemStack item;

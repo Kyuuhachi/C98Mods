@@ -26,19 +26,19 @@ public class SelectorProperties {
 		return null;
 	}
 
-	public static void addEntity(String name, Class clazz, SimpleProperty prop) {
-		add(name, clazz, prop.getType(), prop);
+	public static void addEntity(Class clazz, String name, SimpleProperty prop) {
+		add(clazz, name, prop.getType(), prop);
 	}
 
-	public static void addEntity(String name, Class clazz, String type, EntityProperty prop) {
-		add(name, clazz, type, prop);
+	public static void addEntity(Class clazz, String name, String type, EntityProperty prop) {
+		add(clazz, name, type, prop);
 	}
 
-	public static void addTileEntity(String name, Class clazz, String type, TileEntityProperty prop) {
-		add(name, clazz, type, prop);
+	public static void addTileEntity(Class clazz, String name, String type, TileEntityProperty prop) {
+		add(clazz, name, type, prop);
 	}
 
-	private static void add(String name, Class clazz, String type, SelectorProperty prop) {
+	private static void add(Class clazz, String name, String type, SelectorProperty prop) {
 		String key = EntitySelector.classToId.get(clazz);
 		parent.put(key, EntitySelector.classToId.get(clazz.getSuperclass()));
 		if(!props.containsKey(key)) {

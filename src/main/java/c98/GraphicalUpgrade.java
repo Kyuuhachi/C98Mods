@@ -5,14 +5,11 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.ModelVillager;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import c98.core.*;
-import c98.graphicalUpgrade.LayerColoredSheep;
 import c98.graphicalUpgrade.ModelSquigglySlime;
 
 public class GraphicalUpgrade extends C98Mod {
-
 	public static class GUConf {
 		public static class RXPConf {
 			public boolean enabled = true;
@@ -31,8 +28,7 @@ public class GraphicalUpgrade extends C98Mod {
 	private ModelRenderer testificateHat;
 
 	@Override public void load() {
-		((RendererLivingEntity)Rendering.getRenderer(EntitySheep.class)).addLayer(new LayerColoredSheep((RenderSheep)Rendering.getRenderer(EntitySheep.class)));
-		((RendererLivingEntity)Rendering.getRenderer(EntitySlime.class)).mainModel = new ModelSquigglySlime(16);
+		((RenderLivingBase)Rendering.getRenderer(EntitySlime.class)).mainModel = new ModelSquigglySlime(16);
 
 		ModelVillager base = (ModelVillager)((RenderVillager)Rendering.getRenderer(EntityVillager.class)).mainModel;
 		testificateHat = new ModelRenderer(base).setTextureSize(64, 64);

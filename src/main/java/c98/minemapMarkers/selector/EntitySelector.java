@@ -1,17 +1,50 @@
 package c98.minemapMarkers.selector;
 
+import static c98.minemapMarkers.selector.SelectorProperties.addEntity;
+
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.*;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.item.*;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.*;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.*;
-import net.minecraft.tileentity.TileEntity;
+
 import c98.minemapMarkers.selector.prop.*;
+
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityFlying;
+import net.minecraft.entity.EntityHanging;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartFurnace;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.EntityGuardian;
+import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityAmbientCreature;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntityRabbit;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityWaterMob;
+import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityFireball;
+import net.minecraft.entity.projectile.EntityFishHook;
+import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.tileentity.TileEntity;
 
 public class EntitySelector {
 	public static Map<Class, String> classToId = new HashMap();
@@ -43,47 +76,59 @@ public class EntitySelector {
 	}
 
 	public static void initProperties() {
-		final String[] horseTypes = {"normal", "donkey", "mule", "zombie", "skeleton"};
+		String[] colors = new String[16];
+		for(int i = 0; i < 16; i++)
+			colors[i] = EnumDyeColor.byDyeDamage(i).name;
 		//@off
-		SelectorProperties.addEntity("burning",      Entity.class,                new SimpleBooleanProperty(0, 0));
-		SelectorProperties.addEntity("air",          Entity.class,                new SimpleIntProperty(1));
-		SelectorProperties.addEntity("age",          EntityAgeable.class,         new SimpleIntProperty(12));
-		SelectorProperties.addEntity("health",       EntityLivingBase.class,      new SimpleFloatProperty(6));
-		SelectorProperties.addEntity("arrowCount",   EntityLivingBase.class,      new SimpleIntProperty(9));
-		SelectorProperties.addEntity("forceNametag", EntityLiving.class,          new SimpleBooleanProperty(11, 0));
-		SelectorProperties.addEntity("absorption",   EntityPlayer.class,          new SimpleFloatProperty(17));
-		SelectorProperties.addEntity("score",        EntityPlayer.class,          new SimpleIntProperty(18));
-		SelectorProperties.addEntity("tame",         EntityTameable.class,        new SimpleBooleanProperty(16, 2));
-		SelectorProperties.addEntity("owner",        EntityTameable.class,        new SimpleStringProperty(17));
-		SelectorProperties.addEntity("critical",     EntityArrow.class,           new SimpleBooleanProperty(16, 0));
-		SelectorProperties.addEntity("charging",     EntityBlaze.class,           new SimpleBooleanProperty(16, 0));
-		SelectorProperties.addEntity("fuse",         EntityCreeper.class,         new SimpleIntProperty(16));
-		SelectorProperties.addEntity("charged",      EntityBoat.class,            new SimpleBooleanProperty(17, 0));
-		SelectorProperties.addEntity("screaming",    EntityEnderman.class,        new SimpleBooleanProperty(18, 0));
-		SelectorProperties.addEntity("tame",         EntityHorse.class,           new SimpleBooleanProperty(16, 1));
-		SelectorProperties.addEntity("saddle",       EntityHorse.class,           new SimpleBooleanProperty(16, 2));
-		SelectorProperties.addEntity("chest",        EntityHorse.class,           new SimpleBooleanProperty(16, 3));
-		SelectorProperties.addEntity("type",         EntityHorse.class,           SelectorProperties.STRING, e -> horseTypes[((EntityHorse)e).getHorseType()]);
-		SelectorProperties.addEntity("owner",        EntityHorse.class,           new SimpleStringProperty(21));
-		SelectorProperties.addEntity("armor",        EntityHorse.class,           new SimpleIntProperty(22));
-		SelectorProperties.addEntity("charging",     EntityGhast.class,           new SimpleBooleanProperty(16, 0));
-		SelectorProperties.addEntity("powered",      EntityMinecartFurnace.class, new SimpleBooleanProperty(16, 0));
-		SelectorProperties.addEntity("skin",         EntityOcelot.class,          new SimpleIntProperty(18));
-		SelectorProperties.addEntity("saddled",      EntityPig.class,             new SimpleBooleanProperty(16, 0));
-		SelectorProperties.addEntity("color",        EntitySheep.class,           SelectorProperties.STRING, e -> ((EntitySheep)e).func_175509_cj().getName());
-		SelectorProperties.addEntity("sheared",      EntitySheep.class,           new SimpleBooleanProperty(16, 4));
-		SelectorProperties.addEntity("wither",       EntitySkeleton.class,        new SimpleBooleanProperty(13, 0));
-		SelectorProperties.addEntity("size",         EntitySlime.class,           new SimpleIntProperty(16));
-		SelectorProperties.addEntity("profession",   EntityVillager.class,        new SimpleIntProperty(16));
-		SelectorProperties.addEntity("created",      EntityIronGolem.class,       new SimpleBooleanProperty(16, 0));
-		SelectorProperties.addEntity("angry",        EntityWitch.class,           new SimpleBooleanProperty(21, 0));
-		SelectorProperties.addEntity("charge",       EntityWither.class,          new SimpleIntProperty(20));
-		SelectorProperties.addEntity("angry",        EntityWolf.class,            new SimpleBooleanProperty(16, 1));
-		SelectorProperties.addEntity("collarColor",  EntityWolf.class,            new SimpleIntProperty(20));
-		SelectorProperties.addEntity("baby",         EntityZombie.class,          new SimpleBooleanProperty(12, 0));
-		SelectorProperties.addEntity("villager",     EntityZombie.class,          new SimpleBooleanProperty(12, 0));
-		SelectorProperties.addEntity("converting",   EntityZombie.class,          new SimpleBooleanProperty(14, 0));
-		SelectorProperties.addEntity("name",         Entity.class,                SelectorProperties.STRING, e -> e.getName());
+		addEntity(Entity.class,                "air",          new SimpleIntProperty(Entity.AIR));
+		addEntity(Entity.class,                "burning",      new SimpleBooleanProperty(Entity.FLAGS, 0));
+		addEntity(Entity.class,                "elytra",       new SimpleBooleanProperty(Entity.FLAGS, 7));
+		addEntity(Entity.class,                "forceNametag", new SimpleBooleanProperty(Entity.CUSTOM_NAME_VISIBLE));
+		addEntity(Entity.class,                "glowing",      new SimpleBooleanProperty(Entity.FLAGS, 6));
+		addEntity(Entity.class,                "invisible",    new SimpleBooleanProperty(Entity.FLAGS, 5));
+		addEntity(Entity.class,                "name",         SelectorProperties.STRING, e -> e.getName());
+		addEntity(Entity.class,                "sneaking",     new SimpleBooleanProperty(Entity.FLAGS, 1));
+		addEntity(Entity.class,                "sprinting",    new SimpleBooleanProperty(Entity.FLAGS, 3));
+		addEntity(EntityAgeable.class,         "child",        new SimpleBooleanProperty(EntityAgeable.field_184751_bv));
+		addEntity(EntityLiving.class,          "disabled",     new SimpleBooleanProperty(EntityLiving.AI_FLAGS, 0));
+		addEntity(EntityLiving.class,          "lefthanded",   new SimpleBooleanProperty(EntityLiving.AI_FLAGS, 1));
+		addEntity(EntityLivingBase.class,      "health",       new SimpleFloatProperty(EntityLivingBase.field_184632_c));
+		addEntity(EntityTameable.class,        "owner",        new SimpleUUIDProperty(EntityTameable.field_184756_bw));
+		addEntity(EntityTameable.class,        "tame",         new SimpleBooleanProperty(EntityTameable.TAMED, 2));
+
+		//TODO fill a bunch of enums
+		addEntity(EntityBoat.class,            "type",         new SimpleEnumProperty(EntityBoat.BOAT_TYPE));
+		addEntity(EntityCreeper.class,         "powered",      new SimpleBooleanProperty(EntityCreeper.POWERED));
+		addEntity(EntityDragon.class,          "phase",        new SimpleIntProperty(EntityDragon.PHASE));
+		addEntity(EntityFishHook.class,        "biting",       SelectorProperties.BOOLEAN, e -> false); //TODO
+		addEntity(EntityGuardian.class,        "type",         SelectorProperties.STRING, e -> ""); //TODO can't use simpleenum, since this is just a bit flag
+		addEntity(EntityHorse.class,           "armor",        new SimpleIntProperty(EntityHorse.HORSE_ARMOR));
+		addEntity(EntityHorse.class,           "chest",        new SimpleBooleanProperty(EntityHorse.STATUS, 3));
+		addEntity(EntityHorse.class,           "owner",        new SimpleUUIDProperty(EntityHorse.OWNER_UNIQUE_ID));
+		addEntity(EntityHorse.class,           "saddle",       new SimpleBooleanProperty(EntityHorse.STATUS, 2));
+		addEntity(EntityHorse.class,           "tame",         new SimpleBooleanProperty(EntityHorse.STATUS, 1));
+		addEntity(EntityHorse.class,           "type",         new SimpleEnumProperty(EntityHorse.HORSE_TYPE, "normal", "donkey", "mule", "zombie", "skeleton"));
+		addEntity(EntityIronGolem.class,       "created",      new SimpleBooleanProperty(EntityIronGolem.PLAYER_CREATED, 0));
+		addEntity(EntityMinecartFurnace.class, "powered",      new SimpleBooleanProperty(EntityMinecartFurnace.field_184275_c));
+		addEntity(EntityOcelot.class,          "type",         new SimpleEnumProperty(EntityOcelot.OCELOT_VARIANT));
+		addEntity(EntityPig.class,             "saddle",       new SimpleBooleanProperty(EntityPig.SADDLED));
+		addEntity(EntityPlayer.class,          "absorption",   new SimpleFloatProperty(EntityPlayer.ABSORPTION));
+		addEntity(EntityPlayer.class,          "hand",         new SimpleEnumProperty(EntityPlayer.MAIN_HAND));
+		addEntity(EntityPlayer.class,          "model",        new SimpleEnumProperty(EntityPlayer.PLAYER_MODEL_FLAG));
+		addEntity(EntityPlayer.class,          "score",        new SimpleIntProperty(EntityPlayer.PLAYER_SCORE));
+		addEntity(EntityRabbit.class,          "type",         new SimpleEnumProperty(EntityRabbit.RABBIT_TYPE));
+		addEntity(EntitySheep.class,           "color",        SelectorProperties.STRING, e -> colors[e.dataWatcher.get(EntitySheep.DYE_COLOR) & 15]);
+		addEntity(EntitySheep.class,           "sheared",      SelectorProperties.BOOLEAN, e -> (e.dataWatcher.get(EntitySheep.DYE_COLOR) & 16) != 0);
+		addEntity(EntitySkeleton.class,        "type",         new SimpleEnumProperty(EntitySkeleton.SKELETON_VARIANT, "normal", "wither"));
+		addEntity(EntitySlime.class,           "size",         new SimpleIntProperty(EntitySlime.SLIME_SIZE));
+		addEntity(EntityVillager.class,        "type",         new SimpleEnumProperty(EntityVillager.PROFESSION));
+		addEntity(EntityWolf.class,            "color",        new SimpleEnumProperty(EntityWolf.COLLAR_COLOR, colors));
+		addEntity(EntityZombie.class,          "child",        new SimpleBooleanProperty(EntityZombie.IS_CHILD));
+		addEntity(EntityZombie.class,          "type",         new SimpleEnumProperty(EntityZombie.VILLAGER_TYPE));
+		//TODO
+		//EntityItem, EntityItemFrame: item stack
+		//Creeper, blaze, enderman, ghast, guardian, witch, wolf, tnt: attacking
+
 		//@on
 	}
 

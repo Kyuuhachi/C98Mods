@@ -7,18 +7,20 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.*;
-import net.minecraft.command.common.CommandReplaceItem;
+import net.minecraft.command.CommandReplaceItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
+
 import c98.commander.CommandHighlighter;
 import c98.commander.HighlightNode;
 import c98.commander.node.*;
 import c98.core.C98Log;
 import c98.core.C98Mod;
+
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -82,13 +84,13 @@ public class Commander extends C98Mod implements IResourceManagerReloadListener 
 
 			case "block": return new ListHighlightNode(getIds(Block.blockRegistry.getKeys()));
 			case "item": return new ListHighlightNode(getIds(Item.itemRegistry.getKeys()));
-			case "entity": return new ListHighlightNode(() -> EntityList.func_180124_b());
+			case "entity": return new ListHighlightNode(() -> EntityList.stringToClassMapping.keySet());
 			case "stat": return new ListHighlightNode(() -> map(StatList.allStats, s->s.statId));
-			case "effect": return new ListHighlightNode(() -> Arrays.asList(Potion.func_180141_c()));
-			case "particle": return new ListHighlightNode(() -> Arrays.asList(EnumParticleTypes.func_179349_a()));
-			case "gamerule": return new ListHighlightNode(() -> Arrays.asList(mc.theWorld.getGameRules().getRules()));
-			case "slot": return new ListHighlightNode(() -> new ArrayList(CommandReplaceItem.field_175785_a.keySet()));
-			case "ench": return new ListHighlightNode(getIds(Enchantment.field_180307_E.keySet()));
+			case "effect": return new ListHighlightNode(getIds(Potion.potionRegistry.getKeys()));
+			case "particle": return new ListHighlightNode(() -> EnumParticleTypes.func_186832_a());
+			case "gamerule": return new ListHighlightNode(() -> mc.theWorld.getGameRules().theGameRules.keySet());
+			case "slot": return new ListHighlightNode(() -> new ArrayList(CommandReplaceItem.SHORTCUTS.keySet()));
+			case "ench": return new ListHighlightNode(getIds(Enchantment.enchantmentRegistry.getKeys()));
 
 			case "command": return new ListHighlightNode(() -> CommandHighlighter.highlighters.keySet());
 			case "fullcommand": return CommandHighlighter.INSTANCE;

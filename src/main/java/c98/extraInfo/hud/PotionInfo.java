@@ -5,7 +5,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
+
 import c98.ExtraInfo;
 import c98.core.GL;
 import c98.core.util.Convert;
@@ -20,14 +21,14 @@ public class PotionInfo {
 		int xMult = 26;
 		int yMult = 26;
 		for(PotionEffect effect : potions) {
-			Potion pot = Potion.potionTypes[effect.getPotionID()];
+			Potion pot = effect.field_188420_b;
 			if(itr % 8 == 0 && itr != 0) {
 				xPotOffset += 1;
 				yPotOffset = 8;
 			}
 			int x = 4 + xPotOffset * xMult;
 			int y = -yPotOffset + yPotOffset * yMult;
-			String effectStr = Potion.getDurationString(effect);
+			String effectStr = Potion.func_188410_a(effect, 1);
 			drawRect2(x, y, 26, 26);
 			GL.color(1, 1, 1, 1);
 			GL.disableLighting();
@@ -39,12 +40,12 @@ public class PotionInfo {
 
 			String level = Convert.toRoman(effect.getAmplifier() + 1);
 
-			fr.func_175063_a(level, x + 3, y + 3, 0xFFFFFF);
+			fr.drawStringWithShadow(level, x + 3, y + 3, 0xFFFFFF);
 
 			GL.pushMatrix();
 			GL.scale(0.5, 0.5, 0.5);
-			String s = (Potion.potionTypes[effect.getPotionID()].isBadEffect() ? EnumChatFormatting.RED : "") + effectStr;
-			fr.func_175063_a(s, x * 2 + 48 - fr.getStringWidth(s), y * 2 + 40, 0xFFFFFF);
+			String s = (effect.field_188420_b.isBadEffect() ? TextFormatting.RED : "") + effectStr;
+			fr.drawStringWithShadow(s, x * 2 + 48 - fr.getStringWidth(s), y * 2 + 40, 0xFFFFFF);
 			GL.popMatrix();
 			++itr;
 			--yPotOffset;

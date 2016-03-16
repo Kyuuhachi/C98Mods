@@ -60,15 +60,9 @@ public class C98Core {
 		}
 		b.setUnlocalizedName(string.replace(':', '.'));
 
-		if(b.getMaterial() == Material.air) b.useNeighborBrightness = false;
-		else {
-			boolean isStairs = b instanceof BlockStairs;
-			boolean isSlab = b instanceof BlockSlab;
-			boolean translucent = b.isTranslucent();
-			boolean transparent = b.getLightOpacity() == 0;
 
-			if(isStairs || isSlab || translucent || transparent) b.useNeighborBrightness = true;
-		}
+		if(b.blockMaterial == Material.air) b.useNeighborBrightness = false;
+		else b.useNeighborBrightness = b instanceof BlockStairs || b instanceof BlockSlab || b.translucent || b.lightOpacity == 0;
 
 		for(IBlockState state : (Iterable<IBlockState>)b.getBlockState().getValidStates()) {
 			int value = Block.blockRegistry.getIDForObject(b) << 4 | b.getMetaFromState(state);

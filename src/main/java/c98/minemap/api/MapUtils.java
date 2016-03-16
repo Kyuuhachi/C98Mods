@@ -26,7 +26,7 @@ public class MapUtils {
 			BufferedImage img = IO.getImage(mapIcons);
 			imgSize[0] = img.getWidth();
 			imgSize[1] = img.getHeight();
-			//TODO use metadata instead
+			//TODO use metadata instead of calculating the center
 			int tW = imgSize[0] / 8, tH = imgSize[1] / 2;
 			for(int t = 0; t < 8; t++) {
 				int w = 0;

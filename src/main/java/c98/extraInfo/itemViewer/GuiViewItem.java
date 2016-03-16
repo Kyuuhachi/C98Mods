@@ -7,13 +7,18 @@ import java.io.IOException;
 import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.event.HoverEvent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.util.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.event.HoverEvent;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+
 import c98.core.GL;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.*;
 import com.google.common.base.Splitter;
@@ -29,7 +34,7 @@ public class GuiViewItem extends GuiScreen {
 	private static final int LINES = FIELD_H / 9;
 
 	private ObjectNode json;
-	List<IChatComponent> text;
+	List<ITextComponent> text;
 	int scroll = 0;
 	private int guiLeft;
 	private int guiTop;
@@ -84,7 +89,7 @@ public class GuiViewItem extends GuiScreen {
 			case "LIST": {
 				ArrayNode ar = new ArrayNode(new JsonNodeFactory(false));
 				for(int i = 0; i < ((NBTTagList)nbt).tagCount(); i++)
-					ar.add(toJson((NBTBase)((NBTTagList)nbt).tagList.get(i)));
+					ar.add(toJson(((NBTTagList)nbt).tagList.get(i)));
 				return ar;
 			}
 			default:
@@ -113,8 +118,8 @@ public class GuiViewItem extends GuiScreen {
 			mc.fontRendererObj.drawString(mc.fontRendererObj.trimStringToWidth(text.get(i).getFormattedText(), FIELD_W), x, y, 0xAFAFAF);
 			if(mouseY >= y && mouseY < y + mc.fontRendererObj.FONT_HEIGHT) {
 				int compX = x;
-				for(IChatComponent c : (Iterable<IChatComponent>)text.get(i)) {
-					compX += mc.fontRendererObj.getStringWidth(c.getChatStyle().getFormattingCode() + ((ChatComponentText)c).getUnformattedTextForChat());
+				for(ITextComponent c : text.get(i)) {
+					compX += mc.fontRendererObj.getStringWidth(c.getChatStyle().getFormattingCode() + ((TextComponentString)c).getUnformattedTextForChat());
 					if(compX > mouseX) {
 						HoverEvent e = c.getChatStyle().getChatHoverEvent();
 						if(e != null) {
@@ -187,7 +192,7 @@ public class GuiViewItem extends GuiScreen {
 
 	@Override public void actionPerformed(GuiButton par1GuiButton) {
 		StringBuilder sb = new StringBuilder();
-		for(IChatComponent c : new JsonHighlighter(par1GuiButton.id).write(json))
+		for(ITextComponent c : new JsonHighlighter(par1GuiButton.id).write(json))
 			sb.append(c.getUnformattedText()).append("\n");
 		String s = sb.toString();
 		Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();

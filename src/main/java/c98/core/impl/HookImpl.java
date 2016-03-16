@@ -11,7 +11,6 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import c98.core.*;
@@ -32,7 +31,6 @@ public class HookImpl {
 	public static List<GuiSetHook> guiSetHooks = new ArrayList();
 	public static List<KeyHook> keyHooks = new ArrayList();
 	public static List<ConnectHook> connectHooks = new ArrayList();
-	public static List<EntitySpawnHook> entitySpawnHooks = new ArrayList();
 	public static List<PacketHook> packetHooks = new ArrayList();
 	public static List<DisplayGuiHook> displayGuiHooks = new ArrayList();
 	public static HashMap<KeyBinding, boolean[]> keyBindings = new LinkedHashMap(); //the boolean[] contains [continuous, wasPressed]
@@ -47,10 +45,9 @@ public class HookImpl {
 		if(hook instanceof GuiSetHook) guiSetHooks.add((GuiSetHook)hook);
 		if(hook instanceof KeyHook) keyHooks.add((KeyHook)hook);
 		if(hook instanceof ConnectHook) connectHooks.add((ConnectHook)hook);
-		if(hook instanceof EntitySpawnHook) entitySpawnHooks.add((EntitySpawnHook)hook);
 		if(hook instanceof PacketHook) packetHooks.add((PacketHook)hook);
 		if(hook instanceof DisplayGuiHook) displayGuiHooks.add((DisplayGuiHook)hook);
-		if(hook instanceof IResourceManagerReloadListener) ((SimpleReloadableResourceManager)C98Core.mc.getResourceManager()).reloadListeners.add(hook);
+		if(hook instanceof IResourceManagerReloadListener) ((SimpleReloadableResourceManager)C98Core.mc.getResourceManager()).reloadListeners.add((IResourceManagerReloadListener)hook);
 	}
 
 	public static void removeHook(Object hook) {
@@ -63,7 +60,6 @@ public class HookImpl {
 		if(hook instanceof GuiSetHook) guiSetHooks.remove(hook);
 		if(hook instanceof KeyHook) keyHooks.remove(hook);
 		if(hook instanceof ConnectHook) connectHooks.remove(hook);
-		if(hook instanceof EntitySpawnHook) entitySpawnHooks.remove(hook);
 		if(hook instanceof PacketHook) packetHooks.remove(hook);
 		if(hook instanceof DisplayGuiHook) packetHooks.remove(hook);
 		if(hook instanceof IResourceManagerReloadListener) ((SimpleReloadableResourceManager)C98Core.mc.getResourceManager()).reloadListeners.remove(hook);
@@ -106,8 +102,9 @@ public class HookImpl {
 			C98Log.debug("Mod list: " + C98Core.modList);
 			if(C98Core.client) {
 				addHook(new C98Core());
-				BiomeGenBase.hell.biomeName = "Nether";
-				BiomeGenBase.sky.biomeName = "End";
+				//TODO this should be in EI
+				// BiomeGenBase.getBiome(8).biomeName = "Nether";
+				// BiomeGenBase.getBiome(9).biomeName = "End";
 				C98Core.mc.gameSettings.keyBindings = getAllKeys(C98Core.mc.gameSettings.keyBindings);
 				C98Core.mc.gameSettings.loadOptions();
 			}
@@ -155,7 +152,7 @@ public class HookImpl {
 		C98Core.mc.mcProfiler.startSection("c98renderWorld");
 
 		float f = C98Core.getPartialTicks();
-		Entity ent = C98Core.mc.func_175606_aa();
+		Entity ent = C98Core.mc.renderViewEntity;
 		double x = (ent.posX - ent.prevPosX) * f + ent.prevPosX;
 		double y = (ent.posY - ent.prevPosY) * f + ent.prevPosY;
 		double z = (ent.posZ - ent.prevPosZ) * f + ent.prevPosZ;

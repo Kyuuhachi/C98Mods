@@ -1,10 +1,11 @@
 package c98.minemap.maptype;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.chunk.Chunk;
 import c98.minemap.api.MapHandler;
+
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.chunk.Chunk;
 
 public class SurfaceMap extends MapHandler {
 	private int prevHeight;
@@ -13,21 +14,21 @@ public class SurfaceMap extends MapHandler {
 		int waterDepth = 0;
 		int height = 0;
 
-		int maxY = chunk.getHeight(x, z) + 1;
-		Block id = null;
+		int maxY = chunk.getHeight(new BlockPos(x, 0, z)) + 1;
+		IBlockState id = null;
 
 		if(maxY >= 0) {
 			do {
 				--maxY;
-				id = chunk.getBlock(x, maxY, z);
-			} while(maxY >= 0 && id.getMapColor(chunk.getBlockState(new BlockPos(x, maxY, z))) == MapColor.airColor);
+				id = chunk.getBlockState(x, maxY, z);
+			} while(maxY >= 0 && id.getMapColor() == MapColor.airColor);
 
 			if(maxY >= 0 && id.getMaterial().isLiquid()) {
 				int liquidBottom = maxY - 1;
-				Block bottomID;
+				IBlockState bottomID;
 
 				do {
-					bottomID = chunk.getBlock(x, liquidBottom--, z);
+					bottomID = chunk.getBlockState(x, liquidBottom--, z);
 					++waterDepth;
 				} while(liquidBottom > 0 && bottomID.getMaterial().isLiquid());
 			}

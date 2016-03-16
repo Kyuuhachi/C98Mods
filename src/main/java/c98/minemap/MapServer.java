@@ -1,16 +1,22 @@
 package c98.minemap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+
 import c98.Minemap;
 import c98.core.C98Log;
 import c98.minemap.MinemapConfig.Preset;
-import c98.minemap.api.*;
+import c98.minemap.api.MapHandler;
+import c98.minemap.api.MapIcon;
+import c98.minemap.api.MinemapPlugin;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 public class MapServer {
 	public int size = 256;
@@ -28,16 +34,16 @@ public class MapServer {
 	}
 
 	public void update() {
-		if(mc.func_175606_aa() == null) {
+		if(mc.renderViewEntity == null) {
 			crashed = true;
 			return;
 		}
 		List<MapIcon> m = new LinkedList();
-		MinemapPlugin.addAllIcons(m, world, mc.func_175606_aa());
+		MinemapPlugin.addAllIcons(m, world, mc.renderViewEntity);
 		int[] newColors = colors.clone();
 		updateMap(newColors);
 		colors = newColors;
-		if(mc.func_175606_aa() == null) {
+		if(mc.renderViewEntity == null) {
 			crashed = true;
 			return;
 		}
@@ -45,8 +51,8 @@ public class MapServer {
 	}
 
 	public MapIconInstance convert(MapIcon m) {
-		int xOnMap = round(m.pos.xCoord) - round(mc.func_175606_aa().posX);
-		int zOnMap = round(m.pos.zCoord) - round(mc.func_175606_aa().posZ);
+		int xOnMap = round(m.pos.xCoord) - round(mc.renderViewEntity.posX);
+		int zOnMap = round(m.pos.zCoord) - round(mc.renderViewEntity.posZ);
 
 		int alpha = 256 - (int)Math.abs(m.pos.yCoord == -1 ? 0 : m.pos.yCoord - getPosY()) * 8;
 		if(alpha < m.style.minOpacity) alpha = m.style.minOpacity;
@@ -83,11 +89,11 @@ public class MapServer {
 	private void updateMap(int[] newColors) {
 		int y = getPosY();
 
-		int mapx = MathHelper.floor_double(mc.func_175606_aa().posX) - size / 2 / scale;
-		int mapz = MathHelper.floor_double(mc.func_175606_aa().posZ) - size / 2 / scale;
+		int mapx = MathHelper.floor_double(mc.renderViewEntity.posX) - size / 2 / scale;
+		int mapz = MathHelper.floor_double(mc.renderViewEntity.posZ) - size / 2 / scale;
 
-		int partialx = (int)(mod(mc.func_175606_aa().posX) * scale);
-		int partialz = (int)(mod(mc.func_175606_aa().posZ) * scale);
+		int partialx = (int)(mod(mc.renderViewEntity.posX) * scale);
+		int partialz = (int)(mod(mc.renderViewEntity.posZ) * scale);
 
 		for(int i = 0; i < size; i++) {
 			int x = mapx + (i + partialx) / scale;
@@ -114,7 +120,7 @@ public class MapServer {
 	}
 
 	public int getPosY() {
-		return MathHelper.floor_double(mc.func_175606_aa().posY) + 1;
+		return MathHelper.floor_double(mc.renderViewEntity.posY) + 1;
 	}
 
 	public void render() {

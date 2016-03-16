@@ -26,6 +26,6 @@ public class ModelImpl {
 
 	public static void registerBlockModels(BlockStateMapper models) {
 		for(Map.Entry<Block, IStateMapper> e : blockModels.entrySet())
-			models.func_178447_a(e.getKey(), e.getValue());
+			models.registerBlockStateMapper(e.getKey(), e.getValue());
 	}
 }

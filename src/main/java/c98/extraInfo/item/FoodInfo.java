@@ -3,10 +3,12 @@ package c98.extraInfo.item;
 import java.util.List;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.*;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.StringUtils;
+import net.minecraft.util.text.TextFormatting;
+
 import c98.core.launch.ASMer;
 import c98.core.util.Convert;
 
@@ -26,24 +28,27 @@ import c98.core.util.Convert;
 		boolean b = t instanceof ItemAppleGold;
 		boolean isSuperGold = b && is.getItemDamage() != 0;
 		if(b) {
-			l.add(string(Potion.absorption.id, 2400, 0, 100));
 			if(isSuperGold) {
-				l.add(string(Potion.regeneration.id, 600, 4, 100));
-				l.add(string(Potion.resistance.id, 6000, 0, 100));
-				l.add(string(Potion.fireResistance.id, 6000, 0, 100));
+				l.add(string(new PotionEffect(MobEffects.regeneration, 400, 1), 1));
+				l.add(string(new PotionEffect(MobEffects.resistance, 6000, 0), 1));
+				l.add(string(new PotionEffect(MobEffects.fireResistance, 6000, 0), 1));
+				l.add(string(new PotionEffect(MobEffects.absorption, 2400, 3), 1));
+			} else {
+				l.add(string(new PotionEffect(MobEffects.regeneration, 100, 1), 1));
+				l.add(string(new PotionEffect(MobEffects.absorption, 2400, 0), 1));
 			}
 		}
-		if(!isSuperGold && potionEffectProbability > 0) l.add(string(potionId, potionDuration * 20, potionAmplifier, (int)(potionEffectProbability * 100)));
+		if(!isSuperGold && potionEffectProbability > 0) l.add(string(potionId, potionEffectProbability));
 		if(isWolfsFavoriteMeat()) l.add("Wolf food");
 		super.addInformation(is, ep, l, adv);
 	}
 
-	private static String string(int effect, int time, int amp, int chance) {
-		String color = (Potion.potionTypes[effect].isBadEffect() ? EnumChatFormatting.RED : EnumChatFormatting.GREEN).toString();
-		String effectS = I18n.format(Potion.potionTypes[effect].getName());
-		String timeS = StringUtils.ticksToElapsedTime(time);
-		String ampS = " " + Convert.toRoman(amp + 1);
-		if(amp == 0) ampS = "";
-		return String.format("%s%s %s%s (%d%%)", color, effectS, timeS, ampS, chance);
+	private static String string(PotionEffect e, float chance) {
+		String color = (e.field_188420_b.isBadEffect() ? TextFormatting.RED : TextFormatting.GREEN).toString();
+		String effectS = I18n.format(e.field_188420_b.getName());
+		String timeS = StringUtils.ticksToElapsedTime(e.duration * 20);
+		String ampS = " " + Convert.toRoman(e.amplifier + 1);
+		if(e.amplifier == 0) ampS = "";
+		return String.format("%s%s %s%s (%d%%)", color, effectS, timeS, ampS, (int)(chance * 100));
 	}
 }

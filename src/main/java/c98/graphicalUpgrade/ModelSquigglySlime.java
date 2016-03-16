@@ -1,16 +1,21 @@
 package c98.graphicalUpgrade;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Random;
+import java.util.WeakHashMap;
+
+import c98.GraphicalUpgrade;
+import c98.core.C98Core;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.util.MathHelper;
-import c98.GraphicalUpgrade;
-import c98.core.C98Core;
+import net.minecraft.util.math.MathHelper;
 
+//TODO asm
 public class ModelSquigglySlime extends ModelBase {
 	public static long time = System.currentTimeMillis();
 	private static Random rand = new Random(time);

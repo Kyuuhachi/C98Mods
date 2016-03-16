@@ -1,18 +1,25 @@
 package c98.minemapMarkers.selector.prop;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.network.datasync.DataParameter;
+
+import java.util.function.Function;
+
 import c98.minemapMarkers.selector.SelectorProperties;
 
 public final class SimpleBooleanProperty implements SimpleProperty<Boolean> {
-	public int idx, bit;
+	public Function<Entity, Boolean> func;
 
-	public SimpleBooleanProperty(int idx, int bit) {
-		this.idx = idx;
-		this.bit = bit;
+	public SimpleBooleanProperty(DataParameter<Boolean> prop) {
+		func = e -> e.dataWatcher.get(prop);
+	}
+
+	public SimpleBooleanProperty(DataParameter<Byte> prop, int bit) {
+		func = e -> (e.dataWatcher.get(prop) & 1 << bit) != 0;
 	}
 
 	@Override public Boolean getValue(Entity e) {
-		return (((Number)e.getDataWatcher().getWatchedObject(idx).getObject()).intValue() & 1 << bit) != 0;
+		return func.apply(e);
 	}
 
 	@Override public String getType() {

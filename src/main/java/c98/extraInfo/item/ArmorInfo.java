@@ -1,13 +1,16 @@
 package c98.extraInfo.item;
 
 import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
+
 import c98.core.launch.ASMer;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+
 @ASMer class ArmorInfo extends ItemArmor {
-	public ArmorInfo(ArmorMaterial par2EnumArmorMaterial, int par3, int par4) {
+	public ArmorInfo(ArmorMaterial par2EnumArmorMaterial, int par3, EntityEquipmentSlot par4) {
 		super(par2EnumArmorMaterial, par3, par4);
 	}
 

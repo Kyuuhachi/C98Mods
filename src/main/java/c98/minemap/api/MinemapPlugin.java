@@ -19,7 +19,7 @@ public interface MinemapPlugin {
 	public static void addAllIcons(List<MapIcon> markers, World world, Entity player) {
 		plugins.forEach(p -> p.addIcons(markers, world));
 		if(!plugins.stream().anyMatch(p -> p.marksPlayer())) {
-			MapIcon m = new MapIcon(player.func_174824_e(1));
+			MapIcon m = new MapIcon(player.getPositionVector());
 			m.rot = player.getRotationYawHead();
 			markers.add(m);
 		}

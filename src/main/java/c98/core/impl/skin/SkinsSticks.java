@@ -1,17 +1,17 @@
 package c98.core.impl.skin;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+
 import c98.core.GL;
 
-public class SkinsSticks implements LayerRenderer {
+public class SkinsSticks implements LayerRenderer<EntityPlayer> {
 	private ModelRenderer[] sticks = new ModelRenderer[12];
 
 	public SkinsSticks(RenderPlayer rdr) {
@@ -23,8 +23,9 @@ public class SkinsSticks implements LayerRenderer {
 
 	private static final ResourceLocation blazeTextures = new ResourceLocation("textures/entity/blaze.png");
 
-	@Override public void doRenderLayer(EntityLivingBase ent, float p_177141_2_, float p_177141_3_, float p_177141_4_, float time, float p_177141_6_, float p_177141_7_, float scale) {
-		if(ent.getName().equals("Car0b1nius") && !ent.isInvisible() && ((AbstractClientPlayer)ent).func_175148_a(EnumPlayerModelParts.CAPE)) {
+	@Override public void doRenderLayer(EntityPlayer ent, float p_177141_2_, float p_177141_3_, float p_177141_4_, float time, float p_177141_6_, float p_177141_7_, float scale) {
+		if(ent.getName().equals("Car0b1nius") && !ent.isInvisible() &&
+				ent.isWearing(EnumPlayerModelParts.CAPE)) {
 			GL.color(0, 1, 0);
 			Minecraft.getMinecraft().getTextureManager().bindTexture(blazeTextures);
 			float angle = time * (float)Math.PI * -0.1F;

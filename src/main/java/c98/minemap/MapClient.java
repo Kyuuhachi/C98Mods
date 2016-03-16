@@ -35,7 +35,7 @@ public class MapClient {
 		image.updateDynamicTexture();
 		GL.enableAlpha();
 		GL.pushMatrix();
-		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution sr = new ScaledResolution(mc);
 		float scale = 1F / sr.getScaleFactor();
 		GL.scale(scale, scale, scale);
 		Point p = Minemap.config.location.getPosition(map.size);

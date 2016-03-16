@@ -2,14 +2,17 @@ package c98;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import c98.core.C98Mod;
+import c98.core.hooks.TickHook;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityLargeFireball;
-import net.minecraft.network.play.client.C02PacketUseEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.network.play.client.CPacketUseEntity;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
-import c98.core.C98Mod;
-import c98.core.hooks.TickHook;
 
 public class FireballPunch extends C98Mod implements TickHook {
 
@@ -33,12 +36,12 @@ public class FireballPunch extends C98Mod implements TickHook {
 		double py = y + r;
 		double pz = z + r;
 
-		AxisAlignedBB aabb = AxisAlignedBB.fromBounds(mx, my, mz, px, py, pz);
+		AxisAlignedBB aabb = new AxisAlignedBB(mx, my, mz, px, py, pz);
 		List<EntityFireball> ls = w.getEntitiesWithinAABB(EntityLargeFireball.class, aabb);
 
 		for(EntityFireball target:ls)
 			if(!punchedFireballs.contains(target)) {
-				mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(target, C02PacketUseEntity.Action.ATTACK));
+				mc.getNetHandler().addToSendQueue(new CPacketUseEntity(target, EnumHand.MAIN_HAND));
 				punchedFireballs.add(target);
 			}
 		punchedFireballs.retainAll(ls);

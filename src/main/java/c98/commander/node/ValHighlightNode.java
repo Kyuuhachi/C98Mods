@@ -1,9 +1,11 @@
 package c98.commander.node;
 
 import java.util.function.Predicate;
-import net.minecraft.util.ChatComponentText;
+
 import c98.commander.HighlightNode;
 import c98.commander.HighlightResult;
+
+import net.minecraft.util.text.TextComponentString;
 
 public class ValHighlightNode extends HighlightNode {
 	private Predicate<String> predicate;
@@ -15,6 +17,6 @@ public class ValHighlightNode extends HighlightNode {
 	@Override public HighlightResult highlight(String args, int i) {
 		String word = getWord(args, i);
 		boolean err = !predicate.test(word);
-		return new HighlightResult(new ChatComponentText(word).setChatStyle(error(err, VALUE)), err);
+		return new HighlightResult(new TextComponentString(word).setChatStyle(error(err, VALUE)), err);
 	}
 }

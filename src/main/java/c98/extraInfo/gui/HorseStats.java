@@ -13,13 +13,13 @@ public class HorseStats {
 
 	public static void drawHorseStats(Minecraft mc) {
 		GuiScreen gui = mc.currentScreen;
-		EntityHorse horse = ((GuiScreenHorseInventory)gui).field_147034_x;
+		EntityHorse horse = ((GuiScreenHorseInventory)gui).horseEntity;
 
 		posX = ((GuiContainer)gui).xSize + 4;
 		posY = 4;
 
-		double health = HorseInfo.attr(horse, SharedMonsterAttributes.maxHealth);
-		double speed = HorseInfo.attr(horse, SharedMonsterAttributes.movementSpeed);
+		double health = HorseInfo.attr(horse, SharedMonsterAttributes.MAX_HEALTH);
+		double speed = HorseInfo.attr(horse, SharedMonsterAttributes.MOVEMENT_SPEED);
 		double jump = horse.getHorseJumpStrength();
 
 		str(String.format("Health: \247e%.2f\247f hearts", health / 2), 0, 0);
@@ -34,6 +34,6 @@ public class HorseStats {
 	}
 
 	private static void str(String string, int x, int y) {
-		Minecraft.getMinecraft().fontRendererObj.func_175063_a(string, x + posX, y + posY, 0xFFFFFF);
+		Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(string, x + posX, y + posY, 0xFFFFFF);
 	}
 }

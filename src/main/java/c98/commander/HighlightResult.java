@@ -1,22 +1,22 @@
 package c98.commander;
 
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
 public class HighlightResult {
-	public IChatComponent text;
+	public ITextComponent text;
 	public boolean error;
 	public boolean anyMatch;
 	public int length;
 
-	public HighlightResult(IChatComponent c) {
+	public HighlightResult(ITextComponent c) {
 		this(c, false, true);
 	}
 
-	public HighlightResult(IChatComponent c, boolean err) {
+	public HighlightResult(ITextComponent c, boolean err) {
 		this(c, err, !err);
 	}
 
-	public HighlightResult(IChatComponent c, boolean err, boolean match) {
+	public HighlightResult(ITextComponent c, boolean err, boolean match) {
 		text = c;
 		error = err;
 		anyMatch = match;

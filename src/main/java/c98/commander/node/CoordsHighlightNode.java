@@ -1,9 +1,10 @@
 package c98.commander.node;
 
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
 import c98.commander.HighlightNode;
 import c98.commander.HighlightResult;
+
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 public class CoordsHighlightNode extends HighlightNode {
 	private int count;
@@ -13,7 +14,7 @@ public class CoordsHighlightNode extends HighlightNode {
 	}
 
 	@Override public HighlightResult highlight(String args, int i) {
-		IChatComponent c = new ChatComponentText("");
+		ITextComponent c = new TextComponentString("");
 		for(int j = 0; j < count; j++) {
 			try {
 				String word = getWord(args, i);
@@ -21,8 +22,8 @@ public class CoordsHighlightNode extends HighlightNode {
 				boolean rel = word.startsWith("~");
 				if(rel) word = word.substring(1);
 				if(!rel || !word.isEmpty()) Float.parseFloat(word);
-				if(rel) c.appendSibling(new ChatComponentText("~").setChatStyle(COORDS_TILDE));
-				c.appendSibling(new ChatComponentText(word).setChatStyle(COORDS));
+				if(rel) c.appendSibling(new TextComponentString("~").setChatStyle(COORDS_TILDE));
+				c.appendSibling(new TextComponentString(word).setChatStyle(COORDS));
 			} catch(Exception e) {
 				return new HighlightResult(c, true, j != 0);
 			}

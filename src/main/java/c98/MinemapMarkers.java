@@ -10,8 +10,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
 import c98.MinemapMarkers.Config.MarkerConfig;
 import c98.core.*;
 import c98.minemap.api.*;
@@ -86,7 +87,7 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 		try {
 			MarkerConfig mrkr = getMarker(te);
 			if(mrkr == null) return;
-			MapIcon marker = new MapIcon(new Vec3(te.getPos().getX() + 0.5, te.getPos().getY() + 0.5, te.getPos().getZ() + 0.5));
+			MapIcon marker = new MapIcon(new Vec3d(te.getPos().getX() + 0.5, te.getPos().getY() + 0.5, te.getPos().getZ() + 0.5));
 			marker.style = mrkr.style.clone();
 			l.add(marker);
 		} catch(Exception e) {
@@ -101,7 +102,7 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 			float rotation = e.rotationYaw;
 			if(e instanceof EntityDragon) rotation += 180;
 			if(e instanceof EntityPlayer) rotation = e.getRotationYawHead();
-			MapIcon marker = new MapIcon(e.func_174824_e(1));
+			MapIcon marker = new MapIcon(e.getPositionVector());
 			marker.style = mrkr.style.clone();
 			if(mrkr.style.teamColor) {
 				Color color = getTeamColor(e.worldObj.getScoreboard(), e);

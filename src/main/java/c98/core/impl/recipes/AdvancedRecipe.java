@@ -4,8 +4,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import c98.core.Recipes.RecipeResult;
 import c98.core.Recipes.RecipeSlot;
 
@@ -44,7 +45,7 @@ public class AdvancedRecipe implements IRecipe {
 
 	private static BlockPos getTableLoc(InventoryCrafting inv) {
 		Container cont = inv.eventHandler;
-		if(cont instanceof ContainerWorkbench) return ((ContainerWorkbench)cont).field_178145_h;
+		if(cont instanceof ContainerWorkbench) return ((ContainerWorkbench)cont).pos;
 		return null;
 	}
 
@@ -77,7 +78,7 @@ public class AdvancedRecipe implements IRecipe {
 		return recipeWidth * recipeHeight;
 	}
 
-	@Override public ItemStack[] func_179532_b(InventoryCrafting inv) { //result items left in slots
+	@Override public ItemStack[] getRemainingItems(InventoryCrafting inv) {
 		ItemStack[] result = new ItemStack[inv.getSizeInventory()];
 
 		for(int i = 0; i < result.length; ++i) {

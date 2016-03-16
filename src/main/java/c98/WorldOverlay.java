@@ -1,22 +1,37 @@
 package c98;
 
-import java.util.*;
-import net.minecraft.block.Block;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.lwjgl.input.Keyboard;
+
+import com.google.common.collect.Sets;
+
+import c98.core.C98Core;
+import c98.core.C98Log;
+import c98.core.C98Mod;
+import c98.core.GL;
+import c98.core.hooks.KeyHook;
+import c98.core.hooks.WorldRenderHook;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.EntityMinecartMobSpawner;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityMinecartMobSpawner;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import org.lwjgl.input.Keyboard;
-import c98.core.*;
-import c98.core.hooks.KeyHook;
-import c98.core.hooks.WorldRenderHook;
-import com.google.common.collect.Sets;
 
 public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 
@@ -38,9 +53,9 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 
 	@Override public void renderWorld(World w, float ptt) {
 		if(!display) return;
-		int pX = MathHelper.floor_double(mc.func_175606_aa().posX);
-		int pY = MathHelper.floor_double(mc.func_175606_aa().posY);
-		int pZ = MathHelper.floor_double(mc.func_175606_aa().posZ);
+		int pX = MathHelper.floor_double(mc.renderViewEntity.posX);
+		int pY = MathHelper.floor_double(mc.renderViewEntity.posY);
+		int pZ = MathHelper.floor_double(mc.renderViewEntity.posZ);
 
 		Set<BlockPos> blocks = new HashSet();
 		for(int x = pX - renderWidth + 1; x < pX + renderWidth; x++)
@@ -60,7 +75,7 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 			if(blocks.contains(c)) rgb |= 0xFF0000;
 			if(spawners.contains(c)) rgb |= 0x00FF00;
 
-			drawSide(w, c.offsetUp(), EnumFacing.DOWN, rgb);
+			drawSide(w, c.up(), EnumFacing.DOWN, rgb);
 		}
 
 		for(int x = pX - renderWidth + 1; x < pX + renderWidth; x++)
@@ -72,11 +87,11 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 					BlockPos p2 = p.offset(facing);
 					BiomeGenBase b2 = w.getBiomeGenForCoords(p2);
 					if(b != b2) for(int y = pY - renderHeight + 1; y < pY + renderHeight; y++) {
-						boolean below1 = isSolid(w.getBlockState(new BlockPos(x, y - 1, z)).getBlock());
-						boolean above1 = isSolid(w.getBlockState(new BlockPos(x, y, z)).getBlock());
-						boolean below2 = isSolid(w.getBlockState(new BlockPos(x, y - 1, z).offset(facing)).getBlock());
-						boolean above2 = isSolid(w.getBlockState(new BlockPos(x, y, z).offset(facing)).getBlock());
-						if((below1 || below2) && !(above1 || above2)) drawSide(w, new BlockPos(x, y, z), facing, 0xFF000000 | b2.color);
+						boolean below1 = isSolid(w.getBlockState(new BlockPos(x, y - 1, z)));
+						boolean above1 = isSolid(w.getBlockState(new BlockPos(x, y, z)));
+						boolean below2 = isSolid(w.getBlockState(new BlockPos(x, y - 1, z).offset(facing)));
+						boolean above2 = isSolid(w.getBlockState(new BlockPos(x, y, z).offset(facing)));
+						if((below1 || below2) && !(above1 || above2)) drawSide(w, new BlockPos(x, y, z), facing, 0xFF000000); //I'd like to use b2.color, but it doesn't exist
 					}
 				}
 			}
@@ -157,9 +172,9 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 				for(int y = pY - renderHeight + 1; y < pY + renderHeight; y++)
 					for(int z = pZ - renderWidth + 1; z < pZ + renderWidth; z++)
 						if(w.getBlockState(new BlockPos(x, y, z)).getBlock() == Blocks.mob_spawner) addSpawner(w, spawners, ((TileEntityMobSpawner)w.getTileEntity(new BlockPos(x, y, z))).getSpawnerBaseLogic());
-			AxisAlignedBB bb = AxisAlignedBB.fromBounds(pX, pY, pZ, pX + 1, pY + 1, pZ + 1).expand(renderWidth, renderHeight, renderWidth);
+			AxisAlignedBB bb = new AxisAlignedBB(pX, pY, pZ, pX + 1, pY + 1, pZ + 1).expand(renderWidth, renderHeight, renderWidth);
 			for(EntityMinecartMobSpawner e : new ArrayList<EntityMinecartMobSpawner>(w.getEntitiesWithinAABB(EntityMinecartMobSpawner.class, bb)))
-				addSpawner(w, spawners, e.func_98039_d());
+				addSpawner(w, spawners, e.mobSpawnerLogic);
 		} catch(Exception e) {
 			C98Log.error("Failed to find spawners", e);
 		}
@@ -169,9 +184,9 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 	private static void addSpawner(World w, Collection<BlockPos> spawners, MobSpawnerBaseLogic spawner) {
 		if(!spawner.isActivated()) return;
 
-		int x = spawner.func_177221_b().getX();
-		int y = spawner.func_177221_b().getY();
-		int z = spawner.func_177221_b().getZ();
+		int x = spawner.getSpawnerPosition().getX();
+		int y = spawner.getSpawnerPosition().getY();
+		int z = spawner.getSpawnerPosition().getZ();
 
 		String type = spawner.getEntityNameToSpawn();
 		Entity e = EntityList.createEntityByName(type, w);
@@ -182,7 +197,7 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 		boolean doEntityCountCheck = false;
 		if(doEntityCountCheck) {
 			int height = 4;
-			AxisAlignedBB spawnArea = AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1).expand(range * 2, height, range * 2);
+			AxisAlignedBB spawnArea = new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1).expand(range * 2, height, range * 2);
 			int numEntities = w.getEntitiesWithinAABB(e.getClass(), spawnArea).size();
 			if(numEntities > spawner.maxNearbyEntities) return;
 		}
@@ -199,22 +214,22 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 
 	private static void addBlocks(World w, Collection<BlockPos> blocks, int x, int y, int z) {
 		BlockPos p = new BlockPos(x, y, z);
-		Block blk = w.getBlockState(p).getBlock();
-		Block blk1 = w.getBlockState(p.offsetUp()).getBlock();
-		Block blk2 = w.getBlockState(p.offsetUp(2)).getBlock();
+		IBlockState blk = w.getBlockState(p);
+		IBlockState blk1 = w.getBlockState(p.up());
+		IBlockState blk2 = w.getBlockState(p.up(2));
 
 		if(isNonSolid(blk)) return;
 		if(isSolid(blk1)) return;
 		if(isSolid(blk2)) return;
-		if(w.getLightFor(EnumSkyBlock.BLOCK, p.offsetUp()) > 7) return;
+		if(w.getLightFor(EnumSkyBlock.BLOCK, p.up()) > 7) return;
 		blocks.add(p);
 	}
 
-	private static boolean isNonSolid(Block blk) {
+	private static boolean isNonSolid(IBlockState blk) {
 		return blk == null || !blk.isOpaqueCube() || !blk.getMaterial().blocksMovement();
 	}
 
-	private static boolean isSolid(Block blk) {
+	private static boolean isSolid(IBlockState blk) {
 		return blk != null && (blk.getMaterial().isSolid() || blk.getMaterial().isLiquid());
 	}
 }

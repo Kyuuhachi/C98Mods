@@ -19,7 +19,7 @@ public class XCube {
 		drawTexturedModalRect(x - 5, y - 5, 26, 202, 26, 26);
 
 		drawIt(x, y, mc);
-		ScaledResolution sr = createScale(mc);
+		ScaledResolution sr = new ScaledResolution(mc);
 		int mx = Mouse.getX() / sr.getScaleFactor();
 		int my = Mouse.getY() / sr.getScaleFactor();
 		my = sr.getScaledHeight() - my;
@@ -106,7 +106,7 @@ public class XCube {
 			if(i == 1) GL.polygonMode(GL.LINE);
 			GL.begin();
 			if(i == 1) {
-				ScaledResolution r = createScale(mc);
+				ScaledResolution r = new ScaledResolution(mc);
 				float G = F - 2F / (16 * r.getScaleFactor());
 				GL.vertex(F, f, G);
 				GL.vertex(F, f, f);
@@ -137,11 +137,6 @@ public class XCube {
 
 			GL.popMatrix();
 		}
-	}
-
-	public static ScaledResolution createScale(Minecraft mc) {
-		ScaledResolution r = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-		return r;
 	}
 
 	private static void drawTexturedModalRect(int x, int y, int u, int v, int w, int h) {
@@ -180,16 +175,16 @@ public class XCube {
 			if(stringWidth > w) w = stringWidth;
 		}
 
-		int drawx = x + 12;
+		int drawX = x + 12;
 		int drawY = y + 12;
 		int h = 8;
 		if(list.size() > 1) h += 1 + (list.size() - 1) * 9;
 
-		ScaledResolution dim = createScale(mc);
+		ScaledResolution dim = new ScaledResolution(mc);
 		int width = dim.getScaledWidth();
 		int height = dim.getScaledHeight();
 
-		if(drawx + w > width) drawx -= 28 + w;
+		if(drawX + w > width) drawX -= 28 + w;
 		if(drawY + h + 6 > height) drawY = height - h - 6;
 
 		GL.disableRescaleNormal();
@@ -206,15 +201,15 @@ public class XCube {
 		int border1 = 0x505000FF;
 		int border2 = 0x5028007F;
 		//@off
-		drawGradientRect(drawx - 3,     drawY - 4,     drawx + w + 3, drawY - 3,     black, black);
-		drawGradientRect(drawx - 3,     drawY + h + 3, drawx + w + 3, drawY + h + 4, black, black);
-		drawGradientRect(drawx - 3,     drawY - 3,     drawx + w + 3, drawY + h + 3, black, black);
-		drawGradientRect(drawx - 4,     drawY - 3,     drawx - 3,     drawY + h + 3, black, black);
-		drawGradientRect(drawx + w + 3, drawY - 3,     drawx + w + 4, drawY + h + 3, black, black);
-		drawGradientRect(drawx - 3,     drawY - 3 + 1, drawx - 3 + 1, drawY + h + 2, border1, border2);
-		drawGradientRect(drawx + w + 2, drawY - 3 + 1, drawx + w + 3, drawY + h + 2, border1, border2);
-		drawGradientRect(drawx - 3,     drawY - 3,     drawx + w + 3, drawY - 3 + 1, border1, border1);
-		drawGradientRect(drawx - 3,     drawY + h + 2, drawx + w + 3, drawY + h + 3, border2, border2);
+		drawGradientRect(drawX - 3,     drawY - 4,     drawX + w + 3, drawY - 3,     black, black);
+		drawGradientRect(drawX - 3,     drawY + h + 3, drawX + w + 3, drawY + h + 4, black, black);
+		drawGradientRect(drawX - 3,     drawY - 3,     drawX + w + 3, drawY + h + 3, black, black);
+		drawGradientRect(drawX - 4,     drawY - 3,     drawX - 3,     drawY + h + 3, black, black);
+		drawGradientRect(drawX + w + 3, drawY - 3,     drawX + w + 4, drawY + h + 3, black, black);
+		drawGradientRect(drawX - 3,     drawY - 3 + 1, drawX - 3 + 1, drawY + h + 2, border1, border2);
+		drawGradientRect(drawX + w + 2, drawY - 3 + 1, drawX + w + 3, drawY + h + 2, border1, border2);
+		drawGradientRect(drawX - 3,     drawY - 3,     drawX + w + 3, drawY - 3 + 1, border1, border1);
+		drawGradientRect(drawX - 3,     drawY + h + 2, drawX + w + 3, drawY + h + 3, border2, border2);
 		//@on
 		GL.end();
 
@@ -224,7 +219,7 @@ public class XCube {
 		GL.enableTexture();
 
 		for(String s : list) {
-			mc.fontRendererObj.func_175063_a(s, drawx, drawY, -1);
+			mc.fontRendererObj.drawStringWithShadow(s, drawX, drawY, -1);
 			drawY += 10;
 		}
 

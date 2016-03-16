@@ -3,8 +3,12 @@ package c98.core.impl.asm.skin;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+
+import c98.core.impl.skin.SkinsWings;
 import c98.core.launch.ASMer;
+
 import com.mojang.authlib.GameProfile;
 
 @ASMer abstract class C98WingFlap extends AbstractClientPlayer {
@@ -36,5 +40,13 @@ import com.mojang.authlib.GameProfile;
 		wingAngle += f;
 
 		if(wingResting) wingAngle = 0.15F;
+	}
+
+	@Override public float applyArmorCalculations(DamageSource source, float damage) {
+		if(source == SkinsWings.WING_ANGLE) return wingAngle;
+		if(source == SkinsWings.WING_ANGLE_P) return wingAnglep;
+		if(source == SkinsWings.WING_RESTING) return wingResting ? 1 : 0;
+		if(source == SkinsWings.WING_RESTING_P) return wingRestingp ? 1 : 0;
+		return super.applyArmorCalculations(source, damage);
 	}
 }

@@ -66,7 +66,7 @@
 						<configuration>
 							<srgIn>client_ro.srg</srgIn>
 							<remappedDependencies>
-								<param>net.minecraft:minecraft-deobf:1.8:jar</param>
+								<param>net.minecraft:minecraft-deobf:${project.version}:jar</param>
 							</remappedDependencies>
 							<reverse>true</reverse>
 						</configuration>

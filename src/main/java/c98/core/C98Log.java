@@ -1,15 +1,11 @@
 package c98.core;
 
 import java.io.*;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.Logger;
 
 public class C98Log {
-	public static final Logger log = (Logger)LogManager.getLogger("C98Mods");
-	static {
-		log.setLevel(Level.ALL);
-	}
+	public static final Logger log = LogManager.getLogger("C98Mods");
 	public static final PrintStream stdout = new PrintStream(new FileOutputStream(FileDescriptor.out));
 	public static final PrintStream stderr = new PrintStream(new FileOutputStream(FileDescriptor.err));
 
@@ -37,5 +33,4 @@ public class C98Log {
 	public static void debug(Object o) {
 		log.debug(o);
 	}
-
 }

@@ -21,7 +21,7 @@ for mod in core c98/[^$]#(.:t:r); do #ZSH is neat
 		c98/$mod(|\$*).class(|)   #Classes (TODO maybe move inside packages)
 		c98/(#i)$mod(|)           #Package (TODO make packages lowercase)
 	)
-	zip=$zips/$groupId/$name/$version/$name-$version.zip
+	zip=$zips/$groupId/$name/$version/$name-$version.jar
 	mkdir -p $(dirname $zip)
 	zip -v9r $zip $files
 done

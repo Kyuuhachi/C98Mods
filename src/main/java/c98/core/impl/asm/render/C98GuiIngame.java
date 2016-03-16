@@ -1,7 +1,5 @@
 package c98.core.impl.asm.render;
 
-import java.util.Deque;
-import java.util.LinkedList;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
@@ -29,7 +27,7 @@ import c98.core.launch.*;
 	public static class FakeProfiler extends Profiler {
 		public static final FakeProfiler instance = new FakeProfiler(Minecraft.getMinecraft().mcProfiler);
 
-		private Deque<String> stack = new LinkedList();
+		private String segment;
 		private Profiler parent;
 
 		public FakeProfiler(Profiler mcProfiler) {
@@ -38,13 +36,15 @@ import c98.core.launch.*;
 
 		@Override public void startSection(String name) {
 			parent.startSection(name);
-			stack.push(name);
-			if(HudElement.bySection.containsKey(name)) HudElement.bySection.get(name).pre();
+			segment = name;
+			if(HudElement.bySection.containsKey(segment))
+				HudElement.bySection.get(name).pre();
 		}
 
 		@Override public void endSection() {
-			String name = stack.pop();
-			if(HudElement.bySection.containsKey(name)) HudElement.bySection.get(name).post();
+			if(HudElement.bySection.containsKey(segment))
+				HudElement.bySection.get(segment).post();
+			segment = null;
 			parent.endSection();
 		}
 	}

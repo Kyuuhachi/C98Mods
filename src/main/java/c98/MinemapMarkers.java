@@ -48,7 +48,7 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 			}
 		}
 
-		public MarkerConfig[] markers = null; //generate in ctor
+		public MarkerConfig[] markers = new MarkerConfig[0]; //generate in ctor
 
 		public Config() {
 			MarkerConfig player = new MarkerConfig();

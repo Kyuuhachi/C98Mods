@@ -41,7 +41,7 @@ public class FireballPunch extends C98Mod implements TickHook {
 
 		for(EntityFireball target:ls)
 			if(!punchedFireballs.contains(target)) {
-				mc.getNetHandler().addToSendQueue(new CPacketUseEntity(target, EnumHand.MAIN_HAND));
+				mc.getNetHandler().addToSendQueue(new CPacketUseEntity(target));
 				punchedFireballs.add(target);
 			}
 		punchedFireballs.retainAll(ls);

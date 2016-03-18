@@ -20,10 +20,10 @@ public class Matrix {
 
 	@Override public String toString() {
 		StringBuilder buf = new StringBuilder();
-		buf.append(m[0][0]).append(' ').append(m[1][0]).append(' ').append(m[2][0]).append(' ').append(m[3][0]).append('\n');
-		buf.append(m[0][1]).append(' ').append(m[1][1]).append(' ').append(m[2][1]).append(' ').append(m[3][1]).append('\n');
-		buf.append(m[0][2]).append(' ').append(m[1][2]).append(' ').append(m[2][2]).append(' ').append(m[3][2]).append('\n');
-		buf.append(m[0][3]).append(' ').append(m[1][3]).append(' ').append(m[2][3]).append(' ').append(m[3][3]).append('\n');
+		buf.append(String.format("%.2f %.2f %.2f %.2f\n", m[0][0], m[1][0], m[2][0], m[3][0]));
+		buf.append(String.format("%.2f %.2f %.2f %.2f\n", m[0][1], m[1][1], m[2][1], m[3][1]));
+		buf.append(String.format("%.2f %.2f %.2f %.2f\n", m[0][2], m[1][2], m[2][2], m[3][2]));
+		buf.append(String.format("%.2f %.2f %.2f %.2f\n", m[0][3], m[1][3], m[2][3], m[3][3]));
 		return buf.toString();
 	}
 

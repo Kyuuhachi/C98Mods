@@ -28,7 +28,6 @@ public class MapIconInstance implements Comparable<MapIconInstance> {
 		m.rotateDeg(rot, new Vector(0, 0, 1));
 		m.scale(new Vector(i / 16, i / 16, 1));
 		m.scale(new Vector(size / 2, size / 2, 1));
-		m.translate(new Vector(-0.125, 0.125, 0));
 	}
 
 	@Override public int compareTo(MapIconInstance arg0) {

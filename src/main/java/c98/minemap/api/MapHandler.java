@@ -6,7 +6,7 @@ import net.minecraft.world.chunk.Chunk;
 public abstract class MapHandler {
 	public abstract int calc(Chunk chunk, int x, int z, int plY);
 
-	public void line(int x) {}
+	@Deprecated public void line(int x) {}
 
 	protected int getColor(byte colorID, int x) {
 		if(colorID / 4 == 0) return x * 8 + 16 << 24; //Handle transparency

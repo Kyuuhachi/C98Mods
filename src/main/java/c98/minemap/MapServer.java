@@ -29,6 +29,8 @@ public class MapServer {
 	public MapHandler impl;
 	private int scale;
 
+	private double playerX, playerY, playerZ;
+
 	public MapServer(World theWorld) {
 		world = theWorld;
 	}
@@ -38,9 +40,12 @@ public class MapServer {
 			crashed = true;
 			return;
 		}
+		playerX = mc.renderViewEntity.posX;
+		playerY = mc.renderViewEntity.posY;
+		playerZ = mc.renderViewEntity.posZ;
 		List<MapIcon> m = new LinkedList();
 		MinemapPlugin.addAllIcons(m, world, mc.renderViewEntity);
-		int[] newColors = colors.clone();
+		int[] newColors = colors.clone(); //TODO save some memory (and speed?) by just switching between two arrays
 		updateMap(newColors);
 		colors = newColors;
 		if(mc.renderViewEntity == null) {
@@ -51,8 +56,8 @@ public class MapServer {
 	}
 
 	public MapIconInstance convert(MapIcon m) {
-		int xOnMap = round(m.pos.xCoord) - round(mc.renderViewEntity.posX);
-		int zOnMap = round(m.pos.zCoord) - round(mc.renderViewEntity.posZ);
+		int xOnMap = round(m.pos.xCoord) - round(playerX);
+		int zOnMap = round(m.pos.zCoord) - round(playerZ);
 
 		int alpha = 256 - (int)Math.abs(m.pos.yCoord == -1 ? 0 : m.pos.yCoord - getPosY()) * 8;
 		if(alpha < m.style.minOpacity) alpha = m.style.minOpacity;
@@ -89,11 +94,11 @@ public class MapServer {
 	private void updateMap(int[] newColors) {
 		int y = getPosY();
 
-		int mapx = MathHelper.floor_double(mc.renderViewEntity.posX) - size / 2 / scale;
-		int mapz = MathHelper.floor_double(mc.renderViewEntity.posZ) - size / 2 / scale;
+		int mapx = round(playerX) - size / 2;
+		int mapz = round(playerZ) - size / 2;
 
-		int partialx = (int)(mod(mc.renderViewEntity.posX) * scale);
-		int partialz = (int)(mod(mc.renderViewEntity.posZ) * scale);
+		int partialx = round(mod(playerX) * scale);
+		int partialz = round(mod(playerZ) * scale);
 
 		for(int i = 0; i < size; i++) {
 			int x = mapx + (i + partialx) / scale;
@@ -120,7 +125,7 @@ public class MapServer {
 	}
 
 	public int getPosY() {
-		return MathHelper.floor_double(mc.renderViewEntity.posY) + 1;
+		return MathHelper.floor_double(playerY);
 	}
 
 	public void render() {

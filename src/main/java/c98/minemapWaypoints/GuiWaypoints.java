@@ -18,9 +18,9 @@ public class GuiWaypoints extends GuiScreen {
 
 	private static final int GUI_W = 158, GUI_H = 168;
 	private static final int ITEM_X = 8, ITEM_Y = 17, ITEM_H = 20, ITEM_C = 6;
-	private static final int BUTTON_X = ITEM_X, BUTTON_Y = ITEM_Y + ITEM_H * ITEM_C + 4, BUTTON_H = 20;
+	private static final int BUTTON_X = ITEM_X - 1, BUTTON_Y = ITEM_Y + ITEM_H * ITEM_C + 4, BUTTON_H = 20;
 	private static final int SCROLL_Y = ITEM_Y, SCROLL_W = 14, SCROLL_H = BUTTON_Y + BUTTON_H - SCROLL_Y, SCROLL_X = GUI_W - 7 - SCROLL_W;
-	private static final int ITEM_W = SCROLL_X - 4 - ITEM_X, BUTTON_W = ITEM_W;
+	private static final int ITEM_W = SCROLL_X - 4 - ITEM_X, BUTTON_W = ITEM_W + 2;
 	private static final int NUB_X = SCROLL_X + 1, NUB_W = SCROLL_W - 2, NUB_H = 15;
 
 	private static final int ICON_X = 2, ICON_Y = 2, ICON_W = 16, ICON_H = ICON_W;

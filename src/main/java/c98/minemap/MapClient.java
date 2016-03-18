@@ -61,7 +61,7 @@ public class MapClient {
 		GL.bindTexture(mapIcons);
 		GL.begin();
 		for(MapIconInstance icon : map.markers) {
-			if(icon == null) continue; //Don't ask
+			if(icon == null) continue; //Don't ask TODO figure out
 			MapUtils.renderIcon(icon.img, icon.color, icon.m);
 		}
 		GL.end();

@@ -85,20 +85,18 @@ public class MapServer {
 	}
 
 	private static int getRotation(double rot) {
-		rot %= 360;
 		double step = 360D / Minemap.config.iconDirections;
-		int r = (int)(Math.round(rot / step) * step);
-		return r;
+		return (int)(Math.round(rot / step) * step) % 360;
 	}
 
 	private void updateMap(int[] newColors) {
 		int y = getPosY();
 
-		int mapx = round(playerX) - size / 2;
-		int mapz = round(playerZ) - size / 2;
+		int mapx = round(playerX) / scale - size / 2 / scale;
+		int mapz = round(playerZ / scale) - size / 2 / scale;
 
-		int partialx = round(mod(playerX) * scale);
-		int partialz = round(mod(playerZ) * scale);
+		int partialx = round(mod(playerX));
+		int partialz = round(mod(playerZ));
 
 		for(int i = 0; i < size; i++) {
 			int x = mapx + (i + partialx) / scale;

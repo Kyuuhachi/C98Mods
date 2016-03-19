@@ -24,9 +24,9 @@ public class LightMap extends MapHandler {
 					y--;
 			}
 		} else y = chunk.getHeight(new BlockPos(x, 0, z));
-		int br = chunk.getLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y + 1, z));
+		int br = chunk.getLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z));
 		int rgb = br * 0x101010;
-		if(br < 7 && chunk.getBlockState(x, y, z).getLightOpacity() == 0) rgb += 0x7F0000;
+		if(br <= 7 && chunk.getBlockState(x, y, z).getLightOpacity() == 0) rgb |= 0xFF0000;
 		return rgb | 0xFF000000;
 	}
 }

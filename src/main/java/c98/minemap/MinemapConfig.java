@@ -2,6 +2,10 @@ package c98.minemap;
 
 import java.awt.Point;
 import org.lwjgl.opengl.Display;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import c98.Minemap;
 
 public class MinemapConfig {
@@ -23,7 +27,7 @@ public class MinemapConfig {
 		}
 	}
 
-	public static class Preset {
+	@JsonInclude(Include.NON_NULL) public static class Preset {
 		public int size = 256;
 		public String type = Minemap.NORMAL;
 		public int scale = 1;

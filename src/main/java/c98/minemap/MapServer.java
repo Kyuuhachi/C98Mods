@@ -13,10 +13,8 @@ import c98.minemap.api.MapIcon;
 import c98.minemap.api.MinemapPlugin;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
 public class MapServer {
 	public int size = 256;
@@ -92,7 +90,7 @@ public class MapServer {
 	private void updateMap(int[] newColors) {
 		int y = getPosY();
 
-		int mapx = round(playerX) / scale - size / 2 / scale;
+		int mapx = round(playerX / scale) - size / 2 / scale;
 		int mapz = round(playerZ / scale) - size / 2 / scale;
 
 		int partialx = round(mod(playerX));
@@ -100,19 +98,16 @@ public class MapServer {
 
 		for(int i = 0; i < size; i++) {
 			int x = mapx + (i + partialx) / scale;
-			impl.line(x);
 			for(int j = 0; j < size; j++) {
 				int z = mapz + (j + partialz) / scale;
-				Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
 				int clr = 0;
-				if(chunk != null && !chunk.isEmpty()) {
-					try {
-						clr = impl.calc(chunk, x & 15, z & 15, y);
-					} catch(Exception e) {
-						C98Log.error("X:" + x + ", Z:" + z, e);
-					}
-					if(Minecraft.getMinecraft().gameSettings.showDebugInfo && ((x & 15) == 0 || (z & 15) == 0)) clr = clr & 0xFF000000 | (clr & 0xFEFEFE) >> 1;
+				try {
+					clr = impl.calc(world, x, z, y);
+					//TODO transparency == dithering
+				} catch(Exception e) {
+					C98Log.error("X:" + x + ", Z:" + z, e);
 				}
+				if(Minecraft.getMinecraft().gameSettings.showDebugInfo && (x % 16 == 0 || z % 16 == 0)) clr = clr & 0xFF000000 | (clr & 0xFEFEFE) >> 1;
 				newColors[i + j * size] = clr;
 			}
 		}

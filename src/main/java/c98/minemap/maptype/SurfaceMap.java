@@ -5,65 +5,37 @@ import c98.minemap.api.MapHandler;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.World;
 
 public class SurfaceMap extends MapHandler {
-	private int prevHeight;
+	@Override public int calc(World world, int x, int z, int plY) {
+		int y = getY(world, x, z);
+		int prevY = getY(world, x, z - 1);
 
-	@Override public int calc(Chunk chunk, int x, int z, int plY) {
-		int waterDepth = 0;
-		int height = 0;
+		byte colorVariant = 1;
 
-		int maxY = chunk.getHeight(new BlockPos(x, 0, z)) + 1;
-		IBlockState id = null;
+		IBlockState block = world.getBlockState(new BlockPos(x, y, z));
+		if(block.getMaterial().isLiquid()) {
+			BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, y, z);
+			while(world.getBlockState(pos).getMaterial() == block.getMaterial())
+				pos.y--;
 
-		if(maxY >= 0) {
-			do {
-				--maxY;
-				id = chunk.getBlockState(x, maxY, z);
-			} while(maxY >= 0 && id.getMapColor() == MapColor.airColor);
-
-			if(maxY >= 0 && id.getMaterial().isLiquid()) {
-				int liquidBottom = maxY - 1;
-				IBlockState bottomID;
-
-				do {
-					bottomID = chunk.getBlockState(x, liquidBottom--, z);
-					++waterDepth;
-				} while(liquidBottom > 0 && bottomID.getMaterial().isLiquid());
-			}
-
-			height = maxY;
-		} else height = -1;
-
-		double br = 0;
-		if(prevHeight != -1) br = (height - prevHeight) * 4 / 4 + ((x + z & 1) - 0.5) * 0.4;
-		prevHeight = height;
-		byte brightness = 1;
-
-		if(br > 0.6D) brightness = 2;
-		if(br < -0.6D) brightness = 0;
-
-		int color = 0;
-
-		if(id != null && maxY >= 0) {
-			MapColor materialColor = chunk.getBlockState(new BlockPos(x, maxY, z)).getBlock().getMapColor(chunk.getBlockState(new BlockPos(x, maxY, z)));
-
-			if(materialColor == MapColor.waterColor) {
-				br = waterDepth * 0.1D + (x + z & 1) * 0.2D;
-				brightness = 1;
-
-				if(br < 0.5D) brightness = 2;
-				if(br > 0.9D) brightness = 0;
-			}
-
-			color = materialColor.colorIndex;
+			int depth = y - pos.y;
+			depth += (x + z & 1) * 2;
+			if(depth < 5) colorVariant = 2;
+			if(depth > 9) colorVariant = 0;
+		} else {
+			if(y > prevY) colorVariant = 2;
+			if(y < prevY) colorVariant = 0;
 		}
 
-		return getColor((byte)(color * 4 + brightness), x + z & 1);
+		return getColor(block.getMapColor(), colorVariant);
 	}
 
-	@Override public void line(int x) {
-		prevHeight = -1;
+	public int getY(World world, int x, int z) {
+		int maxY = world.getHeight(new BlockPos(x, 0, z)).y - 1;
+		while(world.getBlockState(new BlockPos(x, maxY, z)).getMapColor() != MapColor.airColor)
+			maxY++;
+		return maxY - 1;
 	}
 }

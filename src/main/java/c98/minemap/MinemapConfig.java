@@ -1,6 +1,8 @@
 package c98.minemap;
 
 import java.awt.Point;
+import java.util.HashMap;
+
 import org.lwjgl.opengl.Display;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,6 +34,7 @@ public class MinemapConfig {
 		public String type = Minemap.NORMAL;
 		public int scale = 1;
 		public Boolean hidden;
+		public HashMap<String, Object> properties;
 	}
 
 	public MapLocation location = MapLocation.NE;

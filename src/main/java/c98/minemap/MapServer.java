@@ -1,6 +1,7 @@
 package c98.minemap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -130,6 +131,7 @@ public class MapServer {
 			size = p.size;
 			scale = p.scale;
 			impl = MinemapPlugin.getMapHandler_(p.type);
+			impl.setProperties(p.properties != null ? p.properties : new HashMap());
 
 			colors = new int[size * size];
 			renderer = new MapClient(this);

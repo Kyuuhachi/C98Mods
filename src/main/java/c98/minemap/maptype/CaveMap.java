@@ -28,7 +28,7 @@ public class CaveMap extends MapHandler {
 		if(up) brightness = 2;
 		if(down) brightness = 0;
 
-		return getColor(world.getBlockState(new BlockPos(x, plY, z)).getMapColor(), brightness);
+		return getColor(world, new BlockPos(x, plY, z), brightness);
 	}
 
 	private static boolean isAir(World world, int x, int plY, int z) {

@@ -29,7 +29,7 @@ public class SurfaceMap extends MapHandler {
 			if(y < prevY) colorVariant = 0;
 		}
 
-		return getColor(block.getMapColor(), colorVariant);
+		return getColor(world, new BlockPos(x, y, z), colorVariant);
 	}
 
 	public int getY(World world, int x, int z) {

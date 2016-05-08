@@ -40,7 +40,6 @@ public class MinemapConfig {
 	public MapLocation location = MapLocation.NE;
 	public Preset[] presets = null; //generate in ctor
 	public int iconDirections = 16;
-	public boolean iconSmooth = false;
 
 	public MinemapConfig() {
 		Preset normal = new Preset();

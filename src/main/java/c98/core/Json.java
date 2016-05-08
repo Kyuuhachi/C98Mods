@@ -39,7 +39,7 @@ public class Json {
 	}
 
 	private static File getFile(String mod) {
-		return new File(IO.getMinecraftDir(), "config/C98/" + mod + ".json");
+		return new File("config/C98/" + mod + ".json");
 	}
 
 	private static ObjectMapper getJson(Class clz) {

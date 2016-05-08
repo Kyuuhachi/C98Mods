@@ -34,7 +34,6 @@ public class SeqHighlightNode extends HighlightNode {
 				match = true;
 				i += r.length;
 				i = skipWhitespace(args, i, c);
-
 			}
 		if(i != args.length()) error = true;
 		return new HighlightResult(c, error, match);

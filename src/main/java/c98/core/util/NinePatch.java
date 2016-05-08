@@ -3,9 +3,6 @@ package c98.core.util;
 import java.awt.Rectangle;
 import c98.core.GL;
 
-/**
- * Helper class for drawing nine-patches
- */
 public final class NinePatch {
 	private static int left, right, top, bottom;
 	private static int texX;
@@ -93,7 +90,6 @@ public final class NinePatch {
 		int th = texHeight - top - bottom;
 		for(int px = 0; px < 3; px++)
 			for(int py = 0; py < 3; py++) {
-
 				int patchX = 0;
 				for(int i = 0; i < px; i++)
 					if(widths[i] != -1) patchX += widths[i];
@@ -112,7 +108,6 @@ public final class NinePatch {
 
 		for(int i = 0; i < width; i += tw)
 			for(int j = 0; j < height; j += th) {
-
 				int cw = i + tw;
 				int ch = j + th;
 				if(cw > width) cw = width;

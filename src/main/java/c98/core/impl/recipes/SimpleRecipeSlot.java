@@ -19,5 +19,4 @@ public class SimpleRecipeSlot implements RecipeSlot {
 		if(is.getItemDamage() != 32767 && is.getItemDamage() != item.getItemDamage()) return false;
 		return true;
 	}
-
 }

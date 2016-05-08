@@ -4,7 +4,6 @@ import java.nio.DoubleBuffer;
 import net.minecraft.dispenser.IPosition;
 
 public class Vector implements IPosition {
-
 	public double x, y, z;
 
 	public Vector() {
@@ -154,5 +153,4 @@ public class Vector implements IPosition {
 	public void setY(double y) {this.y = y;}
 	public void setZ(double z) {this.z = z;}
 	//@on
-
 }

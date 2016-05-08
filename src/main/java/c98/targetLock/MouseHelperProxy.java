@@ -4,7 +4,6 @@ import org.lwjgl.input.Mouse;
 import c98.TargetLock;
 
 public class MouseHelperProxy extends net.minecraft.util.MouseHelper {
-
 	@Override public void mouseXYChange() {
 		if(TargetLock.target() != null) {
 			Mouse.getDX();

@@ -43,7 +43,6 @@ import c98.core.launch.ASMer;
 			EnumFacing facing = EnumFacing.getFront(sign.getBlockMetadata());
 			IBlockState state = sign.getWorld().getBlockState(sign.getPos().offset(facing.getOpposite()));
 			if(state != null && state.getBlock() instanceof BlockFence) {
-
 				float rot = 0;
 				if(facing == EnumFacing.NORTH) rot = 180;
 				if(facing == EnumFacing.SOUTH) rot = 0;

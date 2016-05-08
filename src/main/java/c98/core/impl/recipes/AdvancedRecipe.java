@@ -11,7 +11,6 @@ import c98.core.Recipes.RecipeResult;
 import c98.core.Recipes.RecipeSlot;
 
 public class AdvancedRecipe implements IRecipe {
-
 	private int recipeWidth;
 	private int recipeHeight;
 	private RecipeSlot recipeItems[];

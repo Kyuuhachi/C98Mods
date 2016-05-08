@@ -82,7 +82,6 @@ public class TargetLock extends C98Mod implements WorldRenderHook, GuiHook, HudR
 			pitch = mc.thePlayer.rotationPitch;
 			removedTarget = true;
 		}
-
 	}
 
 	@Override public void keyboardEvent(KeyBinding k) {

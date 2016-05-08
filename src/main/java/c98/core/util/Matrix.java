@@ -4,7 +4,6 @@ import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 
 public class Matrix {
-
 	public double[][] m;
 
 	public Matrix() {

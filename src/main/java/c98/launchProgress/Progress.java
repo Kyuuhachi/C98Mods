@@ -95,7 +95,7 @@ public class Progress {
 	}
 
 	public static double getAverageTime() {
-		return config.launchTime.stream().collect(Collectors.averagingLong((Long a) -> a.longValue()));
+		return config.launchTime.stream().collect(Collectors.averagingLong(a -> a.longValue()));
 	}
 
 	public static void addTime(long time) {

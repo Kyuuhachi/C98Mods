@@ -12,5 +12,4 @@ public class LaunchProgress extends C98Mod implements GuiSetHook {
 		if(!b) Progress.done();
 		b = true;
 	}
-
 }

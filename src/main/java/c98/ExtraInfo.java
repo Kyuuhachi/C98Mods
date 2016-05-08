@@ -43,7 +43,6 @@ import net.minecraft.util.ResourceLocation;
 
 public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, KeyHook {
 	public static class EIConf {
-
 		public static class _SlotConf {
 			public boolean enable = true;
 			public Map<String, Color> colors = new LinkedHashMap();
@@ -141,7 +140,6 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 		GL.vertex(x + w, y + 0, (u + w) * var7, (v + 0) * var8);
 		GL.vertex(x + 0, y + 0, (u + 0) * var7, (v + 0) * var8);
 		GL.end();
-
 	}
 
 	public static void drawRect(int x, int y, int w, int h) {

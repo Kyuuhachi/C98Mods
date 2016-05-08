@@ -46,7 +46,6 @@ import c98.core.launch.*;
 			n |= (a & MASK1) * f1 + (b & MASK1) * f2 >> 8 & MASK1;
 			n |= (a & MASK2) * f1 + (b & MASK2) * f2 >> 8 & MASK2;
 			return n;
-
 		}
 	}
 

@@ -70,7 +70,6 @@ public class SkinsWings implements LayerRenderer<EntityPlayer> {
 	}
 
 	private void setAngles(AbstractClientPlayer ent, float time) {
-
 		//Really hacky way to access the wing variables, but it works.
 		//Honestly, reflection might be better than this.
 		float wingAngle = ent.applyArmorCalculations(WING_ANGLE, time);
@@ -79,7 +78,6 @@ public class SkinsWings implements LayerRenderer<EntityPlayer> {
 		boolean wingRestingP = ent.applyArmorCalculations(WING_RESTING_P, time) != 0;
 
 		float ang = wingAngle * (float)Math.PI * 2;
-
 		float wingx0 = 0.125F - MathHelper.cos(ang) * 0.2F;
 		float wingz0 = (MathHelper.sin(ang) + 0.125F) * 0.8F;
 		float wingz1 = -(MathHelper.sin(ang) + 0.5F) * 0.75F;

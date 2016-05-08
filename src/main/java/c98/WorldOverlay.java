@@ -34,7 +34,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
-
 	private boolean display = false;
 
 	//TODO add config for this
@@ -114,42 +113,42 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 			GL.vertex(p.getX() + f1, p.getY() + y, p.getZ() + f1);
 			GL.vertex(p.getX() + f1, p.getY() + y, p.getZ() + f0);
 			GL.vertex(p.getX() + f0, p.getY() + y, p.getZ() + f0);
-		}
+		} else {
+			float F = 0.5F;
+			float X = p.getX() + 0.5F;
+			float Z = p.getZ() + 0.5F;
+			float y0 = p.getY();
+			float y1 = y0 + 0.5F;
+			int c = color & 0xFFFFFF;
 
-		float F = 0.5F;
-		float X = p.getX() + 0.5F;
-		float Z = p.getZ() + 0.5F;
-		float y0 = p.getY();
-		float y1 = y0 + 0.5F;
-		int c = color & 0xFFFFFF;
-
-		if(f == EnumFacing.NORTH) {
-			GL.vertex(X - F, y0, Z - F);
-			GL.vertex(X + F, y0, Z - F);
-			GL.color(c);
-			GL.vertex(X + F, y1, Z - F);
-			GL.vertex(X - F, y1, Z - F);
-		}
-		if(f == EnumFacing.WEST) {
-			GL.vertex(X - F, y0, Z + F);
-			GL.vertex(X - F, y0, Z - F);
-			GL.color(c);
-			GL.vertex(X - F, y1, Z - F);
-			GL.vertex(X - F, y1, Z + F);
-		}
-		if(f == EnumFacing.SOUTH) {
-			GL.vertex(X + F, y0, Z + F);
-			GL.vertex(X - F, y0, Z + F);
-			GL.color(c);
-			GL.vertex(X - F, y1, Z + F);
-			GL.vertex(X + F, y1, Z + F);
-		}
-		if(f == EnumFacing.EAST) {
-			GL.vertex(X + F, y0, Z - F);
-			GL.vertex(X + F, y0, Z + F);
-			GL.color(c);
-			GL.vertex(X + F, y1, Z + F);
-			GL.vertex(X + F, y1, Z - F);
+			if(f == EnumFacing.NORTH) {
+				GL.vertex(X - F, y0, Z - F);
+				GL.vertex(X + F, y0, Z - F);
+				GL.color(c);
+				GL.vertex(X + F, y1, Z - F);
+				GL.vertex(X - F, y1, Z - F);
+			}
+			if(f == EnumFacing.WEST) {
+				GL.vertex(X - F, y0, Z + F);
+				GL.vertex(X - F, y0, Z - F);
+				GL.color(c);
+				GL.vertex(X - F, y1, Z - F);
+				GL.vertex(X - F, y1, Z + F);
+			}
+			if(f == EnumFacing.SOUTH) {
+				GL.vertex(X + F, y0, Z + F);
+				GL.vertex(X - F, y0, Z + F);
+				GL.color(c);
+				GL.vertex(X - F, y1, Z + F);
+				GL.vertex(X + F, y1, Z + F);
+			}
+			if(f == EnumFacing.EAST) {
+				GL.vertex(X + F, y0, Z - F);
+				GL.vertex(X + F, y0, Z + F);
+				GL.color(c);
+				GL.vertex(X + F, y1, Z + F);
+				GL.vertex(X + F, y1, Z - F);
+			}
 		}
 	}
 

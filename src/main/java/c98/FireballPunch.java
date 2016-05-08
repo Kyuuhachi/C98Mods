@@ -14,7 +14,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 public class FireballPunch extends C98Mod implements TickHook {
-
 	private LinkedList<EntityFireball> punchedFireballs = new LinkedList();
 
 	@Override public void load() {}
@@ -45,5 +44,4 @@ public class FireballPunch extends C98Mod implements TickHook {
 			}
 		punchedFireballs.retainAll(ls);
 	}
-
 }

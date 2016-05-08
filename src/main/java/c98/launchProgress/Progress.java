@@ -1,17 +1,23 @@
 package c98.launchProgress;
 
 import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import javax.swing.*;
+
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
+
 import net.minecraft.client.main.Main;
+
 import org.apache.commons.io.IOUtils;
+
 import c98.core.C98Core;
 import c98.core.Json;
 import c98.core.launch.ASMer;
@@ -55,17 +61,20 @@ public class Progress {
 		bar.setStringPainted(true);
 
 		frame = new JFrame();
-		frame.add(bar);
-		frame.getContentPane().setPreferredSize(new Dimension(400, 40));
-		frame.pack();
+		frame.setType(Window.Type.POPUP);
 		frame.setTitle("Launching Minecraft...");
 		frame.setAlwaysOnTop(config.alwaysOnTop);
-		frame.setLocationRelativeTo(null); //Center window
 		frame.addWindowListener(new WindowAdapter() {
 			@Override public void windowClosing(WindowEvent e) {
 				C98Core.exit(0);
 			}
 		});
+
+		frame.add(bar);
+		frame.getContentPane().setPreferredSize(new Dimension(400, 40));
+		frame.pack();
+
+		frame.setLocationRelativeTo(null); //Center window
 		frame.setVisible(true);
 
 		timer = new Timer(10, Progress::update);

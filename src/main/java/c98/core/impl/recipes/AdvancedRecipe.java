@@ -23,7 +23,7 @@ public class AdvancedRecipe implements IRecipe {
 		recipeWidth = par1;
 		recipeHeight = par2;
 		recipeItems = aitemstack;
-		recipeOutput = new ItemStack(Blocks.stone);
+		recipeOutput = new ItemStack(Blocks.STONE);
 	}
 
 	@Override public final ItemStack getRecipeOutput() {
@@ -48,24 +48,25 @@ public class AdvancedRecipe implements IRecipe {
 		return null;
 	}
 
-	private final boolean checkMatch(InventoryCrafting inv, int x, int y, boolean mirror) {
+	private boolean checkMatch(InventoryCrafting inv, int x, int y, boolean mirror) {
 		for(int i = 0; i < 3; i++)
 			for(int j = 0; j < 3; j++) {
 				int k = i - x;
 				int l = j - y;
-				RecipeSlot is = null;
+				RecipeSlot slot = null;
 
-				if(k >= 0 && l >= 0 && k < recipeWidth && l < recipeHeight) if(mirror) is = recipeItems[recipeWidth - k - 1 + l * recipeWidth];
-				else is = recipeItems[k + l * recipeWidth];
+				if(k >= 0 && l >= 0 && k < recipeWidth && l < recipeHeight)
+					if(mirror) slot = recipeItems[recipeWidth - k - 1 + l * recipeWidth];
+					else slot = recipeItems[k + l * recipeWidth];
 
-				ItemStack itemstack1 = inv.getStackInRowAndColumn(i, j);
+				ItemStack is = inv.getStackInRowAndColumn(i, j);
 
-				if(is != null || itemstack1 != null) {
-					if(is == null && itemstack1 != null || is != null && itemstack1 == null) return false;
-					if(!is.valid(itemstack1, inv, getTableLoc(inv), i, j, x, y, mirror)) return false;
+				if(slot == null && is != null) return false;
+				else if(slot != null) {
+					if(is == null) return false;
+					if(!slot.valid(is, inv, getTableLoc(inv), i, j, x, y, mirror)) return false;
 				}
 			}
-
 		return true;
 	}
 

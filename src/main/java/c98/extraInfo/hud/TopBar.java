@@ -27,7 +27,7 @@ public class TopBar {
 	private static void drawBiome(Minecraft mc, int x, FontRenderer fr) {
 		BlockPos pos = new BlockPos(mc.renderViewEntity.posX, mc.renderViewEntity.getEntityBoundingBox().minY, mc.renderViewEntity.posZ);
 		Chunk chunk = mc.theWorld.getChunkFromBlockCoords(pos);
-		String biomeName = chunk.getBiome(pos, mc.theWorld.getWorldChunkManager()).biomeName;
+		String biomeName = chunk.getBiome(pos, mc.theWorld.getBiomeProvider()).biomeName;
 
 		int size = fr.getStringWidth(biomeName);
 		ExtraInfo.drawRect(x - size - 8, -10, size + 7, 24);

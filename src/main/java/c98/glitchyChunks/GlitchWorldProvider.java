@@ -7,9 +7,9 @@ import c98.GlitchyChunks;
 import c98.core.launch.ASMer;
 
 @ASMer abstract class GlitchWorldProvider extends WorldProvider {
-	@Override public void registerWorldChunkManager() {
-		if(worldObj.getWorldInfo().getTerrainType() == GlitchyChunks.TYPE) worldChunkMgr = new Mgr(worldObj.getWorldInfo());
-		else super.registerWorldChunkManager();
+	@Override public void createBiomeProvider() {
+		if(worldObj.getWorldInfo().getTerrainType() == GlitchyChunks.TYPE) biomeProvider = new Mgr(worldObj.getWorldInfo());
+		else super.createBiomeProvider();
 	}
 
 	@Override public IChunkGenerator createChunkGenerator() {

@@ -17,6 +17,6 @@ public class ValHighlightNode extends HighlightNode {
 	@Override public HighlightResult highlight(String args, int i) {
 		String word = getWord(args, i);
 		boolean err = !predicate.test(word);
-		return new HighlightResult(new TextComponentString(word).setChatStyle(error(err, VALUE)), err);
+		return new HighlightResult(new TextComponentString(word).setStyle(error(err, VALUE)), err);
 	}
 }

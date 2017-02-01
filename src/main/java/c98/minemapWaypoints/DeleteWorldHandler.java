@@ -11,8 +11,8 @@ import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.world.storage.SaveFormatOld;
 
-@ASMer class _SaveFormatOld extends SaveFormatOld {
-	public _SaveFormatOld(File p_i2147_1_, DataFixer fix) {
+@ASMer class SaveFormatOldHook extends SaveFormatOld {
+	public SaveFormatOldHook(File p_i2147_1_, DataFixer fix) {
 		super(p_i2147_1_, fix);
 	}
 
@@ -22,8 +22,8 @@ import net.minecraft.world.storage.SaveFormatOld;
 	}
 }
 
-@ASMer class _ServerList extends ServerList {
-	public _ServerList(Minecraft mcIn) {
+@ASMer class ServerListHook extends ServerList {
+	public ServerListHook(Minecraft mcIn) {
 		super(mcIn);
 	}
 

@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 public class Models {
 	public static final ItemMeshDefinition DEFAULT_ITEM = new ItemMeshDefinition() {
 		@Override public ModelResourceLocation getModelLocation(ItemStack is) {
-			return new ModelResourceLocation(Item.itemRegistry.getNameForObject(is.getItem()), "inventory");
+			return new ModelResourceLocation(Item.REGISTRY.getNameForObject(is.getItem()), "inventory");
 		}
 	};
 	public static final IStateMapper DEFAULT_BLOCK = new StateMap.Builder().build();

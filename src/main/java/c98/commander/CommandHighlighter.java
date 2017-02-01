@@ -34,19 +34,19 @@ public class CommandHighlighter extends HighlightNode {
 		String cmdName = cmd.startsWith("/") ? cmd.substring(1) : cmd;
 		HighlightNode h = highlighters.get(cmdName);
 		ITextComponent c = new TextComponentString("");
-		c.appendSibling(new TextComponentString(cmd).setChatStyle(HighlightNode.error(h == null, HighlightNode.COMMAND)));
+		c.appendSibling(new TextComponentString(cmd).setStyle(HighlightNode.error(h == null, HighlightNode.COMMAND)));
 		if(parts.length == 2) {
 			c.appendSibling(new TextComponentString(" "));
 			if(h != null) {
 				HighlightResult r = h.highlight(parts[1], 0);
 				c.appendSibling(r.text);
-				c.appendSibling(new TextComponentString(parts[1].substring(r.length)).setChatStyle(HighlightNode.ERROR));
+				c.appendSibling(new TextComponentString(parts[1].substring(r.length)).setStyle(HighlightNode.ERROR));
 			} else c.appendSibling(new TextComponentString(parts[1]));
 		}
 		return new HighlightResult(c);
 	}
 
-	public static String substring(String s, int start, int end) {
+	public static String substring(String s, int start, int end) { // TODO only handles color, not formatting
 		int startPos = -1, endPos = -1;
 		int pos = 0;
 		char color = 0;

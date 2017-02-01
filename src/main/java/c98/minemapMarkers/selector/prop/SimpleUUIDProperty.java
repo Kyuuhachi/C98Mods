@@ -19,8 +19,8 @@ public final class SimpleUUIDProperty implements SimpleProperty<String> {
 	}
 
 	@Override public String getValue(Entity e) {
-		NetHandlerPlayClient net = Minecraft.getMinecraft().getNetHandler();
-		Optional<UUID> uuid = e.dataWatcher.get(prop);
+		NetHandlerPlayClient net = Minecraft.getMinecraft().getConnection();
+		Optional<UUID> uuid = e.dataManager.get(prop);
 		if(uuid.isPresent()) return net.getPlayerInfo(uuid.get()).displayName.getUnformattedText();
 		return "none";
 	}

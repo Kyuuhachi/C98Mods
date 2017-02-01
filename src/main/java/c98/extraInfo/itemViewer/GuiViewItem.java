@@ -119,9 +119,9 @@ public class GuiViewItem extends GuiScreen {
 			if(mouseY >= y && mouseY < y + mc.fontRendererObj.FONT_HEIGHT) {
 				int compX = x;
 				for(ITextComponent c : text.get(i)) {
-					compX += mc.fontRendererObj.getStringWidth(c.getChatStyle().getFormattingCode() + ((TextComponentString)c).getUnformattedTextForChat());
+					compX += mc.fontRendererObj.getStringWidth(c.getStyle().getFormattingCode() + ((TextComponentString)c).getUnformattedComponentText());
 					if(compX > mouseX) {
-						HoverEvent e = c.getChatStyle().getChatHoverEvent();
+						HoverEvent e = c.getStyle().getHoverEvent();
 						if(e != null) {
 							drawHoveringText(Splitter.on("\n").splitToList(e.getValue().getFormattedText()), mouseX, mouseY);
 							GL.disableLighting();

@@ -46,7 +46,7 @@ public class Gen extends ChunkProviderOverworld {
 			else if(i == 1) p = end;
 			else if(i == 2) {
 				List<GuiFlatPresets.LayerItem> presets = GuiFlatPresets.FLAT_WORLD_PRESETS;
-				String s = presets.get(rand.nextInt(presets.size())).field_148233_c;
+				String s = presets.get(rand.nextInt(presets.size())).name;
 				if(!flat.containsKey(s)) flat.put(s, new ChunkProviderFlat(world, seed, struct, s));
 				p = flat.get(s);
 			} else p = normal;

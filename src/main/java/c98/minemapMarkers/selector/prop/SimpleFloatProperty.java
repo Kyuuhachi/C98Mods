@@ -13,7 +13,7 @@ public final class SimpleFloatProperty implements SimpleProperty<Float> {
 	}
 
 	@Override public Float getValue(Entity e) {
-		return e.dataWatcher.get(prop);
+		return e.dataManager.get(prop);
 	}
 
 	@Override public String getType() {

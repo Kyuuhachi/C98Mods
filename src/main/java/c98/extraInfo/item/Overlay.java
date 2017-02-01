@@ -19,9 +19,7 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.*;
 import net.minecraft.util.text.TextFormatting;
 
 @ASMer class Overlay extends RenderItem {
@@ -51,12 +49,12 @@ import net.minecraft.util.text.TextFormatting;
 
 	private static void drawBow(FontRenderer font, ItemStack is, int x, int y) {
 		InventoryPlayer pl = Minecraft.getMinecraft().thePlayer.inventory;
-		if(is.getItem() == Items.bow && EnchantmentHelper.getEnchantmentLevel(Enchantments.infinity, is) == 0) {
+		if(is.getItem() == Items.BOW && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, is) == 0) {
 			int arrows = 0;
 			boolean isInInv = false;
 			for(int i = 0; i < pl.getSizeInventory(); i++) {
 				ItemStack stack = pl.getStackInSlot(i);
-				if(stack != null && stack.getItem() == Items.arrow) arrows += stack.stackSize;
+				if(stack != null && stack.getItem() == Items.ARROW) arrows += stack.stackSize;
 				if(stack == is) isInInv = true;
 			}
 			if(!isInInv) return;
@@ -77,7 +75,7 @@ import net.minecraft.util.text.TextFormatting;
 	}
 
 	private static void drawUnbreak(FontRenderer font, ItemStack is, int x, int y) {
-		int unbreakLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.unbreaking, is);
+		int unbreakLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, is);
 		if(unbreakLvl > 0) {
 			String unbreakStr = "" + unbreakLvl;
 			int dx = (x + 1) * 2;
@@ -109,7 +107,7 @@ import net.minecraft.util.text.TextFormatting;
 		if(effects.size() != 1) return;
 
 		PotionEffect e = effects.get(0);
-		Potion p = e.field_188420_b;
+		Potion p = e.potion;
 		{
 			String str = Convert.toRoman(e.getAmplifier() + 1);
 			int dx = (x + 16) * 2 - font.getStringWidth(str) - 1;
@@ -119,7 +117,7 @@ import net.minecraft.util.text.TextFormatting;
 			GL.color(1, 1, 1);
 		}
 		if(!p.isInstant()) {
-			String str = Potion.func_188410_a(e, 1);
+			String str = Potion.getPotionDurationString(e, 1);
 			int dx = (x + 16) * 2 - font.getStringWidth(str) - 1;
 			int dy = (y + 12) * 2;
 			drawOutline(font, str, dx, dy);

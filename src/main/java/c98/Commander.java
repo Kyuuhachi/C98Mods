@@ -82,15 +82,15 @@ public class Commander extends C98Mod implements IResourceManagerReloadListener 
 			case "coords": return new CoordsHighlightNode(3);
 			case "coords2": return new CoordsHighlightNode(2);
 
-			case "block": return new ListHighlightNode(getIds(Block.blockRegistry.getKeys()));
-			case "item": return new ListHighlightNode(getIds(Item.itemRegistry.getKeys()));
-			case "entity": return new ListHighlightNode(() -> EntityList.stringToClassMapping.keySet());
-			case "stat": return new ListHighlightNode(() -> map(StatList.allStats, s->s.statId));
-			case "effect": return new ListHighlightNode(getIds(Potion.potionRegistry.getKeys()));
-			case "particle": return new ListHighlightNode(() -> EnumParticleTypes.func_186832_a());
+		case "block": return new ListHighlightNode(getIds(Block.REGISTRY.getKeys()));
+			case "item": return new ListHighlightNode(getIds(Item.REGISTRY.getKeys()));
+			case "entity": return new ListHighlightNode(() -> EntityList.NAME_TO_CLASS.keySet());
+			case "stat": return new ListHighlightNode(() -> map(StatList.ALL_STATS, s->s.statId));
+			case "effect": return new ListHighlightNode(getIds(Potion.REGISTRY.getKeys()));
+			case "particle": return new ListHighlightNode(() -> EnumParticleTypes.getParticleNames());
 			case "gamerule": return new ListHighlightNode(() -> mc.theWorld.getGameRules().theGameRules.keySet());
 			case "slot": return new ListHighlightNode(() -> new ArrayList(CommandReplaceItem.SHORTCUTS.keySet()));
-			case "ench": return new ListHighlightNode(getIds(Enchantment.enchantmentRegistry.getKeys()));
+			case "ench": return new ListHighlightNode(getIds(Enchantment.REGISTRY.getKeys()));
 
 			case "command": return new ListHighlightNode(() -> CommandHighlighter.highlighters.keySet());
 			case "fullcommand": return CommandHighlighter.INSTANCE;

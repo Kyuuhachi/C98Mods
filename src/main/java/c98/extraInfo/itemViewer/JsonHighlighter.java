@@ -1,22 +1,14 @@
 package c98.extraInfo.itemViewer;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.ValueNode;
+import com.fasterxml.jackson.databind.node.*;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.HoverEvent;
-import net.minecraft.util.text.translation.I18n;
 
 public class JsonHighlighter {
 	public static final int COLOR = 0;
@@ -106,12 +98,12 @@ public class JsonHighlighter {
 		if(mode == COLOR && (path.endsWith("tag/ench/[]/id/") || path.endsWith("tag/StoredEnchantments/[]/id/")) && j.isNumber()) {
 			String name;
 			try {
-				name = I18n.translateToLocal(Enchantment.getEnchantmentByID(j.asInt()).getName());
+				name = I18n.format(Enchantment.getEnchantmentByID(j.asInt()).getName());
 			} catch(Exception e) {
 				name = e.toString();
 			}
 			ITextComponent tooltip = comp(name, new Style());
-			comp.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, tooltip));
+			comp.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, tooltip));
 		}
 		return comp;
 	}
@@ -122,7 +114,7 @@ public class JsonHighlighter {
 			s = s.replace("\"", "\\\"");
 			s = '"' + s + '"';
 		}
-		if(mode == COLOR) return new TextComponentString(s).setChatStyle(style.createShallowCopy());
+		if(mode == COLOR) return new TextComponentString(s).setStyle(style.createShallowCopy());
 		return new TextComponentString(s);
 	}
 

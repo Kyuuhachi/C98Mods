@@ -19,6 +19,8 @@ import net.minecraft.util.ResourceLocation;
 	public LayerColoredSheep(RenderSheep rdr) {
 		super(rdr);
 	}
+
+	@Override
 	public void doRenderLayer(EntitySheep e, float p_177162_2_, float p_177162_3_, float ptt, float p_177162_5_, float p_177162_6_, float p_177162_7_, float scale) {
 		super.doRenderLayer(e, p_177162_2_, p_177162_3_, ptt, p_177162_5_, p_177162_6_, p_177162_7_, scale);
 		if(!e.isInvisible() && GraphicalUpgrade.config.coloredShearedSheep) {

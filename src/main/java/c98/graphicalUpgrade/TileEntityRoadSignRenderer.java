@@ -34,7 +34,7 @@ import c98.core.launch.ASMer;
 
 	@Override public void renderTileEntityAt(TileEntitySign sign, double x, double y, double z, float delta, int breakage) {
 		boolean b = false;
-		if(sign.getBlockType() != Blocks.wall_sign) b = true;
+		if(sign.getBlockType() != Blocks.WALL_SIGN) b = true;
 		//TODO make the line below only happen for the sign that is rendered inside the gui
 		if(Minecraft.getMinecraft().currentScreen instanceof GuiEditSign && ((GuiEditSign)Minecraft.getMinecraft().currentScreen).tileSign == sign) b = true;
 		if(!GraphicalUpgrade.config.roadSigns) b = true;

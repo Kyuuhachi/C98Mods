@@ -1,20 +1,22 @@
 package c98.core.impl.asm;
 
 import java.util.Optional;
+
+import c98.core.impl.HookImpl;
+import c98.core.launch.ASMer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.stats.StatFileWriter;
+import net.minecraft.stats.StatisticsManager;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
-import c98.core.impl.HookImpl;
-import c98.core.launch.ASMer;
 
 @ASMer class DisplayGuiHookImpl_Player extends EntityPlayerSP {
-	public DisplayGuiHookImpl_Player(Minecraft mcIn, World worldIn, NetHandlerPlayClient p_i46278_3_, StatFileWriter p_i46278_4_) {
+	public DisplayGuiHookImpl_Player(Minecraft mcIn, World worldIn, NetHandlerPlayClient p_i46278_3_, StatisticsManager p_i46278_4_) {
 		super(mcIn, worldIn, p_i46278_3_, p_i46278_4_);
 	}
 

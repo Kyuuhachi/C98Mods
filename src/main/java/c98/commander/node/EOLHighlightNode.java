@@ -7,6 +7,6 @@ import net.minecraft.util.text.TextComponentString;
 
 public class EOLHighlightNode extends HighlightNode {
 	@Override public HighlightResult highlight(String args, int i) {
-		return new HighlightResult(new TextComponentString(args.substring(i)).setChatStyle(VALUE));
+		return new HighlightResult(new TextComponentString(args.substring(i)).setStyle(VALUE));
 	}
 }

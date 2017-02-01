@@ -9,7 +9,7 @@ import c98.GlitchyChunks;
 import net.minecraft.client.gui.GuiFlatPresets;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.gen.FlatGeneratorInfo;
@@ -31,8 +31,8 @@ public class Mgr extends BiomeProvider {
 		seed = world.getSeed();
 		rand = new Random(seed);
 		normal = new BiomeProvider(var1);
-		nether = new BiomeProviderSingle(Biomes.hell);
-		end = new BiomeProviderSingle(Biomes.sky);
+		nether = new BiomeProviderSingle(Biomes.HELL);
+		end = new BiomeProviderSingle(Biomes.SKY);
 		flat = new HashMap();
 	}
 
@@ -45,9 +45,9 @@ public class Mgr extends BiomeProvider {
 		else if(type == 1) p = end;
 		else if(type == 2) {
 			List<GuiFlatPresets.LayerItem> presets = GuiFlatPresets.FLAT_WORLD_PRESETS;
-			String s = presets.get(rand.nextInt(presets.size())).field_148233_c;
+			String s = presets.get(rand.nextInt(presets.size())).name;
 			FlatGeneratorInfo var2 = FlatGeneratorInfo.createFlatGeneratorFromString(s);
-			if(!flat.containsKey(s)) flat.put(s, new BiomeProviderSingle(BiomeGenBase.getBiome(var2.getBiome())));
+			if(!flat.containsKey(s)) flat.put(s, new BiomeProviderSingle(Biome.getBiome(var2.getBiome())));
 			p = flat.get(s);
 		} else p = normal;
 
@@ -65,15 +65,15 @@ public class Mgr extends BiomeProvider {
 		return true;//get(par1, par2).areBiomesViable(par1, par2, par3, par4List); //Villages can spawn, yes.
 	}
 
-	@Override public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5, boolean par6) {
+	@Override public Biome[] getBiomeGenAt(Biome[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5, boolean par6) {
 		return get(par2, par3).getBiomeGenAt(par1ArrayOfBiomeGenBase, par2, par3, par4, par5, par6);
 	}
 
-	@Override public BiomeGenBase getBiomeGenerator(BlockPos pos, BiomeGenBase biomeGenBaseIn) {
+	@Override public Biome getBiomeGenerator(BlockPos pos, Biome biomeGenBaseIn) {
 		return get(pos.getX(), pos.getZ()).getBiomeGenerator(pos, biomeGenBaseIn);
 	}
 
-	@Override public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5) {
+	@Override public Biome[] getBiomesForGeneration(Biome[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5) {
 		return get(par2, par3).getBiomesForGeneration(par1ArrayOfBiomeGenBase, par2, par3, par4, par5);
 	}
 
@@ -81,7 +81,7 @@ public class Mgr extends BiomeProvider {
 		return get(par2, 0).getTemperatureAtHeight(par1, par2);
 	}
 
-	@Override public BiomeGenBase[] loadBlockGeneratorData(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5) {
+	@Override public Biome[] loadBlockGeneratorData(Biome[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5) {
 		return get(par2, par3).loadBlockGeneratorData(par1ArrayOfBiomeGenBase, par2, par3, par4, par5);
 	}
 }

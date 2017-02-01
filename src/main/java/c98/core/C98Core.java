@@ -1,8 +1,12 @@
 package c98.core;
 
+import c98.core.impl.HookImpl;
+import c98.core.impl.launch.C98Tweaker;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -13,8 +17,6 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
-import c98.core.impl.HookImpl;
-import c98.core.impl.launch.C98Tweaker;
 
 public class C98Core {
 	public static final String KEYBIND_CAT = "C98Mods";
@@ -53,7 +55,7 @@ public class C98Core {
 	}
 
 	public static void registerBlock(Block b, int id, String string, Item i) {
-		Block.blockRegistry.register(id, new ResourceLocation(string), b);
+		Block.REGISTRY.register(id, new ResourceLocation(string), b);
 		if(i != null) {
 			registerItem(i, id, string);
 			Item.BLOCK_TO_ITEM.put(b, i);
@@ -61,17 +63,17 @@ public class C98Core {
 		b.setUnlocalizedName(string.replace(':', '.'));
 
 
-		if(b.blockMaterial == Material.air) b.useNeighborBrightness = false;
+		if(b.blockMaterial == Material.AIR) b.useNeighborBrightness = false;
 		else b.useNeighborBrightness = b instanceof BlockStairs || b instanceof BlockSlab || b.translucent || b.lightOpacity == 0;
 
 		for(IBlockState state : (Iterable<IBlockState>)b.getBlockState().getValidStates()) {
-			int value = Block.blockRegistry.getIDForObject(b) << 4 | b.getMetaFromState(state);
+			int value = Block.REGISTRY.getIDForObject(b) << 4 | b.getMetaFromState(state);
 			Block.BLOCK_STATE_IDS.put(state, value);
 		}
 	}
 
 	public static void registerItem(Item i, int id, String string) {
-		Item.itemRegistry.register(id, new ResourceLocation(string), i);
+		Item.REGISTRY.register(id, new ResourceLocation(string), i);
 		i.setUnlocalizedName(string.replace(':', '.'));
 	}
 

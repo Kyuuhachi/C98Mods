@@ -17,12 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityPig;
@@ -75,7 +70,7 @@ public class HUD {
 				ScoreObjective obj = board.getObjectiveInDisplaySlot(i);
 
 				if(obj != null) {
-					Score score = board.getValueFromObjective(p.getName(), obj);
+					Score score = board.getOrCreateScore(p.getName(), obj);
 					String s = s0[i] + ": " + score.getScorePoints() + " " + obj.getDisplayName();
 					mc.fontRendererObj.drawStringWithShadow(s, 8, y, 0xFFFFFF);
 					y += 8;
@@ -107,7 +102,7 @@ public class HUD {
 	private void drawArmor() {
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
 		y += 4;
-		for(ItemStack is : targetEntity.func_184209_aF())
+		for(ItemStack is : targetEntity.getEquipmentAndArmor())
 			if(is != null) drawItem(is);
 		y += 4;
 		drawDamageIcons();
@@ -186,23 +181,23 @@ public class HUD {
 		}
 		if(target instanceof EntitySheep) {
 			y += 8;
-			IBlockState wool = Blocks.wool.getDefaultState().withProperty(BlockColored.COLOR, ((EntitySheep)target).getFleeceColor());
-			drawItem(new ItemStack(Blocks.wool, 1, Blocks.wool.getMetaFromState(wool)));
+			IBlockState wool = Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, ((EntitySheep)target).getFleeceColor());
+			drawItem(new ItemStack(Blocks.WOOL, 1, Blocks.WOOL.getMetaFromState(wool)));
 			if(((EntitySheep)target).getSheared()) s = "Sheared";
 		}
 		if(target instanceof EntityEnderman) {
 			EntityEnderman enderman = (EntityEnderman)targetEntity;
 			y += 8;
 			IBlockState st = enderman.getHeldBlockState();
-			if(st != null && st.getBlock() != Blocks.air) drawItem(new ItemStack(st.getBlock(), st.getBlock().getMetaFromState(st)));
+			if(st != null && st.getBlock() != Blocks.AIR) drawItem(new ItemStack(st.getBlock(), st.getBlock().getMetaFromState(st)));
 			if(enderman.isScreaming()) s = "Angry";
 		}
 		if(target instanceof EntityBat) if(((EntityBat)target).getIsBatHanging()) s = "Hanging";
-		if(target instanceof EntityBlaze) if(((EntityBlaze)target).func_70845_n()) s = "Charging";
+		if(target instanceof EntityBlaze) if(((EntityBlaze)target).isCharged()) s = "Charging";
 		if(target instanceof EntityCreeper) if(((EntityCreeper)target).getCreeperState() == 1) s = "Blowing up!";
 		if(target instanceof EntityIronGolem) if(((EntityIronGolem)target).isPlayerCreated()) s = "Player made";
 		if(target instanceof EntityPig) if(((EntityPig)target).getSaddled()) s = "Saddled";
-		if(target instanceof EntitySkeleton) if(((EntitySkeleton)target).getSkeletonType() == 1) s = "Wither";
+		if(target instanceof EntitySkeleton) if(((EntitySkeleton)target).func_189771_df() != SkeletonType.NORMAL) s = ((EntitySkeleton)target).func_189771_df().field_190140_d.getFormattedText();
 		if(target instanceof EntityVillager) {
 			String p;
 			switch(((EntityVillager)target).getProfession()) {

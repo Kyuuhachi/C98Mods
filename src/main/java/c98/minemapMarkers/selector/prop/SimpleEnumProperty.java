@@ -15,7 +15,7 @@ public final class SimpleEnumProperty implements SimpleProperty<String> {
 	}
 
 	@Override public String getValue(Entity e) {
-		int n = e.dataWatcher.get(prop).intValue();
+		int n = e.dataManager.get(prop).intValue();
 		if(n < 0 || n >= values.length) return "unknown";
 		return values[n].toLowerCase();
 	}

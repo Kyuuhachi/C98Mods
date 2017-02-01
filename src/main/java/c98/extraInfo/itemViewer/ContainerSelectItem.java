@@ -48,7 +48,7 @@ public class ContainerSelectItem extends Container {
 		return true;
 	}
 
-	@Override public ItemStack func_184996_a(int slot, int dunno, ClickType button, EntityPlayer p) {
+	@Override public ItemStack slotClick(int slot, int drag, ClickType button, EntityPlayer p) {
 		if(button == ClickType.PICKUP && getSlot(slot).getStack() != null) Minecraft.getMinecraft().displayGuiScreen(new GuiViewItem(getSlot(slot).getStack()));
 		return null;
 	}

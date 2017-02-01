@@ -29,6 +29,7 @@ public class Progress {
 			MethodNode mthd = null;
 			for(MethodNode m : node.methods)
 				if(m.name.equals("main")) mthd = m;
+			if(mthd == null) throw null;
 			mthd.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(Progress.class), "init", "()V", false));
 		}
 	}

@@ -1,37 +1,27 @@
 package c98;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Sets;
 
-import c98.core.C98Core;
-import c98.core.C98Log;
-import c98.core.C98Mod;
-import c98.core.GL;
+import c98.core.*;
 import c98.core.hooks.KeyHook;
 import c98.core.hooks.WorldRenderHook;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityMinecartMobSpawner;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 	private boolean display = false;
@@ -80,11 +70,11 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 		for(int x = pX - renderWidth + 1; x < pX + renderWidth; x++)
 			for(int z = pZ - renderWidth + 1; z < pZ + renderWidth; z++) {
 				BlockPos p = new BlockPos(x, 0, z);
-				BiomeGenBase b = w.getBiomeGenForCoords(p);
+				Biome b = w.getBiomeGenForCoords(p);
 				for(int i = 0; i < 4; i++) {
 					EnumFacing facing = EnumFacing.getHorizontal(i);
 					BlockPos p2 = p.offset(facing);
-					BiomeGenBase b2 = w.getBiomeGenForCoords(p2);
+					Biome b2 = w.getBiomeGenForCoords(p2);
 					if(b != b2) for(int y = pY - renderHeight + 1; y < pY + renderHeight; y++) {
 						boolean below1 = isSolid(w.getBlockState(new BlockPos(x, y - 1, z)));
 						boolean above1 = isSolid(w.getBlockState(new BlockPos(x, y, z)));
@@ -170,9 +160,9 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 			for(int x = pX - renderWidth + 1; x < pX + renderWidth; x++)
 				for(int y = pY - renderHeight + 1; y < pY + renderHeight; y++)
 					for(int z = pZ - renderWidth + 1; z < pZ + renderWidth; z++)
-						if(w.getBlockState(new BlockPos(x, y, z)).getBlock() == Blocks.mob_spawner) addSpawner(w, spawners, ((TileEntityMobSpawner)w.getTileEntity(new BlockPos(x, y, z))).getSpawnerBaseLogic());
+						if(w.getBlockState(new BlockPos(x, y, z)).getBlock() == Blocks.MOB_SPAWNER) addSpawner(w, spawners, ((TileEntityMobSpawner)w.getTileEntity(new BlockPos(x, y, z))).getSpawnerBaseLogic());
 			AxisAlignedBB bb = new AxisAlignedBB(pX, pY, pZ, pX + 1, pY + 1, pZ + 1).expand(renderWidth, renderHeight, renderWidth);
-			for(EntityMinecartMobSpawner e : new ArrayList<EntityMinecartMobSpawner>(w.getEntitiesWithinAABB(EntityMinecartMobSpawner.class, bb)))
+			for(EntityMinecartMobSpawner e : w.getEntitiesWithinAABB(EntityMinecartMobSpawner.class, bb))
 				addSpawner(w, spawners, e.mobSpawnerLogic);
 		} catch(Exception e) {
 			C98Log.error("Failed to find spawners", e);

@@ -54,7 +54,7 @@ public class EntitySelector {
 	}
 
 	public static void initClasses() {
-		classToId.putAll(EntityList.classToStringMapping);
+		classToId.putAll(EntityList.CLASS_TO_NAME);
 		classToId.putAll(TileEntity.classToNameMap);
 		classToId.put(Entity.class, "Entity");
 		classToId.put(EntityAgeable.class, "Ageable");
@@ -89,11 +89,11 @@ public class EntitySelector {
 		addEntity(Entity.class,                "name",         SelectorProperties.STRING, e -> e.getName());
 		addEntity(Entity.class,                "sneaking",     new SimpleBooleanProperty(Entity.FLAGS, 1));
 		addEntity(Entity.class,                "sprinting",    new SimpleBooleanProperty(Entity.FLAGS, 3));
-		addEntity(EntityAgeable.class,         "child",        new SimpleBooleanProperty(EntityAgeable.field_184751_bv));
+		addEntity(EntityAgeable.class,         "child",        new SimpleBooleanProperty(EntityAgeable.BABY));
 		addEntity(EntityLiving.class,          "disabled",     new SimpleBooleanProperty(EntityLiving.AI_FLAGS, 0));
 		addEntity(EntityLiving.class,          "lefthanded",   new SimpleBooleanProperty(EntityLiving.AI_FLAGS, 1));
-		addEntity(EntityLivingBase.class,      "health",       new SimpleFloatProperty(EntityLivingBase.field_184632_c));
-		addEntity(EntityTameable.class,        "owner",        new SimpleUUIDProperty(EntityTameable.field_184756_bw));
+		addEntity(EntityLivingBase.class,      "health",       new SimpleFloatProperty(EntityLivingBase.HEALTH));
+		addEntity(EntityTameable.class,        "owner",        new SimpleUUIDProperty(EntityTameable.OWNER_UNIQUE_ID));
 		addEntity(EntityTameable.class,        "tame",         new SimpleBooleanProperty(EntityTameable.TAMED, 2));
 
 		//TODO fill a bunch of enums
@@ -109,7 +109,7 @@ public class EntitySelector {
 		addEntity(EntityHorse.class,           "tame",         new SimpleBooleanProperty(EntityHorse.STATUS, 1));
 		addEntity(EntityHorse.class,           "type",         new SimpleEnumProperty(EntityHorse.HORSE_TYPE, "normal", "donkey", "mule", "zombie", "skeleton"));
 		addEntity(EntityIronGolem.class,       "created",      new SimpleBooleanProperty(EntityIronGolem.PLAYER_CREATED, 0));
-		addEntity(EntityMinecartFurnace.class, "powered",      new SimpleBooleanProperty(EntityMinecartFurnace.field_184275_c));
+		addEntity(EntityMinecartFurnace.class, "powered",      new SimpleBooleanProperty(EntityMinecartFurnace.POWERED));
 		addEntity(EntityOcelot.class,          "type",         new SimpleEnumProperty(EntityOcelot.OCELOT_VARIANT));
 		addEntity(EntityPig.class,             "saddle",       new SimpleBooleanProperty(EntityPig.SADDLED));
 		addEntity(EntityPlayer.class,          "absorption",   new SimpleFloatProperty(EntityPlayer.ABSORPTION));
@@ -117,8 +117,8 @@ public class EntitySelector {
 		addEntity(EntityPlayer.class,          "model",        new SimpleEnumProperty(EntityPlayer.PLAYER_MODEL_FLAG));
 		addEntity(EntityPlayer.class,          "score",        new SimpleIntProperty(EntityPlayer.PLAYER_SCORE));
 		addEntity(EntityRabbit.class,          "type",         new SimpleEnumProperty(EntityRabbit.RABBIT_TYPE));
-		addEntity(EntitySheep.class,           "color",        SelectorProperties.STRING, e -> colors[e.dataWatcher.get(EntitySheep.DYE_COLOR) & 15]);
-		addEntity(EntitySheep.class,           "sheared",      SelectorProperties.BOOLEAN, e -> (e.dataWatcher.get(EntitySheep.DYE_COLOR) & 16) != 0);
+		addEntity(EntitySheep.class,           "color",        SelectorProperties.STRING, e -> ((EntitySheep)e).getFleeceColor());
+		addEntity(EntitySheep.class,           "sheared",      SelectorProperties.BOOLEAN, e -> ((EntitySheep)e).getSheared());
 		addEntity(EntitySkeleton.class,        "type",         new SimpleEnumProperty(EntitySkeleton.SKELETON_VARIANT, "normal", "wither"));
 		addEntity(EntitySlime.class,           "size",         new SimpleIntProperty(EntitySlime.SLIME_SIZE));
 		addEntity(EntityVillager.class,        "type",         new SimpleEnumProperty(EntityVillager.PROFESSION));
@@ -128,6 +128,7 @@ public class EntitySelector {
 		//TODO
 		//EntityItem, EntityItemFrame: item stack
 		//Creeper, blaze, enderman, ghast, guardian, witch, wolf, tnt: attacking
+		//1.10 stuff
 
 		//@on
 	}

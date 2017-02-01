@@ -35,7 +35,7 @@ public class SurfaceMap extends MapHandler {
 	public int getY(World world, int x, int z) {
 		BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos(world.getHeight(new BlockPos(x, 0, z)));
 		p.y--;
-		while(world.getBlockState(p).getMapColor() != MapColor.airColor)
+		while(world.getBlockState(p).getMapColor() != MapColor.AIR)
 			p.y++;
 		return p.getY() - 1;
 	}

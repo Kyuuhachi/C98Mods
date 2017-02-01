@@ -4,14 +4,14 @@ import java.io.*;
 import java.util.List;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.SimpleReloadableResourceManager;
-import net.minecraft.client.resources.data.IMetadataSerializer;
+import net.minecraft.client.resources.data.MetadataSerializer;
 import net.minecraft.util.ResourceLocation;
 import c98.core.C98Mod;
 import c98.core.launch.ASMer;
 
 public class AssetHelper extends C98Mod {
 	@ASMer static class Blah extends SimpleReloadableResourceManager {
-		public Blah(IMetadataSerializer p_i1289_1_) {
+		public Blah(MetadataSerializer p_i1289_1_) {
 			super(p_i1289_1_);
 		}
 

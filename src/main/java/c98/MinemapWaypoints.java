@@ -1,25 +1,15 @@
 package c98;
 
-import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import org.lwjgl.input.Keyboard;
 
 import c98.MinemapWaypoints.Config.Waypoint;
-import c98.core.C98Core;
-import c98.core.C98Mod;
-import c98.core.Json;
+import c98.core.*;
 import c98.core.hooks.KeyHook;
-import c98.minemap.api.IconStyle;
-import c98.minemap.api.MapIcon;
-import c98.minemap.api.MinemapPlugin;
+import c98.minemap.api.*;
 import c98.minemapWaypoints.GuiEditWaypoint;
 import c98.minemapWaypoints.GuiWaypoints;
-
-import io.netty.channel.local.LocalAddress;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -114,8 +104,7 @@ public class MinemapWaypoints extends C98Mod implements MinemapPlugin, KeyHook {
 	}
 
 	public static String getWorldName() {
-		SocketAddress address = mc.getNetHandler().getNetworkManager().getRemoteAddress();
-		return address instanceof LocalAddress ? Minecraft.getMinecraft().getIntegratedServer().getFolderName() : address.toString();
+		return Minecraft.getMinecraft().getIntegratedServer().getFolderName(); //TODO servers
 	}
 
 	public static void save() {

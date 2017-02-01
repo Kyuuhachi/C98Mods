@@ -18,6 +18,6 @@ public class ListHighlightNode extends HighlightNode {
 	@Override public HighlightResult highlight(String args, int i) {
 		String word = getWord(args, i);
 		boolean err = !supplier.get().contains(word);
-		return new HighlightResult(new TextComponentString(word).setChatStyle(error(err, OBJECT)), err);
+		return new HighlightResult(new TextComponentString(word).setStyle(error(err, OBJECT)), err);
 	}
 }

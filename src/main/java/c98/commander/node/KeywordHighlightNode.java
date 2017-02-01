@@ -25,7 +25,7 @@ public class KeywordHighlightNode extends HighlightNode {
 	@Override public HighlightResult highlight(String args, int i) {
 		String word = getWord(args, i);
 		boolean err = !keywords.contains(word);
-		return new HighlightResult(new TextComponentString(word).setChatStyle(error(err, style)), err);
+		return new HighlightResult(new TextComponentString(word).setStyle(error(err, style)), err);
 	}
 
 	@Override public String toString() {

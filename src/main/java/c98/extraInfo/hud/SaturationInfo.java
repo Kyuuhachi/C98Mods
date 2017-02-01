@@ -26,7 +26,7 @@ public class SaturationInfo {
 				int foodWidth = MathHelper.clamp_int(Math.round((food - i) * 9), 0, 9);
 
 				int u = 70;
-				if(mc.thePlayer.isPotionActive(MobEffects.saturation)) u += 36;
+				if(mc.thePlayer.isPotionActive(MobEffects.SATURATION)) u += 36;
 
 				u += 9 - foodWidth;
 				foodX += 9 - foodWidth;

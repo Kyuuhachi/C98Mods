@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 import net.minecraft.client.resources.DefaultResourcePack;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.data.IMetadataSection;
-import net.minecraft.client.resources.data.IMetadataSerializer;
+import net.minecraft.client.resources.data.MetadataSerializer;
 import net.minecraft.util.ResourceLocation;
 import c98.core.C98Core;
 import com.google.common.collect.ImmutableSet;
@@ -42,7 +42,7 @@ public class C98ResourcePack implements IResourcePack { //TODO sounds.json
 		return ImmutableSet.of("c98");
 	}
 
-	@Override public IMetadataSection getPackMetadata(IMetadataSerializer var1, String var2) throws IOException {
+	@Override public IMetadataSection getPackMetadata(MetadataSerializer var1, String var2) throws IOException {
 		return null;
 	}
 

@@ -17,7 +17,7 @@ public class JsonHighlightNode extends HighlightNode {
 	private HighlightResult hlObj(String args, int i, boolean isObj) {
 		char start = isObj ? '{' : '[';
 		char end = isObj ? '}' : ']';
-		ITextComponent c = new TextComponentString("").setChatStyle(isObj ? JSON_OBJECT : JSON_ARRAY);
+		ITextComponent c = new TextComponentString("").setStyle(isObj ? JSON_OBJECT : JSON_ARRAY);
 		boolean err = false;
 
 		try {
@@ -45,7 +45,7 @@ public class JsonHighlightNode extends HighlightNode {
 				HighlightResult r = null;
 				if(next == '{') r = hlObj(args, i, true);
 				else if(next == '[') r = hlObj(args, i, false);
-				else r = new HighlightResult(new TextComponentString(args.substring(i, getJsonWord(args, i))).setChatStyle(JSON_VALUE));
+				else r = new HighlightResult(new TextComponentString(args.substring(i, getJsonWord(args, i))).setStyle(JSON_VALUE));
 				c.appendSibling(r.text);
 				i += r.length;
 				if(r.error) return new HighlightResult(c, true, true);
@@ -84,11 +84,11 @@ public class JsonHighlightNode extends HighlightNode {
 
 	private static void a(ITextComponent c, String s, Style style) {
 		ITextComponent t = new TextComponentString(s);
-		if(style != null) t.setChatStyle(style);
+		if(style != null) t.setStyle(style);
 		c.appendSibling(t);
 	}
 
 	private static HighlightResult error(ITextComponent c, String s) {
-		return new HighlightResult(c.appendSibling(new TextComponentString(s).setChatStyle(ERROR)), true, true);
+		return new HighlightResult(c.appendSibling(new TextComponentString(s).setStyle(ERROR)), true, true);
 	}
 }

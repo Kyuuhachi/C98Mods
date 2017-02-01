@@ -50,14 +50,14 @@ class MultipleItem {
 		super(p_i46165_1_, p_i46165_2_, c);
 	}
 
-	@Override public void func_184394_a(ItemStack is, IBakedModel model, TransformType tr, boolean b) {
+	@Override public void renderItemModel(ItemStack is, IBakedModel model, TransformType tr, boolean b) {
 		if(!mult) {
-			super.func_184394_a(is, model, tr, b);
+			super.renderItemModel(is, model, tr, b);
 			return;
 		}
 		Random r = new Random(187);
 
-		int num = ri.func_177078_a(is);
+		int num = ri.getModelCount(is);
 
 		for(int i = 0; i < num; ++i) {
 			GL.pushMatrix();
@@ -67,7 +67,7 @@ class MultipleItem {
 				double z = (r.nextFloat() * 2 - 1) * 0.15;
 				GL.translate(x, y, z);
 			} else GL.translate(0, 0, i * 3 / 64F);
-			super.func_184394_a(is, model, tr, b);
+			super.renderItemModel(is, model, tr, b);
 			GL.popMatrix();
 		}
 	}

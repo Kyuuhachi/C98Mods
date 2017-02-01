@@ -77,9 +77,9 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 	}
 
 	@Override public void addIcons(List<MapIcon> markers, World world) {
-		for(Entity e : new ArrayList<Entity>(mc.theWorld.loadedEntityList))
+		for(Entity e : (List<Entity>)new ArrayList(mc.theWorld.loadedEntityList))
 			markEntity(markers, e);
-		for(TileEntity e : new ArrayList<TileEntity>(mc.theWorld.loadedTileEntityList))
+		for(TileEntity e : (List<TileEntity>)new ArrayList(mc.theWorld.loadedTileEntityList))
 			markTileEntity(markers, e);
 	}
 

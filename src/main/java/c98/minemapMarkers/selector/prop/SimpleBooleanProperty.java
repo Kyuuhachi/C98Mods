@@ -11,11 +11,11 @@ public final class SimpleBooleanProperty implements SimpleProperty<Boolean> {
 	public Function<Entity, Boolean> func;
 
 	public SimpleBooleanProperty(DataParameter<Boolean> prop) {
-		func = e -> e.dataWatcher.get(prop);
+		func = e -> e.dataManager.get(prop);
 	}
 
 	public SimpleBooleanProperty(DataParameter<Byte> prop, int bit) {
-		func = e -> (e.dataWatcher.get(prop) & 1 << bit) != 0;
+		func = e -> (e.dataManager.get(prop) & 1 << bit) != 0;
 	}
 
 	@Override public Boolean getValue(Entity e) {

@@ -1,16 +1,17 @@
 package c98.extraInfo.hud;
 
 import java.util.Collection;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.text.TextFormatting;
 
 import c98.ExtraInfo;
 import c98.core.GL;
 import c98.core.util.Convert;
 import c98.core.util.NinePatch;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.text.TextFormatting;
 
 public class PotionInfo {
 	public static void drawPotions(int height, int width, FontRenderer fr, Minecraft mc) {
@@ -21,14 +22,14 @@ public class PotionInfo {
 		int xMult = 26;
 		int yMult = 26;
 		for(PotionEffect effect : potions) {
-			Potion pot = effect.field_188420_b;
+			Potion pot = effect.potion;
 			if(itr % 8 == 0 && itr != 0) {
 				xPotOffset += 1;
 				yPotOffset = 8;
 			}
 			int x = 4 + xPotOffset * xMult;
 			int y = -yPotOffset + yPotOffset * yMult;
-			String effectStr = Potion.func_188410_a(effect, 1);
+			String roman = Potion.getPotionDurationString(effect, 1);
 			drawRect2(x, y, 26, 26);
 			GL.color(1, 1, 1, 1);
 			GL.disableLighting();
@@ -44,7 +45,7 @@ public class PotionInfo {
 
 			GL.pushMatrix();
 			GL.scale(0.5, 0.5, 0.5);
-			String s = (effect.field_188420_b.isBadEffect() ? TextFormatting.RED : "") + effectStr;
+			String s = (pot.isBadEffect() ? TextFormatting.RED : "") + roman;
 			fr.drawStringWithShadow(s, x * 2 + 48 - fr.getStringWidth(s), y * 2 + 40, 0xFFFFFF);
 			GL.popMatrix();
 			++itr;

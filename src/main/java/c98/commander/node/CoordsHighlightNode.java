@@ -22,8 +22,8 @@ public class CoordsHighlightNode extends HighlightNode {
 				boolean rel = word.startsWith("~");
 				if(rel) word = word.substring(1);
 				if(!rel || !word.isEmpty()) Float.parseFloat(word);
-				if(rel) c.appendSibling(new TextComponentString("~").setChatStyle(COORDS_TILDE));
-				c.appendSibling(new TextComponentString(word).setChatStyle(COORDS));
+				if(rel) c.appendSibling(new TextComponentString("~").setStyle(COORDS_TILDE));
+				c.appendSibling(new TextComponentString(word).setStyle(COORDS));
 			} catch(Exception e) {
 				return new HighlightResult(c, true, j != 0);
 			}

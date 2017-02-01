@@ -3,7 +3,6 @@ package c98.minemap.maptype;
 import c98.minemap.api.MapHandler;
 
 import net.minecraft.block.material.MapColor;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -32,7 +31,6 @@ public class CaveMap extends MapHandler {
 	}
 
 	private static boolean isAir(World world, int x, int plY, int z) {
-		IBlockState block = world.getBlockState(new BlockPos(x, plY, z));
-		return block == null || block.getMapColor() == MapColor.airColor;
+		return world.getBlockState(new BlockPos(x, plY, z)).getMapColor() == MapColor.AIR;
 	}
 }

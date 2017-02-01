@@ -47,8 +47,8 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 			public boolean enable = true;
 			public Map<String, Color> colors = new LinkedHashMap();
 			{
-				for(CreativeTabs tab : CreativeTabs.creativeTabArray)
-					if(tab != null && tab != CreativeTabs.tabAllSearch && tab != CreativeTabs.tabInventory) {
+				for(CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY)
+					if(tab != null && tab != CreativeTabs.SEARCH && tab != CreativeTabs.INVENTORY) {
 						String s = tab.getTabLabel();
 						colors.put(s, new Color(Color.HSBtoRGB(s.hashCode() / 360F, 1, 1)));
 					}
@@ -172,17 +172,18 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 				entity = ((TargetEntity)TargetLock.target()).getEntity();
 				if(entity instanceof EntityLivingBase) {
 					add(viableStacks, ((EntityLivingBase)entity).armorArray);
-					add(viableStacks, ((EntityLivingBase)entity).field_184630_bs); //items in hands
+					add(viableStacks, ((EntityLivingBase)entity).handInventory);
 				}
-			} else add(viableStacks, new ItemStack[5]);
-			add(viableStacks, mc.thePlayer.inventory.mainInventory);
+			} else add(viableStacks, new ItemStack[6]);
+			add(viableStacks, mc .thePlayer.inventory.mainInventory);
 
 			mc.displayGuiScreen(new GuiSelectItem(viableStacks, entity instanceof EntityLivingBase ? (EntityLivingBase)entity : null));
+			// TODO I'm not sure if the UI supports dual wielding.
 		}
 	}
 
 	private static void add(List<ItemStack> viableStacks, ItemStack[] stacks) {
-		if(stacks != null) for(ItemStack is : stacks)
+		for(ItemStack is : stacks)
 			viableStacks.add(is);
 	}
 }

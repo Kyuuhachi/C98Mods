@@ -20,14 +20,14 @@ public class SelHighlightNode extends HighlightNode {
 		ITextComponent c = new TextComponentString("");
 		if(!tokenPattern.matcher(word).matches()) {
 			boolean err = !usernamePattern.matcher(word).matches();
-			c.appendSibling(new TextComponentString(word).setChatStyle(err ? ERROR : OBJECT));
+			c.appendSibling(new TextComponentString(word).setStyle(err ? ERROR : OBJECT));
 			return new HighlightResult(c, err);
 		}
-		c.appendSibling(new TextComponentString(word.substring(0, 2)).setChatStyle(SEL_START));
+		c.appendSibling(new TextComponentString(word.substring(0, 2)).setStyle(SEL_START));
 		boolean error = false;
 		if(word.length() > 2) {
 			word = word.substring(2);
-			c.appendSibling(new TextComponentString("[").setChatStyle(SEL_BRACKET));
+			c.appendSibling(new TextComponentString("[").setStyle(SEL_BRACKET));
 			int simple = 0;
 			boolean endBracket = word.endsWith("]");
 			String[] args2 = word.substring(1, word.length() - (endBracket ? 1 : 0)).split(",", -1);
@@ -36,21 +36,21 @@ public class SelHighlightNode extends HighlightNode {
 				String arg = args2[j];
 				if(!arg.contains("=")) {
 					simple++;
-					c.appendSibling(new TextComponentString(arg).setChatStyle(error(simple > 4, SEL_VALUE)));
+					c.appendSibling(new TextComponentString(arg).setStyle(error(simple > 4, SEL_VALUE)));
 				} else {
 					simple = 10;
 					String[] kv = arg.split("=", 2);
 					boolean validKey = keys.contains(kv[0]) || kv[0].startsWith("score_");
-					c.appendSibling(new TextComponentString(kv[0]).setChatStyle(error(!validKey, SEL_KEY)));
-					c.appendSibling(new TextComponentString("=").setChatStyle(error(kv[0].isEmpty(), PLAIN)));
+					c.appendSibling(new TextComponentString(kv[0]).setStyle(error(!validKey, SEL_KEY)));
+					c.appendSibling(new TextComponentString("=").setStyle(error(kv[0].isEmpty(), PLAIN)));
 					if(kv[1].startsWith("!")) {
 						kv[1] = kv[1].substring(1);
-						c.appendSibling(new TextComponentString("!").setChatStyle(SEL_NOT));
+						c.appendSibling(new TextComponentString("!").setStyle(SEL_NOT));
 					}
-					c.appendSibling(new TextComponentString(kv[1]).setChatStyle(SEL_VALUE));
+					c.appendSibling(new TextComponentString(kv[1]).setStyle(SEL_VALUE));
 				}
 			}
-			if(endBracket) c.appendSibling(new TextComponentString("]").setChatStyle(SEL_BRACKET));
+			if(endBracket) c.appendSibling(new TextComponentString("]").setStyle(SEL_BRACKET));
 			else error = true;
 		}
 		return new HighlightResult(c, error, true);

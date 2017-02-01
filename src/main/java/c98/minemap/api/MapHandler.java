@@ -20,13 +20,13 @@ public abstract class MapHandler {
 
 	protected int getColor(IBlockAccess w, BlockPos pos, int variant) {
 		MapColor color = w.getBlockState(pos).getMapColor();
-		if(color == MapColor.airColor) return 0;
+		if(color == MapColor.AIR) return 0;
 
 		int rgb = color.colorValue;
 		if(biomeColors) {
-			if(color == MapColor.grassColor) rgb = col(w, pos, BiomeColorHelper.GRASS_COLOR);
-			if(color == MapColor.foliageColor) rgb = col(w, pos, BiomeColorHelper.FOLIAGE_COLOR);
-			if(color == MapColor.waterColor) rgb = blend(col(w, pos, BiomeColorHelper.WATER_COLOR), MapColor.waterColor.colorValue);
+			if(color == MapColor.GRASS) rgb = col(w, pos, BiomeColorHelper.GRASS_COLOR);
+			if(color == MapColor.FOLIAGE) rgb = col(w, pos, BiomeColorHelper.FOLIAGE_COLOR);
+			if(color == MapColor.WATER) rgb = blend(col(w, pos, BiomeColorHelper.WATER_COLOR), MapColor.WATER.colorValue);
 		}
 		return blend(rgb, new int[] { 0xB4B4B4, 0xDCDCDC, 0xFFFFFF, 0 }[variant]);
 	}

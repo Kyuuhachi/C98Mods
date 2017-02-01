@@ -13,7 +13,7 @@ public final class SimpleIntProperty implements SimpleProperty<Integer> {
 	}
 
 	@Override public Integer getValue(Entity e) {
-		return e.dataWatcher.get(prop);
+		return e.dataManager.get(prop);
 	}
 
 	@Override public String getType() {

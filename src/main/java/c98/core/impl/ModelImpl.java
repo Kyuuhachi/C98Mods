@@ -14,9 +14,9 @@ public class ModelImpl {
 
 	public static void registerVariantList(Map<Item, List<String>> variants) {
 		for(Item i : itemModels.keySet())
-			variants.put(i, Arrays.asList(Item.itemRegistry.getNameForObject(i).toString()));
+			variants.put(i, Arrays.asList(Item.REGISTRY.getNameForObject(i).toString()));
 		for(Block i : blockModels.keySet())
-			variants.put(Item.getItemFromBlock(i), Arrays.asList(Block.blockRegistry.getNameForObject(i).toString()));
+			variants.put(Item.getItemFromBlock(i), Arrays.asList(Block.REGISTRY.getNameForObject(i).toString()));
 	}
 
 	public static void registerItemModels(ItemModelMesher models) {

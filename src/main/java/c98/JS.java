@@ -61,17 +61,17 @@ public class JS extends C98Mod {
 		}
 
 		private static List<ITextComponent> error(Exception e) {
-			if(!(e instanceof ScriptException)) return Arrays.asList(new TextComponentString(e.toString()).setChatStyle(ERROR_STYLE));
+			if(!(e instanceof ScriptException)) return Arrays.asList(new TextComponentString(e.toString()).setStyle(ERROR_STYLE));
 			String err = e.getCause().getMessage();
 			String[] lines = err.split("\r?\n");
 			List<ITextComponent> msg = new ArrayList();
-			msg.add(new TextComponentString(lines[0]).setChatStyle(ERROR_STYLE));
+			msg.add(new TextComponentString(lines[0]).setStyle(ERROR_STYLE));
 			if(lines.length == 3) {
 				int idx = lines[2].indexOf('^');
 				String text = lines[1] + " ";
-				ITextComponent loc = new TextComponentString("").setChatStyle(ERROR_STYLE);
+				ITextComponent loc = new TextComponentString("").setStyle(ERROR_STYLE);
 				loc.appendText(text.substring(0, idx));
-				loc.appendSibling(new TextComponentString(text.substring(idx, idx + 1)).setChatStyle(ERROR_LOC_STYLE));
+				loc.appendSibling(new TextComponentString(text.substring(idx, idx + 1)).setStyle(ERROR_LOC_STYLE));
 				loc.appendText(text.substring(idx + 1));
 				msg.add(loc);
 			}

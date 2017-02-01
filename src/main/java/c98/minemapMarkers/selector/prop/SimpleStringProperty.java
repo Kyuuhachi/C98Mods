@@ -13,7 +13,7 @@ public final class SimpleStringProperty implements SimpleProperty<String> {
 	}
 
 	@Override public String getValue(Entity e) {
-		return e.dataWatcher.get(prop);
+		return e.dataManager.get(prop);
 	}
 
 	@Override public String getType() {

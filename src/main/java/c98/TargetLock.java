@@ -146,11 +146,11 @@ public class TargetLock extends C98Mod implements WorldRenderHook, GuiHook, HudR
 		float yaw = (float)(Math.atan2(z, x) * DEG) - 90;
 		float pitch = (float)-(Math.atan2(y, dist) * DEG);
 		if(e instanceof EntityPlayer) {
-			ItemStack item = ((EntityPlayer)e).func_184607_cu();
-			if(item != null && item.getItem() == Items.bow) {
-				float f = (float)-(calcBow(dist, y, 0.05, 3, 0.98) * DEG);
+			ItemStack item = ((EntityPlayer)e).getActiveItemStack();
+			if(item != null && item.getItem() == Items.BOW) {
+				float f = (float)(-calcBow(dist, y, 0.05, 3, 0.98) * DEG);
 				if(!Double.isNaN(f)) {
-					float charge = mc.thePlayer.func_184612_cw() / 20F;
+					float charge = mc.thePlayer.getItemInUseCount() / 20F;
 					charge = Math.min((charge * charge + charge * 2) / 3, 1);
 					pitch += (f - pitch) * charge / 2;
 				}

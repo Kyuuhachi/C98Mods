@@ -33,7 +33,12 @@ public class MapClient {
 			System.arraycopy(map.colors, 0, data, 0, data.length);
 		}
 		image.updateDynamicTexture();
-		GL.enableAlpha();
+
+		GL.pushAttrib();
+		GL.disableAlpha();
+		GL.enableBlend();
+		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
+
 		GL.pushMatrix();
 		ScaledResolution sr = new ScaledResolution(mc);
 		float scale = 1F / sr.getScaleFactor();
@@ -55,9 +60,6 @@ public class MapClient {
 		}
 		GL.color(1, 1, 1);
 
-		GL.enableBlend();
-		GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
-
 		GL.bindTexture(mapIcons);
 		GL.begin();
 		for(MapIconInstance icon : map.markers) {
@@ -66,8 +68,7 @@ public class MapClient {
 		}
 		GL.end();
 
-		GL.disableBlend();
-
 		GL.popMatrix();
+		GL.popAttrib();
 	}
 }

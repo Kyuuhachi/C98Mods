@@ -20,7 +20,7 @@ public abstract class MapHandler {
 
 	protected int getColor(IBlockAccess w, BlockPos pos, int variant) {
 		MapColor color = w.getBlockState(pos).getMapColor();
-		if(color == MapColor.AIR) return 0;
+		if(color == MapColor.AIR) return (pos.getX() + pos.getZ() & 1) * 8 + 16 << 24;
 
 		int rgb = color.colorValue;
 		if(biomeColors) {
@@ -33,7 +33,6 @@ public abstract class MapHandler {
 
 	int col(IBlockAccess w, BlockPos pos, BiomeColorHelper.ColorResolver col) {
 		return BiomeColorHelper.getColorAtPos(w, pos, col);
-		// return col.getColorAtPos(w.getBiomeGenForCoords(pos), pos);
 	}
 
 	private static int blend(int c1, int c2) {
@@ -41,5 +40,13 @@ public abstract class MapHandler {
 		int g = (c1 >> 8 & 255) * (c2 >> 8 & 255) / 255;
 		int b = (c1 >> 0 & 255) * (c2 >> 0 & 255) / 255;
 		return 0xFF000000 | r << 16 | g << 8 | b;
+	}
+
+	public static int getTopY(World world, int x, int z) {
+		BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos(world.getHeight(new BlockPos(x, 0, z)));
+		p.y--;
+		while(world.getBlockState(p).getMapColor() != MapColor.AIR)
+			p.y++;
+		return p.getY() - 1;
 	}
 }

@@ -104,7 +104,6 @@ public class MapServer {
 				int clr = 0;
 				try {
 					clr = impl.calc(world, x, z, y);
-					//TODO transparency == dithering
 				} catch(Exception e) {
 					C98Log.error("X:" + x + ", Z:" + z, e);
 				}

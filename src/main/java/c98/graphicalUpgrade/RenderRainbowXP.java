@@ -4,23 +4,29 @@ import java.awt.Color;
 import java.util.Random;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
+
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderXPOrb;
 import net.minecraft.entity.item.EntityXPOrb;
+
 import c98.GraphicalUpgrade;
 import c98.core.C98Core;
 import c98.core.launch.*;
 
 @ASMer public class RenderRainbowXP extends RenderXPOrb implements CustomASMer {
 	public static class Impl {
-		public static int getColor(int normal, Object o) {
-			if(GraphicalUpgrade.config.xpColors.length == 0) return normal;
-			EntityXPOrb e = (EntityXPOrb)o;
-			return getColor(e.getEntityId(), e.xpColor + C98Core.getPartialTicks());
-		}
-
 		private static final float TIME = 20;
 		private static final Random rand = new Random();
+
+		public static VertexBuffer color(VertexBuffer buf, int r, int g, int b, int a, Object o) {
+			if(GraphicalUpgrade.config.xpColors.length == 0) {
+				return buf.color(r, g, b, a);
+			}
+			EntityXPOrb e = (EntityXPOrb)o;
+			int rgb = getColor(e.getEntityId(), e.xpColor + C98Core.getPartialTicks());
+			return buf.color((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, (rgb >> 0) & 0xFF, a);
+		}
 
 		public static int getColor(int id, float age) {
 			int c1 = getRgb(id, age);
@@ -32,7 +38,7 @@ import c98.core.launch.*;
 		private static int getRgb(int id, float age) {
 			Color[] colors = GraphicalUpgrade.config.xpColors;
 			rand.setSeed(id + (int)(age / TIME));
-			return colors[rand.nextInt(colors.length)].getRGB() | 0xFF000000;
+			return colors[rand.nextInt(colors.length)].getRGB();
 		}
 
 		private static int interpolate(int a, int b, float f) {
@@ -55,11 +61,16 @@ import c98.core.launch.*;
 
 	@Override public void asm(ClassNode node) {
 		node.methods.forEach(m -> new Asm(m).forEach(i -> {
-			if(i.getOpcode() == Opcodes.SIPUSH && ((IntInsnNode)i).operand == 128) {
-				InsnList l = new InsnList();
-				l.add(new VarInsnNode(Opcodes.ALOAD, 1));
-				l.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "c98/graphicalUpgrade/RenderRainbowXP$Impl", "getColor", "(ILjava/lang/Object;)I", false));
-				m.instructions.insertBefore(i, l);
+			if(i.getOpcode() == Opcodes.INVOKEVIRTUAL) {
+				MethodInsnNode mi = (MethodInsnNode)i;
+				if(mi.desc.equals("(IIII)L%;".replaceAll("%", mi.owner))) {
+					InsnList l = new InsnList();
+					l.add(new VarInsnNode(Opcodes.ALOAD, 1));
+					String sig = "(L%;IIIILjava/lang/Object;)L%;".replaceAll("%", mi.owner);
+					l.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "c98/graphicalUpgrade/RenderRainbowXP$Impl", "color", sig, false));
+					m.instructions.insertBefore(i, l);
+					m.instructions.remove(i);
+				}
 			}
 		}));
 	}

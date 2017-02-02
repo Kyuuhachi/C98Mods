@@ -22,9 +22,9 @@ import net.minecraft.util.math.MathHelper;
 	public void squiggle(EntitySlime slime, ModelRenderer box, int boxIdx, float factor, float partialTicks) {
 		rand.setSeed(slime.getEntityId() + boxIdx);
 		float age = slime.ticksExisted + partialTicks;
-		box.rotationPointX = calcSquiggle(age);
-		box.rotationPointY = calcSquiggle(age) + slime.squishFactor * factor;
-		box.rotationPointZ = calcSquiggle(age);
+		box.rotationPointX += calcSquiggle(age);
+		box.rotationPointY += calcSquiggle(age) + slime.squishFactor * factor;
+		box.rotationPointZ += calcSquiggle(age);
 	}
 
 	private float calcSquiggle(float age) {
@@ -36,10 +36,19 @@ import net.minecraft.util.math.MathHelper;
 	}
 
 	@Override public void doRender(EntitySlime entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		model.slimeBodies.setRotationPoint(0, 0, 0);
+		model.slimeLeftEye.setRotationPoint(0, 0, 0);
+		model.slimeRightEye.setRotationPoint(0, 0, 0);
+		model.slimeMouth.setRotationPoint(0, 0, 0);
+
 		squiggle(entity, model.slimeBodies, 0, 2, partialTicks);
-		squiggle(entity, model.slimeLeftEye, 1, 4, partialTicks);
-		squiggle(entity, model.slimeRightEye, 2, 4, partialTicks);
-		squiggle(entity, model.slimeMouth, 3, 5, partialTicks);
+		squiggle(entity, model.slimeLeftEye, 0, 2, partialTicks);
+		squiggle(entity, model.slimeRightEye, 0, 2, partialTicks);
+		squiggle(entity, model.slimeMouth, 0, 2, partialTicks);
+
+		squiggle(entity, model.slimeLeftEye, 1, 1.4F, partialTicks);
+		squiggle(entity, model.slimeRightEye, 2, 1.4F, partialTicks);
+		squiggle(entity, model.slimeMouth, 3, 2, partialTicks);
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 }

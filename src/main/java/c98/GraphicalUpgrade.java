@@ -1,13 +1,13 @@
 package c98;
 
 import java.awt.Color;
+
+import c98.core.*;
+
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.ModelVillager;
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.client.renderer.entity.RenderVillager;
 import net.minecraft.entity.passive.EntityVillager;
-import c98.core.*;
-import c98.graphicalUpgrade.ModelSquigglySlime;
 
 public class GraphicalUpgrade extends C98Mod {
 	public static class GUConf {
@@ -28,8 +28,6 @@ public class GraphicalUpgrade extends C98Mod {
 	private ModelRenderer testificateHat;
 
 	@Override public void load() {
-		((RenderLivingBase)Rendering.getRenderer(EntitySlime.class)).mainModel = new ModelSquigglySlime(16);
-
 		ModelVillager base = (ModelVillager)((RenderVillager)Rendering.getRenderer(EntityVillager.class)).mainModel;
 		testificateHat = new ModelRenderer(base).setTextureSize(64, 64);
 		testificateHat.setRotationPoint(0, 0, 0);

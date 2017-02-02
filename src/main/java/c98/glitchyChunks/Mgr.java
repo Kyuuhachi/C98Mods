@@ -45,7 +45,7 @@ public class Mgr extends BiomeProvider {
 		else if(type == 1) p = end;
 		else if(type == 2) {
 			List<GuiFlatPresets.LayerItem> presets = GuiFlatPresets.FLAT_WORLD_PRESETS;
-			String s = presets.get(rand.nextInt(presets.size())).name;
+			String s = presets.get(rand.nextInt(presets.size())).generatorInfo;
 			FlatGeneratorInfo var2 = FlatGeneratorInfo.createFlatGeneratorFromString(s);
 			if(!flat.containsKey(s)) flat.put(s, new BiomeProviderSingle(Biome.getBiome(var2.getBiome())));
 			p = flat.get(s);

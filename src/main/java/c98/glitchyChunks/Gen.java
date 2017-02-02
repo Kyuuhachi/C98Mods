@@ -37,20 +37,22 @@ public class Gen extends ChunkProviderOverworld {
 		return get(par1 << 4, par2 << 4).provideChunk(par1, par2);
 	}
 
-	private IChunkGenerator get(int par1, int par2) {
-		try {
-			rand.setSeed(seed ^ par1 * 71 ^ par2 * 37);
-			IChunkGenerator p = null;
-			int i = rand.nextInt(GlitchyChunks.num);
-			if(i == 0) p = nether;
-			else if(i == 1) p = end;
-			else if(i == 2) {
-				List<GuiFlatPresets.LayerItem> presets = GuiFlatPresets.FLAT_WORLD_PRESETS;
-				String s = presets.get(rand.nextInt(presets.size())).name;
-				if(!flat.containsKey(s)) flat.put(s, new ChunkProviderFlat(world, seed, struct, s));
-				p = flat.get(s);
-			} else p = normal;
+	private IChunkGenerator get(int chunkX, int chunkZ) {
+		rand.setSeed(seed ^ chunkX * 71 ^ chunkZ * 37);
 
+		IChunkGenerator p = null;
+		int type = rand.nextInt(GlitchyChunks.num);
+		if(type == 0) p = nether;
+		else if(type == 1) p = end;
+		else if(type == 2) {
+			List<GuiFlatPresets.LayerItem> presets = GuiFlatPresets.FLAT_WORLD_PRESETS;
+			String s = presets.get(rand.nextInt(presets.size())).generatorInfo;
+			if(!flat.containsKey(s)) flat.put(s, new ChunkProviderFlat(world, seed, struct, s));
+			p = flat.get(s);
+		} else p = normal;
+
+
+		try {
 			long chunkSeed = rand.nextLong();
 
 			for(Field field : p.getClass().getDeclaredFields())

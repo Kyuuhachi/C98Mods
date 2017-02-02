@@ -1,43 +1,33 @@
 package c98.extraInfo.hud;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
-import c98.ExtraInfo;
-import c98.core.GL;
 
 public class XPBar {
-	public static void draw(int height, int width, FontRenderer fr, EntityPlayer p) {
-		ExtraInfo.bindTexture(ExtraInfo.iconsTexture);
-		GL.color(1, 1, 1);
-		int beginX = width / 2 - 91;
-		int maxXP = p.xpBarCap();
-		short barLength = 182;
+	private static final int BAR_LENGTH = 182;
 
-		if(maxXP > 0) {
-			int grnEnd = (int)(p.experience * (barLength + 1));
-			int y = height - 32 + 3;
-			ExtraInfo.drawTexturedRect(beginX, y, 0, 64, barLength, 5);
-			ExtraInfo.drawTexturedRect(beginX, y, 0, 69, grnEnd, 5);
-		}
+	public static void draw() {
+		Minecraft mc = Minecraft.getMinecraft();
+		ScaledResolution res = new ScaledResolution(mc);
+		int width = res.getScaledWidth();
+		int height = res.getScaledHeight();
+		EntityPlayer p = mc.thePlayer;
+		FontRenderer fr = mc.fontRendererObj;
 
-		String level = "" + p.experienceLevel;
-		int x = (width - fr.getStringWidth(level)) / 2;
 		int y = height - 31 - 4;
-		drawOutlinedString(level, x, y, 0x80FF20, fr);
-
-		String s = "" + (int)(p.experience * maxXP) + " / " + maxXP;
-		String S = "(" + (maxXP - (int)(p.experience * maxXP)) + ")";
-		int w = fr.getStringWidth(s) / 2;
-		int W = fr.getStringWidth(S) / 2;
-		drawOutlinedString(s, width / 2 - w - barLength / 3, y, 0x80FF20, fr);
-		drawOutlinedString(S, width / 2 - W + barLength / 3, y, 0x80FF20, fr);
+		String s = String.format("%d / %d", (int)(p.experience * p.xpBarCap()), p.xpBarCap());
+		String S = String.format("(%d)", (int)((1 - p.experience) * p.xpBarCap()));
+		drawOutlinedString(s, (width - fr.getStringWidth(s)) / 2 - BAR_LENGTH / 3, y, 0x80FF20, fr);
+		drawOutlinedString(S, (width - fr.getStringWidth(S)) / 2 + BAR_LENGTH / 3, y, 0x80FF20, fr);
 	}
 
-	private static void drawOutlinedString(String str, int x, int y, int i, FontRenderer fr) {
-		fr.drawString(str, x + 1, y * 1, 0);
-		fr.drawString(str, x - 1, y * 1, 0);
-		fr.drawString(str, x * 1, y + 1, 0);
-		fr.drawString(str, x * 1, y - 1, 0);
-		fr.drawString(str, x * 1, y * 1, i);
+	private static void drawOutlinedString(String str, int x, int y, int rgb, FontRenderer fr) {
+		fr.drawString(str, x + 1, y, 0);
+		fr.drawString(str, x - 1, y, 0);
+		fr.drawString(str, x, y + 1, 0);
+		fr.drawString(str, x, y - 1, 0);
+		fr.drawString(str, x, y, rgb);
 	}
 }

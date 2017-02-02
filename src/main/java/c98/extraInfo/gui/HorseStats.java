@@ -1,39 +1,49 @@
 package c98.extraInfo.gui;
 
+import c98.extraInfo.hud.HorseInfo;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityHorse;
-import c98.extraInfo.hud.HorseInfo;
 
 public class HorseStats {
-	static int posX, posY;
+	private static int n;
+	private static Minecraft mc;
 
 	public static void drawHorseStats(Minecraft mc) {
-		GuiScreen gui = mc.currentScreen;
-		EntityHorse horse = ((GuiScreenHorseInventory)gui).horseEntity;
+		HorseStats.mc = mc;
+		n = 0;
 
-		posX = ((GuiContainer)gui).xSize + 4;
-		posY = 4;
-
-		double health = HorseInfo.attr(horse, SharedMonsterAttributes.MAX_HEALTH);
-		double speed = HorseInfo.attr(horse, SharedMonsterAttributes.MOVEMENT_SPEED);
+		EntityHorse horse = ((GuiScreenHorseInventory)mc.currentScreen).horseEntity;
+		double health = attr(horse, SharedMonsterAttributes.MAX_HEALTH);
+		double speed = attr(horse, SharedMonsterAttributes.MOVEMENT_SPEED);
 		double jump = horse.getHorseJumpStrength();
 
-		str(String.format("Health: \247e%.2f\247f hearts", health / 2), 0, 0);
-		str(String.format("Speed: \247e%.2f\247f blocks/s", speed * 43), 0, 8);
-		str(String.format("Jump: \247e%.2f\247f blocks", HorseInfo.getHeight(jump)), 0, 16);
-		posY += 32;
+		str(String.format("Health: &e%.2f&f hearts", health / 2));
+		str(String.format("Speed: &e%.2f&f blocks/s", speed * 43));
+		str(String.format("Jump: &e%.2f&f blocks", HorseInfo.getHeight(jump)));
+		n++;
 
-		str(String.format("Raw health: \247e%.2f\247f", health), 0, 0);
-		str(String.format("Raw speed: \247e%.2f\247f", speed), 0, 8);
-		str(String.format("Raw jump: \247e%.2f\247f", jump), 0, 16);
-		posY += 32;
+		str(String.format("Raw health: &e%.2f&f", health));
+		str(String.format("Raw speed: &e%.2f&f", speed));
+		str(String.format("Raw jump: &e%.2f&f", jump));
+		n++;
 	}
 
-	private static void str(String string, int x, int y) {
-		Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(string, x + posX, y + posY, 0xFFFFFF);
+	private static void str(String string, Object... args) {
+		str_(String.format(string, args), 0);
+	}
+
+	private static void str_(String string, int x) {
+		x += ((GuiContainer)mc.currentScreen).xSize + 4;
+		int y = 4 + 8 * n++;
+		mc.fontRendererObj.drawStringWithShadow(string.replace('&', '\247'), x, y, 0xFFFFFF);
+	}
+
+	private static double attr(EntityHorse horse, IAttribute attr) {
+		return horse.getEntityAttribute(attr).getAttributeValue();
 	}
 }

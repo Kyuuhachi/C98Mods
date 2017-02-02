@@ -1,42 +1,42 @@
 package c98.extraInfo.hud;
 
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.passive.EntityHorse;
-import c98.ExtraInfo;
 import c98.core.GL;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.util.ResourceLocation;
+
 public class HorseInfo {
-	public static void draw(int height, int width, FontRenderer fr, EntityPlayerSP pl, EntityHorse horse) {
-		ExtraInfo.bindTexture(ExtraInfo.iconsTexture);
+	private static final ResourceLocation ICONS = new ResourceLocation("textures/gui/icons.png");
+
+	public static void draw() {
+		Minecraft mc = Minecraft.getMinecraft();
+		ScaledResolution res = new ScaledResolution(mc);
+		int height = res.getScaledHeight();
+		int width = res.getScaledWidth();
+
+		EntityPlayerSP pl = mc.thePlayer;
+		if(!pl.isRidingHorse()) return;
+		EntityHorse horse = (EntityHorse)pl.getRidingEntity();
+
+		mc.getTextureManager().bindTexture(ICONS);
 		GL.color(1, 1, 1);
 
-		float jumpCharge = pl.getHorseJumpPower();
-		int barLength = 182;
-		int barFill = (int)(jumpCharge * (barLength + 1));
-		int barX = width / 2 - 91;
-		int barY = height - 32 + 3;
-		ExtraInfo.drawTexturedRect(barX, barY, 0, 84, barLength, 5);
+		double strength = horse.getHorseJumpStrength();
+		double charge = pl.getHorseJumpPower();
+		String str = String.format("%.2f / %.2f", getHeight(strength * charge), getHeight(strength));
 
-		if(barFill > 0) ExtraInfo.drawTexturedRect(barX, barY, 0, 89, barFill, 5);
-		double jumpStrength = horse.getHorseJumpStrength();
-		String level = String.format(ExtraInfo.format, getHeight(jumpStrength * jumpCharge), getHeight(jumpStrength));
-		int x = (width - fr.getStringWidth(level)) / 2;
+		FontRenderer fr = mc.fontRendererObj;
+		int x = (width - fr.getStringWidth(str)) / 2;
 		int y = height - 31 - 4;
-		drawOutlinedString(level, x, y, 0x2080FF, fr);
-
-		String s = String.format("S " + ExtraInfo.format2, attr(horse, SharedMonsterAttributes.MOVEMENT_SPEED));
-		String S = String.format("J " + ExtraInfo.format2, horse.getHorseJumpStrength());
-		int w = fr.getStringWidth(s) / 2;
-		int W = fr.getStringWidth(S) / 2;
-		drawOutlinedString(s, width / 2 - w - barLength / 3, height - 31 - 4, 0x2080FF, fr);
-		drawOutlinedString(S, width / 2 - W + barLength / 3, height - 31 - 4, 0x2080FF, fr);
-	}
-
-	public static double attr(EntityHorse horse, IAttribute attr) {
-		return horse.getEntityAttribute(attr).getAttributeValue();
+		fr.drawString(str, x + 1, y, 0);
+		fr.drawString(str, x - 1, y, 0);
+		fr.drawString(str, x, y + 1, 0);
+		fr.drawString(str, x, y - 1, 0);
+		fr.drawString(str, x, y, 0x2080FF);
 	}
 
 	public static double getHeight(double v) {
@@ -49,13 +49,5 @@ public class HorseInfo {
 			v *= r;
 		}
 		return d;
-	}
-
-	private static void drawOutlinedString(String str, int x, int y, int i, FontRenderer fr) {
-		fr.drawString(str, x + 1, y * 1, 0);
-		fr.drawString(str, x - 1, y * 1, 0);
-		fr.drawString(str, x * 1, y + 1, 0);
-		fr.drawString(str, x * 1, y - 1, 0);
-		fr.drawString(str, x * 1, y * 1, i);
 	}
 }

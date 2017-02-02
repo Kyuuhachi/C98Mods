@@ -2,6 +2,8 @@ package c98.graphicalUpgrade;
 
 import java.util.Random;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import c98.core.GL;
 import c98.core.Rendering;
 import c98.core.launch.ASMer;
@@ -45,18 +47,20 @@ class Vars {
 
 		for(int i = 0; i < num; i++) {
 			GL.pushMatrix();
-			if(i > 0)
+			if(i > 0) {
+				Vector3f scale = model.getItemCameraTransforms().ground.scale;
 				if(model.isGui3d()) {
 					double x = (r.nextFloat() * 2 - 1);
 					double y = (r.nextFloat() * 2 - 1);
 					double z = (r.nextFloat() * 2 - 1);
 					GL.translate(x * SCALE, y * SCALE, z * SCALE);
 				} else {
-					double x = (r.nextFloat() * 2 - 1) * 0.5;
-					double y = (r.nextFloat() * 2 - 1) * 0.5;
-					double z = 0.0625 * i * model.getItemCameraTransforms().ground.scale.z;
+					double x = (r.nextFloat() * 2 - 1) * 0.5 * scale.x;
+					double y = (r.nextFloat() * 2 - 1) * 0.5 * scale.y;
+					double z = 0.0625 * i * scale.z;
 					GL.translate(x * SCALE, y * SCALE, z * SCALE / 0.15);
 				}
+			}
 			super.renderItem(is, model);
 			GL.popMatrix();
 		}

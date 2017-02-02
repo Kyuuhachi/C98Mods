@@ -10,7 +10,6 @@ import c98.core.hooks.*;
 import c98.extraInfo.gui.*;
 import c98.extraInfo.hud.*;
 import c98.extraInfo.itemViewer.GuiSelectItem;
-import c98.targetLock.TargetEntity;
 
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.inventory.*;
@@ -103,20 +102,10 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 	@Override public void keyboardEvent(KeyBinding key) {
 		if(key == viewKey && mc.currentScreen == null) {
 			List<ItemStack> viableStacks = new LinkedList();
-			Entity entity = null;
-			add(viableStacks, mc.thePlayer.inventory.armorInventory);
-			// TODO left hand
-			if(C98Core.isModLoaded("TargetLock") && TargetLock.target() instanceof TargetEntity) {
-				entity = ((TargetEntity)TargetLock.target()).getEntity();
-				if(entity instanceof EntityLivingBase) {
-					add(viableStacks, ((EntityLivingBase)entity).armorArray);
-					add(viableStacks, ((EntityLivingBase)entity).handInventory);
-				}
-			} else add(viableStacks, new ItemStack[6]);
-			add(viableStacks, mc .thePlayer.inventory.mainInventory);
-
-			mc.displayGuiScreen(new GuiSelectItem(viableStacks, entity instanceof EntityLivingBase ? (EntityLivingBase)entity : null));
 			// TODO the GUI doesn't support dualwielding - pester Car0b1nius
+			add(viableStacks, mc.thePlayer.inventory.armorInventory);
+			add(viableStacks, mc.thePlayer.inventory.mainInventory);
+			mc.displayGuiScreen(new GuiSelectItem(viableStacks));
 		}
 	}
 

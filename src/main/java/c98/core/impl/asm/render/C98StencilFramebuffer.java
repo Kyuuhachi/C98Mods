@@ -1,18 +1,22 @@
 package c98.core.impl.asm.render;
 
-import org.objectweb.asm.tree.ClassNode;
+import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL30;
 
 import c98.core.launch.ASMer;
-import c98.core.launch.CustomASMer;
 
-import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.client.renderer.OpenGlHelper;
 
-@ASMer class C98StencilFramebuffer extends Framebuffer implements CustomASMer {
-	public C98StencilFramebuffer(int p_i45078_1_, int p_i45078_2_, boolean p_i45078_3_) {
-		super(p_i45078_1_, p_i45078_2_, p_i45078_3_);
+@ASMer class C98StencilFramebuffer extends OpenGlHelper {
+	public static void glFramebufferRenderbuffer(int target, int attachment, int renderBufferTarget, int renderBuffer) {
+		if(attachment == GL30.GL_DEPTH_ATTACHMENT)
+			attachment = GL30.GL_DEPTH_STENCIL_ATTACHMENT;
+		OpenGlHelper.glFramebufferRenderbuffer(target, attachment, renderBufferTarget, renderBuffer);
 	}
 
-	@Override public void asm(ClassNode node) {
-		//TODO replace GL_DEPTH_ATTACHMENT with GL_DEPTH_STENCIL_ATTACHMENT
+	public static void glRenderbufferStorage(int target, int internalFormat, int width, int height) {
+		if(internalFormat == GL14.GL_DEPTH_COMPONENT24)
+			internalFormat = GL30.GL_DEPTH24_STENCIL8;
+		OpenGlHelper.glRenderbufferStorage(target, internalFormat, width, height);
 	}
 }

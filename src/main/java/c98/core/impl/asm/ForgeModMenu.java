@@ -34,7 +34,7 @@ import c98.core.launch.ASMer;
 
 	@ASMer static class ForgeModMenuList extends GuiSlotModList {
 		public ForgeModMenuList(GuiModList parent, ArrayList<ModContainer> mods, int listWidth, int slotHeight) {
-			super(parent, mods, listWidth, slotHeight); // TODO maybe force slotHeight
+			super(parent, mods, listWidth, slotHeight);
 		}
 
 		@Override public void drawSlot(int idx, int right, int top, int height, Tessellator tess) {

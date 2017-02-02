@@ -1,18 +1,18 @@
 package c98.graphicalUpgrade;
 
+import c98.GraphicalUpgrade;
+import c98.core.GL;
+import c98.core.launch.ASMer;
+
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraft.client.model.*;
 import net.minecraft.client.renderer.tileentity.TileEntitySignRenderer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.EnumFacing;
-import c98.GraphicalUpgrade;
-import c98.core.GL;
-import c98.core.launch.ASMer;
 
 @ASMer public class TileEntityRoadSignRenderer extends TileEntitySignRenderer {
 	public final ModelSign modelSign = new ModelSign();
@@ -33,62 +33,53 @@ import c98.core.launch.ASMer;
 	}
 
 	@Override public void renderTileEntityAt(TileEntitySign sign, double x, double y, double z, float delta, int breakage) {
-		boolean b = false;
-		if(sign.getBlockType() != Blocks.WALL_SIGN) b = true;
-		//TODO make the line below only happen for the sign that is rendered inside the gui
-		if(Minecraft.getMinecraft().currentScreen instanceof GuiEditSign && ((GuiEditSign)Minecraft.getMinecraft().currentScreen).tileSign == sign) b = true;
-		if(!GraphicalUpgrade.config.roadSigns) b = true;
-		if(b) super.renderTileEntityAt(sign, x, y, z, delta, breakage);
-		else {
-			EnumFacing facing = EnumFacing.getFront(sign.getBlockMetadata());
-			IBlockState state = sign.getWorld().getBlockState(sign.getPos().offset(facing.getOpposite()));
-			if(state != null && state.getBlock() instanceof BlockFence) {
-				float rot = 0;
-				if(facing == EnumFacing.NORTH) rot = 180;
-				if(facing == EnumFacing.SOUTH) rot = 0;
-				if(facing == EnumFacing.WEST) rot = 90;
-				if(facing == EnumFacing.EAST) rot = -90;
-				rot += 90;
-
-				float scale = 2F / 3;
-				GL.pushMatrix();
-				GL.translate((float)x + 0.5F, (float)y + 0.75F * scale, (float)z + 0.5F);
-				GL.rotate(-rot, 0, 1, 0);
-				GL.translate(0, -0.3125F, -0.4375F);
-
-				bindTexture(SIGN_TEXTURE);
-				GL.scale(scale, -scale, -scale);
-				float f = 1 / 16F;
-				GL.translate(f * -9, f * 0, f * -10.5F);
-				modelSign.renderSign();
-
-				FontRenderer fontRenderer = getFontRenderer();
-				float scale2 = 0.025F * scale;
-				GL.translate(0, f * -8, 0);
-				f += 0.01;
-				drawText(sign, f, fontRenderer, scale2);
-				GL.rotate(180, 0, 1, 0);
-				drawText(sign, f, fontRenderer, scale2);
-				GL.popMatrix();
-			} else super.renderTileEntityAt(sign, x, y, z, delta, breakage);
-		}
+		if(!doRender(sign, x, y, z, delta, breakage))
+			super.renderTileEntityAt(sign, x, y, z, delta, breakage);
 	}
 
-	private static void drawText(TileEntitySign sign, float f, FontRenderer fontRenderer, float scale) {
+	public boolean doRender(TileEntitySign sign, double x, double y, double z, float delta, int breakage) {
+		if(!GraphicalUpgrade.config.roadSigns) return false;
+		if(sign.getBlockType() != Blocks.WALL_SIGN) return false;
+		if(Minecraft.getMinecraft().currentScreen instanceof GuiEditSign &&
+				((GuiEditSign)Minecraft.getMinecraft().currentScreen).tileSign == sign) return false;
+		EnumFacing facing = EnumFacing.getFront(sign.getBlockMetadata());
+		IBlockState state = sign.getWorld().getBlockState(sign.getPos().offset(facing.getOpposite()));
+		if(!(state.getBlock() instanceof BlockFence)) return false;
+
 		GL.pushMatrix();
-		GL.translate(0, 0, -f);
-		GL.scale(scale);
-		GL.normal(0, 0, -1);
+
+		GL.translate((float)x + 0.5F, (float)y + 0.5F, (float)z + 0.5F);
+		GL.rotate(-facing.getHorizontalAngle() - 90, 0, 1, 0);
+		GL.translate(-6/16F, -5/16F, 0);
+		GL.rotate(180, 1, 0, 0);
+		GL.scale(2/3F);
+		bindTexture(SIGN_TEXTURE);
+		modelSign.renderSign();
+
 		GL.depthMask(false);
-		byte var13 = 0;
-
-		for(int var14 = 0; var14 < sign.signText.length; ++var14) {
-			String var15 = sign.signText[var14].getFormattedText();
-			fontRenderer.drawString(var15, -fontRenderer.getStringWidth(var15) / 2, var14 * 10 - sign.signText.length * 5, var13);
-		}
-
+		GL.translate(0, -0.5F, 0);
+		drawText(sign);
+		GL.rotate(180, 0, 1, 0);
+		drawText(sign);
 		GL.depthMask(true);
 		GL.color(1, 1, 1, 1);
+
+		GL.popMatrix();
+		return true;
+	}
+
+	private void drawText(TileEntitySign sign) {
+		GL.pushMatrix();
+		GL.translate(0, 0, -1.01/16F);
+		GL.scale(2/3F);
+		GL.scale(1/40F);
+		GL.normal(0, 0, -1);
+
+		for(int i = 0; i < sign.signText.length; ++i) {
+			String s = sign.signText[i].getFormattedText();
+			getFontRenderer().drawString(s, -getFontRenderer().getStringWidth(s) / 2, i * 10 - 20, 0);
+		}
+
 		GL.popMatrix();
 	}
 }

@@ -1,0 +1,19 @@
+{
+	"variants": {
+		"charge=0": {"model": "c98/magic:xp_tank/0"},
+		"charge=1": {"model": "c98/magic:xp_tank/1"},
+		"charge=2": {"model": "c98/magic:xp_tank/2"},
+		"charge=3": {"model": "c98/magic:xp_tank/3"},
+		"charge=4": {"model": "c98/magic:xp_tank/4"},
+		"charge=5": {"model": "c98/magic:xp_tank/5"},
+		"charge=6": {"model": "c98/magic:xp_tank/6"},
+		"charge=7": {"model": "c98/magic:xp_tank/7"},
+		"charge=8": {"model": "c98/magic:xp_tank/8"},
+		"charge=9": {"model": "c98/magic:xp_tank/9"},
+		"charge=10":{"model": "c98/magic:xp_tank/10"},
+		"charge=11":{"model": "c98/magic:xp_tank/11"},
+		"charge=12":{"model": "c98/magic:xp_tank/12"},
+		"charge=13":{"model": "c98/magic:xp_tank/13"},
+		"charge=14":{"model": "c98/magic:xp_tank/14"}
+	}
+}

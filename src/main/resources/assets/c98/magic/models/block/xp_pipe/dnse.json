@@ -1,0 +1,7 @@
+{
+	"parent": "c98/magic:block/pipe/dnse",
+	"textures": {
+		"particle": "blocks/enchanting_table_bottom",
+		"side": "c98/magic:blocks/pipe"
+	}
+}

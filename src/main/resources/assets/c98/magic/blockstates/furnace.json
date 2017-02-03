@@ -1,0 +1,12 @@
+{
+	"variants": {
+		"active=false,facing=north": {"model": "c98/magic:furnace/off"},
+		"active=false,facing=south": {"model": "c98/magic:furnace/off", "y": 180},
+		"active=false,facing=west":  {"model": "c98/magic:furnace/off", "y": 270},
+		"active=false,facing=east":  {"model": "c98/magic:furnace/off", "y": 90},
+		"active=true,facing=north":  {"model": "c98/magic:furnace/on"},
+		"active=true,facing=south":  {"model": "c98/magic:furnace/on", "y": 180},
+		"active=true,facing=west":   {"model": "c98/magic:furnace/on", "y": 270},
+		"active=true,facing=east":   {"model": "c98/magic:furnace/on", "y": 90}
+	}
+}

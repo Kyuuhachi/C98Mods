@@ -1,0 +1,17 @@
+{
+	"textures": {
+		"particle": "c98/magic:blocks/magic_gate",
+		"front": "c98/magic:blocks/magic_gate",
+		"back": "blocks/enchanting_table_bottom"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 15],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#front"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#back", "cullface": "south"}
+			}
+		}
+	]
+}

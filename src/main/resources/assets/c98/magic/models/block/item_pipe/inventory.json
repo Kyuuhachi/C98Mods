@@ -1,0 +1,6 @@
+{
+	"parent": "c98/magic:block/pipe/inventory",
+	"textures": {
+		"side": "blocks/iron_block"
+	}
+}

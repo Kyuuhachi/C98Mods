@@ -26,21 +26,21 @@ public abstract class BlockPipe extends BlockContainer {
 	public static final AxisAlignedBB AABB_CENTER = new AxisAlignedBB(IN0, IN0, IN0, IN1, IN1, IN1);
 	public static final AxisAlignedBB AABB_DOWN   = new AxisAlignedBB(IN0,   0, IN0, IN1, IN0, IN1);
 	public static final AxisAlignedBB AABB_UP     = new AxisAlignedBB(IN0, IN1, IN0, IN1,   1, IN1);
-	public static final AxisAlignedBB AABB_NORTH  = new AxisAlignedBB(  0, IN0, IN0, IN0, IN1, IN1);
-	public static final AxisAlignedBB AABB_SOUTH  = new AxisAlignedBB(IN1, IN0, IN0,   1, IN1, IN1);
-	public static final AxisAlignedBB AABB_WEST   = new AxisAlignedBB(IN0, IN0,   0, IN1, IN1, IN0);
-	public static final AxisAlignedBB AABB_EAST   = new AxisAlignedBB(IN0, IN0, IN1, IN1, IN1,   1);
+	public static final AxisAlignedBB AABB_NORTH  = new AxisAlignedBB(IN0, IN0,   0, IN1, IN1, IN0);
+	public static final AxisAlignedBB AABB_SOUTH  = new AxisAlignedBB(IN0, IN0, IN1, IN1, IN1,   1);
+	public static final AxisAlignedBB AABB_WEST   = new AxisAlignedBB(  0, IN0, IN0, IN0, IN1, IN1);
+	public static final AxisAlignedBB AABB_EAST   = new AxisAlignedBB(IN1, IN0, IN0,   1, IN1, IN1);
 
 	public static final AxisAlignedBB[] BOUNDING_BOXES = new AxisAlignedBB[1<<6];
 	static {
 		for(int i = 0; i < BOUNDING_BOXES.length; i++)
 			BOUNDING_BOXES[i] = new AxisAlignedBB(
+				(i & 1<<4) != 0 ? 0 : IN0,
 				(i & 1<<0) != 0 ? 0 : IN0,
-				(i & 1<<1) != 0 ? 0 : IN0,
 				(i & 1<<2) != 0 ? 0 : IN0,
-				(i & 1<<3) != 0 ? 1 : IN1,
-				(i & 1<<4) != 0 ? 1 : IN1,
-				(i & 1<<5) != 0 ? 1 : IN1
+				(i & 1<<5) != 0 ? 1 : IN1,
+				(i & 1<<1) != 0 ? 1 : IN1,
+				(i & 1<<3) != 0 ? 1 : IN1
 			);
 	}
 	

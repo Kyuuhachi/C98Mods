@@ -64,7 +64,7 @@
 							<goal>remap</goal>
 						</goals>
 						<configuration>
-							<srgIn>client_deobf.srg</srgIn>
+							<srgIn>client_ro_cls.srg</srgIn>
 							<remappedDependencies>
 								<param>net.minecraft:minecraft-deobf:${project.version}:jar</param>
 							</remappedDependencies>
@@ -76,7 +76,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.1.1</version>
+				<version>1.5.0</version>
 				<executions>
 					<execution>
 						<id>modpack</id>
@@ -103,7 +103,6 @@
 						<argument>-classpath</argument>
 						<classpath />
 						<argument>-Djava.library.path=../target/natives</argument>
-						<argument>-Dorg.lwjgl.util.Debug=true</argument>
 						<argument>net.minecraft.launchwrapper.Launch</argument>
 						<argument>--username</argument> <argument>Caagr98</argument>
 						<argument>--uuid</argument> <argument>d5c883d4-c9ae-4263-96bb-3303e4a135a0</argument>
@@ -129,8 +128,9 @@
 	</repositories>
 
 	<dependencies>
-		<dependency><groupId>net.minecraft</groupId>              <artifactId>minecraft-deobf</artifactId>     <version>1.10</version> </dependency>
-		<dependency><groupId>c98</groupId>                        <artifactId>forge-stubs</artifactId>         <version>1.10</version> <scope>provided</scope> </dependency>
+		<dependency><groupId>net.minecraft</groupId>              <artifactId>minecraft-deobf</artifactId>     <version>1.10</version>  <scope>provided</scope> <classifier>public</classifier> </dependency>
+		<dependency><groupId>net.minecraft</groupId>              <artifactId>minecraft-deobf</artifactId>     <version>1.10</version>  </dependency>
+		<dependency><groupId>c98</groupId>                        <artifactId>forge-stubs</artifactId>         <version>1.10</version>  <scope>provided</scope> </dependency>
 		<dependency><groupId>net.minecraft</groupId>              <artifactId>launchwrapper</artifactId>       <version>1.11</version>  </dependency>
 		<dependency><groupId>com.fasterxml.jackson.core</groupId> <artifactId>jackson-core</artifactId>        <version>2.5.3</version> </dependency>
 		<dependency><groupId>com.fasterxml.jackson.core</groupId> <artifactId>jackson-annotations</artifactId> <version>2.5.3</version> </dependency>

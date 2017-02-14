@@ -150,7 +150,7 @@ public class GuiViewItem extends GuiScreen {
 		scroll();
 	}
 
-	@Override public void keyTyped(char par1, int par2) throws IOException {
+	@Override public void keyTyped(char par1, int par2) {
 		super.keyTyped(par1, par2);
 		if(par2 == Keyboard.KEY_UP) scroll--;
 		if(par2 == Keyboard.KEY_DOWN) scroll++;
@@ -160,7 +160,7 @@ public class GuiViewItem extends GuiScreen {
 		scroll();
 	}
 
-	@Override public void handleMouseInput() throws IOException {
+	@Override public void handleMouseInput() {
 		super.handleMouseInput();
 		int dist = Mouse.getEventDWheel();
 		if(dist > 0) scroll--;

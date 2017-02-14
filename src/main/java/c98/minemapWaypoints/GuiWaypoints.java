@@ -1,17 +1,19 @@
 package c98.minemapWaypoints;
 
-import java.io.IOException;
 import java.util.List;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+
 import org.lwjgl.input.Mouse;
+
 import c98.MinemapWaypoints;
 import c98.MinemapWaypoints.Config.Waypoint;
 import c98.core.GL;
 import c98.minemap.api.IconStyle;
 import c98.minemap.api.MapUtils;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 public class GuiWaypoints extends GuiScreen {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("c98/minemapwaypoints", "waypoints.png");
@@ -76,11 +78,11 @@ public class GuiWaypoints extends GuiScreen {
 		buttonList.add(new GuiButton(0, GUI_X() + BUTTON_X, GUI_Y() + BUTTON_Y, BUTTON_W, BUTTON_H, "Add"));
 	}
 
-	@Override public void actionPerformed(GuiButton button) throws IOException {
+	@Override public void actionPerformed(GuiButton button) {
 		if(button.id == 0) mc.displayGuiScreen(new GuiEditWaypoint(w, new Waypoint(mc.thePlayer.getPosition())));
 	}
 
-	@Override public void handleMouseInput() throws IOException {
+	@Override public void handleMouseInput() {
 		super.handleMouseInput();
 		int steps = Mouse.getEventDWheel();
 
@@ -94,7 +96,7 @@ public class GuiWaypoints extends GuiScreen {
 		}
 	}
 
-	@Override public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	@Override public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		if(mouseButton == 0) for(int i = 0; isIndex(i); i++) {
 			int x = ITEM_X;
@@ -104,7 +106,7 @@ public class GuiWaypoints extends GuiScreen {
 		}
 	}
 
-	@Override public void keyTyped(char typedChar, int keyCode) throws IOException {
+	@Override public void keyTyped(char typedChar, int keyCode) {
 		if(keyCode == 1 || keyCode == mc.gameSettings.keyBindInventory.getKeyCode()) mc.thePlayer.closeScreen();
 	}
 

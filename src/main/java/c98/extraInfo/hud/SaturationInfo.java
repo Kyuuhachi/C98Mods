@@ -3,7 +3,6 @@ package c98.extraInfo.hud;
 import c98.core.GL;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.FoodStats;

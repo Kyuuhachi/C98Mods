@@ -1,16 +1,18 @@
 package c98.minemapWaypoints;
 
 import java.awt.Color;
-import java.io.IOException;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+
 import org.lwjgl.input.Keyboard;
+
 import c98.MinemapWaypoints;
 import c98.MinemapWaypoints.Config.Waypoint;
 import c98.minemap.api.IconStyle;
 import c98.minemap.api.MapUtils;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.*;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 public class GuiEditWaypoint extends GuiScreen {
 	private class MapButton extends GuiButton {
@@ -116,7 +118,7 @@ public class GuiEditWaypoint extends GuiScreen {
 		f.setEnableBackgroundDrawing(false);
 	}
 
-	@Override public void actionPerformed(GuiButton button) throws IOException {
+	@Override public void actionPerformed(GuiButton button) {
 		if(button.id < 16) point.style.color = new Color(fontRendererObj.colorCode[button.id]);
 		else point.style.shape = button.id - 16;
 	}
@@ -168,7 +170,7 @@ public class GuiEditWaypoint extends GuiScreen {
 			f.drawTextBox();
 	}
 
-	@Override public void keyTyped(char typedChar, int keyCode) throws IOException {
+	@Override public void keyTyped(char typedChar, int keyCode) {
 		if(keyCode == 1) mc.displayGuiScreen(parent);
 		if(keyCode == Keyboard.KEY_TAB) {
 			int cur = -1;
@@ -194,7 +196,7 @@ public class GuiEditWaypoint extends GuiScreen {
 			f.textboxKeyTyped(typedChar, keyCode);
 	}
 
-	@Override public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	@Override public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		for(GuiTextField f : textFields)
 			f.mouseClicked(mouseX, mouseY, mouseButton);

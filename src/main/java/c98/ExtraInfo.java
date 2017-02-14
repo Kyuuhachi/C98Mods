@@ -11,12 +11,10 @@ import c98.extraInfo.gui.*;
 import c98.extraInfo.hud.*;
 import c98.extraInfo.itemViewer.GuiSelectItem;
 
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.*;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
 public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, KeyHook {

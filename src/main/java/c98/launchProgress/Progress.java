@@ -10,30 +10,22 @@ import java.util.stream.Collectors;
 
 import javax.swing.*;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.*;
-
-import net.minecraft.client.main.Main;
-
 import org.apache.commons.io.IOUtils;
 
 import c98.core.C98Core;
 import c98.core.Json;
 import c98.core.launch.ASMer;
-import c98.core.launch.CustomASMer;
+
+import net.minecraft.client.main.Main;
+
+@ASMer class MainHook extends Main {
+	public static void main(String[] args) {
+		Progress.init();
+		Main.main(args);
+	}
+}
 
 public class Progress {
-	@ASMer static class MainHook extends Main implements CustomASMer {
-		@Override public void asm(ClassNode node) {
-			MethodNode mthd = null;
-			for(MethodNode m : node.methods)
-				if(m.name.equals("main")) mthd = m;
-			if(mthd == null) throw null;
-			mthd.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(Progress.class), "init", "()V", false));
-		}
-	}
-
 	public static class Config {
 		public List<Long> launchTime = new ArrayList();
 		public boolean alwaysOnTop = true;

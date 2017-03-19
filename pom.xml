@@ -15,26 +15,18 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
+				<groupId>org.apache.maven.plugins</groupId> <artifactId>maven-compiler-plugin</artifactId> <version>3.5.1</version>
 				<configuration>
 					<compilerId>eclipse</compilerId>
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
 				<dependencies>
-					<dependency>
-						<groupId>org.codehaus.plexus</groupId>
-						<artifactId>plexus-compiler-eclipse</artifactId>
-						<version>2.7</version>
-					</dependency>
+					<dependency> <groupId>org.codehaus.plexus</groupId> <artifactId>plexus-compiler-eclipse</artifactId> <version>2.7</version> </dependency>
 				</dependencies>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.10</version>
+				<groupId>org.apache.maven.plugins</groupId> <artifactId>maven-eclipse-plugin</artifactId> <version>2.10</version>
 				<configuration>
 					<useProjectReferences>false</useProjectReferences>
 					<downloadJavadocs>true</downloadJavadocs>
@@ -42,27 +34,41 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>com.googlecode.mavennatives</groupId>
-				<artifactId>maven-nativedependencies-plugin</artifactId>
-				<version>0.0.5</version>
-				<executions>
-					<execution>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-					</execution>
-				</executions>
+				<groupId>com.googlecode.mavennatives</groupId> <artifactId>maven-nativedependencies-plugin</artifactId> <version>0.0.5</version>
+				<executions><execution>
+					<phase>generate-resources</phase>
+					<goals><goal>copy</goal></goals>
+				</execution></executions>
 			</plugin>
 			<plugin>
-				<groupId>net.md-5</groupId>
-				<artifactId>specialsource-maven-plugin</artifactId>
-				<version>1.2.1</version>
+				<groupId>net.md-5</groupId> <artifactId>specialsource-maven-plugin</artifactId> <version>1.2.1</version>
 				<executions>
 					<execution>
-						<goals>
-							<goal>remap</goal>
-						</goals>
+						<id>install-mc</id>
+						<goals> <goal>install-remapped-file</goal> </goals>
+						<configuration>
+							<groupId>net.minecraft</groupId> <artifactId>minecraft</artifactId> <version>${project.version}</version> <classifier>deobf</classifier>
+							<inJars><param>${HOME}/.minecraft/versions/${project.version}/${project.version}.jar</param></inJars>
+							<srgIn>client_ro_cls.srg</srgIn>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-mc-public</id>
+						<goals> <goal>install-remapped-file</goal> </goals>
+						<configuration>
+							<groupId>net.minecraft</groupId> <artifactId>minecraft</artifactId> <version>${project.version}</version> <classifier>deobf-public</classifier>
+							<inJars><param>${HOME}/.minecraft/versions/${project.version}/${project.version}.jar</param></inJars>
+							<srgIn>client_ro_cls.srg</srgIn>
+							<accessTransformers>
+								<param>pattern:public **</param>
+								<param>pattern:*-final *</param>
+								<param>pattern:*-final *.*()</param>
+							</accessTransformers>
+						</configuration>
+					</execution>
+					<execution>
+						<id>reobfuscate</id>
+						<goals> <goal>remap</goal> </goals>
 						<configuration>
 							<srgIn>client_ro_cls.srg</srgIn>
 							<remappedDependencies>
@@ -72,18 +78,17 @@
 						</configuration>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency> <groupId>net.md-5</groupId> <artifactId>SpecialSource</artifactId> <version>1.7.4</version> </dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.5.0</version>
+				<groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> <version>1.5.0</version>
 				<executions>
 					<execution>
 						<id>modpack</id>
 						<phase>package</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
+						<goals> <goal>exec</goal> </goals>
 						<configuration>
 							<workingDirectory>${project.build.directory}</workingDirectory>
 							<executable>zsh</executable>
@@ -96,45 +101,54 @@
 						</configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<workingDirectory>mc</workingDirectory>
-					<executable>java</executable>
-					<arguments>
-						<argument>-classpath</argument>
-						<classpath />
-						<argument>-Djava.library.path=../target/natives</argument>
-						<argument>net.minecraft.launchwrapper.Launch</argument>
-						<argument>--username</argument> <argument>Caagr98</argument>
-						<argument>--uuid</argument> <argument>d5c883d4-c9ae-4263-96bb-3303e4a135a0</argument>
-						<argument>--version</argument> <argument>${project.version}</argument>
-						<argument>--tweakClass</argument> <argument>c98.core.main.Main</argument>
-						<argument>--accessToken</argument> <argument>0</argument>
-						<argument>--userProperties</argument> <argument>{}</argument>
-					</arguments>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 
 	<repositories>
-		<repository>
-			<id>mc</id>
-			<url>https://libraries.minecraft.net</url>
-		</repository>
-		<repository>
-			<id>forge</id>
-			<url>http://files.minecraftforge.net/maven</url>
-		</repository>
+		<repository> <id>mc</id>    <url>https://libraries.minecraft.net</url>       </repository>
+		<repository> <id>forge</id> <url>http://files.minecraftforge.net/maven</url> </repository>
 	</repositories>
 
 	<dependencies>
-		<dependency><groupId>net.minecraft</groupId>              <artifactId>minecraft-deobf</artifactId>     <version>1.10</version>  <scope>provided</scope> <classifier>public</classifier> </dependency>
-		<dependency><groupId>net.minecraft</groupId>              <artifactId>minecraft-deobf</artifactId>     <version>1.10</version>  </dependency>
+		<dependency><groupId>com.mojang</groupId>                <artifactId>netty</artifactId>              <version>1.6</version>                    </dependency>
+		<dependency><groupId>oshi-project</groupId>              <artifactId>oshi-core</artifactId>          <version>1.1</version>                    </dependency>
+		<dependency><groupId>net.java.dev.jna</groupId>          <artifactId>jna</artifactId>                <version>3.4.0</version>                  </dependency>
+		<dependency><groupId>net.java.dev.jna</groupId>          <artifactId>platform</artifactId>           <version>3.4.0</version>                  </dependency>
+		<dependency><groupId>com.ibm.icu</groupId>               <artifactId>icu4j-core-mojang</artifactId>  <version>51.2</version>                   </dependency>
+		<dependency><groupId>net.sf.jopt-simple</groupId>        <artifactId>jopt-simple</artifactId>        <version>4.6</version>                    </dependency>
+		<dependency><groupId>com.paulscode</groupId>             <artifactId>codecjorbis</artifactId>        <version>20101023</version>               </dependency>
+		<dependency><groupId>com.paulscode</groupId>             <artifactId>codecwav</artifactId>           <version>20101023</version>               </dependency>
+		<dependency><groupId>com.paulscode</groupId>             <artifactId>libraryjavasound</artifactId>   <version>20101123</version>               </dependency>
+		<dependency><groupId>com.paulscode</groupId>             <artifactId>librarylwjglopenal</artifactId> <version>20100824</version>               </dependency>
+		<dependency><groupId>com.paulscode</groupId>             <artifactId>soundsystem</artifactId>        <version>20120107</version>               </dependency>
+		<dependency><groupId>io.netty</groupId>                  <artifactId>netty-all</artifactId>          <version>4.0.23.Final</version>           </dependency>
+		<dependency><groupId>com.google.guava</groupId>          <artifactId>guava</artifactId>              <version>17.0</version>                   </dependency>
+		<dependency><groupId>org.apache.commons</groupId>        <artifactId>commons-lang3</artifactId>      <version>3.3.2</version>                  </dependency>
+		<dependency><groupId>commons-io</groupId>                <artifactId>commons-io</artifactId>         <version>2.4</version>                    </dependency>
+		<dependency><groupId>commons-codec</groupId>             <artifactId>commons-codec</artifactId>      <version>1.9</version>                    </dependency>
+		<dependency><groupId>net.java.jinput</groupId>           <artifactId>jinput</artifactId>             <version>2.0.5</version>                  </dependency>
+		<dependency><groupId>net.java.jutils</groupId>           <artifactId>jutils</artifactId>             <version>1.0.0</version>                  </dependency>
+		<dependency><groupId>com.google.code.gson</groupId>      <artifactId>gson</artifactId>               <version>2.2.4</version>                  </dependency>
+		<dependency><groupId>com.mojang</groupId>                <artifactId>authlib</artifactId>            <version>1.5.22</version>                 </dependency>
+		<dependency><groupId>com.mojang</groupId>                <artifactId>realms</artifactId>             <version>1.9.1</version>                  </dependency>
+		<dependency><groupId>org.apache.commons</groupId>        <artifactId>commons-compress</artifactId>   <version>1.8.1</version>                  </dependency>
+		<dependency><groupId>org.apache.httpcomponents</groupId> <artifactId>httpclient</artifactId>         <version>4.3.3</version>                  </dependency>
+		<dependency><groupId>commons-logging</groupId>           <artifactId>commons-logging</artifactId>    <version>1.1.3</version>                  </dependency>
+		<dependency><groupId>org.apache.httpcomponents</groupId> <artifactId>httpcore</artifactId>           <version>4.3.2</version>                  </dependency>
+		<dependency><groupId>it.unimi.dsi</groupId>              <artifactId>fastutil</artifactId>           <version>7.0.12_mojang</version>          </dependency>
+		<dependency><groupId>org.apache.logging.log4j</groupId>  <artifactId>log4j-api</artifactId>          <version>2.0-beta9</version>              </dependency>
+		<dependency><groupId>org.apache.logging.log4j</groupId>  <artifactId>log4j-core</artifactId>         <version>2.0-beta9</version>              </dependency>
+		<dependency><groupId>org.lwjgl.lwjgl</groupId>           <artifactId>lwjgl</artifactId>              <version>2.9.4-nightly-20150209</version> </dependency>
+		<dependency><groupId>org.lwjgl.lwjgl</groupId>           <artifactId>lwjgl_util</artifactId>         <version>2.9.4-nightly-20150209</version> </dependency>
+
+		<dependency><groupId>net.minecraft</groupId>              <artifactId>minecraft</artifactId>           <version>1.10</version>  <scope>provided</scope> <classifier>deobf-public</classifier> </dependency>
+		<dependency><groupId>net.minecraft</groupId>              <artifactId>minecraft</artifactId>           <version>1.10</version>  <scope>runtime</scope>  <classifier>deobf</classifier> </dependency>
 		<dependency><groupId>c98</groupId>                        <artifactId>forge-stubs</artifactId>         <version>1.10</version>  <scope>provided</scope> </dependency>
 		<dependency><groupId>net.minecraft</groupId>              <artifactId>launchwrapper</artifactId>       <version>1.11</version>  </dependency>
 		<dependency><groupId>com.fasterxml.jackson.core</groupId> <artifactId>jackson-core</artifactId>        <version>2.5.3</version> </dependency>
 		<dependency><groupId>com.fasterxml.jackson.core</groupId> <artifactId>jackson-annotations</artifactId> <version>2.5.3</version> </dependency>
 		<dependency><groupId>com.fasterxml.jackson.core</groupId> <artifactId>jackson-databind</artifactId>    <version>2.5.3</version> </dependency>
-		<dependency><groupId>org.ow2.asm</groupId>                <artifactId>asm-all</artifactId>             <version>5.0.4</version> </dependency>
+		<dependency><groupId>org.ow2.asm</groupId>                <artifactId>asm-all</artifactId>             <version>5.2</version> </dependency>
 	</dependencies>
 </project>

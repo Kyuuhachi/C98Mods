@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 
-public class Rendering {
+@Deprecated public class Rendering {
 	public static final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 	private static Map<Class<? extends Entity>, Render<? extends Entity>> map = manager.entityRenderMap;
 	private static Map<Class<? extends TileEntity>, TileEntitySpecialRenderer<? extends TileEntity>> temap = TileEntityRendererDispatcher.instance.mapSpecialRenderers;

@@ -42,7 +42,7 @@ public class C98Core {
 		HookImpl.keyBindings.put(key, new boolean[] {continous, false});
 	}
 
-	public static float getPartialTicks() {
+	@Deprecated public static float getPartialTicks() {
 		return mc.timer.renderPartialTicks;
 	}
 
@@ -54,7 +54,7 @@ public class C98Core {
 		registerBlock(b, id, string, new ItemBlock(b));
 	}
 
-	public static void registerBlock(Block b, int id, String string, Item i) {
+	@Deprecated public static void registerBlock(Block b, int id, String string, Item i) {
 		Block.REGISTRY.register(id, new ResourceLocation(string), b);
 		if(i != null) {
 			registerItem(i, id, string);
@@ -72,12 +72,12 @@ public class C98Core {
 		}
 	}
 
-	public static void registerItem(Item i, int id, String string) {
+	@Deprecated public static void registerItem(Item i, int id, String string) {
 		Item.REGISTRY.register(id, new ResourceLocation(string), i);
 		i.setUnlocalizedName(string.replace(':', '.'));
 	}
 
-	public static void registerEntity(Class<? extends Entity> class1, String string, int id) {
+	@Deprecated public static void registerEntity(Class<? extends Entity> class1, String string, int id) {
 		EntityList.addMapping(class1, string, id);
 	}
 

@@ -126,12 +126,10 @@ public class Vector implements IPosition {
 	 * @return left cross right
 	 */
 	public static Vector cross(Vector left, Vector right) {
-		Vector dest = new Vector();
 		double x = left.y * right.z - left.z * right.y;
 		double y = left.z * right.x - left.x * right.z;
 		double z = left.x * right.y - left.y * right.x;
-		dest.set(x, y, z);
-		return dest;
+		return new Vector(x, y, z);
 	}
 
 	public Vector round(double d) {

@@ -6,7 +6,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
-public class SimpleRecipeResult implements RecipeResult {
+@Deprecated public class SimpleRecipeResult implements RecipeResult {
 	private ItemStack is;
 
 	public SimpleRecipeResult(ItemStack itemStack) {

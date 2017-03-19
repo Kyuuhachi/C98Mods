@@ -2,13 +2,15 @@ package c98.core.impl.launch;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 import org.objectweb.asm.*;
+
+import c98.core.impl.C98Loader;
+
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.launchwrapper.*;
 import net.minecraftforge.common.ForgeVersion;
-import c98.core.impl.C98Loader;
 
 public class C98Tweaker implements ITweaker {
 	public static final List<String> asmers = new ArrayList();
@@ -64,10 +66,6 @@ public class C98Tweaker implements ITweaker {
 
 	@Override public void injectIntoClassLoader(LaunchClassLoader l) {
 		l.addClassLoaderExclusion("c98.core.impl.launch.");
-		l.addTransformerExclusion("c98.core.launch.");
-		l.addClassLoaderExclusion("jdk.");
-		//^ This could possibly affect other mods, but I doubt it.
-		//^ It makes accessing the jdk apis (like Nashorn) possible, I don't think it does anything else.
 	}
 
 	private static void loadReplacers() {

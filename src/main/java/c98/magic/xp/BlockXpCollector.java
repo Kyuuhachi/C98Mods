@@ -4,10 +4,12 @@ import java.util.*;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -19,7 +21,7 @@ public class BlockXpCollector extends BlockContainer {
 				return (o1 instanceof EntityXPOrb ? 0 : 1) - (o2 instanceof EntityXPOrb ? 0 : 1);
 			}
 		};
-		
+
 		private List<Entity> getEntities() {
 			if(!hasWorldObj()) return new ArrayList();
 			List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1));
@@ -36,11 +38,11 @@ public class BlockXpCollector extends BlockContainer {
 			}
 			return entities;
 		}
-		
+
 		@Override public boolean canTake(EnumFacing face) {
 			return !getEntities().isEmpty();
 		}
-		
+
 		@Override public void take() {
 			List<Entity> entities = getEntities();
 			Collections.sort(entities, comp);
@@ -60,21 +62,25 @@ public class BlockXpCollector extends BlockContainer {
 				p.experience = xp / p.xpBarCap();
 			}
 		}
-		
+
 		@Override public boolean isXpInput(EnumFacing f) {
 			return false;
 		}
-		
+
 		@Override public boolean isXpOutput(EnumFacing f) {
 			return f == EnumFacing.DOWN;
 		}
 	}
-	
+
 	public BlockXpCollector() {
 		super(Material.CIRCUITS);
 	}
-	
+
 	@Override public TileEntity createNewTileEntity(World w, int meta) {
 		return new TE();
+	}
+
+	@Override public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
 	}
 }

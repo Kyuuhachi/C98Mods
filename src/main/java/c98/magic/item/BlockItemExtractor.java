@@ -13,43 +13,47 @@ import net.minecraft.world.World;
 
 public class BlockItemExtractor extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
-	
+
 	public static class TE extends TileEntity implements IItemSource, IItemConnection {
 		@Override public IInventory getStacks(EnumFacing side) {
 			TileEntity te = worldObj.getTileEntity(pos.offset(side));
 			if(te instanceof IInventory) return (IInventory)te;
 			return null;
 		}
-		
+
 		@Override public boolean isItemInput(EnumFacing f) {
 			return false;
 		}
-		
+
 		@Override public boolean isItemOutput(EnumFacing f) {
 			return f.getOpposite() == worldObj.getBlockState(getPos()).getValue(FACING);
 		}
 	}
-	
+
 	public BlockItemExtractor() {
 		super(Material.CIRCUITS);
 	}
-	
+
 	@Override public TileEntity createNewTileEntity(World w, int meta) {
 		return new TE();
 	}
-	
+
+	@Override public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
+
 	@Override public BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING);
 	}
-	
+
 	@Override public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
 	}
-	
+
 	@Override public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, facing);
 	}
-	
+
 	@Override public int getMetaFromState(IBlockState state) {
 		return state.getValue(FACING).getIndex();
 	}

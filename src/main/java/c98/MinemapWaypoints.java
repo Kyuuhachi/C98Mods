@@ -83,6 +83,7 @@ public class MinemapWaypoints extends C98Mod implements MinemapPlugin, KeyHook {
 	}
 
 	public static void delete(String worldName) {
+		System.out.println(config);
 		if(config.waypoints.containsKey(worldName)) {
 			config.waypoints.remove(worldName);
 			save();

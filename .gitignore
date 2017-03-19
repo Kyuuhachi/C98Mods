@@ -3,4 +3,5 @@
 .settings
 /target
 /mc
+/bin
 package-info.java

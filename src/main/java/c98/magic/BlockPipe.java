@@ -5,10 +5,10 @@ import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.*;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -43,11 +43,19 @@ public abstract class BlockPipe extends BlockContainer {
 				(i & 1<<3) != 0 ? 1 : IN1
 			);
 	}
-	
+
 	protected BlockPipe(Material materialIn) {
 		super(materialIn);
+        setDefaultState(blockState.getBaseState()
+			.withProperty(DOWN, false)
+			.withProperty(UP, false)
+			.withProperty(NORTH, false)
+			.withProperty(SOUTH, false)
+			.withProperty(WEST, false)
+			.withProperty(EAST, false)
+		);
 	}
-	
+
 	@Override public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		if(connected(worldIn, pos, EnumFacing.DOWN)) state = state.withProperty(DOWN, true);
 		if(connected(worldIn, pos, EnumFacing.UP)) state = state.withProperty(UP, true);
@@ -57,33 +65,37 @@ public abstract class BlockPipe extends BlockContainer {
 		if(connected(worldIn, pos, EnumFacing.EAST)) state = state.withProperty(EAST, true);
 		return state;
 	}
-	
+
 	public final boolean connected(IBlockAccess worldIn, BlockPos pos, EnumFacing facing) {
 		return isConnected(worldIn, pos, facing) || isConnected(worldIn, pos.offset(facing), facing.getOpposite());
 	}
-	
+
 	public abstract boolean isConnected(IBlockAccess worldIn, BlockPos pos, EnumFacing facing);
-	
+
 	@Override public BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, DOWN, UP, NORTH, SOUTH, WEST, EAST);
 	}
-	
+
 	@Override public int getMetaFromState(IBlockState state) {
 		return 0;
 	}
-	
+
+	@Override public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
+
 	@Override public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
-	
+
 	@Override public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override public boolean isFullCube(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess w, BlockPos pos) {
 		int bits = 0;
 		bits |= (connected(w, pos, EnumFacing.DOWN) ? 1 : 0) << 0;
@@ -94,7 +106,7 @@ public abstract class BlockPipe extends BlockContainer {
 		bits |= (connected(w, pos, EnumFacing.EAST) ? 1 : 0) << 5;
 		return BOUNDING_BOXES[bits];
 	}
-	
+
 	@Override public void addCollisionBoxToList(IBlockState state, World w, BlockPos pos, AxisAlignedBB box, List<AxisAlignedBB> list, Entity e) {
 		addCollisionBoxToList(pos, box, list, AABB_CENTER);
 		if(connected(w, pos, EnumFacing.DOWN)) addCollisionBoxToList(pos, box, list, AABB_DOWN);

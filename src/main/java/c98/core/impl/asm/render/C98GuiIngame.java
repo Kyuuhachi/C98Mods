@@ -54,8 +54,8 @@ import c98.core.launch.*;
 	}
 
 	@Override public void asm(ClassNode node) {
-		ClassNode settings = Asm.getClass(getClass().getName() + "$SettingsName");
-		ClassNode profiler = Asm.getClass(getClass().getName() + "$ProfilerName");
+		ClassNode settings = Asm.getClass(getClass().getName() + "$SettingsName", true);
+		ClassNode profiler = Asm.getClass(getClass().getName() + "$ProfilerName", true);
 		FieldInsnNode showDebug = new FieldInsnNode(Opcodes.PUTFIELD, settings.superName, settings.fields.get(0).name, settings.fields.get(0).desc);
 		FieldInsnNode mcProfiler = new FieldInsnNode(Opcodes.PUTFIELD, profiler.superName, profiler.fields.get(0).name, profiler.fields.get(0).desc);
 

@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class Models {
+@Deprecated public class Models {
 	public static final ItemMeshDefinition DEFAULT_ITEM = new ItemMeshDefinition() {
 		@Override public ModelResourceLocation getModelLocation(ItemStack is) {
 			return new ModelResourceLocation(Item.REGISTRY.getNameForObject(is.getItem()), "inventory");
@@ -22,10 +22,6 @@ public class Models {
 		ModelImpl.blockModels.put(b, block);
 	}
 
-	public static void registerBlockModel(Block b) {
-		registerBlockModel(b, DEFAULT_BLOCK);
-	}
-
 	public static void registerItemModel(Item i, ItemMeshDefinition item) {
 		ModelImpl.itemModels.put(i, item);
 	}
@@ -35,7 +31,6 @@ public class Models {
 	}
 
 	public static void registerModel(Block b) {
-		registerBlockModel(b);
 		registerItemModel(Item.getItemFromBlock(b));
 	}
 }

@@ -28,15 +28,9 @@ public class Recipes {
 		RecipeResult req = null;
 
 		if(o instanceof RecipeResult) req = (RecipeResult)o;
-		else req = new SimpleRecipeResult(getStack(o));
+		else req = (inv, coords, gridX, gridY, mirror) -> getStack(o);
 
 		CraftingManager.getInstance().getRecipeList().add(compileReqRecipe(recipe, req));
-	}
-
-	public static void addRecipe(Object o, Object... recipe) {
-		ItemStack result = getStack(o);
-
-		CraftingManager.getInstance().getRecipeList().add(compileRecipe(recipe, result));
 	}
 
 	private static ItemStack getStack(Object o) {
@@ -46,36 +40,6 @@ public class Recipes {
 		if(o instanceof Block) result = new ItemStack((Block)o, 1, Short.MAX_VALUE);
 		if(o instanceof ItemStack) result = (ItemStack)o;
 		return result;
-	}
-
-	private static ShapedRecipes compileRecipe(Object[] recipe, ItemStack result) {
-		String s = "";
-		int width = 0;
-		int height = 0;
-
-		HashMap symbols = new HashMap();
-
-		for(int i = 0; i < recipe.length; i++)
-			if(recipe[i] instanceof String) {
-				String str = (String)recipe[i];
-				height++;
-				width = str.length();
-				s = s += str;
-			} else {
-				char ch = (char)recipe[i];
-				i++;
-				Object o = recipe[i];
-
-				o = getStack(o);
-
-				symbols.put(ch, o);
-			}
-
-		ItemStack[] array = new ItemStack[width * height];
-
-		for(int i = 0; i < width * height; i++)
-			array[i] = (ItemStack)symbols.get(s.charAt(i));
-		return new ShapedRecipes(width, height, array, result);
 	}
 
 	private static IRecipe compileReqRecipe(Object[] recipe, RecipeResult req) {
@@ -98,7 +62,13 @@ public class Recipes {
 				Object o = recipe[i];
 
 				if(o instanceof RecipeSlot) handler = (RecipeSlot)o;
-				else o = new SimpleRecipeSlot(getStack(o));
+				else handler = (is, inv, coords, x, y, gridX, gridY, mirrored) -> {
+					ItemStack item = getStack(o);
+					if(is == null || item == null) return is == item;
+					if(is.getItem() != item.getItem()) return false;
+					if(is.getItemDamage() != 32767 && is.getItemDamage() != item.getItemDamage()) return false;
+					return true;
+				};
 
 				symbols.put(ch, handler);
 			}

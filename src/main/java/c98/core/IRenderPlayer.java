@@ -4,7 +4,7 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-public interface IRenderPlayer {
+@Deprecated public interface IRenderPlayer {
 	public void renderLeftArm(AbstractClientPlayer player);
 
 	public void renderRightArm(AbstractClientPlayer player);

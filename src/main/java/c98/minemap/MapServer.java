@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import c98.Minemap;
+import c98.core.C98Core;
 import c98.core.C98Log;
+import c98.magic.Hyperspace;
 import c98.minemap.MinemapConfig.Preset;
 import c98.minemap.api.MapHandler;
 import c98.minemap.api.MapIcon;
@@ -118,7 +120,10 @@ public class MapServer {
 	}
 
 	public int getPosY() {
-		return MathHelper.floor_double(playerY);
+		int y = MathHelper.floor_double(playerY);
+		if(C98Core.isModLoaded("Magic") && Hyperspace.isHyperspace(y))
+			y -= Hyperspace.DISTANCE;
+		return y;
 	}
 
 	public void render() {

@@ -50,7 +50,7 @@ public class BlockXpPipe extends BlockPipe {
 		private int countConnections() {
 			int num = 0;
 			for(EnumFacing f : EnumFacing.values())
-				if(Magic.xpPipe.connected(worldObj, pos, f)) num++;
+				if(((BlockXpPipe)Magic.xpPipe).connected(worldObj, pos, f)) num++;
 			return num;
 		}
 	}

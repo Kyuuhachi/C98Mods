@@ -1,16 +1,24 @@
 package c98.core;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
+
+import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
+
+import org.lwjgl.opengl.*;
+
+import c98.core.impl.GLImpl;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.*;
-import c98.core.impl.GLImpl;
+import net.minecraft.util.math.*;
 
 public class GL {
-	public static class stencil {
+	public static class stencil { //TODO update to work with GlSM
 		private static int msk;
 		private static boolean creating;
 
@@ -54,49 +62,110 @@ public class GL {
 		}
 	}
 
-	public static class fbo {
-		public static class fullscreen {
-			private static Framebuffer b;
+	public static class FBO {
+		private int w, h;
+		private Framebuffer b;
+		private Framebuffer prevFb;
+		private Minecraft mc = Minecraft.getMinecraft();
 
-			public static void create() {
-				if(b == null || b.framebufferWidth != Display.getWidth() || b.framebufferHeight != Display.getHeight()) {
-					if(b != null) b.deleteFramebuffer();
-					b = new Framebuffer(Display.getWidth(), Display.getHeight(), true);
-				}
-				b.bindFramebuffer(true);
-				clear(COLOR_BUFFER_BIT | DEPTH_BUFFER_BIT);
-			}
-
-			public static void draw() {
-				b.bindFramebufferTexture();
-				matrixMode(PROJECTION);
-				pushMatrix();
-				loadIdentity();
-				ortho(0, 1, 0, 1, 0, 1);
-				matrixMode(MODELVIEW);
-				pushMatrix();
-				loadIdentity();
-
-				color(1, 1, 1);
-				begin();
-				{
-					vertex(0, 0, 0, 0);
-					vertex(1, 0, 1, 0);
-					vertex(1, 1, 1, 1);
-					vertex(0, 1, 0, 1);
-				}
-				end();
-
-				matrixMode(PROJECTION);
-				popMatrix();
-				matrixMode(MODELVIEW);
-				popMatrix();
-			}
-
-			public static void finish() {
-				Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
-			}
+		public FBO(int w, int h) {
+			this.w = w;
+			this.h = h;
 		}
+
+		public FBO() {
+			this(-1, -1);
+		}
+
+		public void bind() {
+			if(isBound())
+				throw new IllegalStateException("FBO is already bound");
+			int w = this.w != -1 ? this.w : Display.getWidth();
+			int h = this.h != -1 ? this.h : Display.getHeight();
+			if(b == null || b.framebufferWidth != w || b.framebufferHeight != h) {
+				if(b != null) b.deleteFramebuffer();
+				b = new Framebuffer(w, h, true);
+			}
+			prevFb = mc.framebufferMc;
+			(mc.framebufferMc = b).bindFramebuffer(true);
+		}
+
+		public void finish() {
+			(mc.framebufferMc = prevFb).bindFramebuffer(true);
+			prevFb = null;
+		}
+
+		public boolean isBound() {
+			return prevFb != null;
+		}
+
+		public void bindTexture() {
+			b.bindFramebufferTexture();
+		}
+	}
+
+    public static final FloatBuffer BUF16 = GLAllocation.createDirectFloatBuffer(16);
+	public static final FloatBuffer BUF4 = GLAllocation.createDirectFloatBuffer(4);
+	public static final DoubleBuffer BUF4D = GLAllocation.createDirectByteBuffer(4 * 8).asDoubleBuffer();
+
+	public static FloatBuffer getBuffer(float a, float b, float c, float d) {
+		return (FloatBuffer)BUF4.put(a).put(b).put(c).put(d).flip();
+	}
+
+	public static DoubleBuffer getBuffer(double a, double b, double c, double d) {
+		return (DoubleBuffer)BUF4D.put(a).put(b).put(c).put(d).flip();
+	}
+
+	public static void drawFullscreen() {
+		matrixMode(PROJECTION);
+		pushMatrix();
+		loadIdentity();
+		ortho(0, 1, 0, 1, 0, 1);
+		matrixMode(MODELVIEW);
+		pushMatrix();
+		loadIdentity();
+
+		// color(1, 1, 1);
+		begin();
+		vertex(0, 0, 0, 0);
+		vertex(1, 0, 1, 0);
+		vertex(1, 1, 1, 1);
+		vertex(0, 1, 0, 1);
+		end();
+
+		matrixMode(PROJECTION);
+		popMatrix();
+		matrixMode(MODELVIEW);
+		popMatrix();
+	}
+
+	public static void enableFakeStencil() {
+		pushAttrib();
+		texGen(S, EYE_LINEAR);
+		texGen(T, EYE_LINEAR);
+		texGen(R, EYE_LINEAR);
+		texGen(S, EYE_PLANE, getBuffer(1, 0, 0, 0));
+		texGen(T, EYE_PLANE, getBuffer(0, 1, 0, 0));
+		texGen(R, EYE_PLANE, getBuffer(0, 0, 1, 0));
+		enableTexGen(S);
+		enableTexGen(T);
+		enableTexGen(R);
+
+		matrixMode(TEXTURE);
+		pushMatrix();
+		loadIdentity();
+		translate(0.5F, 0.5F, 0.0F);
+		scale(0.5F, 0.5F, 1.0F);
+		BUF16.clear(); getFloat(PROJECTION_MATRIX, BUF16); multMatrix(BUF16);
+		BUF16.clear(); getFloat(MODELVIEW_MATRIX, BUF16); multMatrix(BUF16);
+		matrixMode(MODELVIEW);
+	}
+
+	public static void disableFakeStencil() {
+		matrixMode(TEXTURE);
+		popMatrix();
+		matrixMode(MODELVIEW);
+		popAttrib();
 	}
 
 	public static final int ZERO = GL_ZERO, ONE = GL_ONE;
@@ -112,6 +181,18 @@ public class GL {
 	public static final int POINT = GL_POINT, LINE = GL_LINE, FILL = GL_FILL;
 	public static final int FRONT = GL_FRONT, BACK = GL_BACK, FRONT_AND_BACK = GL_FRONT_AND_BACK;
 	public static final int EMISSION = GL_EMISSION, AMBIENT = GL_AMBIENT, DIFFUSE = GL_DIFFUSE, SPECULAR = GL_SPECULAR, AMBIENT_AND_DIFFUSE = GL_AMBIENT_AND_DIFFUSE;
+	public static final int EYE_LINEAR = GL_EYE_LINEAR, OBJECT_LINEAR = GL_OBJECT_LINEAR, SPHERE_MAP = GL_SPHERE_MAP;
+	public static final int TEXTURE_GEN_MODE = GL_TEXTURE_GEN_MODE, OBJECT_PLANE = GL_OBJECT_PLANE, EYE_PLANE = GL_EYE_PLANE;
+
+	public static final int TEXTURE_ENV = GL_TEXTURE_ENV;
+	public static final int TEXTURE_ENV_MODE = GL_TEXTURE_ENV_MODE, ADD = GL_ADD, MODULATE = GL_MODULATE, DECAL = GL_DECAL, BLEND = GL_BLEND, REPLACE = GL_REPLACE, COMBINE = GL_COMBINE;
+	public static final int INTERPOLATE = GL_INTERPOLATE, PRIMARY_COLOR = GL_PRIMARY_COLOR, CONSTANT = GL_CONSTANT, PREVIOUS = GL_PREVIOUS;
+	public static final int TEXTURE_ENV_COLOR = GL_TEXTURE_ENV_COLOR, COMBINE_RGB = GL_COMBINE_RGB, COMBINE_ALPHA = GL_COMBINE_ALPHA, RGB_SCALE = GL_RGB_SCALE, ALPHA_SCALE = GL_ALPHA_SCALE;
+	public static final int TEXTURE0 = GL_TEXTURE0, SOURCE0_RGB = GL_SOURCE0_RGB, OPERAND0_RGB = GL_OPERAND0_RGB, SOURCE0_ALPHA = GL_SOURCE0_ALPHA, OPERAND0_ALPHA = GL_OPERAND0_ALPHA;
+	public static final int TEXTURE1 = GL_TEXTURE1, SOURCE1_RGB = GL_SOURCE1_RGB, OPERAND1_RGB = GL_OPERAND1_RGB, SOURCE1_ALPHA = GL_SOURCE1_ALPHA, OPERAND1_ALPHA = GL_OPERAND1_ALPHA;
+	public static final int TEXTURE2 = GL_TEXTURE2, SOURCE2_RGB = GL_SOURCE2_RGB, OPERAND2_RGB = GL_OPERAND2_RGB, SOURCE2_ALPHA = GL_SOURCE2_ALPHA, OPERAND2_ALPHA = GL_OPERAND2_ALPHA;
+
+	public static final GlStateManager.TexGen S = GlStateManager.TexGen.S, T = GlStateManager.TexGen.T, R = GlStateManager.TexGen.R, Q = GlStateManager.TexGen.Q;
 
 	//@off
 
@@ -194,9 +275,12 @@ public class GL {
 	public static void translate(double x, double y, double z) {GlStateManager.translate(x,y,z);}
 	public static void translate(float x, float y) {GlStateManager.translate(x,y,0);}
 	public static void translate(double x, double y) {GlStateManager.translate(x,y,0);}
+	public static void translate(Vec2f vec) {GlStateManager.translate(vec.field_189982_i, vec.field_189983_j, 0);}
+	public static void translate(Vec3d vec) {GlStateManager.translate(vec.xCoord, vec.yCoord, vec.zCoord);}
+	public static void translate(Vec3i vec) {GlStateManager.translate(vec.getX(), vec.getY(), vec.getZ());}
 
 	public static void color(float r, float g, float b, float a) {GlStateManager.color(r,g,b,a);}
-	public static void color(float r, float g, float b) {color(r,g,b, 1);}
+	public static void color(float r, float g, float b) {color(r,g,b,1);}
 	public static void color(int rgba) {color((rgba>>16&255)/255F,(rgba>>8&255)/255F,(rgba>>0&255)/255F,(rgba>>24&255)/255F);}
 	public static void resetColor() {GlStateManager.resetColor();}
 
@@ -217,6 +301,8 @@ public class GL {
 	public static void viewport(int x0, int y0, int x1, int y1) {GlStateManager.viewport(x0,y0,x1,y1);}
 	public static void shadeMode(int mode) {GlStateManager.shadeModel(mode);}
 	public static void polygonMode(int mode) {glPolygonMode(GL_FRONT_AND_BACK, mode);}
+
+	public static void texEnv(int target, int pname, int param) {GlStateManager.glTexEnvi(target, pname, param);}
 	//@on
 
 	public static void pushAttrib() {

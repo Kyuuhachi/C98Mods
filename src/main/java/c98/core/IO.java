@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
-public class IO {
+@Deprecated public class IO {
 	public static BufferedImage getImage(ResourceLocation loc) {
 		try {
 			return ImageIO.read(getInputStream(loc));

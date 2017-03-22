@@ -1,19 +1,67 @@
 {
-	"variants": {
-		"charge=0": {"model": "c98/magic:xp_tank/0"},
-		"charge=1": {"model": "c98/magic:xp_tank/1"},
-		"charge=2": {"model": "c98/magic:xp_tank/2"},
-		"charge=3": {"model": "c98/magic:xp_tank/3"},
-		"charge=4": {"model": "c98/magic:xp_tank/4"},
-		"charge=5": {"model": "c98/magic:xp_tank/5"},
-		"charge=6": {"model": "c98/magic:xp_tank/6"},
-		"charge=7": {"model": "c98/magic:xp_tank/7"},
-		"charge=8": {"model": "c98/magic:xp_tank/8"},
-		"charge=9": {"model": "c98/magic:xp_tank/9"},
-		"charge=10":{"model": "c98/magic:xp_tank/10"},
-		"charge=11":{"model": "c98/magic:xp_tank/11"},
-		"charge=12":{"model": "c98/magic:xp_tank/12"},
-		"charge=13":{"model": "c98/magic:xp_tank/13"},
-		"charge=14":{"model": "c98/magic:xp_tank/14"}
-	}
+	"multipart": [
+		{
+			"apply": {"model": "c98/magic:xp_tank/frame"}
+		},
+		{
+			"when": {"charge": 0},
+			"apply": {"model": "c98/magic:xp_tank/0"}
+		},
+		{
+			"when": {"charge": 1},
+			"apply": {"model": "c98/magic:xp_tank/1"}
+		},
+		{
+			"when": {"charge": 2},
+			"apply": {"model": "c98/magic:xp_tank/2"}
+		},
+		{
+			"when": {"charge": 3},
+			"apply": {"model": "c98/magic:xp_tank/3"}
+		},
+		{
+			"when": {"charge": 4},
+			"apply": {"model": "c98/magic:xp_tank/4"}
+		},
+		{
+			"when": {"charge": 5},
+			"apply": {"model": "c98/magic:xp_tank/5"}
+		},
+		{
+			"when": {"charge": 6},
+			"apply": {"model": "c98/magic:xp_tank/6"}
+		},
+		{
+			"when": {"charge": 7},
+			"apply": {"model": "c98/magic:xp_tank/7"}
+		},
+		{
+			"when": {"charge": 8},
+			"apply": {"model": "c98/magic:xp_tank/8"}
+		},
+		{
+			"when": {"charge": 9},
+			"apply": {"model": "c98/magic:xp_tank/9"}
+		},
+		{
+			"when": {"charge": 10},
+			"apply": {"model": "c98/magic:xp_tank/10"}
+		},
+		{
+			"when": {"charge": 11},
+			"apply": {"model": "c98/magic:xp_tank/11"}
+		},
+		{
+			"when": {"charge": 12},
+			"apply": {"model": "c98/magic:xp_tank/12"}
+		},
+		{
+			"when": {"charge": 13},
+			"apply": {"model": "c98/magic:xp_tank/13"}
+		},
+		{
+			"when": {"charge": 14},
+			"apply": {"model": "c98/magic:xp_tank/14"}
+		}
+	]
 }

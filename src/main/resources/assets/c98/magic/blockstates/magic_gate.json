@@ -1,12 +1,8 @@
 {
 	"variants": {
-		"center=false,facing=north": {"model": "c98/magic:magic_gate"},
-		"center=false,facing=east":  {"model": "c98/magic:magic_gate", "y": 90},
-		"center=false,facing=south": {"model": "c98/magic:magic_gate", "y": 180},
-		"center=false,facing=west":  {"model": "c98/magic:magic_gate", "y": 270},
-		"center=true,facing=north":  {"model": "c98/magic:magic_gate"},
-		"center=true,facing=east":   {"model": "c98/magic:magic_gate", "y": 90},
-		"center=true,facing=south":  {"model": "c98/magic:magic_gate", "y": 180},
-		"center=true,facing=west":   {"model": "c98/magic:magic_gate", "y": 270}
+		"facing=north": {"model": "c98/magic:magic_gate"},
+		"facing=east":  {"model": "c98/magic:magic_gate", "y": 90},
+		"facing=south": {"model": "c98/magic:magic_gate", "y": 180},
+		"facing=west":  {"model": "c98/magic:magic_gate", "y": 270}
 	}
 }

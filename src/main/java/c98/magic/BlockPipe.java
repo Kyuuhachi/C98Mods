@@ -107,7 +107,7 @@ public abstract class BlockPipe extends BlockContainer {
 		return BOUNDING_BOXES[bits];
 	}
 
-	@Override public void addCollisionBoxToList(IBlockState state, World w, BlockPos pos, AxisAlignedBB box, List<AxisAlignedBB> list, Entity e) {
+	@Override public void addCollisionBoxToList(IBlockState state, World w, BlockPos pos, AxisAlignedBB box, List<AxisAlignedBB> list, Entity e, boolean TODO) {
 		addCollisionBoxToList(pos, box, list, AABB_CENTER);
 		if(connected(w, pos, EnumFacing.DOWN)) addCollisionBoxToList(pos, box, list, AABB_DOWN);
 		if(connected(w, pos, EnumFacing.UP)) addCollisionBoxToList(pos, box, list, AABB_DOWN);

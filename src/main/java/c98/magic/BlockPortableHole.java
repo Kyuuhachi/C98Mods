@@ -29,7 +29,7 @@ public class BlockPortableHole extends BlockContainer {
 
 		public TE(TE entrance) {
 			this.isExit = true;
-			this.worldObj = entrance.worldObj;
+			this.world = entrance.world;
 			this.pos = entrance.pos.up(Hyperspace.DISTANCE);
 		}
 
@@ -50,7 +50,7 @@ public class BlockPortableHole extends BlockContainer {
 		}
 
 		@Override public EnumFacing getDirection() {
-			return worldObj.getBlockState(pos).getValue(FACING);
+			return world.getBlockState(pos).getValue(FACING);
 		}
 
 		@Override public boolean isCenter() {
@@ -68,7 +68,7 @@ public class BlockPortableHole extends BlockContainer {
 				p.x += getDirection().getFrontOffsetX();
 				p.y += getDirection().getFrontOffsetY();
 				p.z += getDirection().getFrontOffsetZ();
-				TileEntity t = worldObj.getTileEntity(p);
+				TileEntity t = world.getTileEntity(p);
 				if(t instanceof TE) {
 					TE te = (TE)t;
 					if(te.getDirection() == getDirection())
@@ -137,7 +137,7 @@ public class BlockPortableHole extends BlockContainer {
 		return AABB[state.getValue(FACING).getHorizontalIndex()];
 	}
 
-	@Override public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> boxes, Entity e) {
+	@Override public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> boxes, Entity e, boolean TODO) {
 		AxisAlignedBB b = state.getCollisionBoundingBox(world, pos);
 		AxisAlignedBB bb = new SpecialAABB((TE)world.getTileEntity(pos),
 			b.minX + pos.getX(), b.minY + pos.getY(), b.minZ + pos.getZ(),

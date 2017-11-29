@@ -18,7 +18,7 @@ public class HorseInfo {
 		int height = res.getScaledHeight();
 		int width = res.getScaledWidth();
 
-		EntityPlayerSP pl = mc.thePlayer;
+		EntityPlayerSP pl = mc.player;
 		if(!pl.isRidingHorse()) return;
 		EntityHorse horse = (EntityHorse)pl.getRidingEntity();
 

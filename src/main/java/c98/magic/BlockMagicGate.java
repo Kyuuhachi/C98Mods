@@ -23,8 +23,7 @@ import net.minecraft.network.*;
 import net.minecraft.network.play.client.CPacketCustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -45,11 +44,11 @@ public class BlockMagicGate extends BlockContainer {
 		}
 
 		public boolean isCenter() {
-			return worldObj.getBlockState(pos).getValue(CENTER);
+			return world.getBlockState(pos).getValue(CENTER);
 		}
 
 		@Override public EnumFacing getDirection() {
-			return worldObj.getBlockState(pos).getValue(FACING);
+			return world.getBlockState(pos).getValue(FACING);
 		}
 
 		@Override public void enter(Entity e) {
@@ -88,7 +87,7 @@ public class BlockMagicGate extends BlockContainer {
 				if(packetIn.getChannelName().equals("C98|Teleport")) {
 					BlockPos p = packetIn.data.readBlockPos();
 					double distSq = p.distanceSqToCenter(playerEntity.posX, playerEntity.posY, playerEntity.posZ);
-					TileEntity te = playerEntity.worldObj.getTileEntity(p);
+					TileEntity te = playerEntity.world.getTileEntity(p);
 					if(distSq < 5*5 && te instanceof BlockMagicGate.TE)
 						((BlockMagicGate.TE)te).enter(playerEntity);
 				}
@@ -153,7 +152,7 @@ public class BlockMagicGate extends BlockContainer {
 		w.setBlockState(pos, state.withProperty(CENTER, is.getItemDamage() == 1).withProperty(FACING, EnumFacing.getHorizontal(meta)), 3);
 	}
 
-	@Override public void getSubBlocks(Item item, CreativeTabs tab, List l) {
+	@Override public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> l) {
 		l.add(new ItemStack(item, 1, 0));
 		l.add(new ItemStack(item, 1, 1));
 	}
@@ -162,7 +161,7 @@ public class BlockMagicGate extends BlockContainer {
 		return AABB[state.getValue(FACING).getHorizontalIndex()];
 	}
 
-	@Override public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> boxes, Entity e) {
+	@Override public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> boxes, Entity e, boolean raw) {
 		AxisAlignedBB b = state.getCollisionBoundingBox(world, pos);
 		AxisAlignedBB bb = new SpecialAABB((TE)world.getTileEntity(pos),
 			b.minX + pos.getX(), b.minY + pos.getY(), b.minZ + pos.getZ(),

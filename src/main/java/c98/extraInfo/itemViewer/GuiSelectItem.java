@@ -18,7 +18,7 @@ public class GuiSelectItem extends GuiContainer {
 		int y = (height - ySize) / 2;
 		drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
-		drawEntity(x + 51, y + 75, 30, 70, mouseX, mouseY, mc.thePlayer);
+		drawEntity(x + 51, y + 75, 30, 70, mouseX, mouseY, mc.player);
 	}
 
 	private static void drawEntity(int x, int y, int sc, int h, int mouseX, int mouseY, EntityLivingBase e) {

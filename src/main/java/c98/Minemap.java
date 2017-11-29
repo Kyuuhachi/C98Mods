@@ -42,7 +42,7 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 				do {
 					i++;
 					i %= config.presets.length;
-				} while(config.presets[i].hidden == Boolean.TRUE && !mc.thePlayer.isSneaking() && i != currentPreset);
+				} while(config.presets[i].hidden == Boolean.TRUE && !mc.player.isSneaking() && i != currentPreset);
 				currentPreset = i;
 			}
 		}
@@ -50,7 +50,7 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 
 	private void start() {
 		if(thread == null && lastStartTime + System.currentTimeMillis() > 1000) {
-			mapServer = new MapServer(mc.theWorld);
+			mapServer = new MapServer(mc.world);
 			if(currentPreset >= config.presets.length) currentPreset = 0;
 			mapServer.setPreset(config.presets[currentPreset]);
 			thread = new MapThread(mapServer);
@@ -80,7 +80,7 @@ public class Minemap extends C98Mod implements HudRenderHook, KeyHook, ConnectHo
 
 	@Override public void postRenderHud(HudElement e) {
 		if(e == HudElement.ALL) {
-			if((mapServer == null || mc.theWorld != mapServer.world || reloadMap || !thread.isAlive()) && mc.currentScreen == null) {
+			if((mapServer == null || mc.world != mapServer.world || reloadMap || !thread.isAlive()) && mc.currentScreen == null) {
 				stop();
 				MinemapPlugin.plugins.forEach(p -> p.reloadConfig());
 				start();

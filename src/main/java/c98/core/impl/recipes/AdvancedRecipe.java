@@ -1,14 +1,15 @@
 package c98.core.impl.recipes;
 
+import c98.core.Recipes.RecipeResult;
+import c98.core.Recipes.RecipeSlot;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import c98.core.Recipes.RecipeResult;
-import c98.core.Recipes.RecipeSlot;
 
 public class AdvancedRecipe implements IRecipe {
 	private int recipeWidth;
@@ -78,12 +79,12 @@ public class AdvancedRecipe implements IRecipe {
 		return recipeWidth * recipeHeight;
 	}
 
-	@Override public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		ItemStack[] result = new ItemStack[inv.getSizeInventory()];
+	@Override public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		NonNullList<ItemStack> result = new NonNullList();
 
-		for(int i = 0; i < result.length; ++i) {
+		for(int i = 0; i < inv.getSizeInventory(); ++i) {
 			ItemStack is = recipeItems[i].getLeftovers(inv.getStackInSlot(i));
-			if(is != null) result[i] = is;
+			if(is != null) result.add(is); // TODO it's never null
 		}
 
 		return result;

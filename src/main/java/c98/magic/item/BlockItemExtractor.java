@@ -16,7 +16,7 @@ public class BlockItemExtractor extends BlockContainer {
 
 	public static class TE extends TileEntity implements IItemSource, IItemConnection {
 		@Override public IInventory getStacks(EnumFacing side) {
-			TileEntity te = worldObj.getTileEntity(pos.offset(side));
+			TileEntity te = world.getTileEntity(pos.offset(side));
 			if(te instanceof IInventory) return (IInventory)te;
 			return null;
 		}
@@ -26,7 +26,7 @@ public class BlockItemExtractor extends BlockContainer {
 		}
 
 		@Override public boolean isItemOutput(EnumFacing f) {
-			return f.getOpposite() == worldObj.getBlockState(getPos()).getValue(FACING);
+			return f.getOpposite() == world.getBlockState(getPos()).getValue(FACING);
 		}
 	}
 

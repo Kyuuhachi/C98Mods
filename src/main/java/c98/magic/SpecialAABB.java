@@ -3,6 +3,7 @@ package c98.magic;
 import c98.core.launch.ASMer;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.EnumFacing;
@@ -41,7 +42,7 @@ public class SpecialAABB extends AxisAlignedBB {
 	public static boolean checkTeleport(Entity e, double x, double y, double z) {
 		AxisAlignedBB bb = e.getEntityBoundingBox();
 		bb = bb.union(bb.offset(x, y, z));
-		for(AxisAlignedBB box : e.worldObj.getCollisionBoxes(e, bb))
+		for(AxisAlignedBB box : e.world.getCollisionBoxes(e, bb))
 			if(bb.intersectsWith(box) && box instanceof SpecialAABB) {
 				SpecialAABB sbb = (SpecialAABB)box;
 				if(x * sbb.facing.getFrontOffsetX() + y * sbb.facing.getFrontOffsetY() + z * sbb.facing.getFrontOffsetZ() > 0) {
@@ -58,9 +59,9 @@ public class SpecialAABB extends AxisAlignedBB {
 		super(world);
 	}
 
-	@Override public void moveEntity(double x, double y, double z) {
+	@Override public void moveEntity(MoverType type, double x, double y, double z) {
 		if(!noClip) SpecialAABB.checkTeleport(this, x, y, z);
-		super.moveEntity(x, y, z);
+		super.moveEntity(type, x, y, z);
 	}
 
 	// TODO hook onUpdate when I add support for hook-all-subclasses

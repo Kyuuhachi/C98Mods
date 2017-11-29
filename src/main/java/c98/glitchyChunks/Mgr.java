@@ -1,17 +1,15 @@
 package c98.glitchyChunks;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
+import javax.annotation.Nullable;
 
 import c98.GlitchyChunks;
 
 import net.minecraft.client.gui.GuiFlatPresets;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeProvider;
-import net.minecraft.world.biome.BiomeProviderSingle;
+import net.minecraft.world.biome.*;
 import net.minecraft.world.gen.FlatGeneratorInfo;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.storage.WorldInfo;
@@ -51,37 +49,29 @@ public class Mgr extends BiomeProvider {
 			p = flat.get(s);
 		} else p = normal;
 
-		GenLayer[] layers = GenLayer.initializeAllBiomeGenerators(rand.nextLong(), world.getTerrainType(), world.getGeneratorOptions());
+		GenLayer[] layers = GenLayer.initializeAllBiomeGenerators(rand.nextLong(), world.getTerrainType(), null);
 		p.genBiomes = layers[0];
 		p.biomeIndexLayer = layers[1];
 		return p;
 	}
 
-	@Override public BlockPos findBiomePosition(int x, int z, int range, List biomes, Random random) {
+	@Override public Biome getBiome(BlockPos pos, Biome defaultBiome) {
+		return get(pos.getZ() >> 4, pos.getZ() >> 4).getBiome(pos, defaultBiome);
+	}
+
+	@Override public Biome[] getBiomesForGeneration(Biome[] biomes, int x, int z, int width, int height) {
+		return get(x, z).getBiomesForGeneration(biomes, x, z, width, height);
+	}
+
+	@Override public Biome[] getBiomes(@Nullable Biome[] listToReuse, int x, int z, int width, int length, boolean cacheFlag) {
+		return get(x, z).getBiomes(listToReuse, x, z, width, length, cacheFlag);
+	}
+
+	@Override public boolean areBiomesViable(int x, int z, int radius, List<Biome> allowed) {
+		return get(x, z).areBiomesViable(x, z, radius, allowed);
+	}
+
+	@Override @Nullable public BlockPos findBiomePosition(int x, int z, int range, List<Biome> biomes, Random random) {
 		return get(x, z).findBiomePosition(x, z, range, biomes, random);
-	}
-
-	@Override public boolean areBiomesViable(int par1, int par2, int par3, List par4List) {
-		return true;//get(par1, par2).areBiomesViable(par1, par2, par3, par4List); //Villages can spawn, yes.
-	}
-
-	@Override public Biome[] getBiomeGenAt(Biome[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5, boolean par6) {
-		return get(par2, par3).getBiomeGenAt(par1ArrayOfBiomeGenBase, par2, par3, par4, par5, par6);
-	}
-
-	@Override public Biome getBiomeGenerator(BlockPos pos, Biome biomeGenBaseIn) {
-		return get(pos.getX(), pos.getZ()).getBiomeGenerator(pos, biomeGenBaseIn);
-	}
-
-	@Override public Biome[] getBiomesForGeneration(Biome[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5) {
-		return get(par2, par3).getBiomesForGeneration(par1ArrayOfBiomeGenBase, par2, par3, par4, par5);
-	}
-
-	@Override public float getTemperatureAtHeight(float par1, int par2) {
-		return get(par2, 0).getTemperatureAtHeight(par1, par2);
-	}
-
-	@Override public Biome[] loadBlockGeneratorData(Biome[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5) {
-		return get(par2, par3).loadBlockGeneratorData(par1ArrayOfBiomeGenBase, par2, par3, par4, par5);
 	}
 }

@@ -79,7 +79,7 @@ public class GuiWaypoints extends GuiScreen {
 	}
 
 	@Override public void actionPerformed(GuiButton button) {
-		if(button.id == 0) mc.displayGuiScreen(new GuiEditWaypoint(w, new Waypoint(mc.thePlayer.getPosition())));
+		if(button.id == 0) mc.displayGuiScreen(new GuiEditWaypoint(w, new Waypoint(mc.player.getPosition())));
 	}
 
 	@Override public void handleMouseInput() {
@@ -107,7 +107,7 @@ public class GuiWaypoints extends GuiScreen {
 	}
 
 	@Override public void keyTyped(char typedChar, int keyCode) {
-		if(keyCode == 1 || keyCode == mc.gameSettings.keyBindInventory.getKeyCode()) mc.thePlayer.closeScreen();
+		if(keyCode == 1 || keyCode == mc.gameSettings.keyBindInventory.getKeyCode()) mc.player.closeScreen();
 	}
 
 	@Override public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -254,7 +254,7 @@ public class GuiWaypoints extends GuiScreen {
 
 	@Override public void updateScreen() {
 		super.updateScreen();
-		if(!mc.thePlayer.isEntityAlive() || mc.thePlayer.isDead) mc.thePlayer.closeScreen();
+		if(!mc.player.isEntityAlive() || mc.player.isDead) mc.player.closeScreen();
 	}
 
 	@Override public void onGuiClosed() {

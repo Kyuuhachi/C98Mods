@@ -157,7 +157,7 @@ public class Hyperspace {
 
 	public static boolean isInVoid(Entity e) {
 		double Y = e.posY - Hyperspace.DISTANCE;
-		if(Y >= -64 && Y < e.worldObj.getHeight() + 64) return false;
+		if(Y >= -64 && Y < e.world.getHeight() + 64) return false;
 		return e.posY < -64;
 	}
 }
@@ -189,13 +189,13 @@ public class Hyperspace {
 			l.add(Asm.MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/client/renderer/RenderGlobal", "renderTileEntities", "(F)V"));
 			m.instructions.insert(monitorexit, l);
 		}
-		{ // Fix a vanilla bug
-			MethodNode m = Asm.getMethod(node, "renderSky", "(FI)V");
-			FieldInsnNode thePlayer = Asm.findReads(m, "net/minecraft/client/Minecraft", "thePlayer", "Lnet/minecraft/client/entity/EntityPlayerSP;").get(0);
-			MethodInsnNode renderViewEntity = Asm.MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/client/Minecraft", "getRenderViewEntity", "()Lnet/minecraft/entity/Entity;");
-			m.instructions.set(thePlayer, renderViewEntity);
-			((MethodInsnNode)renderViewEntity.getNext().getNext()).owner = Asm.obfuscate("net/minecraft/entity/Entity");
-		}
+		// { // Fix a vanilla bug
+		// 	MethodNode m = Asm.getMethod(node, "renderSky", "(FI)V");
+		// 	FieldInsnNode thePlayer = Asm.findReads(m, "net/minecraft/client/Minecraft", "thePlayer", "Lnet/minecraft/client/entity/EntityPlayerSP;").get(0);
+		// 	MethodInsnNode renderViewEntity = Asm.MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/client/Minecraft", "getRenderViewEntity", "()Lnet/minecraft/entity/Entity;");
+		// 	m.instructions.set(thePlayer, renderViewEntity);
+		// 	((MethodInsnNode)renderViewEntity.getNext().getNext()).owner = Asm.obfuscate("net/minecraft/entity/Entity");
+		// }
 	}
 }
 
@@ -216,7 +216,7 @@ public class Hyperspace {
 		double z = rve.prevPosZ + (rve.posZ - rve.prevPosZ) * ptt;
 
 		for(Entity e : theWorld.loadedEntityList) {
-			if(Hyperspace.isHyperspace(e.posY) && (renderManager.shouldRender(e, camera, x, y, z) || e.isRidingOrBeingRiddenBy(mc.thePlayer))) {
+			if(Hyperspace.isHyperspace(e.posY) && (renderManager.shouldRender(e, camera, x, y, z) || e.isRidingOrBeingRiddenBy(mc.player))) {
 				boolean sleeping = rve instanceof EntityLivingBase && ((EntityLivingBase)rve).isPlayerSleeping();
 
 				if(e != rve || mc.gameSettings.thirdPersonView != 0 || sleeping) {

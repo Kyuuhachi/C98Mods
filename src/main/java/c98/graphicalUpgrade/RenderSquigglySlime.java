@@ -14,9 +14,9 @@ import net.minecraft.util.math.MathHelper;
 	private ModelSlime model;
 	private Random rand = new Random();
 
-	public RenderSquigglySlime(RenderManager renderManagerIn, ModelBase modelBaseIn, float shadowSizeIn) {
-		super(renderManagerIn, modelBaseIn, shadowSizeIn);
-		model = (ModelSlime)modelBaseIn;
+	public RenderSquigglySlime(RenderManager renderManagerIn) {
+		super(renderManagerIn);
+		model = (ModelSlime)mainModel;
 	}
 
 	public void squiggle(EntitySlime slime, ModelRenderer box, int boxIdx, float factor, float partialTicks) {

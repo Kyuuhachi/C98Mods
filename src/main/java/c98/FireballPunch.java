@@ -19,10 +19,10 @@ public class FireballPunch extends C98Mod implements TickHook {
 	@Override public void load() {}
 
 	@Override public void tickGame(World w) {
-		EntityPlayer player = mc.thePlayer;
+		EntityPlayer player = mc.player;
 
 		double x = player.posX;
-		double y = player.posY + mc.thePlayer.getEyeHeight();
+		double y = player.posY + player.getEyeHeight();
 		double z = player.posZ;
 		double r = mc.playerController.getBlockReachDistance();
 

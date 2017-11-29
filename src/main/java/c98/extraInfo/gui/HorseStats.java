@@ -7,7 +7,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.AbstractHorse;
 
 public class HorseStats {
 	private static int n;
@@ -17,7 +17,7 @@ public class HorseStats {
 		HorseStats.mc = mc;
 		n = 0;
 
-		EntityHorse horse = ((GuiScreenHorseInventory)mc.currentScreen).horseEntity;
+		AbstractHorse horse = ((GuiScreenHorseInventory)mc.currentScreen).horseEntity;
 		double health = attr(horse, SharedMonsterAttributes.MAX_HEALTH);
 		double speed = attr(horse, SharedMonsterAttributes.MOVEMENT_SPEED);
 		double jump = horse.getHorseJumpStrength();
@@ -43,7 +43,7 @@ public class HorseStats {
 		mc.fontRendererObj.drawStringWithShadow(string.replace('&', '\247'), x, y, 0xFFFFFF);
 	}
 
-	private static double attr(EntityHorse horse, IAttribute attr) {
+	private static double attr(AbstractHorse horse, IAttribute attr) {
 		return horse.getEntityAttribute(attr).getAttributeValue();
 	}
 }

@@ -2,14 +2,16 @@ package c98.glitchyChunks;
 
 import java.lang.reflect.Field;
 import java.util.*;
+
+import c98.GlitchyChunks;
+import c98.core.C98Log;
+
 import net.minecraft.client.gui.GuiFlatPresets;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.gen.*;
-
-import c98.GlitchyChunks;
-import c98.core.C98Log;
 
 public class Gen extends ChunkProviderOverworld {
 	private ChunkProviderOverworld normal;
@@ -21,15 +23,15 @@ public class Gen extends ChunkProviderOverworld {
 	private boolean struct;
 	private Random rand;
 
-	public Gen(World wld, long seed, boolean structs, String settings) {
-		super(wld, seed, structs, settings);
-		world = wld;
+	public Gen(World world, long seed, boolean structs, String settings) {
+		super(world, seed, structs, settings);
+		this.world = world;
 		this.seed = seed;
 		struct = structs;
 		rand = new Random(seed);
-		normal = new ChunkProviderOverworld(wld, seed, struct, settings);
-		nether = new ChunkProviderHell(wld, structs, seed);
-		end = new ChunkProviderEnd(wld, structs, seed);
+		normal = new ChunkProviderOverworld(world, seed, struct, settings);
+		nether = new ChunkProviderHell(world, structs, seed);
+		end = new ChunkProviderEnd(world, structs, seed, new BlockPos(Integer.MIN_VALUE, 0, Integer.MIN_VALUE));
 		flat = new HashMap();
 	}
 
@@ -50,7 +52,6 @@ public class Gen extends ChunkProviderOverworld {
 			if(!flat.containsKey(s)) flat.put(s, new ChunkProviderFlat(world, seed, struct, s));
 			p = flat.get(s);
 		} else p = normal;
-
 
 		try {
 			long chunkSeed = rand.nextLong();

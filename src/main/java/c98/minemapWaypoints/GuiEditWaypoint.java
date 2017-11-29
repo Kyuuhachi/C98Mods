@@ -134,7 +134,7 @@ public class GuiEditWaypoint extends GuiScreen {
 
 	@Override public void updateScreen() {
 		super.updateScreen();
-		if(!mc.thePlayer.isEntityAlive() || mc.thePlayer.isDead) mc.displayGuiScreen(parent);
+		if(!mc.player.isEntityAlive() || mc.player.isDead) mc.displayGuiScreen(parent);
 
 		point.name = nameField.getText();
 		if(validate(xField, false) & validate(yField, true) & validate(zField, false)) {

@@ -16,6 +16,7 @@ import net.minecraft.client.gui.inventory.*;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, KeyHook {
 	public static class EIConf {
@@ -99,16 +100,11 @@ public class ExtraInfo extends C98Mod implements GuiRenderHook, HudRenderHook, K
 
 	@Override public void keyboardEvent(KeyBinding key) {
 		if(key == viewKey && mc.currentScreen == null) {
-			List<ItemStack> viableStacks = new LinkedList();
+			NonNullList<ItemStack> viableStacks = new NonNullList();
 			// TODO the GUI doesn't support dualwielding - pester Car0b1nius
-			add(viableStacks, mc.thePlayer.inventory.armorInventory);
-			add(viableStacks, mc.thePlayer.inventory.mainInventory);
+			viableStacks.addAll(mc.player.inventory.armorInventory);
+			viableStacks.addAll(mc.player.inventory.mainInventory);
 			mc.displayGuiScreen(new GuiSelectItem(viableStacks));
 		}
-	}
-
-	private static void add(List<ItemStack> viableStacks, ItemStack[] stacks) {
-		for(ItemStack is : stacks)
-			viableStacks.add(is);
 	}
 }

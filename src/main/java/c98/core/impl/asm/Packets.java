@@ -19,7 +19,7 @@ import c98.core.launch.ASMer;
 		else if(isChannelOpen()) {
 			boolean block = false;
 			for(PacketHook hook : HookImpl.packetHooks) {
-				if(direction == EnumPacketDirection.CLIENTBOUND) block |= hook.packetFromServer(p_channelRead0_2_, Minecraft.getMinecraft().thePlayer);
+				if(direction == EnumPacketDirection.CLIENTBOUND) block |= hook.packetFromServer(p_channelRead0_2_, Minecraft.getMinecraft().player);
 				if(direction == EnumPacketDirection.SERVERBOUND) block |= hook.packetFromClient(p_channelRead0_2_, ((NetHandlerPlayServer)getNetHandler()).playerEntity);
 			}
 			if(!block) super.channelRead0(p_channelRead0_1_, p_channelRead0_2_);
@@ -31,7 +31,7 @@ import c98.core.launch.ASMer;
 		else {
 			boolean block = false;
 			for(PacketHook hook : HookImpl.packetHooks) {
-				if(direction == EnumPacketDirection.CLIENTBOUND) block |= hook.packetToServer(inPacket, Minecraft.getMinecraft().thePlayer);
+				if(direction == EnumPacketDirection.CLIENTBOUND) block |= hook.packetToServer(inPacket, Minecraft.getMinecraft().player);
 				if(direction == EnumPacketDirection.SERVERBOUND) block |= hook.packetToClient(inPacket, ((NetHandlerPlayServer)getNetHandler()).playerEntity);
 			}
 			if(!block) super.dispatchPacket(inPacket, futureListeners);

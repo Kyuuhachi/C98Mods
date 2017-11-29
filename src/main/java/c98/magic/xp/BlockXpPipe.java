@@ -17,13 +17,13 @@ import net.minecraft.world.World;
 public class BlockXpPipe extends BlockPipe {
 	public static class TE extends TileEntity implements ITickable, IXpPipe, IXpConnection {
 		@Override public void getSources(Set<IXpSource> sources, Set<IXpPipe> visited, EnumFacing side) {
-			if(worldObj == null) return;
+			if(world == null) return;
 			if(visited.contains(this)) return;
 			visited.add(this);
 			for(EnumFacing f : EnumFacing.values()) {
 				if(f == side) continue; //Don't turn straight back, that's silly
 				if(!XpUtils.isConnected(getWorld(), getPos(), f)) continue;
-				TileEntity te = worldObj.getTileEntity(pos.offset(f));
+				TileEntity te = world.getTileEntity(pos.offset(f));
 				if(te instanceof IXpPipe) ((IXpPipe)te).getSources(sources, visited, f.getOpposite());
 				else if(te instanceof IXpSource) {
 					IXpSource p = (IXpSource)te;
@@ -41,16 +41,16 @@ public class BlockXpPipe extends BlockPipe {
 		}
 		
 		@Override public void update() {
-			if(countConnections() == 1 && worldObj.rand.nextInt(4) == 0 && !worldObj.isRemote && XpUtils.canTake(this)) {
+			if(countConnections() == 1 && world.rand.nextInt(4) == 0 && !world.isRemote && XpUtils.canTake(this)) {
 				XpUtils.take(this);
-				worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1));
+				world.spawnEntityInWorld(new EntityXPOrb(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1));
 			}
 		}
 		
 		private int countConnections() {
 			int num = 0;
 			for(EnumFacing f : EnumFacing.values())
-				if(((BlockXpPipe)Magic.xpPipe).connected(worldObj, pos, f)) num++;
+				if(((BlockXpPipe)Magic.xpPipe).connected(world, pos, f)) num++;
 			return num;
 		}
 	}

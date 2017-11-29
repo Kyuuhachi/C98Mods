@@ -47,7 +47,7 @@ import net.minecraft.util.text.TextFormatting;
 	}
 
 	private static void drawBow(FontRenderer font, ItemStack is, int x, int y) {
-		EntityPlayer p = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer p = Minecraft.getMinecraft().player;
 		if(is.getItem() instanceof ItemBow) {
 			ItemStack arrow = ((ItemBow)is.getItem()).findAmmo(p);
 			int arrows = 0;

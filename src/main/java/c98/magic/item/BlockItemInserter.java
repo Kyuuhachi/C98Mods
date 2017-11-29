@@ -19,17 +19,17 @@ public class BlockItemInserter extends BlockContainer {
 
 	public static class TE extends TileEntity implements ITickable, IItemConnection {
 		@Override public void update() {
-			if(worldObj.isRemote) return;
+			if(world.isRemote) return;
 			List<ItemSlot> slots = ItemUtils.getItems(this);
 			if(slots.isEmpty()) return;
-			int idx = worldObj.rand.nextInt(slots.size());
+			int idx = world.rand.nextInt(slots.size());
 
-			EntityItem it = new EntityItem(worldObj, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, slots.get(idx).take());
-			worldObj.spawnEntityInWorld(it); //TODO add to container instead
+			EntityItem it = new EntityItem(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, slots.get(idx).take());
+			world.spawnEntityInWorld(it); //TODO add to container instead
 		}
 
 		@Override public boolean isItemInput(EnumFacing f) {
-			return f == worldObj.getBlockState(getPos()).getValue(FACING);
+			return f == world.getBlockState(getPos()).getValue(FACING);
 		}
 
 		@Override public boolean isItemOutput(EnumFacing f) {

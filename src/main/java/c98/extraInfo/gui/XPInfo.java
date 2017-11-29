@@ -13,31 +13,31 @@ public class XPInfo extends Gui {
 		XPInfo.mc = mc;
 		n = 0;
 
-		int xpDropped = mc.thePlayer.experienceLevel * 7 > 100 ? 100 : mc.thePlayer.experienceLevel * 7;
+		int xpDropped = mc.player.experienceLevel * 7 > 100 ? 100 : mc.player.experienceLevel * 7;
 		str("XP dropped: &e%d&r / 100", xpDropped);
 		str2("&8min(&%slvl * 7&8, &%s100&8)", xpDropped < 100 ? 7 : 8, xpDropped < 100 ? 8 : 7);
 		n++;
 
-		int level = mc.thePlayer.experienceLevel;
+		int level = mc.player.experienceLevel;
 		int lvlFormula = level < 32 ? level < 17 ? 0 : 1 : 2;
-		int xpToNextLevel = mc.thePlayer.xpBarCap();
+		int xpToNextLevel = mc.player.xpBarCap();
 		str("XP to next level: &e%d", xpToNextLevel);
 		str2("lvl >= 30: &%d112 + (lvl - 30) * 9", lvlFormula == 2 ? 7 : 8);
 		str2("lvl >= 15: &%d37 + (lvl - 15) * 5", lvlFormula == 1 ? 7 : 8);
 		str2("lvl >= 00: &%d7 + lvl * 2", lvlFormula == 0 ? 7 : 8);
 		n++;
 
-		int totalXP = mc.thePlayer.experienceTotal;
+		int totalXP = mc.player.experienceTotal;
 		str("Total XP: &e%d", totalXP);
-		str("Level: &e%d", mc.thePlayer.experienceLevel);
+		str("Level: &e%d", mc.player.experienceLevel);
 		n++;
 
-		int xpSinceLastLevel = (int)(mc.thePlayer.experience * xpToNextLevel);
+		int xpSinceLastLevel = (int)(mc.player.experience * xpToNextLevel);
 		str("XP since last level: &e%d", xpSinceLastLevel);
 		str("XP to next level: &e%d", xpToNextLevel - xpSinceLastLevel);
 		str("Total XP at last level: &e%d", totalXP - xpSinceLastLevel);
 		str("Total XP at next level: &e%d", totalXP - xpSinceLastLevel + xpToNextLevel);
-		str("Score: &e%d", mc.thePlayer.experienceTotal);
+		str("Score: &e%d", mc.player.experienceTotal);
 		n++;
 	}
 

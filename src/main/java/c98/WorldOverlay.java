@@ -42,9 +42,9 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 
 	@Override public void renderWorld(World w, float ptt) {
 		if(!display) return;
-		int pX = MathHelper.floor_double(mc.renderViewEntity.posX);
-		int pY = MathHelper.floor_double(mc.renderViewEntity.posY);
-		int pZ = MathHelper.floor_double(mc.renderViewEntity.posZ);
+		int pX = MathHelper.floor(mc.renderViewEntity.posX);
+		int pY = MathHelper.floor(mc.renderViewEntity.posY);
+		int pZ = MathHelper.floor(mc.renderViewEntity.posZ);
 
 		Set<BlockPos> blocks = new HashSet();
 		for(int x = pX - renderWidth + 1; x < pX + renderWidth; x++)
@@ -70,11 +70,11 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 		for(int x = pX - renderWidth + 1; x < pX + renderWidth; x++)
 			for(int z = pZ - renderWidth + 1; z < pZ + renderWidth; z++) {
 				BlockPos p = new BlockPos(x, 0, z);
-				Biome b = w.getBiomeGenForCoords(p);
+				Biome b = w.getBiome(p);
 				for(int i = 0; i < 4; i++) {
 					EnumFacing facing = EnumFacing.getHorizontal(i);
 					BlockPos p2 = p.offset(facing);
-					Biome b2 = w.getBiomeGenForCoords(p2);
+					Biome b2 = w.getBiome(p2);
 					if(b != b2) for(int y = pY - renderHeight + 1; y < pY + renderHeight; y++) {
 						boolean below1 = isSolid(w.getBlockState(new BlockPos(x, y - 1, z)));
 						boolean above1 = isSolid(w.getBlockState(new BlockPos(x, y, z)));
@@ -177,8 +177,7 @@ public class WorldOverlay extends C98Mod implements WorldRenderHook, KeyHook {
 		int y = spawner.getSpawnerPosition().getY();
 		int z = spawner.getSpawnerPosition().getZ();
 
-		String type = spawner.getEntityNameToSpawn();
-		Entity e = EntityList.createEntityByName(type, w);
+		Entity e = spawner.getCachedEntity();
 		if(e == null) return;
 
 		int range = spawner.spawnRange;

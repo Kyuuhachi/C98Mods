@@ -49,7 +49,7 @@ public class ContainerMagicFurnace extends Container {
 	}
 	
 	@Override public boolean canInteractWith(EntityPlayer player) {
-		return inventory.isUseableByPlayer(player);
+		return inventory.isUsableByPlayer(player);
 	}
 	
 	@Override public ItemStack transferStackInSlot(EntityPlayer player, int index) {
@@ -77,7 +77,7 @@ public class ContainerMagicFurnace extends Container {
 			
 			if(is.stackSize == ret.stackSize) return null;
 			
-			slot.onPickupFromSlot(player, is);
+			slot.func_190901_a(player, is);
 		}
 		
 		return ret;

@@ -8,71 +8,45 @@ import java.util.Map;
 import c98.minemapMarkers.selector.prop.*;
 
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityFlying;
-import net.minecraft.entity.EntityHanging;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.*;
 import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityMinecartFurnace;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.EntityGuardian;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityAmbientCreature;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.EntityWaterMob;
-import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.item.*;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityFireball;
-import net.minecraft.entity.projectile.EntityFishHook;
-import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.entity.projectile.*;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 
 public class EntitySelector {
-	public static Map<Class, String> classToId = new HashMap();
+	public static Map<Class, ResourceLocation> classToId = new HashMap();
 	static {
 		initClasses();
 		initProperties();
 	}
 
 	public static void initClasses() {
-		classToId.putAll(EntityList.CLASS_TO_NAME);
-		classToId.putAll(TileEntity.classToNameMap);
-		classToId.put(Entity.class, "Entity");
-		classToId.put(EntityAgeable.class, "Ageable");
-		classToId.put(EntityLivingBase.class, "Living");
-		classToId.put(EntityMinecart.class, "Minecart");
-		classToId.put(EntityLiving.class, "NonPlayer");
-		classToId.put(EntityPlayer.class, "Player");
-		classToId.put(EntityPlayerSP.class, "Self");
-		classToId.put(EntityFireball.class, "FireballBase");
-		classToId.put(EntityHanging.class, "Hanging");
-		classToId.put(EntityAmbientCreature.class, "AmbientCreature");
-		classToId.put(EntityCreature.class, "Creature");
-		classToId.put(EntityGolem.class, "Golem");
-		classToId.put(EntityMob.class, "Hostile");
-		classToId.put(EntityWaterMob.class, "WaterMob");
-		classToId.put(EntityFlying.class, "Flying");
-		classToId.put(EntityThrowable.class, "Throwable");
-		classToId.put(EntityAnimal.class, "Animal");
+		classToId.putAll(EntityList.field_191308_b.inverseObjectRegistry);
+		classToId.putAll(TileEntity.field_190562_f.inverseObjectRegistry);
+		classToId.put(Entity.class, new ResourceLocation("entity"));
+		classToId.put(EntityAgeable.class, new ResourceLocation("ageable"));
+		classToId.put(EntityLivingBase.class, new ResourceLocation("living"));
+		classToId.put(EntityMinecart.class, new ResourceLocation("minecart"));
+		classToId.put(EntityLiving.class, new ResourceLocation("non_player"));
+		classToId.put(EntityPlayer.class, new ResourceLocation("player"));
+		classToId.put(EntityPlayerSP.class, new ResourceLocation("self"));
+		classToId.put(EntityFireball.class, new ResourceLocation("fireball_base"));
+		classToId.put(EntityHanging.class, new ResourceLocation("Hanging"));
+		classToId.put(EntityAmbientCreature.class, new ResourceLocation("ambient_creature"));
+		classToId.put(EntityCreature.class, new ResourceLocation("creature"));
+		classToId.put(EntityGolem.class, new ResourceLocation("golem"));
+		classToId.put(EntityMob.class, new ResourceLocation("hostile"));
+		classToId.put(EntityWaterMob.class, new ResourceLocation("water_mob"));
+		classToId.put(EntityFlying.class, new ResourceLocation("flying"));
+		classToId.put(EntityThrowable.class, new ResourceLocation("throwable"));
+		classToId.put(EntityAnimal.class, new ResourceLocation("animal"));
+		classToId.put(AbstractSkeleton.class, new ResourceLocation("any_skeleton"));
 	}
 
 	public static void initProperties() {
@@ -95,8 +69,6 @@ public class EntitySelector {
 		addEntity(EntityLivingBase.class,      "health",       new SimpleFloatProperty(EntityLivingBase.HEALTH));
 		addEntity(EntityTameable.class,        "owner",        new SimpleUUIDProperty(EntityTameable.OWNER_UNIQUE_ID));
 		addEntity(EntityTameable.class,        "tame",         new SimpleBooleanProperty(EntityTameable.TAMED, 2));
-
-		//TODO fill a bunch of enums
 		addEntity(EntityBoat.class,            "type",         new SimpleEnumProperty(EntityBoat.BOAT_TYPE));
 		addEntity(EntityCreeper.class,         "powered",      new SimpleBooleanProperty(EntityCreeper.POWERED));
 		addEntity(EntityDragon.class,          "phase",        new SimpleIntProperty(EntityDragon.PHASE));
@@ -107,7 +79,7 @@ public class EntitySelector {
 		addEntity(EntityHorse.class,           "owner",        new SimpleUUIDProperty(EntityHorse.OWNER_UNIQUE_ID));
 		addEntity(EntityHorse.class,           "saddle",       new SimpleBooleanProperty(EntityHorse.STATUS, 2));
 		addEntity(EntityHorse.class,           "tame",         new SimpleBooleanProperty(EntityHorse.STATUS, 1));
-		addEntity(EntityHorse.class,           "type",         new SimpleEnumProperty(EntityHorse.HORSE_TYPE, "normal", "donkey", "mule", "zombie", "skeleton"));
+		addEntity(EntityHorse.class,           "type",         new SimpleEnumProperty(EntityHorse.HORSE_VARIANT, "normal", "donkey", "mule", "zombie", "skeleton"));
 		addEntity(EntityIronGolem.class,       "created",      new SimpleBooleanProperty(EntityIronGolem.PLAYER_CREATED, 0));
 		addEntity(EntityMinecartFurnace.class, "powered",      new SimpleBooleanProperty(EntityMinecartFurnace.POWERED));
 		addEntity(EntityOcelot.class,          "type",         new SimpleEnumProperty(EntityOcelot.OCELOT_VARIANT));
@@ -119,7 +91,6 @@ public class EntitySelector {
 		addEntity(EntityRabbit.class,          "type",         new SimpleEnumProperty(EntityRabbit.RABBIT_TYPE));
 		addEntity(EntitySheep.class,           "color",        SelectorProperties.STRING, e -> ((EntitySheep)e).getFleeceColor());
 		addEntity(EntitySheep.class,           "sheared",      SelectorProperties.BOOLEAN, e -> ((EntitySheep)e).getSheared());
-		addEntity(EntitySkeleton.class,        "type",         new SimpleEnumProperty(EntitySkeleton.SKELETON_VARIANT, "normal", "wither"));
 		addEntity(EntitySlime.class,           "size",         new SimpleIntProperty(EntitySlime.SLIME_SIZE));
 		addEntity(EntityVillager.class,        "type",         new SimpleEnumProperty(EntityVillager.PROFESSION));
 		addEntity(EntityWolf.class,            "color",        new SimpleEnumProperty(EntityWolf.COLLAR_COLOR, colors));

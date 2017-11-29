@@ -82,7 +82,7 @@ public class MapServer {
 	}
 
 	private int round(double x) {
-		return MathHelper.floor_double(x * scale);
+		return MathHelper.floor(x * scale);
 	}
 
 	private static int getRotation(double rot) {
@@ -116,11 +116,11 @@ public class MapServer {
 	}
 
 	private static double mod(double x) {
-		return x - MathHelper.floor_double(x);
+		return x - MathHelper.floor(x);
 	}
 
 	public int getPosY() {
-		int y = MathHelper.floor_double(playerY);
+		int y = MathHelper.floor(playerY);
 		if(C98Core.isModLoaded("Magic") && Hyperspace.isHyperspace(y))
 			y -= Hyperspace.DISTANCE;
 		return y;

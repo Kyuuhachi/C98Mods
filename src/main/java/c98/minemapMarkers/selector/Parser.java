@@ -1,9 +1,12 @@
 package c98.minemapMarkers.selector;
 
 import java.util.LinkedList;
+
 import c98.minemapMarkers.selector.Tokenizer.Token;
 import c98.minemapMarkers.selector.prop.SelectorProperty;
 import c98.minemapMarkers.selector.propinst.*;
+
+import net.minecraft.util.ResourceLocation;
 
 public class Parser {
 	private static LinkedList tokens;
@@ -18,7 +21,7 @@ public class Parser {
 	private static Selector parseSelector() {
 		if(isEmpty()) throw error("Empty selector");
 		Selector s = new Selector();
-		if(get() instanceof String) s.name = (String)remove();
+		if(get() instanceof String) s.name = new ResourceLocation((String)remove());
 		if(isEmpty()) return s;
 		if(get() != Tokenizer.BEGIN) throw expected("parameter list");
 		remove();
@@ -30,7 +33,7 @@ public class Parser {
 		return s;
 	}
 
-	private static PropertyInstance parseProp(String owner) {
+	private static PropertyInstance parseProp(ResourceLocation owner) {
 		boolean invert = false;
 		if(removeIf(Tokenizer.NOT)) invert = true;
 		if(!(get() instanceof String)) throw expected("property name");

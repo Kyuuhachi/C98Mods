@@ -18,8 +18,8 @@ public class SaturationInfo {
 		int width = res.getScaledWidth();
 		int height = res.getScaledHeight();
 
-		if(mc.thePlayer.ridingEntity == null) {
-			FoodStats foodStats = mc.thePlayer.getFoodStats();
+		if(mc.player.ridingEntity == null) {
+			FoodStats foodStats = mc.player.getFoodStats();
 			float sat = foodStats.getSaturationLevel() / 2;
 			int x = width / 2 + 91;
 			int y = height - 39;
@@ -27,14 +27,14 @@ public class SaturationInfo {
 			GL.enableBlend();
 			GL.blendFunc(GL.SRC_ALPHA, GL.ONE);
 			mc.getTextureManager().bindTexture(ICONS);
-			int numHams = Math.min(10, MathHelper.ceiling_float_int(sat));
+			int numHams = Math.min(10, MathHelper.ceil(sat));
 			for(int i = 0; i < numHams; ++i) {
 				int foodX = x - i * 8 - 9;
 				int foodY = y;
-				int foodWidth = MathHelper.clamp_int(Math.round((sat - i) * 9), 0, 9);
+				int foodWidth = MathHelper.clamp(Math.round((sat - i) * 9), 0, 9);
 
 				int u = 70;
-				if(mc.thePlayer.isPotionActive(MobEffects.SATURATION)) u += 36;
+				if(mc.player.isPotionActive(MobEffects.SATURATION)) u += 36;
 
 				u += 9 - foodWidth;
 				foodX += 9 - foodWidth;

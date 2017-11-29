@@ -275,7 +275,7 @@ public class GL {
 	public static void translate(double x, double y, double z) {GlStateManager.translate(x,y,z);}
 	public static void translate(float x, float y) {GlStateManager.translate(x,y,0);}
 	public static void translate(double x, double y) {GlStateManager.translate(x,y,0);}
-	public static void translate(Vec2f vec) {GlStateManager.translate(vec.field_189982_i, vec.field_189983_j, 0);}
+	public static void translate(Vec2f vec) {GlStateManager.translate(vec.x, vec.y, 0);}
 	public static void translate(Vec3d vec) {GlStateManager.translate(vec.xCoord, vec.yCoord, vec.zCoord);}
 	public static void translate(Vec3i vec) {GlStateManager.translate(vec.getX(), vec.getY(), vec.getZ());}
 

@@ -28,7 +28,7 @@ import net.minecraft.util.text.TextFormatting;
 		}
 
 		FontRenderer fr = getFontRenderer();
-		Collection<PotionEffect> potions = mc.thePlayer.getActivePotionEffects();
+		Collection<PotionEffect> potions = mc.player.getActivePotionEffects();
 
 		GL.pushAttrib();
 		GL.disableLighting();

@@ -61,15 +61,15 @@ public class Magic extends C98Mod implements DisplayGuiHook {
 	}
 
 	@Override public void load() {
-		TileEntity.addMapping(BlockMagicGate.TE.class, "MagicGate");
-		TileEntity.addMapping(BlockPortableHole.TE.class, "PortableHole");
-		TileEntity.addMapping(BlockXpCollector.TE.class, "XpCollector");
-		TileEntity.addMapping(BlockXpPipe.TE.class, "XpPipe");
-		TileEntity.addMapping(BlockXpTank.TE.class, "XpCell");
-		TileEntity.addMapping(BlockItemPipe.TE.class, "ItemPipe");
-		TileEntity.addMapping(BlockItemExtractor.TE.class, "ItemExtractor");
-		TileEntity.addMapping(BlockItemInserter.TE.class, "ItemInserter");
-		TileEntity.addMapping(BlockMagicFurnace.TE.class, "MagicFurnace");
+		TileEntity.func_190560_a("magic_gate",     BlockMagicGate.TE.class);
+		TileEntity.func_190560_a("portable_hole",  BlockPortableHole.TE.class);
+		TileEntity.func_190560_a("xp_collector",   BlockXpCollector.TE.class);
+		TileEntity.func_190560_a("xp_pipe",        BlockXpPipe.TE.class);
+		TileEntity.func_190560_a("xp_cell",        BlockXpTank.TE.class);
+		TileEntity.func_190560_a("item_pipe",      BlockItemPipe.TE.class);
+		TileEntity.func_190560_a("item_extractor", BlockItemExtractor.TE.class);
+		TileEntity.func_190560_a("item_inserter",  BlockItemInserter.TE.class);
+		TileEntity.func_190560_a("magic_furnace",  BlockMagicFurnace.TE.class);
 	}
 
 	@Override public GuiScreen displayGui(String name, IInventory inv, InventoryPlayer playerInv) {

@@ -2,8 +2,6 @@ package c98.magic.furnace;
 
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import c98.magic.item.IItemConnection;
 import c98.magic.item.IItemSource;
 import c98.magic.xp.IXpConnection;
@@ -23,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.*;
@@ -42,6 +41,15 @@ public class BlockMagicFurnace extends BlockContainer {
 		@Override public int getSizeInventory() {
 			return slots.length;
 		}
+
+		@Override public boolean func_191420_l() {
+			for (ItemStack itemstack : this.slots)
+				if (!itemstack.func_190926_b())
+					return false;
+
+			return true;
+		}
+
 
 		@Override public ItemStack getStackInSlot(int slot) {
 			return slots[slot];
@@ -104,7 +112,7 @@ public class BlockMagicFurnace extends BlockContainer {
 				NBTTagCompound comp = items.getCompoundTagAt(i);
 				byte slot = comp.getByte("Slot");
 
-				if(slot >= 0 && slot < slots.length) slots[slot] = ItemStack.loadItemStackFromNBT(comp);
+				if(slot >= 0 && slot < slots.length) slots[slot] = new ItemStack(comp);
 			}
 
 			cookTime = compound.getShort("CookTime");
@@ -113,8 +121,8 @@ public class BlockMagicFurnace extends BlockContainer {
 			if(compound.hasKey("CustomName", 8)) customName = compound.getString("CustomName");
 		}
 
-		@Override public NBTTagCompound func_189515_b(NBTTagCompound compound) {
-			super.func_189515_b(compound);
+		@Override public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+			super.writeToNBT(compound);
 			compound.setShort("CookTime", (short)cookTime);
 			compound.setShort("CookTimeTotal", (short)cookTimeTotal);
 			NBTTagList items = new NBTTagList();
@@ -140,9 +148,9 @@ public class BlockMagicFurnace extends BlockContainer {
 			boolean wasBurning = cookTime != -1;
 			boolean changed = false;
 
-			if(!worldObj.isRemote) {
+			if(!world.isRemote) {
 				if(cookTime == -1 && slots[IN] == null) {
-					if(cookTime == -1 && cookTime > 0) cookTime = MathHelper.clamp_int(cookTime - 2, 0, cookTimeTotal);
+					if(cookTime == -1 && cookTime > 0) cookTime = MathHelper.clamp(cookTime - 2, 0, cookTimeTotal);
 				} else {
 					if(cookTime == -1 && canSmelt()) {
 						XpUtils.take(this);
@@ -193,8 +201,8 @@ public class BlockMagicFurnace extends BlockContainer {
 			}
 		}
 
-		@Override public boolean isUseableByPlayer(EntityPlayer playerIn) {
-			return worldObj.getTileEntity(pos) != this ? false : playerIn.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 8 * 8;
+		@Override public boolean isUsableByPlayer(EntityPlayer playerIn) {
+			return world.getTileEntity(pos) != this ? false : playerIn.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 8 * 8;
 		}
 
 		@Override public void openInventory(EntityPlayer playerIn) {}
@@ -323,8 +331,10 @@ public class BlockMagicFurnace extends BlockContainer {
 		}
 	}
 
-	@Override public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote) playerIn.displayGUIChest((TE)worldIn.getTileEntity(pos));
+	@Override public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if(worldIn.isRemote) return true;
+		playerIn.displayGUIChest((TE)worldIn.getTileEntity(pos));
+		playerIn.addStat(StatList.FURNACE_INTERACTION);
 		return true;
 	}
 

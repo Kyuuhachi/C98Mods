@@ -53,7 +53,7 @@ public class MinemapWaypoints extends C98Mod implements MinemapPlugin, KeyHook {
 
 	@Override public void keyboardEvent(KeyBinding keybinding) {
 		if(mc.currentScreen != null) return;
-		if(keybinding == key) mc.displayGuiScreen(mc.thePlayer.isSneaking() ? new GuiEditWaypoint(mc.theWorld, new Waypoint(mc.thePlayer.getPosition())) : new GuiWaypoints(mc.theWorld));
+		if(keybinding == key) mc.displayGuiScreen(mc.player.isSneaking() ? new GuiEditWaypoint(mc.world, new Waypoint(mc.player.getPosition())) : new GuiWaypoints(mc.world));
 	}
 
 	@Override public void addIcons(List<MapIcon> markers, World world) {

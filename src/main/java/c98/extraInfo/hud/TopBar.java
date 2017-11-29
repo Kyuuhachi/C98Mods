@@ -40,8 +40,8 @@ public class TopBar {
 
 	private static void drawBiome(Minecraft mc, int x, FontRenderer fr) {
 		BlockPos pos = new BlockPos(mc.renderViewEntity.posX, mc.renderViewEntity.getEntityBoundingBox().minY, mc.renderViewEntity.posZ);
-		Chunk chunk = mc.theWorld.getChunkFromBlockCoords(pos);
-		String biomeName = chunk.getBiome(pos, mc.theWorld.getBiomeProvider()).biomeName;
+		Chunk chunk = mc.world.getChunkFromBlockCoords(pos);
+		String biomeName = chunk.getBiome(pos, mc.world.getBiomeProvider()).biomeName;
 
 		int size = fr.getStringWidth(biomeName);
 		mc.getTextureManager().bindTexture(HUD);
@@ -70,13 +70,13 @@ public class TopBar {
 		mc.getTextureManager().bindTexture(HUD);
 		mc.ingameGUI.drawTexturedModalRect(x, -10, 24, -10, 40, 60);
 
-		int time = (int)((mc.theWorld.getWorldTime() + 6000) % 24000);
+		int time = (int)((mc.world.getWorldTime() + 6000) % 24000);
 		boolean daytime = isDaytime(mc);
 
 		int hour = time / 1000;
 		double min = (time % 1000) / (1000D / 60D);
 		String timeString = String.format("%02d:%02d", hour, (int)min);
-		if(ExtraInfo.config.hud.topBar.rawTime) timeString = String.format("%05d", mc.theWorld.getWorldTime() % 24000);
+		if(ExtraInfo.config.hud.topBar.rawTime) timeString = String.format("%05d", mc.world.getWorldTime() % 24000);
 
 		fr.drawString(timeString, x + 21 - fr.getStringWidth(timeString) / 2, 4, 0xFFFFFF);
 
@@ -87,8 +87,8 @@ public class TopBar {
 			v = 0;
 		} else {
 			mc.getTextureManager().bindTexture(MOON);
-			u = mc.theWorld.getMoonPhase() % 4 * 32;
-			v = mc.theWorld.getMoonPhase() / 4 % 2 * 32;
+			u = mc.world.getMoonPhase() % 4 * 32;
+			v = mc.world.getMoonPhase() / 4 % 2 * 32;
 		}
 		u += 2;
 		v += 2;
@@ -111,7 +111,7 @@ public class TopBar {
 	}
 
 	private static boolean isDaytime(Minecraft mc) {
-		float angle = mc.theWorld.getCelestialAngle(1);
+		float angle = mc.world.getCelestialAngle(1);
 		float var3 = 0.5F - MathHelper.cos(angle * (float)Math.PI * 2) * 2;
 		if(var3 < 0.0F) var3 = 0.0F;
 		if(var3 > 1.0F) var3 = 1.0F;

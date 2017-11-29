@@ -13,7 +13,7 @@ public class XPBar {
 		ScaledResolution res = new ScaledResolution(mc);
 		int width = res.getScaledWidth();
 		int height = res.getScaledHeight();
-		EntityPlayer p = mc.thePlayer;
+		EntityPlayer p = mc.player;
 		FontRenderer fr = mc.fontRendererObj;
 
 		int y = height - 31 - 4;

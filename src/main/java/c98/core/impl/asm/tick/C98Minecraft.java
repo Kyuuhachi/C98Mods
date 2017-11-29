@@ -12,7 +12,7 @@ import c98.core.launch.ASMer;
 	}
 
 	@Override public void displayGuiScreen(GuiScreen par1GuiScreen) {
-		if(par1GuiScreen == null && Minecraft.getMinecraft().theWorld != null) HookImpl.setGui(null);
+		if(par1GuiScreen == null && Minecraft.getMinecraft().world != null) HookImpl.setGui(null);
 		super.displayGuiScreen(par1GuiScreen);
 	}
 }

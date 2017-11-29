@@ -12,10 +12,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 
 public class RenderHyperspace {
 	private static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("textures/environment/end_sky.png");
@@ -42,7 +40,7 @@ public class RenderHyperspace {
 				d = rve.prevRotationPitch + (rve.rotationPitch - rve.prevRotationPitch) * ptt;
 				break;
 			case 5:
-				d = Minecraft.getMinecraft().theWorld.worldInfo.getWorldTime() / 7F;
+				d = Minecraft.getMinecraft().world.worldInfo.getWorldTime() / 7F;
 				break;
 			default: return 0;
 		}

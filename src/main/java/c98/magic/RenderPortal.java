@@ -153,7 +153,7 @@ class RVE extends Entity {
 	private Entity rve;
 
 	public RVE(Entity rve, double ox, double oy, double oz) {
-		super(rve.worldObj);
+		super(rve.world);
 		this.rve = rve;
 		this.posX = rve.posX + ox;
 		this.prevPosX = rve.prevPosX + ox;

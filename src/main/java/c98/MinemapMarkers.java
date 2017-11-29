@@ -77,9 +77,9 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 	}
 
 	@Override public void addIcons(List<MapIcon> markers, World world) {
-		for(Entity e : (List<Entity>)new ArrayList(mc.theWorld.loadedEntityList))
+		for(Entity e : (List<Entity>)new ArrayList(mc.world.loadedEntityList))
 			markEntity(markers, e);
-		for(TileEntity e : (List<TileEntity>)new ArrayList(mc.theWorld.loadedTileEntityList))
+		for(TileEntity e : (List<TileEntity>)new ArrayList(mc.world.loadedTileEntityList))
 			markTileEntity(markers, e);
 	}
 
@@ -105,7 +105,7 @@ public class MinemapMarkers extends C98Mod implements MinemapPlugin {
 			MapIcon marker = new MapIcon(e.getPositionVector());
 			marker.style = mrkr.style.clone();
 			if(mrkr.style.teamColor) {
-				Color color = getTeamColor(e.worldObj.getScoreboard(), e);
+				Color color = getTeamColor(e.world.getScoreboard(), e);
 				if(color != null) marker.style.color = color;
 			}
 			marker.rot = rotation;

@@ -72,7 +72,7 @@ public class Commander extends C98Mod implements IResourceManagerReloadListener 
 	}
 
 	private static HighlightNode getSpecial(String text) {
-		switch(text) {//@off
+		switch(text) {
 			case "?": return new OptHighlightNode();
 			case "text*": return new EOLHighlightNode();
 			case "text": return new ValHighlightNode(s -> true);
@@ -82,13 +82,13 @@ public class Commander extends C98Mod implements IResourceManagerReloadListener 
 			case "coords": return new CoordsHighlightNode(3);
 			case "coords2": return new CoordsHighlightNode(2);
 
-		case "block": return new ListHighlightNode(getIds(Block.REGISTRY.getKeys()));
+			case "block": return new ListHighlightNode(getIds(Block.REGISTRY.getKeys()));
 			case "item": return new ListHighlightNode(getIds(Item.REGISTRY.getKeys()));
-			case "entity": return new ListHighlightNode(() -> EntityList.NAME_TO_CLASS.keySet());
+			case "entity": return new ListHighlightNode(getIds(EntityList.field_191308_b.getKeys()));
 			case "stat": return new ListHighlightNode(() -> map(StatList.ALL_STATS, s->s.statId));
 			case "effect": return new ListHighlightNode(getIds(Potion.REGISTRY.getKeys()));
 			case "particle": return new ListHighlightNode(() -> EnumParticleTypes.getParticleNames());
-			case "gamerule": return new ListHighlightNode(() -> mc.theWorld.getGameRules().theGameRules.keySet());
+			case "gamerule": return new ListHighlightNode(() -> mc.world.getGameRules().theGameRules.keySet());
 			case "slot": return new ListHighlightNode(() -> new ArrayList(CommandReplaceItem.SHORTCUTS.keySet()));
 			case "ench": return new ListHighlightNode(getIds(Enchantment.REGISTRY.getKeys()));
 
@@ -99,7 +99,7 @@ public class Commander extends C98Mod implements IResourceManagerReloadListener 
 
 			case "sel": case "sel*": return new SelHighlightNode();
 			case "json": return new JsonHighlightNode();
-		} //@on
+		}
 		C98Log.error("[Commander] Unknown parameter type: " + text);
 		return new EOLHighlightNode();
 	}

@@ -129,10 +129,11 @@ public class HookImpl {
 		C98Core.mc.mcProfiler.startSection("c98tick");
 		C98Core.mc.mcProfiler.startSection("keys");
 		doKeys();
-		if(C98Core.mc.theWorld != null && C98Core.mc.thePlayer != null && C98Core.mc.thePlayer.worldObj != null) for(TickHook mod : tickHooks) {
-			C98Core.mc.mcProfiler.endStartSection(mod.toString());
-			mod.tickGame(w);
-		}
+		if(C98Core.mc.world != null && C98Core.mc.player != null && C98Core.mc.player.world != null)
+			for(TickHook mod : tickHooks) {
+				C98Core.mc.mcProfiler.endStartSection(mod.toString());
+				mod.tickGame(w);
+			}
 		C98Core.mc.mcProfiler.endSection();
 		C98Core.mc.mcProfiler.endSection();
 	}
@@ -162,7 +163,7 @@ public class HookImpl {
 
 		for(WorldRenderHook mod : worldRenderHooks) {
 			C98Core.mc.mcProfiler.startSection(mod.toString());
-			mod.renderWorld(C98Core.mc.theWorld, C98Core.getPartialTicks());
+			mod.renderWorld(C98Core.mc.world, C98Core.getPartialTicks());
 			C98Core.mc.mcProfiler.endSection();
 		}
 		GL.popMatrix();

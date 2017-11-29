@@ -42,18 +42,18 @@ public class BlockXpTank extends BlockContainer {
 		}
 
 		private void updateState() {
-			IBlockState s = worldObj.getBlockState(pos);
+			IBlockState s = world.getBlockState(pos);
 			int oldVal = s.getValue(CHARGE);
 			int newVal;
 			if(charge == 0) newVal = 0;
 			else if(charge == MAX - 1) newVal = MAX_CHARGE;
 			else newVal = charge * MAX_CHARGE / (MAX - 2);
 			if(newVal > MAX_CHARGE) newVal = MAX_CHARGE;
-			if(oldVal != newVal) worldObj.setBlockState(pos, s.withProperty(CHARGE, newVal));
+			if(oldVal != newVal) world.setBlockState(pos, s.withProperty(CHARGE, newVal));
 		}
 
-		@Override public NBTTagCompound func_189515_b(NBTTagCompound compound) {
-			super.func_189515_b(compound);
+		@Override public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+			super.writeToNBT(compound);
 			compound.setInteger("charge", charge);
 			return compound;
 		}

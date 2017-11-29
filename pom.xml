@@ -41,13 +41,23 @@
 				</execution></executions>
 			</plugin>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId> <artifactId>build-helper-maven-plugin</artifactId> <version>3.0.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals><goal>add-source</goal></goals>
+						<configuration><sources><source>src/forge-stubs/java</source></sources></configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>net.md-5</groupId> <artifactId>specialsource-maven-plugin</artifactId> <version>1.2.1</version>
 				<executions>
 					<execution>
 						<id>install-mc</id>
 						<goals> <goal>install-remapped-file</goal> </goals>
 						<configuration>
-							<groupId>net.minecraft</groupId> <artifactId>minecraft</artifactId> <version>${project.version}</version> <classifier>deobf</classifier>
+							<groupId>net.minecraft</groupId> <artifactId>minecraft-deobf</artifactId> <version>${project.version}</version>
 							<inJars><param>${HOME}/.minecraft/versions/${project.version}/${project.version}.jar</param></inJars>
 							<srgIn>client_ro_cls.srg</srgIn>
 						</configuration>
@@ -56,7 +66,7 @@
 						<id>install-mc-public</id>
 						<goals> <goal>install-remapped-file</goal> </goals>
 						<configuration>
-							<groupId>net.minecraft</groupId> <artifactId>minecraft</artifactId> <version>${project.version}</version> <classifier>deobf-public</classifier>
+							<groupId>net.minecraft</groupId> <artifactId>minecraft-deobf-public</artifactId> <version>${project.version}</version>
 							<inJars><param>${HOME}/.minecraft/versions/${project.version}/${project.version}.jar</param></inJars>
 							<srgIn>client_ro_cls.srg</srgIn>
 							<accessTransformers>
@@ -142,9 +152,8 @@
 		<dependency><groupId>org.lwjgl.lwjgl</groupId>           <artifactId>lwjgl_util</artifactId>         <version>2.9.4-nightly-20150209</version> </dependency>
 		<dependency><groupId>oshi-project</groupId>              <artifactId>oshi-core</artifactId>          <version>1.1</version>                    </dependency>
 
-		<dependency><groupId>net.minecraft</groupId>              <artifactId>minecraft</artifactId>           <version>${project.version}</version>  <scope>provided</scope> <classifier>deobf-public</classifier> </dependency>
-		<dependency><groupId>net.minecraft</groupId>              <artifactId>minecraft</artifactId>           <version>${project.version}</version>  <scope>runtime</scope>  <classifier>deobf</classifier> </dependency>
-		<dependency><groupId>c98</groupId>                        <artifactId>forge-stubs</artifactId>         <version>${project.version}</version>  <scope>provided</scope> </dependency>
+		<dependency><groupId>net.minecraft</groupId>              <artifactId>minecraft-deobf</artifactId>     <version>${project.version}</version>  <scope>runtime</scope> </dependency>
+		<dependency><groupId>net.minecraft</groupId>              <artifactId>minecraft-deobf-public</artifactId> <version>${project.version}</version>  <scope>provided</scope> </dependency>
 		<dependency><groupId>net.minecraft</groupId>              <artifactId>launchwrapper</artifactId>       <version>1.11</version>  </dependency>
 		<dependency><groupId>com.fasterxml.jackson.core</groupId> <artifactId>jackson-core</artifactId>        <version>2.5.3</version> </dependency>
 		<dependency><groupId>com.fasterxml.jackson.core</groupId> <artifactId>jackson-annotations</artifactId> <version>2.5.3</version> </dependency>

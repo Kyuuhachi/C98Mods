@@ -23,12 +23,12 @@ for path, errors2 in itertools.groupby(errors, lambda l: l["filename"]):
 sys.exit(haserr)
 '
 
-command -v eclim >/dev/null && {
-	eclim -command problems -p C98Mods | python3 -c $SCRIPT || {
-		echo "Errors found; quitting"
-		exit
-	}
-}
+# command -v eclim >/dev/null && {
+# 	eclim -command problems -p C98Mods | python3 -c $SCRIPT || {
+# 		echo "Errors found; quitting"
+# 		exit
+# 	}
+# }
 
 jq -r '.authenticationDatabase[.selectedUser] | .displayName, .uuid' ~/.minecraft/launcher_profiles.json | { read username; read uuid }
 
